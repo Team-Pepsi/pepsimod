@@ -95,15 +95,7 @@ jar {
                 "MixinConfigs": 'mixins.pepsimod.json',
                 "tweakClass": 'org.spongepowered.asm.launch.MixinTweaker',
                 "TweakOrder": 0,
-                'FMLCorePluginContainsFMLMod': 'net.daporkchop.pepsimod.MixinLoaderForge')
+                'FMLCorePluginContainsFMLMod': 'net.daporkchop.pepsimod.MixinLoader')
     }
 }
 sourceCompatibility = targetCompatibility = "1.8"
-
-minecraft {
-    runDir = 'run'
-    mappings = 'snapshot_20170215'
-    MixinConfigs = 'mixins.pepsimod.json'
-
-    makeObfSourceJar = true
-}
