@@ -67,13 +67,13 @@ processResources {
 }
 
 mixin {
-    defaultObfuscationEnv notch
-    add sourceSets.main, "mixins.mcwrapper.refmap.json"
+    defaultObfuscationEnv searge
+    add sourceSets.main, "mixins.pepsimod.refmap.json"
 }
 
 reobf {
     shadowJar {
-        mappingType = 'NOTCH'
+        mappingType = 'SEARGE'
         classpath = sourceSets.main.compileClasspath
     }
 }

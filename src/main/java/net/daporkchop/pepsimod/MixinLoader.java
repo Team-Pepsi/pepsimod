@@ -11,23 +11,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Since we aren't relying on Forge anymore, this means we won't be having our Mixins load through Forge's coremod
- * classes.  Instead, we will be using the {@link ITweaker} class from the Minecraft launchwrapper library, which
- * works just about the same.
- */
 public class MixinLoader implements ITweaker {
-
-    /**
-     * We could be using the {@link MixinTweaker} class, but it strips the launch
-     * arguments by default, making it not work outside of a development environment.  These are the launch arguments.
-     */
     private ArrayList<String> args = new ArrayList<>();
 
     private boolean forge = false;
 
     @Override
     public void acceptOptions(List<String> list, File gameDir, File assetsDir, String profile) {
+        System.out.println("\n\n\nPepsiMod AcceptOptions\n\n\n");
         args.addAll(list);
         if (args.contains("--ignoreme")) {
             forge = true;
@@ -49,32 +40,29 @@ public class MixinLoader implements ITweaker {
 
     @Override
     public void injectIntoClassLoader(LaunchClassLoader classLoader) {
+        System.out.println("\n\n\nPepsiMod Inject Start\n\n\n");
         MixinBootstrap.init();
         /*
 		  Check for Forge's GuiIngame class.  If it is found, then we will tell the Mixin library to use the searge
 		  obfuscation context, since Forge jars are obfuscated differently.
 		 */
         Mixins.addConfiguration("mixins.pepsimod.json");
-        MixinEnvironment.getDefaultEnvironment().setObfuscationContext("notch");
+        MixinEnvironment.getDefaultEnvironment().setObfuscationContext("searge");
         try {
             Class.forName("net.minecraftforge.client.GuiIngameForge");
         } catch (ClassNotFoundException e) {
             System.out.println("Forge not found!");
+            MixinEnvironment.getDefaultEnvironment().setObfuscationContext("notch");
         }
         MixinEnvironment.getDefaultEnvironment().setSide(MixinEnvironment.Side.CLIENT);
+        System.out.println("\n\n\nPepsiMod Inject Finish\n\n\n");
     }
 
-    /**
-     * The target class we will be launching.  In this case, it is Minecraft's Main class.
-     */
     @Override
     public String getLaunchTarget() {
         return "net.minecraft.client.main.Main";
     }
 
-    /**
-     * We will use our {@link #args} for the launch arguments.
-     */
     @Override
     public String[] getLaunchArguments() {
         return forge ? new String[0] : args.toArray(new String[args.size()]);

@@ -17,7 +17,7 @@ import java.util.Map;
 public class MixinLoaderForge implements IFMLLoadingPlugin {
 
     public MixinLoaderForge() {
-        System.out.println("\n\n\nPepsiMod Init\n\n\n");
+        System.out.println("\n\n\nPepsiMod Constructor\n\n\n");
         MixinBootstrap.init();
         Mixins.addConfiguration("mixins.pepsimod.json");
         MixinEnvironment.getDefaultEnvironment().setObfuscationContext("searge");
