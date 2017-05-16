@@ -1,5 +1,9 @@
 package net.daporkchop.pepsimod.util;
 
+import org.apache.commons.codec.Charsets;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.Validate;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -9,10 +13,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map;
-
-import org.apache.commons.codec.Charsets;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.Validate;
 
 @SuppressWarnings("deprecation")
 public class HTTPUtils {
@@ -28,13 +28,13 @@ public class HTTPUtils {
 
     /**
      * Performs a POST request to the specified URL and returns the result.
-     * <p />
+     * <p/>
      * The POST data will be encoded in UTF-8 as the specified contentType. The response will be parsed as UTF-8.
      * If the server returns an error but still provides a body, the body will be returned as normal.
      * If the server returns an error without any body, a relevant {@link java.io.IOException} will be thrown.
      *
-     * @param url URL to submit the POST request to
-     * @param post POST data in the correct format to be submitted
+     * @param url         URL to submit the POST request to
+     * @param post        POST data in the correct format to be submitted
      * @param contentType Content type of the POST data
      * @return Raw text response from the server
      * @throws IOException The request was not successful
@@ -80,13 +80,13 @@ public class HTTPUtils {
 
     /**
      * Performs a POST request to the specified URL and returns the result.
-     * <p />
+     * <p/>
      * The POST data will be encoded in UTF-8 as the specified contentType. The response will be parsed as UTF-8.
      * If the server returns an error but still provides a body, the body will be returned as normal.
      * If the server returns an error without any body, a relevant {@link java.io.IOException} will be thrown.
      *
-     * @param url URL to submit the POST request to
-     * @param post POST data in the correct format to be submitted
+     * @param url         URL to submit the POST request to
+     * @param post        POST data in the correct format to be submitted
      * @param contentType Content type of the POST data
      * @return Raw text response from the server
      * @throws IOException The request was not successful
@@ -98,7 +98,7 @@ public class HTTPUtils {
         final HttpURLConnection connection = createUrlConnection(url);
         final byte[] postAsBytes = post.getBytes(Charsets.UTF_8);
 
-        connection.setRequestProperty ("Authorization", auth);
+        connection.setRequestProperty("Authorization", auth);
         connection.setRequestProperty("Content-Type", contentType + "; charset=utf-8");
         connection.setRequestProperty("Content-Length", "" + postAsBytes.length);
         connection.setDoOutput(true);
@@ -133,7 +133,7 @@ public class HTTPUtils {
 
     /**
      * Performs a GET request to the specified URL and returns the result.
-     * <p />
+     * <p/>
      * The response will be parsed as UTF-8.
      * If the server returns an error but still provides a body, the body will be returned as normal.
      * If the server returns an error without any body, a relevant {@link java.io.IOException} will be thrown.
@@ -168,7 +168,7 @@ public class HTTPUtils {
 
     /**
      * Creates a {@link URL} with the specified string, throwing an {@link java.lang.Error} if the URL was malformed.
-     * <p />
+     * <p/>
      * This is just a wrapper to allow URLs to be created in constants, where you know the URL is valid.
      *
      * @param url URL to construct
@@ -219,7 +219,7 @@ public class HTTPUtils {
     /**
      * Concatenates the given {@link java.net.URL} and query.
      *
-     * @param url URL to base off
+     * @param url   URL to base off
      * @param query Query to append to URL
      * @return URL constructed
      */

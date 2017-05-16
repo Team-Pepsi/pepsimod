@@ -3,7 +3,6 @@ package net.daporkchop.pepsimod;
 import net.minecraft.launchwrapper.ITweaker;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.spongepowered.asm.launch.MixinBootstrap;
-import org.spongepowered.asm.launch.MixinTweaker;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.Mixins;
 
@@ -43,7 +42,7 @@ public class MixinLoader implements ITweaker {
         System.out.println("\n\n\nPepsiMod Inject Start\n\n\n");
         MixinBootstrap.init();
         /*
-		  Check for Forge's GuiIngame class.  If it is found, then we will tell the Mixin library to use the searge
+          Check for Forge's GuiIngame class.  If it is found, then we will tell the Mixin library to use the searge
 		  obfuscation context, since Forge jars are obfuscated differently.
 		 */
         Mixins.addConfiguration("mixins.pepsimod.json");

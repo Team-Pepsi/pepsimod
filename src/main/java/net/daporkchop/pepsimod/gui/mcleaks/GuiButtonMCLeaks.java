@@ -5,9 +5,6 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
-/**
- * Created by DaPorkchop_ on 17.02.17.
- */
 public class GuiButtonMCLeaks extends GuiButton {
     private ResourceLocation location;
 

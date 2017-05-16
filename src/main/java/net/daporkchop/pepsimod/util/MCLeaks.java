@@ -28,7 +28,7 @@ public class MCLeaks {
     public static final URL redeemUrl = HTTPUtils.constantURL("http://auth.mcleaks.net/v1/redeem");
     public static final URL joinUrl = HTTPUtils.constantURL("http://auth.mcleaks.net/v1/joinserver");
 
-    public static RedeemResponse redeemToken(String token)  {
+    public static RedeemResponse redeemToken(String token) {
         try {
             String response = HTTPUtils.performPostRequest(redeemUrl,
                     "{ \"token\": \"" + token + "\" }",
@@ -40,14 +40,14 @@ public class MCLeaks {
             return new RedeemResponse(result.get("mcname").getAsString(), result.get("session").getAsString());
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (NullPointerException e)    {
+        } catch (NullPointerException e) {
             //TODO: notify user about bad token
             JOptionPane.showMessageDialog(null, "Invalid or expired token!", "MCLeaks Error", JOptionPane.OK_OPTION);
         }
         return new RedeemResponse();
     }
 
-    public static void joinServerStuff(SPacketEncryptionRequest pck, NetworkManager mgr)    {
+    public static void joinServerStuff(SPacketEncryptionRequest pck, NetworkManager mgr) {
         try {
             final SecretKey secretkey = CryptManager.createNewSharedKey();
             String s = pck.getServerId();
@@ -66,19 +66,17 @@ public class MCLeaks {
             System.out.println(result);
 
             JsonObject json = (new JsonParser()).parse(result).getAsJsonObject();
-            if (!json.get("success").getAsBoolean())    {
+            if (!json.get("success").getAsBoolean()) {
                 mgr.closeChannel(new TextComponentString("§c§lError validating §9MCLeaks §ckey!"));
             }
 
-            mgr.sendPacket(new CPacketEncryptionResponse(secretkey, publickey, pck.getVerifyToken()), new GenericFutureListener< Future<? super Void >>()
-            {
-                public void operationComplete(Future <? super Void > p_operationComplete_1_) throws Exception
-                {
+            mgr.sendPacket(new CPacketEncryptionResponse(secretkey, publickey, pck.getVerifyToken()), new GenericFutureListener<Future<? super Void>>() {
+                public void operationComplete(Future<? super Void> p_operationComplete_1_) throws Exception {
                     mgr.enableEncryption(secretkey);
                 }
             }, new GenericFutureListener[0]);
 
-        } catch (Exception e)   {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
         }
@@ -105,7 +103,7 @@ public class MCLeaks {
         return md.digest(strBytes);
     }
 
-    public static final class RedeemResponse    {
+    public static final class RedeemResponse {
 
         public boolean success;
 
@@ -115,11 +113,11 @@ public class MCLeaks {
         @Nullable
         private String session;
 
-        public RedeemResponse()  { //welp
+        public RedeemResponse() { //welp
             success = false;
         }
 
-        public RedeemResponse(String n, String s)   {
+        public RedeemResponse(String n, String s) {
             success = true;
             this.name = n;
             this.session = s;
@@ -129,7 +127,7 @@ public class MCLeaks {
             return name;
         }
 
-        public String getSession()  {
+        public String getSession() {
             return session;
         }
     }

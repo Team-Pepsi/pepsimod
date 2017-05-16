@@ -2,7 +2,6 @@ package net.daporkchop.pepsimod.mixin.client.network;
 
 import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.util.MCLeaks;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerLoginClient;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.login.INetHandlerLoginClient;

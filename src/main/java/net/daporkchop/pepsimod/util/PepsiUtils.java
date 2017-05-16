@@ -1,5 +1,7 @@
 package net.daporkchop.pepsimod.util;
 
+import net.minecraft.client.multiplayer.ServerData;
+
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -17,7 +19,11 @@ public class PepsiUtils {
 
     public static final Timer timer = new Timer();
 
+    public static final ServerData TOOBEETOOTEE_DATA = new ServerData("toobeetootee", "2b2t.org", false);
+
     static {
+        TOOBEETOOTEE_DATA.setResourceMode(ServerData.ServerResourceMode.PROMPT);
+
         timer.schedule(new TimerTask() {
             @Override
             public void run() {// random colors
