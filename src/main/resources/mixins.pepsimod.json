@@ -4,6 +4,8 @@
   "package": "net.daporkchop.pepsimod.mixin",
   "refmap": "mixins.pepsimod.refmap.json",
   "mixins": [
-    "client.gui.MixinGuiMainMenu"
+    "client.gui.MixinGuiMainMenu",
+    "client.network.MixinNetHandlerLoginClient",
+    "client.gui.MixinGuiMultiplayer"
   ]
 }
