@@ -63,6 +63,8 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude "mcmod.info"
     }
+
+    // move _at.cfg into META-INF
     rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
@@ -95,7 +97,10 @@ jar {
                 "MixinConfigs": 'mixins.pepsimod.json',
                 "tweakClass": 'org.spongepowered.asm.launch.MixinTweaker',
                 "TweakOrder": 0,
-                'FMLCorePluginContainsFMLMod': 'net.daporkchop.pepsimod.MixinLoader')
+                'FMLCorePluginContainsFMLMod': 'true',
+                'FMLCorePlugin': 'net.daporkchop.pepsimod.MixinLoader',
+                'FMLAT': 'pepsimod_at.cfg'
+        )
     }
 }
 sourceCompatibility = targetCompatibility = "1.8"
