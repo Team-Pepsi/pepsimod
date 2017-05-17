@@ -19,14 +19,16 @@ public class PepsiUtils {
 
     public static final Timer timer = new Timer();
 
+    public static RainbowCycle rainbowCycle = new RainbowCycle();
+
+    public static Color RAINBOW_COLOR = new Color(0, 0, 0);
+
     public static final ServerData TOOBEETOOTEE_DATA = new ServerData("toobeetootee", "2b2t.org", false);
 
-    public static final GradientText PEPSIMOD_TEXT_GRADIENT = getGradientFromStringThroughColor("PepsiMod 11.0 for Minecraft 1.11.2", new Color(255, 0, 0), new Color(0, 0, 255), new Color(255, 255, 255));
-    public static final GradientText PEPSIMOD_AUTHOR_GRADIENT = getGradientFromStringThroughColor("Made by DaPorkchop_ and LeafHacker", new Color(255, 0, 0), new Color(255, 0, 0), new Color(0, 0, 255));
+    public static final ColorizedText PEPSIMOD_TEXT_GRADIENT = getGradientFromStringThroughColor("PepsiMod 11.0 for Minecraft 1.11.2", new Color(255, 0, 0), new Color(0, 0, 255), new Color(255, 255, 255));
+    public static final ColorizedText PEPSIMOD_AUTHOR_GRADIENT = new RainbowText("Made by DaPorkchop_ and LeafHacker");
 
     static {
-        //TODO: rainbow filter hehehehehehhehehe
-        // #RainbowsAreNotGay
         TOOBEETOOTEE_DATA.setResourceMode(ServerData.ServerResourceMode.PROMPT);
 
         timer.schedule(new TimerTask() {
@@ -35,6 +37,52 @@ public class PepsiUtils {
                 PepsiUtils.buttonPrefix = PepsiUtils.COLOR_ESCAPE + colorCodes[PepsiUtils.rand(0, PepsiUtils.colorCodes.length)];
             }
         }, 1000, 1000);
+
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                //red
+                if (rainbowCycle.red == ColorChangeType.INCREASE)    {
+                    rainbowCycle.r += 8;
+                    if (rainbowCycle.r > 255)    {
+                        rainbowCycle.red = ColorChangeType.DECRASE;
+                        rainbowCycle.green = ColorChangeType.INCREASE;
+                    }
+                } else if (rainbowCycle.red == ColorChangeType.DECRASE)  {
+                    rainbowCycle.r -= 8;
+                    if (rainbowCycle.r == 0) {
+                        rainbowCycle.red = ColorChangeType.NONE;
+                    }
+                }
+                //green
+                if (rainbowCycle.green == ColorChangeType.INCREASE)    {
+                    rainbowCycle.g += 8;
+                    if (rainbowCycle.g > 255)    {
+                        rainbowCycle.green = ColorChangeType.DECRASE;
+                        rainbowCycle.blue = ColorChangeType.INCREASE;
+                    }
+                } else if (rainbowCycle.green == ColorChangeType.DECRASE)  {
+                    rainbowCycle.g -= 8;
+                    if (rainbowCycle.g == 0) {
+                        rainbowCycle.green = ColorChangeType.NONE;
+                    }
+                }
+                //blue
+                if (rainbowCycle.blue == ColorChangeType.INCREASE)    {
+                    rainbowCycle.b += 8;
+                    if (rainbowCycle.b > 255)    {
+                        rainbowCycle.blue = ColorChangeType.DECRASE;
+                        rainbowCycle.red = ColorChangeType.INCREASE;
+                    }
+                } else if (rainbowCycle.blue == ColorChangeType.DECRASE)  {
+                    rainbowCycle.b -= 8;
+                    if (rainbowCycle.b == 0) {
+                        rainbowCycle.blue = ColorChangeType.NONE;
+                    }
+                }
+                RAINBOW_COLOR = new Color(ensureRange(rainbowCycle.r, 0, 255), ensureRange(rainbowCycle.g, 0, 255), ensureRange(rainbowCycle.b, 0, 255));
+            }
+        }, 0, 50);
     }
 
     /**
@@ -67,7 +115,7 @@ public class PepsiUtils {
      * @param through the color in the middle
      * @return a filled GradientText
      */
-    public static GradientText getGradientFromStringThroughColor(String text, Color color1, Color color2, Color through)   {
+    public static ColorizedText getGradientFromStringThroughColor(String text, Color color1, Color color2, Color through)   {
         int charCount = text.length();
         String[] letters = text.split("");
         int colorCountPart1 = Math.floorDiv(charCount, 2), colorCountPart2 = ceilDiv(charCount, 2);
@@ -85,10 +133,10 @@ public class PepsiUtils {
         for (int i = 0; i < colorCountPart2; i++) { //second step
             colorsPart2[i] = new Color(ensureRange(through.getRed() + i * rDiffStep * -1, 0, 255), ensureRange(through.getGreen() + i * gDiffStep * -1, 0, 255), ensureRange(through.getBlue() + i * bDiffStep * -1, 0, 255));
         }
-        GradientElement[] elements = new GradientElement[charCount];
+        FixedColorElement[] elements = new FixedColorElement[charCount];
         Color[] merged = (Color[]) ArrayUtils.addAll(colorsPart1, colorsPart2);
         for (int i = 0; i < charCount; i++) {
-            elements[i] = new GradientElement(merged[i].getRGB(), letters[i]);
+            elements[i] = new FixedColorElement(merged[i].getRGB(), letters[i]);
         }
         return new GradientText(elements, Minecraft.getMinecraft().fontRenderer.getStringWidth(text));
     }
@@ -99,5 +147,70 @@ public class PepsiUtils {
 
     public static int ensureRange(int value, int min, int max) {
         return Math.min(Math.max(value, min), max);
+    }
+
+    public static RainbowCycle rainbowCycle(int count, RainbowCycle toRunOn) {
+        for (int i = 0; i < count; i++) {
+            //red
+            if (toRunOn.red == ColorChangeType.INCREASE) {
+                toRunOn.r += 8;
+                if (toRunOn.r > 255) {
+                    toRunOn.red = ColorChangeType.DECRASE;
+                    toRunOn.green = ColorChangeType.INCREASE;
+                }
+            } else if (toRunOn.red == ColorChangeType.DECRASE) {
+                toRunOn.r -= 8;
+                if (toRunOn.r == 0) {
+                    toRunOn.red = ColorChangeType.NONE;
+                }
+            }
+            //green
+            if (toRunOn.green == ColorChangeType.INCREASE) {
+                toRunOn.g += 8;
+                if (toRunOn.g > 255) {
+                    toRunOn.green = ColorChangeType.DECRASE;
+                    toRunOn.blue = ColorChangeType.INCREASE;
+                }
+            } else if (toRunOn.green == ColorChangeType.DECRASE) {
+                toRunOn.g -= 8;
+                if (toRunOn.g == 0) {
+                    toRunOn.green = ColorChangeType.NONE;
+                }
+            }
+            //blue
+            if (toRunOn.blue == ColorChangeType.INCREASE) {
+                toRunOn.b += 8;
+                if (toRunOn.b > 255) {
+                    toRunOn.blue = ColorChangeType.DECRASE;
+                    toRunOn.red = ColorChangeType.INCREASE;
+                }
+            } else if (toRunOn.blue == ColorChangeType.DECRASE) {
+                toRunOn.b -= 8;
+                if (toRunOn.b == 0) {
+                    toRunOn.blue = ColorChangeType.NONE;
+                }
+            }
+        }
+        return toRunOn;
+    }
+}
+
+enum ColorChangeType {
+    INCREASE,
+    DECRASE,
+    NONE
+}
+
+class RainbowCycle implements Cloneable {
+    public ColorChangeType red = ColorChangeType.INCREASE, green = ColorChangeType.NONE, blue = ColorChangeType.NONE;
+    public int r = 0, g = 0, b = 0;
+
+    public RainbowCycle clone() {
+        try {
+            return (RainbowCycle) super.clone();
+        } catch (CloneNotSupportedException e)  {
+            e.printStackTrace();
+            return this;
+        }
     }
 }
