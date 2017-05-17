@@ -1,5 +1,6 @@
 package net.daporkchop.pepsimod.mixin.client.gui;
 
+import net.daporkchop.pepsimod.PepsiInjectMethods;
 import net.daporkchop.pepsimod.util.Texture;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiMainMenu;
@@ -23,7 +24,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
     private Texture TITLE;
 
     @Inject(method = "initGui", at = @At("RETURN"))
-    public void setup(CallbackInfo ci) {
+    public void addPepsiIconAndChangeSplash(CallbackInfo ci) {
         TITLE = new Texture(new ResourceLocation("textures/gui/pepsimod.png"));
         this.splashText = "";
     }
@@ -41,5 +42,10 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
 
     @Redirect(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiMainMenu;drawString(Lnet/minecraft/client/gui/FontRenderer;Ljava/lang/String;III)V"))
     public void removeAllDrawStrings(GuiMainMenu guiMainMenu, FontRenderer fontRenderer1, String string, int i1, int i2, int i3) {
+    }
+
+    @Inject(method = "drawScreen", at = @At("RETURN"))
+    public void addDrawPepsiStuff(int mouseX, int mouseY, float partialTicks, CallbackInfo ci)  {
+        PepsiInjectMethods.drawPepsiStuffToMainMenu(mouseX, mouseY, partialTicks, this);
     }
 }
