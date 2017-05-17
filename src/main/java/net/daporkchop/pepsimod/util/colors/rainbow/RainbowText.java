@@ -1,52 +1,15 @@
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.util.colors.rainbow;
 
+import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.colors.ColorizedText;
+import net.daporkchop.pepsimod.util.colors.PlainColorElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 
 import java.awt.*;
 
-public abstract class ColorizedText {
-    public abstract void drawAtPos(GuiScreen screen, int x, int y);
-
-    public abstract void drawWithEndAtPos(GuiScreen screen, int x, int y);
-}
-
-abstract class ColorizedElement {
-    public int width;
-    public String text;
-}
-
-class GradientText extends ColorizedText {
-    public final FixedColorElement[] elements;
-    public final int width;
-
-    public GradientText(FixedColorElement[] elements, int width) {
-        this.elements = elements;
-        this.width = width;
-    }
-
-    public void drawAtPos(GuiScreen screen, int x, int y) {
-        int i = 0;
-        for (FixedColorElement element : elements) {
-            screen.drawString(screen.fontRenderer, element.text, x + i, y, element.color);
-            i += element.width;
-        }
-    }
-
-    public void drawWithEndAtPos(GuiScreen screen, int x, int y) {
-        int i = 0;
-        for (FixedColorElement element : elements) {
-            i -= element.width;
-        }
-        for (FixedColorElement element : elements) {
-            screen.drawString(screen.fontRenderer, element.text, x + i, y, element.color);
-            i += element.width;
-        }
-    }
-}
-
-class RainbowText extends ColorizedText {
+public class RainbowText extends ColorizedText {
     private final PlainColorElement[] elements;
     private final int width;
     private final FontRenderer fontRenderer;
@@ -92,22 +55,5 @@ class RainbowText extends ColorizedText {
             screen.drawString(screen.fontRenderer, element.text, x + i, y, color.getRGB());
             i += element.width;
         }
-    }
-}
-
-class FixedColorElement extends ColorizedElement {
-    public final int color;
-
-    public FixedColorElement(int color, String text) {
-        this.color = color;
-        this.text = text;
-        this.width = Minecraft.getMinecraft().fontRenderer.getStringWidth(text);
-    }
-}
-
-class PlainColorElement extends ColorizedElement {
-    public PlainColorElement(String text) {
-        this.text = text;
-        this.width = Minecraft.getMinecraft().fontRenderer.getStringWidth(text);
     }
 }

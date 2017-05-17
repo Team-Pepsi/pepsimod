@@ -1,7 +1,12 @@
 package net.daporkchop.pepsimod.util;
 
+import net.daporkchop.pepsimod.util.colors.ColorizedText;
+import net.daporkchop.pepsimod.util.colors.FixedColorElement;
+import net.daporkchop.pepsimod.util.colors.GradientText;
+import net.daporkchop.pepsimod.util.colors.rainbow.ColorChangeType;
+import net.daporkchop.pepsimod.util.colors.rainbow.RainbowCycle;
+import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.ServerData;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -192,25 +197,5 @@ public class PepsiUtils {
             }
         }
         return toRunOn;
-    }
-}
-
-enum ColorChangeType {
-    INCREASE,
-    DECRASE,
-    NONE
-}
-
-class RainbowCycle implements Cloneable {
-    public ColorChangeType red = ColorChangeType.INCREASE, green = ColorChangeType.NONE, blue = ColorChangeType.NONE;
-    public int r = 0, g = 0, b = 0;
-
-    public RainbowCycle clone() {
-        try {
-            return (RainbowCycle) super.clone();
-        } catch (CloneNotSupportedException e)  {
-            e.printStackTrace();
-            return this;
-        }
     }
 }
