@@ -1,16 +1,16 @@
 [
-{
-  "modid": "pepsimod",
-  "name": "PepsiMod",
-  "description": "A hacked client for Forge\nMade by Team Pepsi, for Team Pepsi",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
-  "authorList": ["DaPorkchop_"],
-  "credits": "Pepsi, for being amazing",
-  "logoFile": "",
-  "screenshots": [],
-  "dependencies": []
-}
+  {
+    "modid": "pepsimod",
+    "name": "PepsiMod",
+    "description": "A hacked client for Forge\nMade by Team Pepsi, for Team Pepsi",
+    "version": "11.0",
+    "mcversion": "1.11.2",
+    "url": "",
+    "updateUrl": "",
+    "authorList": ["DaPorkchop_"],
+    "credits": "Pepsi, for being amazing",
+    "logoFile": "assets/minecraft/textures/gui/pepsimodBackground.png",
+    "screenshots": [],
+    "dependencies": []
+  }
 ]
