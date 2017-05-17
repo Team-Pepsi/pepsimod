@@ -31,7 +31,7 @@ public class PepsiUtils {
     public static final ServerData TOOBEETOOTEE_DATA = new ServerData("toobeetootee", "2b2t.org", false);
 
     public static final ColorizedText PEPSIMOD_TEXT_GRADIENT = getGradientFromStringThroughColor("PepsiMod 11.0 for Minecraft 1.11.2", new Color(255, 0, 0), new Color(0, 0, 255), new Color(255, 255, 255));
-    public static final ColorizedText PEPSIMOD_AUTHOR_GRADIENT = new RainbowText("Made by DaPorkchop_ and LeafHacker");
+    public static final ColorizedText PEPSIMOD_AUTHOR_GRADIENT = new RainbowText("Made by Team Pepsi's awesome developer team");
 
     static {
         TOOBEETOOTEE_DATA.setResourceMode(ServerData.ServerResourceMode.PROMPT);
