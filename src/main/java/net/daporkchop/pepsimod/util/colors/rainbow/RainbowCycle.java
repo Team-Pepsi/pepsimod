@@ -7,7 +7,7 @@ public class RainbowCycle implements Cloneable {
     public RainbowCycle clone() {
         try {
             return (RainbowCycle) super.clone();
-        } catch (CloneNotSupportedException e)  {
+        } catch (CloneNotSupportedException e) {
             e.printStackTrace();
             return this;
         }

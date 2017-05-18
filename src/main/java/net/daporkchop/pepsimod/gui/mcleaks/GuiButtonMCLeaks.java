@@ -8,8 +8,7 @@ import net.minecraft.util.ResourceLocation;
 public class GuiButtonMCLeaks extends GuiButton {
     private ResourceLocation location;
 
-    public GuiButtonMCLeaks(int buttonId, int x, int y, int widthIn, int heightIn)
-    {
+    public GuiButtonMCLeaks(int buttonId, int x, int y, int widthIn, int heightIn) {
         super(buttonId, x, y, widthIn, heightIn, "");
         this.width = 20;
         this.height = 20;
@@ -24,10 +23,8 @@ public class GuiButtonMCLeaks extends GuiButton {
     }
 
 
-    public void drawButton(Minecraft mc, int mouseX, int mouseY)
-    {
-        if (this.visible)
-        {
+    public void drawButton(Minecraft mc, int mouseX, int mouseY) {
+        if (this.visible) {
             mc.getTextureManager().bindTexture(location);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;

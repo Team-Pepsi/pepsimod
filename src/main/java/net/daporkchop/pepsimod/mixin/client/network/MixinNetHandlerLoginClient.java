@@ -17,6 +17,10 @@ public abstract class MixinNetHandlerLoginClient implements INetHandlerLoginClie
     @Shadow
     private final NetworkManager networkManager;
 
+    { // kek look at this hack
+        this.networkManager = null;
+    }
+
     @Inject(method = "handleEncryptionRequest", at = @At("HEAD"), cancellable = true)
     // setting cancellable to true so that we can make the method return prematurely if need be
     public void handleEncryptionRequest(SPacketEncryptionRequest packetIn, CallbackInfo ci) {
@@ -25,9 +29,5 @@ public abstract class MixinNetHandlerLoginClient implements INetHandlerLoginClie
             ci.cancel(); // prevent vanilla auth code from running afterwards
             // https://github.com/SpongePowered/Mixin/wiki/Advanced-Mixin-Usage---Callback-Injectors#3-cancellable-injections
         }
-    }
-
-    { // kek look at this hack
-        this.networkManager = null;
     }
 }

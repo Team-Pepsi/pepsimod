@@ -5,7 +5,6 @@ import net.daporkchop.pepsimod.util.colors.FixedColorElement;
 import net.daporkchop.pepsimod.util.colors.GradientText;
 import net.daporkchop.pepsimod.util.colors.rainbow.ColorChangeType;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowCycle;
-import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
 import org.apache.commons.lang3.ArrayUtils;
@@ -16,22 +15,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class PepsiUtils {
-    private static final Random random = new Random(System.currentTimeMillis());
-
     public static final char COLOR_ESCAPE = '\u00A7';
-    public static String buttonPrefix = COLOR_ESCAPE + "c";
-    public static final String[] colorCodes = new String[] {"c", "9", "f", "1", "4"};
-
+    public static final String[] colorCodes = new String[]{"c", "9", "f", "1", "4"};
     public static final Timer timer = new Timer();
-
-    public static RainbowCycle rainbowCycle = new RainbowCycle();
-
-    public static Color RAINBOW_COLOR = new Color(0, 0, 0);
-
     public static final ServerData TOOBEETOOTEE_DATA = new ServerData("toobeetootee", "2b2t.org", false);
-
-    public static final ColorizedText PEPSIMOD_TEXT_GRADIENT = getGradientFromStringThroughColor("PepsiMod 11.0 for Minecraft 1.11.2", new Color(255, 0, 0), new Color(0, 0, 255), new Color(255, 255, 255));
-    public static final ColorizedText PEPSIMOD_AUTHOR_GRADIENT = new RainbowText("Made by Team Pepsi's awesome developer team");
+    private static final Random random = new Random(System.currentTimeMillis());
+    public static String buttonPrefix = COLOR_ESCAPE + "c";
+    public static RainbowCycle rainbowCycle = new RainbowCycle();
+    public static Color RAINBOW_COLOR = new Color(0, 0, 0);
 
     static {
         TOOBEETOOTEE_DATA.setResourceMode(ServerData.ServerResourceMode.PROMPT);
@@ -47,39 +38,39 @@ public class PepsiUtils {
             @Override
             public void run() {
                 //red
-                if (rainbowCycle.red == ColorChangeType.INCREASE)    {
+                if (rainbowCycle.red == ColorChangeType.INCREASE) {
                     rainbowCycle.r += 8;
-                    if (rainbowCycle.r > 255)    {
+                    if (rainbowCycle.r > 255) {
                         rainbowCycle.red = ColorChangeType.DECRASE;
                         rainbowCycle.green = ColorChangeType.INCREASE;
                     }
-                } else if (rainbowCycle.red == ColorChangeType.DECRASE)  {
+                } else if (rainbowCycle.red == ColorChangeType.DECRASE) {
                     rainbowCycle.r -= 8;
                     if (rainbowCycle.r == 0) {
                         rainbowCycle.red = ColorChangeType.NONE;
                     }
                 }
                 //green
-                if (rainbowCycle.green == ColorChangeType.INCREASE)    {
+                if (rainbowCycle.green == ColorChangeType.INCREASE) {
                     rainbowCycle.g += 8;
-                    if (rainbowCycle.g > 255)    {
+                    if (rainbowCycle.g > 255) {
                         rainbowCycle.green = ColorChangeType.DECRASE;
                         rainbowCycle.blue = ColorChangeType.INCREASE;
                     }
-                } else if (rainbowCycle.green == ColorChangeType.DECRASE)  {
+                } else if (rainbowCycle.green == ColorChangeType.DECRASE) {
                     rainbowCycle.g -= 8;
                     if (rainbowCycle.g == 0) {
                         rainbowCycle.green = ColorChangeType.NONE;
                     }
                 }
                 //blue
-                if (rainbowCycle.blue == ColorChangeType.INCREASE)    {
+                if (rainbowCycle.blue == ColorChangeType.INCREASE) {
                     rainbowCycle.b += 8;
-                    if (rainbowCycle.b > 255)    {
+                    if (rainbowCycle.b > 255) {
                         rainbowCycle.blue = ColorChangeType.DECRASE;
                         rainbowCycle.red = ColorChangeType.INCREASE;
                     }
-                } else if (rainbowCycle.blue == ColorChangeType.DECRASE)  {
+                } else if (rainbowCycle.blue == ColorChangeType.DECRASE) {
                     rainbowCycle.b -= 8;
                     if (rainbowCycle.b == 0) {
                         rainbowCycle.blue = ColorChangeType.NONE;
@@ -106,6 +97,7 @@ public class PepsiUtils {
 
     /**
      * Returns random boolean
+     *
      * @return a boolean random value either <code>true</code> or <code>false</code>
      */
     public static boolean rand() {
@@ -114,13 +106,14 @@ public class PepsiUtils {
 
     /**
      * Makes a gradient! Cache this, as it's quite resource-intensive
-     * @param text the text to gradient-ify
-     * @param color1 the starting color
-     * @param color2 the ending color
+     *
+     * @param text    the text to gradient-ify
+     * @param color1  the starting color
+     * @param color2  the ending color
      * @param through the color in the middle
      * @return a filled GradientText
      */
-    public static ColorizedText getGradientFromStringThroughColor(String text, Color color1, Color color2, Color through)   {
+    public static ColorizedText getGradientFromStringThroughColor(String text, Color color1, Color color2, Color through) {
         int charCount = text.length();
         String[] letters = text.split("");
         int colorCountPart1 = Math.floorDiv(charCount, 2), colorCountPart2 = ceilDiv(charCount, 2);

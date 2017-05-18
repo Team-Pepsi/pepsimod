@@ -1,7 +1,10 @@
 package net.daporkchop.pepsimod.mixin.client.gui;
 
 import net.daporkchop.pepsimod.PepsiInjectMethods;
+import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.Texture;
+import net.daporkchop.pepsimod.util.colors.ColorizedText;
+import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
@@ -15,12 +18,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.awt.*;
+
 @Mixin(GuiMainMenu.class)
 public abstract class MixinGuiMainMenu extends GuiScreen {
 
+    public final ColorizedText PEPSIMOD_TEXT_GRADIENT = PepsiUtils.getGradientFromStringThroughColor("PepsiMod 11.0 for Minecraft 1.11.2", new Color(255, 0, 0), new Color(0, 0, 255), new Color(255, 255, 255));
+    public final ColorizedText PEPSIMOD_AUTHOR_GRADIENT = new RainbowText("Made by Team Pepsi's awesome developer team");
     @Shadow
     private String splashText;
-
     private Texture TITLE;
 
     @Inject(method = "initGui", at = @At("RETURN"))
@@ -45,7 +51,10 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
     }
 
     @Inject(method = "drawScreen", at = @At("RETURN"))
-    public void addDrawPepsiStuff(int mouseX, int mouseY, float partialTicks, CallbackInfo ci)  {
+    public void addDrawPepsiStuff(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
+        this.drawString(this.fontRenderer, PepsiUtils.COLOR_ESCAPE + "cCopyright Mojang AB. Do not distribute!", this.width - this.fontRenderer.getStringWidth("Copyright Mojang AB. Do not distribute!") - 2, this.height - 10, -1);
         PepsiInjectMethods.drawPepsiStuffToMainMenu(mouseX, mouseY, partialTicks, this);
+        PEPSIMOD_TEXT_GRADIENT.drawAtPos(this, 2, this.height - 20);
+        PEPSIMOD_AUTHOR_GRADIENT.drawAtPos(this, 2, this.height - 10);
     }
 }

@@ -1,6 +1,7 @@
 package net.daporkchop.pepsimod.util.colors;
 
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 
 public class GradientText extends ColorizedText {
     public final FixedColorElement[] elements;
@@ -11,21 +12,21 @@ public class GradientText extends ColorizedText {
         this.width = width;
     }
 
-    public void drawAtPos(GuiScreen screen, int x, int y) {
+    public void drawAtPos(Gui screen, int x, int y) {
         int i = 0;
         for (FixedColorElement element : elements) {
-            screen.drawString(screen.fontRenderer, element.text, x + i, y, element.color);
+            screen.drawString(Minecraft.getMinecraft().fontRenderer, element.text, x + i, y, element.color);
             i += element.width;
         }
     }
 
-    public void drawWithEndAtPos(GuiScreen screen, int x, int y) {
+    public void drawWithEndAtPos(Gui screen, int x, int y) {
         int i = 0;
         for (FixedColorElement element : elements) {
             i -= element.width;
         }
         for (FixedColorElement element : elements) {
-            screen.drawString(screen.fontRenderer, element.text, x + i, y, element.color);
+            screen.drawString(Minecraft.getMinecraft().fontRenderer, element.text, x + i, y, element.color);
             i += element.width;
         }
     }
