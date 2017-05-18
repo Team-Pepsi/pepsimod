@@ -23,7 +23,7 @@ public abstract class MixinGuiChat extends GuiScreen {
             GL11.glEnable(GL11.GL_BLEND);
             int x = inputField.xPosition;
             int y = inputField.yPosition;
-            fontRenderer.drawString(".pepsi", x, y, 0x3FFFFFFF, false); //temp string
+            fontRenderer.drawString(".pepsi", x, y, 0x5FFFFFFF, false); //temp string
             GL11.glDisable(GL11.GL_BLEND);
             GL11.glPopMatrix();
         }
