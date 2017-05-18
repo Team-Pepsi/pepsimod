@@ -30,6 +30,7 @@ minecraft {
     runDir = "run"
     mappings = project.mcpVersion
     makeObfSourceJar = false
+    coreMod = "net.daporkchop.pepsimod.MixinLoaderForge"
 }
 
 repositories {
