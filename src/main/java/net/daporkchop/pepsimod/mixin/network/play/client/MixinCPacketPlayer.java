@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.io.IOException;
 
 @Mixin(CPacketPlayer.class)
-public class MixinCPacketPlayer {
+public abstract class MixinCPacketPlayer {
     @Shadow
     protected boolean onGround;
 

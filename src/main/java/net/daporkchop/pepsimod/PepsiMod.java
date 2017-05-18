@@ -1,9 +1,11 @@
 package net.daporkchop.pepsimod;
 
+import net.daporkchop.pepsimod.event.GuiRenderHandler;
 import net.daporkchop.pepsimod.key.KeyRegistry;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.impl.AntiHunger;
 import net.daporkchop.pepsimod.module.impl.NoFall;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -18,6 +20,7 @@ public class PepsiMod {
     public static PepsiMod INSTANCE;
     public boolean isMcLeaksAccount = false;
     public Session originalSession = null;
+    public Minecraft mc;
 
     {
         INSTANCE = this;
@@ -31,16 +34,19 @@ public class PepsiMod {
         ModuleManager.registerModule(new AntiHunger(false, -1, false));
     }
 
+    @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        registerModules(event);
         MinecraftForge.EVENT_BUS.register(new KeyRegistry());
+        this.mc = Minecraft.getMinecraft();
     }
 
+    @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-
+        registerModules(event);
     }
 
+    @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-
+        MinecraftForge.EVENT_BUS.register(new GuiRenderHandler());
     }
 }

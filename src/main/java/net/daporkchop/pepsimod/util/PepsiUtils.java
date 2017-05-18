@@ -1,10 +1,12 @@
 package net.daporkchop.pepsimod.util;
 
+import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
 import net.daporkchop.pepsimod.util.colors.FixedColorElement;
 import net.daporkchop.pepsimod.util.colors.GradientText;
 import net.daporkchop.pepsimod.util.colors.rainbow.ColorChangeType;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowCycle;
+import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
 import org.apache.commons.lang3.ArrayUtils;
@@ -23,6 +25,7 @@ public class PepsiUtils {
     public static String buttonPrefix = COLOR_ESCAPE + "c";
     public static RainbowCycle rainbowCycle = new RainbowCycle();
     public static Color RAINBOW_COLOR = new Color(0, 0, 0);
+    public static ColorizedText PEPSI_NAME = new RainbowText("PepsiMod " + PepsiMod.VERSION);
 
     static {
         TOOBEETOOTEE_DATA.setResourceMode(ServerData.ServerResourceMode.PROMPT);

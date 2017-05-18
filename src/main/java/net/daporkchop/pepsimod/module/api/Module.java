@@ -16,7 +16,7 @@ public abstract class Module {
     public Module(boolean def, String name, int keybind, boolean hide) {
         this.isEnabled = def;
         this.name = name;
-        this.keybind = new KeyBinding("key." + name.toLowerCase(), keybind == -1 ? Keyboard.KEY_NONE : keybind, "key.categories.pepsimod");
+        this.keybind = new KeyBinding(name, keybind == -1 ? Keyboard.KEY_NONE : keybind, "key.categories.pepsimod");
         ClientRegistry.registerKeyBinding(this.keybind);
         if (def) {
             this.onEnable();

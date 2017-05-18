@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 public class KeyRegistry {
     @SubscribeEvent
     public void onKeyPress(InputEvent.KeyInputEvent event) {
-        for (Module module : ModuleManager.ENABLED_MODULES) {
+        for (Module module : ModuleManager.AVALIBLE_MODULES) {
             if (module.keybind.isPressed()) {
                 ModuleManager.toggleModule(module);
             }

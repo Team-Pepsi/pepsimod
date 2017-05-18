@@ -7,7 +7,7 @@
     "client.gui.MixinGuiMainMenu",
     "client.network.MixinNetHandlerLoginClient",
     "client.gui.MixinGuiMultiplayer",
-    "client.gui.MixinGuiIngame",
-    "network.play.client.MixinCPacketPlayer"
+    "network.play.client.MixinCPacketPlayer",
+    "client.gui.MixinGuiChat"
   ]
 }
