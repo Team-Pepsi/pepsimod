@@ -70,4 +70,18 @@ public class RainbowText extends ColorizedText {
             i += element.width;
         }
     }
+
+    public void drawAtPos(Gui screen, int x, int y, int offset) {
+        int tempOffset = this.offset;
+        this.offset = offset;
+        this.drawAtPos(screen, x, y);
+        this.offset = tempOffset;
+    }
+
+    public void drawWithEndAtPos(Gui screen, int x, int y, int offset) {
+        int tempOffset = this.offset;
+        this.offset = offset;
+        this.drawWithEndAtPos(screen, x, y);
+        this.offset = tempOffset;
+    }
 }

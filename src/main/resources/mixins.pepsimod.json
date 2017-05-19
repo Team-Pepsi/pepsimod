@@ -8,6 +8,7 @@
     "client.network.MixinNetHandlerLoginClient",
     "client.gui.MixinGuiMultiplayer",
     "network.play.client.MixinCPacketPlayer",
-    "client.gui.MixinGuiChat"
+    "client.gui.MixinGuiChat",
+    "client.MixinMinecraft"
   ]
 }

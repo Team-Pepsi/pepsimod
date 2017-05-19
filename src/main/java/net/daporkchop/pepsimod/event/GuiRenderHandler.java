@@ -4,7 +4,9 @@ import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
 import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -17,11 +19,25 @@ public class GuiRenderHandler {
 
         GuiIngame gui = PepsiMod.INSTANCE.mc.ingameGUI;
 
-        PepsiUtils.PEPSI_NAME.drawAtPos(gui, 2, 2);
+        ScaledResolution scaled = new ScaledResolution(PepsiMod.INSTANCE.mc);
+        int width = scaled.getScaledWidth();
 
-        for (int i = 0; i < ModuleManager.ENABLED_MODULES.size(); i++) {
+        if ( PepsiUtils.PEPSI_NAME instanceof RainbowText) {
+            ((RainbowText) PepsiUtils.PEPSI_NAME).drawWithEndAtPos(gui, width - 2, 2, 0);
+        } else {
+            PepsiUtils.PEPSI_NAME.drawWithEndAtPos(gui, width - 2, 2);
+        }
+
+        for (int i = 0, j = 0; i < ModuleManager.ENABLED_MODULES.size(); i++) {
             Module module = ModuleManager.ENABLED_MODULES.get(i);
-            module.text.drawAtPos(gui, 2, 22 + i * 10);
+            if (module.hide)    {
+                continue;
+            }
+            if (module.text instanceof RainbowText) {
+                ((RainbowText) module.text).drawWithEndAtPos(gui, width - 2, 22 + j * 10, ++j);
+            } else {
+                module.text.drawWithEndAtPos(gui, width - 2, 22 + i++ * 10);
+            }
         }
     }
 }

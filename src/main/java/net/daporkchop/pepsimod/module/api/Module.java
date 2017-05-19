@@ -1,9 +1,11 @@
 package net.daporkchop.pepsimod.module.api;
 
+import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.input.Keyboard;
 
 public abstract class Module {
@@ -12,6 +14,7 @@ public abstract class Module {
     public KeyBinding keybind;
     public boolean hide;
     public ColorizedText text;
+    public ModuleOption[] options;
 
     public Module(boolean def, String name, int keybind, boolean hide) {
         this.isEnabled = def;
@@ -39,6 +42,7 @@ public abstract class Module {
         } else {
             this.onDisable();
         }
+        this.getOptionByName("enabled").setValue(this.isEnabled);
         return this.isEnabled;
     }
 
@@ -55,7 +59,31 @@ public abstract class Module {
         } else {
             this.onDisable();
         }
+        this.getOptionByName("enabled").setValue(this.isEnabled);
         return isEnabled;
+    }
+
+    /**
+     * Gets all the default module options
+     * @return all the default module options
+     */
+    public final ModuleOption[] defaultOptions()    {
+        return ArrayUtils.addAll(new ModuleOption[] {new OptionTypeBoolean(false,"enabled"), new OptionTypeBoolean(false,"hidden")}, this.getDefaultOptions());
+    }
+
+    /**
+     * Gets a ModuleOption by name
+     * @param name the name to search for
+     * @return a ModuleOption by the given name, null if there was nothing with the name
+     */
+    public ModuleOption getOptionByName(String name)    {
+        for (ModuleOption moduleOption : this.options)  {
+            if (moduleOption.getName().equals(name))    {
+                return moduleOption;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -78,4 +106,9 @@ public abstract class Module {
      * DO NOT CALL THIS YOURSELF, ModuleManager DOES THAT FOR YOU!!!
      */
     public abstract void init();
+
+    /**
+     * Module specific module settings
+     */
+    protected abstract ModuleOption[] getDefaultOptions();
 }

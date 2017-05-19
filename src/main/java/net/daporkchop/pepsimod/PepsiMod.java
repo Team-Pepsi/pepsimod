@@ -3,16 +3,26 @@ package net.daporkchop.pepsimod;
 import net.daporkchop.pepsimod.event.GuiRenderHandler;
 import net.daporkchop.pepsimod.key.KeyRegistry;
 import net.daporkchop.pepsimod.module.ModuleManager;
+import net.daporkchop.pepsimod.module.api.Module;
+import net.daporkchop.pepsimod.module.api.ModuleOption;
+import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
 import net.daporkchop.pepsimod.module.impl.AntiHunger;
+import net.daporkchop.pepsimod.module.impl.Fullbright;
 import net.daporkchop.pepsimod.module.impl.NoFall;
+import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.datatag.DataTag;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLStateEvent;
+
+import java.io.File;
+import java.util.TimerTask;
 
 @Mod(name = "PepsiMod", modid = "pepsimod", version = PepsiMod.VERSION)
 public class PepsiMod {
@@ -21,6 +31,7 @@ public class PepsiMod {
     public boolean isMcLeaksAccount = false;
     public Session originalSession = null;
     public Minecraft mc;
+    public DataTag dataTag = null;
 
     {
         INSTANCE = this;
@@ -32,6 +43,7 @@ public class PepsiMod {
         //i think i got keybinds, still need to test
         ModuleManager.registerModule(new NoFall(false, -1, false));
         ModuleManager.registerModule(new AntiHunger(false, -1, false));
+        ModuleManager.registerModule(new Fullbright(false, -1, false));
     }
 
     @Mod.EventHandler
@@ -43,10 +55,68 @@ public class PepsiMod {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         registerModules(event);
+        loadConfig();
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new GuiRenderHandler());
+        PepsiUtils.timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                PepsiMod.INSTANCE.saveConfig();
+            }
+        }, 300000, 300000);
+    }
+
+    public void loadConfig() {
+        File file = new File(PepsiMod.getWorkingFolder(), "/pepsimod.dat");
+
+        if (!file.exists()) {
+            dataTag = new DataTag(file);
+            for (Module module : ModuleManager.AVALIBLE_MODULES)    {
+                dataTag.setSerializableArray("settings" + module.name, module.defaultOptions());
+            }
+            dataTag.save();
+        } else {
+            dataTag = new DataTag(file);
+        }
+
+        for (Module module : ModuleManager.AVALIBLE_MODULES)    {
+            module.options = (ModuleOption[]) dataTag.getSerializableArray("settings" + module.name, module.defaultOptions());
+            if (((OptionTypeBoolean) module.getOptionByName("enabled")).getValue()) {
+                ModuleManager.enableModule(module);
+            }
+            module.hide = ((OptionTypeBoolean) module.getOptionByName("hidden")).getValue();
+        }
+
+        //save the tag in case new fields are added, this way they are saved right away
+        dataTag.save();
+    }
+
+    public void saveConfig() {
+        for (Module module : ModuleManager.AVALIBLE_MODULES)    {
+            dataTag.setSerializableArray("settings" + module.name, module.defaultOptions());
+        }
+        dataTag.save();
+    }
+
+    /**
+     * Probably unneeded, as pepsimod is client-only
+     * @return a java.io.File with the .minecraft directory
+     */
+    public static File getWorkingFolder() {
+        File toBeReturned;
+        try {
+            if (FMLCommonHandler.instance().getSide().isClient()) {
+                toBeReturned = Minecraft.getMinecraft().mcDataDir;
+            } else {
+                toBeReturned = FMLCommonHandler.instance().getMinecraftServerInstance().getFile("");
+            }
+            return toBeReturned;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -1,6 +1,7 @@
 package net.daporkchop.pepsimod.module.impl;
 
 import net.daporkchop.pepsimod.module.api.Module;
+import net.daporkchop.pepsimod.module.api.ModuleOption;
 
 public class NoFall extends Module {
     public static boolean NO_FALL = false;
@@ -27,5 +28,10 @@ public class NoFall extends Module {
     @Override
     public void init() {
 
+    }
+
+    @Override
+    public ModuleOption[] getDefaultOptions()   {
+        return new ModuleOption[0];
     }
 }
