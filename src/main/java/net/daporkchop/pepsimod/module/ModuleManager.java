@@ -37,7 +37,7 @@ public class ModuleManager {
      * @return the enabled module
      */
     public static final Module enableModule(Module toEnable) {
-        if (!toEnable.isEnabled) {
+        if (!ENABLED_MODULES.contains(toEnable)) {
             if (AVALIBLE_MODULES.contains(toEnable)) {
                 ENABLED_MODULES.add(toEnable);
                 toEnable.setEnabled(true);

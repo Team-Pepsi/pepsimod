@@ -16,11 +16,17 @@ public class Fullbright extends Module {
 
     @Override
     public void onEnable() {
+        if (PepsiMod.INSTANCE.mc.player == null) {
+            return;
+        }
         PepsiMod.INSTANCE.mc.player.addPotionEffect(BRIGHTNESS_EFFECT);
     }
 
     @Override
     public void onDisable() {
+        if (PepsiMod.INSTANCE.mc.player == null) {
+            return;
+        }
         PepsiMod.INSTANCE.mc.player.removeActivePotionEffect(NIGHT_VISION);
         for (PotionEffect effect : PepsiMod.INSTANCE.mc.player.getActivePotionEffects())    {
 
