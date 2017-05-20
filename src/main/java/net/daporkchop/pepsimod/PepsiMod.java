@@ -3,6 +3,7 @@ package net.daporkchop.pepsimod;
 import net.daporkchop.pepsimod.command.CommandRegistry;
 import net.daporkchop.pepsimod.command.impl.Help;
 import net.daporkchop.pepsimod.command.impl.SetRot;
+import net.daporkchop.pepsimod.command.impl.Toggle;
 import net.daporkchop.pepsimod.event.GuiRenderHandler;
 import net.daporkchop.pepsimod.key.KeyRegistry;
 import net.daporkchop.pepsimod.module.ModuleManager;
@@ -36,6 +37,7 @@ public class PepsiMod {
     public Session originalSession = null;
     public Minecraft mc;
     public DataTag dataTag = null;
+    public boolean hasInitializedModules = false;
 
     {
         INSTANCE = this;
@@ -53,6 +55,7 @@ public class PepsiMod {
     public static void registerCommands(FMLStateEvent event) {
         CommandRegistry.registerCommand(new Help());
         CommandRegistry.registerCommand(new SetRot());
+        CommandRegistry.registerCommand(new Toggle());
     }
 
     /**
@@ -126,7 +129,7 @@ public class PepsiMod {
 
     public void saveConfig() {
         for (Module module : ModuleManager.AVALIBLE_MODULES) {
-            dataTag.setSerializableArray("settings" + module.name, module.defaultOptions());
+            dataTag.setSerializableArray("settings" + module.name, module.options);
         }
         dataTag.save();
     }

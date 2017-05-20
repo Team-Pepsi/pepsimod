@@ -2,12 +2,13 @@ package net.daporkchop.pepsimod.mixin.client.gui;
 
 import net.daporkchop.pepsimod.PepsiInjectMethods;
 import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.module.ModuleManager;
+import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.Texture;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -33,6 +34,12 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
 
     @Inject(method = "initGui", at = @At("RETURN"))
     public void addPepsiIconAndChangeSplash(CallbackInfo ci) {
+        if (!PepsiMod.INSTANCE.hasInitializedModules) {
+            for (Module module : ModuleManager.AVALIBLE_MODULES) {
+                module.doInit();
+            }
+            PepsiMod.INSTANCE.hasInitializedModules = true;
+        }
         TITLE = new Texture(new ResourceLocation("textures/gui/pepsimod.png"));
         this.splashText = "";
     }

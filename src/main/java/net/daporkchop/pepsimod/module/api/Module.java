@@ -27,7 +27,6 @@ public abstract class Module {
             this.onDisable();
         }
         this.hide = hide;
-        text = new RainbowText(name);
     }
 
     /**
@@ -72,6 +71,14 @@ public abstract class Module {
     }
 
     /**
+     * Handles base initialization logic after minecraft is started
+     */
+    public final void doInit() {
+        this.text = new RainbowText(this.name);
+        this.init();
+    }
+
+    /**
      * Gets a ModuleOption by name
      * @param name the name to search for
      * @return a ModuleOption by the given name, null if there was nothing with the name
@@ -102,7 +109,7 @@ public abstract class Module {
     public abstract void onDisable();
 
     /**
-     * Called when the module is registered
+     * Called when minecraft is started
      * DO NOT CALL THIS YOURSELF, ModuleManager DOES THAT FOR YOU!!!
      */
     public abstract void init();

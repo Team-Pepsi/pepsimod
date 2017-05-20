@@ -23,9 +23,9 @@ public class GuiRenderHandler {
         int width = scaled.getScaledWidth();
 
         if ( PepsiUtils.PEPSI_NAME instanceof RainbowText) {
-            ((RainbowText) PepsiUtils.PEPSI_NAME).drawWithEndAtPos(gui, width - 2, 2, 0);
+            ((RainbowText) PepsiUtils.PEPSI_NAME).drawAtPos(gui, 2, 2, 0);
         } else {
-            PepsiUtils.PEPSI_NAME.drawWithEndAtPos(gui, width - 2, 2);
+            PepsiUtils.PEPSI_NAME.drawAtPos(gui, 2, 2);
         }
 
         for (int i = 0, j = 0; i < ModuleManager.ENABLED_MODULES.size(); i++) {
@@ -34,9 +34,9 @@ public class GuiRenderHandler {
                 continue;
             }
             if (module.text instanceof RainbowText) {
-                ((RainbowText) module.text).drawWithEndAtPos(gui, width - 2, 22 + j * 10, ++j);
+                ((RainbowText) module.text).drawWithEndAtPos(gui, width - 2, 2 + j * 10, ++j);
             } else {
-                module.text.drawWithEndAtPos(gui, width - 2, 22 + i++ * 10);
+                module.text.drawWithEndAtPos(gui, width - 2, 2 + i++ * 10);
             }
         }
     }

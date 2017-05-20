@@ -80,4 +80,20 @@ public class ModuleManager {
         }
         return toToggle;
     }
+
+    /**
+     * Gets a module by it's name
+     *
+     * @param name the module's name
+     * @return a module, or null if nothing was found
+     */
+    public static final Module getModuleByName(String name) {
+        for (Module module : AVALIBLE_MODULES) {
+            if (module.name.equals(name)) {
+                return module;
+            }
+        }
+
+        return null;
+    }
 }

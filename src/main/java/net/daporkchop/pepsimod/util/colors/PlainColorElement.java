@@ -1,13 +1,10 @@
 package net.daporkchop.pepsimod.util.colors;
 
-import net.minecraft.client.Minecraft;
+import net.daporkchop.pepsimod.PepsiMod;
 
 public class PlainColorElement extends ColorizedElement {
     public PlainColorElement(String text) {
         this.text = text;
-        this.width = Minecraft
-                .getMinecraft()
-                .fontRenderer
-                .getStringWidth(text);
+        this.width = PepsiMod.INSTANCE.mc.fontRenderer.getStringWidth(text);
     }
 }

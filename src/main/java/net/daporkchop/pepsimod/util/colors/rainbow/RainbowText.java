@@ -1,5 +1,6 @@
 package net.daporkchop.pepsimod.util.colors.rainbow;
 
+import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.colors.ColorizedElement;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
@@ -32,7 +33,7 @@ public class RainbowText extends ColorizedText {
         if (split.length > 1) {
             elements[elements.length - 1] = new FixedColorElement(Integer.parseInt(split[1].substring(0, Math.min(split[1].length(), 6)), 16), split[1].substring(6));
         }
-        this.fontRenderer = Minecraft.getMinecraft().fontRenderer;
+        this.fontRenderer = PepsiMod.INSTANCE.mc.fontRenderer;
         this.width = this.fontRenderer.getStringWidth(text);
     }
 
@@ -53,21 +54,34 @@ public class RainbowText extends ColorizedText {
     }
 
     public void drawWithEndAtPos(Gui screen, int x, int y) {
-        int i = 0;
-        for (ColorizedElement element : elements) {
-            i -= element.width;
-        }
+        //old, broken version
+        /*int i = 0;
         RainbowCycle cycle = PepsiUtils.rainbowCycle(offset, PepsiUtils.rainbowCycle.clone());
         for (int j = 0; j < elements.length; j++) {
             ColorizedElement element = elements[j];
             if (element instanceof FixedColorElement) {
-                screen.drawString(Minecraft.getMinecraft().fontRenderer, element.text, x + i, y, ((FixedColorElement) element).color);
+                screen.drawString(Minecraft.getMinecraft().fontRenderer, element.text, x - i, y, ((FixedColorElement) element).color);
                 return;
             }
             cycle = PepsiUtils.rainbowCycle(1, cycle);
             Color color = new Color(PepsiUtils.ensureRange(cycle.r, 0, 255), PepsiUtils.ensureRange(cycle.g, 0, 255), PepsiUtils.ensureRange(cycle.b, 0, 255));
-            screen.drawString(Minecraft.getMinecraft().fontRenderer, element.text, x + i, y, color.getRGB());
+            screen.drawString(Minecraft.getMinecraft().fontRenderer, element.text, x - i, y, color.getRGB());
             i += element.width;
+        }*/
+        int i = 0;
+        RainbowCycle cycle = PepsiUtils.rainbowCycle(offset, PepsiUtils.rainbowCycle.clone());
+        System.out.println(elements.length);
+        for (int j = elements.length - 1; j >= 0; j--) {
+            System.out.println("loop: " + j);
+            ColorizedElement element = elements[j];
+            if (element instanceof FixedColorElement) {
+                screen.drawString(PepsiMod.INSTANCE.mc.fontRenderer, element.text, x + i, y, ((FixedColorElement) element).color);
+                return;
+            }
+            cycle = PepsiUtils.rainbowCycle(1, cycle);
+            Color color = new Color(PepsiUtils.ensureRange(cycle.r, 0, 255), PepsiUtils.ensureRange(cycle.g, 0, 255), PepsiUtils.ensureRange(cycle.b, 0, 255));
+            screen.drawString(PepsiMod.INSTANCE.mc.fontRenderer, element.text, x + i, y, color.getRGB());
+            i -= element.width;
         }
     }
 
