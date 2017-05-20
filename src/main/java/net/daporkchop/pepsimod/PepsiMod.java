@@ -1,5 +1,8 @@
 package net.daporkchop.pepsimod;
 
+import net.daporkchop.pepsimod.command.CommandRegistry;
+import net.daporkchop.pepsimod.command.impl.Help;
+import net.daporkchop.pepsimod.command.impl.SetRot;
 import net.daporkchop.pepsimod.event.GuiRenderHandler;
 import net.daporkchop.pepsimod.key.KeyRegistry;
 import net.daporkchop.pepsimod.module.ModuleManager;
@@ -27,6 +30,7 @@ import java.util.TimerTask;
 @Mod(name = "PepsiMod", modid = "pepsimod", version = PepsiMod.VERSION)
 public class PepsiMod {
     public static final String VERSION = "11.0";
+    public static final String chatPrefix = PepsiUtils.COLOR_ESCAPE + "0" + PepsiUtils.COLOR_ESCAPE + "l[" + PepsiUtils.COLOR_ESCAPE + "c" + PepsiUtils.COLOR_ESCAPE + "lpepsi" + PepsiUtils.COLOR_ESCAPE + "9" + PepsiUtils.COLOR_ESCAPE + "lmod" + PepsiUtils.COLOR_ESCAPE + "0" + PepsiUtils.COLOR_ESCAPE + "l]" + PepsiUtils.COLOR_ESCAPE + "r ";
     public static PepsiMod INSTANCE;
     public boolean isMcLeaksAccount = false;
     public Session originalSession = null;
@@ -46,6 +50,31 @@ public class PepsiMod {
         ModuleManager.registerModule(new Fullbright(false, -1, false));
     }
 
+    public static void registerCommands(FMLStateEvent event) {
+        CommandRegistry.registerCommand(new Help());
+        CommandRegistry.registerCommand(new SetRot());
+    }
+
+    /**
+     * Probably unneeded, as pepsimod is client-only
+     *
+     * @return a java.io.File with the .minecraft directory
+     */
+    public static File getWorkingFolder() {
+        File toBeReturned;
+        try {
+            if (FMLCommonHandler.instance().getSide().isClient()) {
+                toBeReturned = Minecraft.getMinecraft().mcDataDir;
+            } else {
+                toBeReturned = FMLCommonHandler.instance().getMinecraftServerInstance().getFile("");
+            }
+            return toBeReturned;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new KeyRegistry());
@@ -55,6 +84,7 @@ public class PepsiMod {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         registerModules(event);
+        registerCommands(event);
         loadConfig();
     }
 
@@ -74,7 +104,7 @@ public class PepsiMod {
 
         if (!file.exists()) {
             dataTag = new DataTag(file);
-            for (Module module : ModuleManager.AVALIBLE_MODULES)    {
+            for (Module module : ModuleManager.AVALIBLE_MODULES) {
                 dataTag.setSerializableArray("settings" + module.name, module.defaultOptions());
             }
             dataTag.save();
@@ -82,7 +112,7 @@ public class PepsiMod {
             dataTag = new DataTag(file);
         }
 
-        for (Module module : ModuleManager.AVALIBLE_MODULES)    {
+        for (Module module : ModuleManager.AVALIBLE_MODULES) {
             module.options = (ModuleOption[]) dataTag.getSerializableArray("settings" + module.name, module.defaultOptions());
             if (((OptionTypeBoolean) module.getOptionByName("enabled")).getValue()) {
                 ModuleManager.enableModule(module);
@@ -95,28 +125,9 @@ public class PepsiMod {
     }
 
     public void saveConfig() {
-        for (Module module : ModuleManager.AVALIBLE_MODULES)    {
+        for (Module module : ModuleManager.AVALIBLE_MODULES) {
             dataTag.setSerializableArray("settings" + module.name, module.defaultOptions());
         }
         dataTag.save();
-    }
-
-    /**
-     * Probably unneeded, as pepsimod is client-only
-     * @return a java.io.File with the .minecraft directory
-     */
-    public static File getWorkingFolder() {
-        File toBeReturned;
-        try {
-            if (FMLCommonHandler.instance().getSide().isClient()) {
-                toBeReturned = Minecraft.getMinecraft().mcDataDir;
-            } else {
-                toBeReturned = FMLCommonHandler.instance().getMinecraftServerInstance().getFile("");
-            }
-            return toBeReturned;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }
