@@ -3,6 +3,7 @@ package net.daporkchop.pepsimod;
 import net.daporkchop.pepsimod.command.CommandRegistry;
 import net.daporkchop.pepsimod.command.impl.Help;
 import net.daporkchop.pepsimod.command.impl.SetRot;
+import net.daporkchop.pepsimod.command.impl.SortModules;
 import net.daporkchop.pepsimod.command.impl.Toggle;
 import net.daporkchop.pepsimod.event.GuiRenderHandler;
 import net.daporkchop.pepsimod.key.KeyRegistry;
@@ -13,6 +14,8 @@ import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
 import net.daporkchop.pepsimod.module.impl.AntiHunger;
 import net.daporkchop.pepsimod.module.impl.Fullbright;
 import net.daporkchop.pepsimod.module.impl.NoFall;
+import net.daporkchop.pepsimod.util.Friend;
+import net.daporkchop.pepsimod.util.Friends;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.datatag.DataTag;
 import net.minecraft.client.Minecraft;
@@ -26,6 +29,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLStateEvent;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.TimerTask;
 
 @Mod(name = "PepsiMod", modid = "pepsimod", version = PepsiMod.VERSION)
@@ -56,6 +60,7 @@ public class PepsiMod {
         CommandRegistry.registerCommand(new Help());
         CommandRegistry.registerCommand(new SetRot());
         CommandRegistry.registerCommand(new Toggle());
+        CommandRegistry.registerCommand(new SortModules());
     }
 
     /**
@@ -110,6 +115,7 @@ public class PepsiMod {
             for (Module module : ModuleManager.AVALIBLE_MODULES) {
                 dataTag.setSerializableArray("settings" + module.name, module.defaultOptions());
             }
+            dataTag.setSerializable("friends", new HashMap<String, Friend>());
             dataTag.save();
         } else {
             dataTag = new DataTag(file);
@@ -122,6 +128,7 @@ public class PepsiMod {
             }
             module.hide = ((OptionTypeBoolean) module.getOptionByName("hidden")).getValue();
         }
+        Friends.FRIENDS = (HashMap<String, Friend>) dataTag.getSerializable("friends", new HashMap<String, Friend>());
 
         //save the tag in case new fields are added, this way they are saved right away
         dataTag.save();
@@ -131,6 +138,7 @@ public class PepsiMod {
         for (Module module : ModuleManager.AVALIBLE_MODULES) {
             dataTag.setSerializableArray("settings" + module.name, module.options);
         }
+        dataTag.setSerializable("friends", Friends.FRIENDS);
         dataTag.save();
     }
 }

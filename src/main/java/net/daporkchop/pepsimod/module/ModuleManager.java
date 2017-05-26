@@ -1,6 +1,8 @@
 package net.daporkchop.pepsimod.module;
 
 import net.daporkchop.pepsimod.module.api.Module;
+import net.daporkchop.pepsimod.module.api.ModuleSortType;
+import net.daporkchop.pepsimod.util.PepsiUtils;
 
 import java.util.ArrayList;
 
@@ -9,12 +11,12 @@ public class ModuleManager {
     /**
      * All modules that are registered
      */
-    public static final ArrayList<Module> AVALIBLE_MODULES = new ArrayList<>();
+    public static ArrayList<Module> AVALIBLE_MODULES = new ArrayList<>();
 
     /**
      * All modules that are currently enabled
      */
-    public static final ArrayList<Module> ENABLED_MODULES = new ArrayList<>();
+    public static ArrayList<Module> ENABLED_MODULES = new ArrayList<>();
 
     /**
      * Adds a module to the registry
@@ -95,5 +97,51 @@ public class ModuleManager {
         }
 
         return null;
+    }
+
+    public static final void sortModules(ModuleSortType type) {
+        switch (type) {
+            case ALPHABETICAL:
+                ArrayList<Module> tempArrayList = (ArrayList<Module>) ENABLED_MODULES.clone();
+                ArrayList<Module> newArrayList = new ArrayList<>();
+                ESCAPE:
+                for (Module module : tempArrayList) {
+                    for (int i = 0; i < newArrayList.size(); i++) {
+                        if (module.name.compareTo(newArrayList.get(i).name) > 0) {
+                            newArrayList.add(i, module);
+                            continue ESCAPE;
+                        }
+                    }
+                    newArrayList.add(module);
+                }
+                ENABLED_MODULES = newArrayList;
+                break;
+            case DEFAULT: //hehe do nothing lol
+                break;
+            case SIZE:
+                ArrayList<Module> tempArrayList1 = (ArrayList<Module>) ENABLED_MODULES.clone();
+                ArrayList<Module> newArrayList1 = new ArrayList<>();
+                ESCAPE:
+                for (Module module : tempArrayList1) {
+                    for (int i = 0; i < newArrayList1.size(); i++) {
+                        Module existingModule = newArrayList1.get(i);
+                        if (module.text.width() <= existingModule.text.width()) {
+                            newArrayList1.add(i, module);
+                            continue ESCAPE;
+                        }
+                    }
+                    newArrayList1.add(module);
+                }
+                ENABLED_MODULES = newArrayList1;
+                break;
+            case RANDOM:
+                ArrayList<Module> tempArrayList2 = (ArrayList<Module>) ENABLED_MODULES.clone();
+                ArrayList<Module> newArrayList2 = new ArrayList<>();
+                ESCAPE:
+                for (Module module : tempArrayList2) {
+                    newArrayList2.add(PepsiUtils.rand(0, newArrayList2.size()), module);
+                }
+                ENABLED_MODULES = newArrayList2;
+        }
     }
 }

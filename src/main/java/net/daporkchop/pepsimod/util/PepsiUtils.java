@@ -135,7 +135,7 @@ public class PepsiUtils {
             colorsPart2[i] = new Color(ensureRange(through.getRed() + i * rDiffStep * -1, 0, 255), ensureRange(through.getGreen() + i * gDiffStep * -1, 0, 255), ensureRange(through.getBlue() + i * bDiffStep * -1, 0, 255));
         }
         FixedColorElement[] elements = new FixedColorElement[charCount];
-        Color[] merged = (Color[]) ArrayUtils.addAll(colorsPart1, colorsPart2);
+        Color[] merged = ArrayUtils.addAll(colorsPart1, colorsPart2);
         for (int i = 0; i < charCount; i++) {
             elements[i] = new FixedColorElement(merged[i].getRGB(), letters[i]);
         }
@@ -147,7 +147,11 @@ public class PepsiUtils {
     }
 
     public static int ensureRange(int value, int min, int max) {
-        return Math.min(Math.max(value, min), max);
+        int toReturn = Math.min(Math.max(value, min), max);
+        /*if (toReturn != value)  {
+            System.out.println("Changed value, old: " + value + ", new: " + toReturn);
+        }*/
+        return toReturn;
     }
 
     public static RainbowCycle rainbowCycle(int count, RainbowCycle toRunOn) {
@@ -189,6 +193,53 @@ public class PepsiUtils {
                 toRunOn.b -= 8;
                 if (toRunOn.b == 0) {
                     toRunOn.blue = ColorChangeType.NONE;
+                }
+            }
+        }
+        return toRunOn;
+    }
+
+    public static RainbowCycle rainbowCycleBackwards(int count, RainbowCycle toRunOn) {
+        for (int i = 0; i < count; i++) {
+            //red
+            if (toRunOn.red == ColorChangeType.INCREASE) { //decrease value
+                toRunOn.r -= 8;
+                if (toRunOn.r == 0) {
+                    toRunOn.red = ColorChangeType.NONE;
+                }
+            } else if (toRunOn.red == ColorChangeType.DECRASE) {
+                toRunOn.r += 8;
+                if (toRunOn.r > 255) {
+                    toRunOn.red = ColorChangeType.INCREASE;
+                    toRunOn.green = ColorChangeType.DECRASE;
+                }
+            }
+
+            //green
+            if (toRunOn.green == ColorChangeType.INCREASE) { //decrease value
+                toRunOn.g -= 8;
+                if (toRunOn.g == 0) {
+                    toRunOn.green = ColorChangeType.NONE;
+                }
+            } else if (toRunOn.green == ColorChangeType.DECRASE) {
+                toRunOn.g += 8;
+                if (toRunOn.g > 255) {
+                    toRunOn.green = ColorChangeType.INCREASE;
+                    toRunOn.blue = ColorChangeType.DECRASE;
+                }
+            }
+
+            //blue
+            if (toRunOn.blue == ColorChangeType.INCREASE) { //decrease value
+                toRunOn.b -= 8;
+                if (toRunOn.b == 0) {
+                    toRunOn.blue = ColorChangeType.NONE;
+                }
+            } else if (toRunOn.blue == ColorChangeType.DECRASE) {
+                toRunOn.b += 8;
+                if (toRunOn.b > 255) {
+                    toRunOn.blue = ColorChangeType.INCREASE;
+                    toRunOn.red = ColorChangeType.DECRASE;
                 }
             }
         }

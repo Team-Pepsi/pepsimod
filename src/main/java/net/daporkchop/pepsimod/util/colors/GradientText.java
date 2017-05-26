@@ -30,4 +30,8 @@ public class GradientText extends ColorizedText {
             i += element.width;
         }
     }
+
+    public int width() {
+        return width;
+    }
 }
