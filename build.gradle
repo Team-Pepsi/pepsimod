@@ -30,6 +30,7 @@ minecraft {
     runDir = "run"
     mappings = project.mcpVersion
     makeObfSourceJar = false
+    coreMod = "net.daporkchop.pepsimod.PepsiModMixinLoader"
 }
 
 repositories {
@@ -98,7 +99,7 @@ jar {
                 "tweakClass": 'org.spongepowered.asm.launch.MixinTweaker',
                 "TweakOrder": 0,
                 'FMLCorePluginContainsFMLMod': 'true',
-                'FMLCorePlugin': 'net.daporkchop.pepsimod.MixinLoader',
+                'FMLCorePlugin': 'net.daporkchop.pepsimod.PepsiModMixinLoader',
                 'FMLAT': 'pepsimod_at.cfg'
         )
     }

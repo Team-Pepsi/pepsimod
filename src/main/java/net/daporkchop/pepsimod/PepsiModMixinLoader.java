@@ -8,16 +8,12 @@ import org.spongepowered.asm.mixin.Mixins;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-/**
- * Our {@link MixinLoader} class doesn't seem to work properly through a development environment, so we will use this
- * as our tweak class instead when we're in that context.
- * <p>
- * Compiled versions of the client will use {@link MixinLoader} without any trouble.
- */
-public class MixinLoaderForge implements IFMLLoadingPlugin {
+public class PepsiModMixinLoader implements IFMLLoadingPlugin {
 
-    public MixinLoaderForge() {
-        System.out.println("\n\n\nPepsiMod Constructor\n\n\n");
+    public static boolean isObfuscatedEnvironment = false;
+
+    public PepsiModMixinLoader() {
+        System.out.println("\n\n\nPepsiMod Mixin init\n\n");
         MixinBootstrap.init();
         Mixins.addConfiguration("mixins.pepsimod.json");
         MixinEnvironment.getDefaultEnvironment().setObfuscationContext("searge");
@@ -41,11 +37,11 @@ public class MixinLoaderForge implements IFMLLoadingPlugin {
 
     @Override
     public void injectData(Map<String, Object> data) {
-
+        isObfuscatedEnvironment = (boolean) (Boolean) data.get("runtimeDeobfuscationEnabled");
     }
 
     @Override
     public String getAccessTransformerClass() {
-        return null;
+        return "net.daporkchop.pepsimod.PepsiModAccessTransformer";
     }
 }
