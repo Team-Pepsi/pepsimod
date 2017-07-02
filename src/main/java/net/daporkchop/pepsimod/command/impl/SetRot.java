@@ -2,7 +2,6 @@ package net.daporkchop.pepsimod.command.impl;
 
 import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.api.Command;
-import net.minecraft.util.text.TextComponentString;
 
 public class SetRot extends Command {
     public SetRot() {
@@ -12,7 +11,7 @@ public class SetRot extends Command {
     @Override
     public void execute(String cmd, String[] args) {
         if (args.length < 3) {
-            PepsiMod.INSTANCE.mc.player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + "Usage: .setrot <yaw> <pitch>"));
+            clientMessage("Usage: .setrot <yaw> <pitch>");
             return;
         }
 
@@ -20,9 +19,9 @@ public class SetRot extends Command {
             float yaw = Float.parseFloat(args[1]);
             float pitch = Float.parseFloat(args[2]);
             PepsiMod.INSTANCE.mc.player.setPositionAndRotation(PepsiMod.INSTANCE.mc.player.posX, PepsiMod.INSTANCE.mc.player.posY, PepsiMod.INSTANCE.mc.player.posZ, yaw, pitch);
-            PepsiMod.INSTANCE.mc.player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + "Set rotation to yaw: " + yaw + " pitch: " + pitch));
+            clientMessage("Set rotation to yaw: " + yaw + " pitch: " + pitch);
         } catch (NumberFormatException e) {
-            PepsiMod.INSTANCE.mc.player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + "Invalid arguemnts!"));
+            clientMessage("Invalid arguemnts!");
         }
     }
 

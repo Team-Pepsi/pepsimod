@@ -9,6 +9,7 @@
     "client.gui.MixinGuiMultiplayer",
     "network.play.client.MixinCPacketPlayer",
     "client.gui.MixinGuiChat",
-    "client.MixinMinecraft"
+    "client.MixinMinecraft",
+    "client.gui.MixinGuiBossOverlay"
   ]
 }

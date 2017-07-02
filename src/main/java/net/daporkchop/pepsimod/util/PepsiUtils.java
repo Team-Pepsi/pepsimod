@@ -42,39 +42,39 @@ public class PepsiUtils {
             public void run() {
                 //red
                 if (rainbowCycle.red == ColorChangeType.INCREASE) {
-                    rainbowCycle.r += 8;
+                    rainbowCycle.r += 4;
                     if (rainbowCycle.r > 255) {
                         rainbowCycle.red = ColorChangeType.DECRASE;
                         rainbowCycle.green = ColorChangeType.INCREASE;
                     }
                 } else if (rainbowCycle.red == ColorChangeType.DECRASE) {
-                    rainbowCycle.r -= 8;
+                    rainbowCycle.r -= 4;
                     if (rainbowCycle.r == 0) {
                         rainbowCycle.red = ColorChangeType.NONE;
                     }
                 }
                 //green
                 if (rainbowCycle.green == ColorChangeType.INCREASE) {
-                    rainbowCycle.g += 8;
+                    rainbowCycle.g += 4;
                     if (rainbowCycle.g > 255) {
                         rainbowCycle.green = ColorChangeType.DECRASE;
                         rainbowCycle.blue = ColorChangeType.INCREASE;
                     }
                 } else if (rainbowCycle.green == ColorChangeType.DECRASE) {
-                    rainbowCycle.g -= 8;
+                    rainbowCycle.g -= 4;
                     if (rainbowCycle.g == 0) {
                         rainbowCycle.green = ColorChangeType.NONE;
                     }
                 }
                 //blue
                 if (rainbowCycle.blue == ColorChangeType.INCREASE) {
-                    rainbowCycle.b += 8;
+                    rainbowCycle.b += 4;
                     if (rainbowCycle.b > 255) {
                         rainbowCycle.blue = ColorChangeType.DECRASE;
                         rainbowCycle.red = ColorChangeType.INCREASE;
                     }
                 } else if (rainbowCycle.blue == ColorChangeType.DECRASE) {
-                    rainbowCycle.b -= 8;
+                    rainbowCycle.b -= 4;
                     if (rainbowCycle.b == 0) {
                         rainbowCycle.blue = ColorChangeType.NONE;
                     }
@@ -158,39 +158,39 @@ public class PepsiUtils {
         for (int i = 0; i < count; i++) {
             //red
             if (toRunOn.red == ColorChangeType.INCREASE) {
-                toRunOn.r += 8;
+                toRunOn.r += 4;
                 if (toRunOn.r > 255) {
                     toRunOn.red = ColorChangeType.DECRASE;
                     toRunOn.green = ColorChangeType.INCREASE;
                 }
             } else if (toRunOn.red == ColorChangeType.DECRASE) {
-                toRunOn.r -= 8;
+                toRunOn.r -= 4;
                 if (toRunOn.r == 0) {
                     toRunOn.red = ColorChangeType.NONE;
                 }
             }
             //green
             if (toRunOn.green == ColorChangeType.INCREASE) {
-                toRunOn.g += 8;
+                toRunOn.g += 4;
                 if (toRunOn.g > 255) {
                     toRunOn.green = ColorChangeType.DECRASE;
                     toRunOn.blue = ColorChangeType.INCREASE;
                 }
             } else if (toRunOn.green == ColorChangeType.DECRASE) {
-                toRunOn.g -= 8;
+                toRunOn.g -= 4;
                 if (toRunOn.g == 0) {
                     toRunOn.green = ColorChangeType.NONE;
                 }
             }
             //blue
             if (toRunOn.blue == ColorChangeType.INCREASE) {
-                toRunOn.b += 8;
+                toRunOn.b += 4;
                 if (toRunOn.b > 255) {
                     toRunOn.blue = ColorChangeType.DECRASE;
                     toRunOn.red = ColorChangeType.INCREASE;
                 }
             } else if (toRunOn.blue == ColorChangeType.DECRASE) {
-                toRunOn.b -= 8;
+                toRunOn.b -= 4;
                 if (toRunOn.b == 0) {
                     toRunOn.blue = ColorChangeType.NONE;
                 }

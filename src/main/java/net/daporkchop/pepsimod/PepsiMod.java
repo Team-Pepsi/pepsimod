@@ -1,10 +1,7 @@
 package net.daporkchop.pepsimod;
 
 import net.daporkchop.pepsimod.command.CommandRegistry;
-import net.daporkchop.pepsimod.command.impl.Help;
-import net.daporkchop.pepsimod.command.impl.SetRot;
-import net.daporkchop.pepsimod.command.impl.SortModules;
-import net.daporkchop.pepsimod.command.impl.Toggle;
+import net.daporkchop.pepsimod.command.impl.*;
 import net.daporkchop.pepsimod.event.GuiRenderHandler;
 import net.daporkchop.pepsimod.key.KeyRegistry;
 import net.daporkchop.pepsimod.module.ModuleManager;
@@ -50,7 +47,6 @@ public class PepsiMod {
     public static void registerModules(FMLStateEvent event) {
         //TODO: save enabled status
         //TODO: save hidden status
-        //i think i got keybinds, still need to test
         ModuleManager.registerModule(new NoFall(false, -1, false));
         ModuleManager.registerModule(new AntiHunger(false, -1, false));
         ModuleManager.registerModule(new Fullbright(false, -1, false));
@@ -61,6 +57,7 @@ public class PepsiMod {
         CommandRegistry.registerCommand(new SetRot());
         CommandRegistry.registerCommand(new Toggle());
         CommandRegistry.registerCommand(new SortModules());
+        CommandRegistry.registerCommand(new Save());
     }
 
     /**

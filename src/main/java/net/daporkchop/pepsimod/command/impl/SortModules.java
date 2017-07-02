@@ -1,10 +1,8 @@
 package net.daporkchop.pepsimod.command.impl;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.api.Command;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.ModuleSortType;
-import net.minecraft.util.text.TextComponentString;
 
 public class SortModules extends Command {
     public static final String[] MODES = new String[] {"alphabetical", "default", "size", "random"};
@@ -24,8 +22,8 @@ public class SortModules extends Command {
             }
         }
         if (resulttype == null) {
-            PepsiMod.INSTANCE.mc.player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + "Invalid type: " + args[1]));
-            PepsiMod.INSTANCE.mc.player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + "Valid types are: alphabetical, default, size, random"));
+            clientMessage("Invalid type: " + args[1]);
+            clientMessage("Valid types are: alphabetical, default, size, random");
             return;
         } else {
             switch (resulttype) {
@@ -42,7 +40,7 @@ public class SortModules extends Command {
                     ModuleManager.sortModules(ModuleSortType.RANDOM);
                     break;
             }
-            PepsiMod.INSTANCE.mc.player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + "Sorted modules according to: " + resulttype));
+            clientMessage("Sorted modules according to: \u00A7l" + resulttype);
         }
     }
 

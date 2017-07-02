@@ -1,11 +1,9 @@
 package net.daporkchop.pepsimod.command.impl;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.api.Command;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.util.PepsiUtils;
-import net.minecraft.util.text.TextComponentString;
 
 public class Toggle extends Command {
     public Toggle() {
@@ -15,15 +13,15 @@ public class Toggle extends Command {
     @Override
     public void execute(String cmd, String[] args) {
         if (args.length < 2)    {
-            PepsiMod.INSTANCE.mc.player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + "Usage: .toggle <moduleName>"));
+            clientMessage("Usage: .toggle <moduleName>");
             return;
         }
         Module module = ModuleManager.getModuleByName(args[1]);
         if (module == null) {
-            PepsiMod.INSTANCE.mc.player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + "No module was found by the name: " + PepsiUtils.COLOR_ESCAPE + "o" + args[1]));
+            clientMessage("No module was found by the name: " + PepsiUtils.COLOR_ESCAPE + "o" + args[1]);
         } else {
             ModuleManager.toggleModule(module);
-            PepsiMod.INSTANCE.mc.player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + "Toggled module: " + PepsiUtils.COLOR_ESCAPE + "o" + module.name));
+            clientMessage("Toggled module: " + PepsiUtils.COLOR_ESCAPE + "o" + module.name);
         }
     }
 

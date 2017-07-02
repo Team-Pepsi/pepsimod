@@ -34,7 +34,7 @@ public class GuiRenderHandler {
                 continue;
             }
             if (module.text instanceof RainbowText) {
-                ((RainbowText) module.text).drawWithEndAtPos(gui, width - 2, 2 + j * 10, ++j);
+                ((RainbowText) module.text).drawWithEndAtPos(gui, width - 2, 2 + j * 10, ++j * 4);
             } else {
                 module.text.drawWithEndAtPos(gui, width - 2, 2 + i++ * 10);
             }
