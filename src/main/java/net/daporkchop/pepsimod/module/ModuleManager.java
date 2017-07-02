@@ -3,6 +3,7 @@ package net.daporkchop.pepsimod.module;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleSortType;
 import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.minecraft.network.Packet;
 
 import java.util.ArrayList;
 
@@ -107,7 +108,7 @@ public class ModuleManager {
                 ESCAPE:
                 for (Module module : tempArrayList) {
                     for (int i = 0; i < newArrayList.size(); i++) {
-                        if (module.name.compareTo(newArrayList.get(i).name) > 0) {
+                        if (module.name.compareTo(newArrayList.get(i).name) < 0) {
                             newArrayList.add(i, module);
                             continue ESCAPE;
                         }
@@ -125,7 +126,7 @@ public class ModuleManager {
                 for (Module module : tempArrayList1) {
                     for (int i = 0; i < newArrayList1.size(); i++) {
                         Module existingModule = newArrayList1.get(i);
-                        if (module.text.width() <= existingModule.text.width()) {
+                        if (module.text.width() >= existingModule.text.width()) {
                             newArrayList1.add(i, module);
                             continue ESCAPE;
                         }
@@ -142,6 +143,38 @@ public class ModuleManager {
                     newArrayList2.add(PepsiUtils.rand(0, newArrayList2.size()), module);
                 }
                 ENABLED_MODULES = newArrayList2;
+        }
+    }
+
+    public static boolean preRecievePacket(Packet<?> packetIn) {
+        boolean cancel = false;
+        for (Module module : ENABLED_MODULES) {
+            if (module.preRecievePacket(packetIn)) {
+                cancel = true;
+            }
+        }
+        return cancel;
+    }
+
+    public static void postRecievePacket(Packet<?> packetIn) {
+        for (Module module : ENABLED_MODULES) {
+            module.postRecievePacket(packetIn);
+        }
+    }
+
+    public static boolean preSendPacket(Packet<?> packetIn) {
+        boolean cancel = false;
+        for (Module module : ENABLED_MODULES) {
+            if (module.preSendPacket(packetIn)) {
+                cancel = true;
+            }
+        }
+        return cancel;
+    }
+
+    public static void postSendPacket(Packet<?> packetIn) {
+        for (Module module : ENABLED_MODULES) {
+            module.postSendPacket(packetIn);
         }
     }
 }

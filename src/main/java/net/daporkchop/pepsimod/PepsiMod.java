@@ -9,6 +9,7 @@ import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
 import net.daporkchop.pepsimod.module.impl.AntiHunger;
+import net.daporkchop.pepsimod.module.impl.Criticals;
 import net.daporkchop.pepsimod.module.impl.Fullbright;
 import net.daporkchop.pepsimod.module.impl.NoFall;
 import net.daporkchop.pepsimod.util.Friend;
@@ -26,6 +27,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLStateEvent;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TimerTask;
 
@@ -50,6 +52,7 @@ public class PepsiMod {
         ModuleManager.registerModule(new NoFall(false, -1, false));
         ModuleManager.registerModule(new AntiHunger(false, -1, false));
         ModuleManager.registerModule(new Fullbright(false, -1, false));
+        ModuleManager.registerModule(new Criticals(false, -1, false));
     }
 
     public static void registerCommands(FMLStateEvent event) {
@@ -119,7 +122,29 @@ public class PepsiMod {
         }
 
         for (Module module : ModuleManager.AVALIBLE_MODULES) {
-            module.options = (ModuleOption[]) dataTag.getSerializableArray("settings" + module.name, module.defaultOptions());
+            ModuleOption[] defaultOptions = module.defaultOptions();
+            module.options = (ModuleOption[]) dataTag.getSerializableArray("settings" + module.name, defaultOptions);
+            if (defaultOptions.length != module.options.length) {
+                //TODO: remove by name, not by index
+                if (defaultOptions.length > module.options.length) {
+                    System.out.println("New options have been added to module: " + module.name);
+                    ArrayList<ModuleOption> tempList = new ArrayList<>();
+                    for (ModuleOption option : module.options) {
+                        tempList.add(option);
+                    }
+                    for (int i = tempList.size(); i < defaultOptions.length; i++) {
+                        tempList.add(defaultOptions[i]);
+                    }
+                    module.options = tempList.toArray(new ModuleOption[tempList.size()]);
+                } else {
+                    System.out.println("Options have been removed from module: " + module.name);
+                    ArrayList<ModuleOption> tempList = new ArrayList<>();
+                    for (int i = 0; i < defaultOptions.length; i++) {
+                        tempList.add(module.options[i]);
+                    }
+                    module.options = tempList.toArray(new ModuleOption[tempList.size()]);
+                }
+            }
             if (((OptionTypeBoolean) module.getOptionByName("enabled")).getValue()) {
                 ModuleManager.enableModule(module);
             }

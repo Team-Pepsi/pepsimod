@@ -16,6 +16,6 @@ public class Save extends Command {
 
     @Override
     public String getSuggestion(String cmd, String[] args) {
-        return ".help";
+        return ".save";
     }
 }

@@ -10,6 +10,7 @@
     "network.play.client.MixinCPacketPlayer",
     "client.gui.MixinGuiChat",
     "client.MixinMinecraft",
-    "client.gui.MixinGuiBossOverlay"
+    "client.gui.MixinGuiBossOverlay",
+    "network.MixinNetworkManager"
   ]
 }

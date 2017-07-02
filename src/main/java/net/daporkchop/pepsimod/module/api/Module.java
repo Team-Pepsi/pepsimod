@@ -1,16 +1,18 @@
 package net.daporkchop.pepsimod.module.api;
 
 import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
+import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.network.Packet;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.input.Keyboard;
 
 public abstract class Module {
+    public final String name;
     public boolean isEnabled;
-    public String name;
     public KeyBinding keybind;
     public boolean hide;
     public ColorizedText text;
@@ -64,28 +66,34 @@ public abstract class Module {
 
     /**
      * Gets all the default module options
+     *
      * @return all the default module options
      */
-    public final ModuleOption[] defaultOptions()    {
-        return ArrayUtils.addAll(new ModuleOption[] {new OptionTypeBoolean(false,"enabled"), new OptionTypeBoolean(false,"hidden")}, this.getDefaultOptions());
+    public final ModuleOption[] defaultOptions() {
+        return ArrayUtils.addAll(new ModuleOption[]{new OptionTypeBoolean(false, "enabled"), new OptionTypeBoolean(false, "hidden")}, this.getDefaultOptions());
     }
 
     /**
      * Handles base initialization logic after minecraft is started
      */
     public final void doInit() {
-        this.text = new RainbowText(this.name);
+        if (hasModeInName()) {
+            updateName();
+        } else {
+            this.text = new RainbowText(this.name);
+        }
         this.init();
     }
 
     /**
      * Gets a ModuleOption by name
+     *
      * @param name the name to search for
      * @return a ModuleOption by the given name, null if there was nothing with the name
      */
-    public ModuleOption getOptionByName(String name)    {
-        for (ModuleOption moduleOption : this.options)  {
-            if (moduleOption.getName().equals(name))    {
+    public ModuleOption getOptionByName(String name) {
+        for (ModuleOption moduleOption : this.options) {
+            if (moduleOption.getName().equals(name)) {
                 return moduleOption;
             }
         }
@@ -118,4 +126,66 @@ public abstract class Module {
      * Module specific module settings
      */
     protected abstract ModuleOption[] getDefaultOptions();
+
+    /**
+     * Called directly after a packet is recieved, before it's processed
+     *
+     * @return if true, the packet will be ignored by vanilla
+     */
+    public boolean preRecievePacket(Packet<?> packetIn) {
+        return false;
+    }
+
+    /**
+     * Called after a packet is recieved, after it's been processed
+     */
+    public void postRecievePacket(Packet<?> packetIn) {
+
+    }
+
+    /**
+     * Called right before a packet is sent
+     *
+     * @return if true, the packet will not be sent
+     */
+    public boolean preSendPacket(Packet<?> packetIn) {
+        return false;
+    }
+
+    /**
+     * Called after a packet is sent
+     */
+    public void postSendPacket(Packet<?> packetIn) {
+
+    }
+
+    /**
+     * Whether or not extra info should show in the name
+     * e.g.
+     * Criticals [Packet]
+     */
+    public boolean hasModeInName() {
+        return false;
+    }
+
+    /**
+     * Whether or not extra info should show in the name
+     * e.g.
+     * Criticals [Packet]
+     * <p>
+     * This method returned "Packet"
+     */
+    public String getModeForName() {
+        return "";
+    }
+
+    /**
+     * Updates the module's name
+     * Does nothing if the module has no custom name
+     */
+    public void updateName() {
+        if (hasModeInName()) {
+            text = new RainbowText(name + PepsiUtils.COLOR_ESCAPE + "customa8a8a8 [" + getModeForName() + "]");
+        }
+    }
 }
