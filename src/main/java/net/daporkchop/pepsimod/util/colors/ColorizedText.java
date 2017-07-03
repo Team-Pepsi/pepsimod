@@ -6,6 +6,4 @@ public abstract class ColorizedText {
     public abstract int width();
 
     public abstract void drawAtPos(Gui screen, int x, int y);
-
-    public abstract void drawWithEndAtPos(Gui screen, int x, int y);
 }

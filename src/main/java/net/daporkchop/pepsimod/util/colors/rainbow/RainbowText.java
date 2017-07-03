@@ -39,13 +39,14 @@ public class RainbowText extends ColorizedText {
                 i += element.width;
             }
             this.width = i;
+            this.text = split[0] + split[1].substring(6);
         } else {
             this.width = this.fontRenderer.getStringWidth(text);
         }
         this.text = text;
     }
 
-    //TODO: find out why colors are wonky with info text
+    //int debug = 0;
     public void drawAtPos(Gui screen, int x, int y) {
         int i = 0;
         RainbowCycle cycle = PepsiUtils.rainbowCycle(offset, PepsiUtils.rainbowCycle.clone());
@@ -57,25 +58,13 @@ public class RainbowText extends ColorizedText {
             }
             cycle = PepsiUtils.rainbowCycle(1, cycle);
             Color color = new Color(PepsiUtils.ensureRange(cycle.r, 0, 255), PepsiUtils.ensureRange(cycle.g, 0, 255), PepsiUtils.ensureRange(cycle.b, 0, 255));
-            screen.drawString(Minecraft.getMinecraft().fontRenderer, element.text, x + i, y, color.getRGB());
-            i += element.width;
-        }
-    }
-
-    public void drawWithEndAtPos(Gui screen, int x, int y) {
-        int i = 0;
-        for (ColorizedElement element : elements) {
-            i -= element.width;
-        }
-        RainbowCycle cycle = PepsiUtils.rainbowCycleBackwards(this.text.length(), PepsiUtils.rainbowCycle(offset, PepsiUtils.rainbowCycle.clone()));
-        for (int j = 0; j < elements.length; j++) {
-            ColorizedElement element = elements[j];
-            if (element instanceof FixedColorElement) {
-                screen.drawString(Minecraft.getMinecraft().fontRenderer, element.text, x + i, y, ((FixedColorElement) element).color);
-                return;
+            /*if (color.getRed() != cycle.r)  {
+                System.out.println("had to ensure range! original color " + cycle.r + ", actual " + color.getRed());
+            }*/
+            /*if (Math.abs(debug - color.getRed()) > 4)   {
+                System.out.println("difference in one color tick was " + Math.abs(debug - color.getRed()));
             }
-            cycle = PepsiUtils.rainbowCycle(1, cycle);
-            Color color = new Color(PepsiUtils.ensureRange(cycle.r, 0, 255), PepsiUtils.ensureRange(cycle.g, 0, 255), PepsiUtils.ensureRange(cycle.b, 0, 255));
+            debug = color.getRed();*/
             screen.drawString(Minecraft.getMinecraft().fontRenderer, element.text, x + i, y, color.getRGB());
             i += element.width;
         }
@@ -85,13 +74,6 @@ public class RainbowText extends ColorizedText {
         int tempOffset = this.offset;
         this.offset = offset;
         this.drawAtPos(screen, x, y);
-        this.offset = tempOffset;
-    }
-
-    public void drawWithEndAtPos(Gui screen, int x, int y, int offset) {
-        int tempOffset = this.offset;
-        this.offset = offset;
-        this.drawWithEndAtPos(screen, x, y);
         this.offset = tempOffset;
     }
 

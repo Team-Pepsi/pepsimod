@@ -34,9 +34,9 @@ public class GuiRenderHandler {
                 continue;
             }
             if (module.text instanceof RainbowText) {
-                ((RainbowText) module.text).drawWithEndAtPos(gui, width - 2, 2 + j * 10, ++j * 8);
+                ((RainbowText) module.text).drawAtPos(gui, width - 2 - module.text.width(), 2 + j * 10, ++j * 8);
             } else {
-                module.text.drawWithEndAtPos(gui, width - 2, 2 + i++ * 10);
+                module.text.drawAtPos(gui, width - 2 - module.text.width(), 2 + i++ * 10);
             }
         }
     }
