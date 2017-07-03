@@ -19,6 +19,8 @@ public class ModuleManager {
      */
     public static ArrayList<Module> ENABLED_MODULES = new ArrayList<>();
 
+    public static ModuleSortType sortType = ModuleSortType.SIZE;
+
     /**
      * Adds a module to the registry
      *
@@ -48,6 +50,7 @@ public class ModuleManager {
                 throw new IllegalStateException("Attempted to enable an unregistered Module!");
             }
         }
+        sortModules(sortType);
         return toEnable;
     }
 
@@ -66,6 +69,7 @@ public class ModuleManager {
                 throw new IllegalStateException("Attempted to disable an unregistered Module!");
             }
         }
+        sortModules(sortType);
         return toDisable;
     }
 
@@ -101,6 +105,7 @@ public class ModuleManager {
     }
 
     public static final void sortModules(ModuleSortType type) {
+        sortType = type;
         switch (type) {
             case ALPHABETICAL:
                 ArrayList<Module> tempArrayList = (ArrayList<Module>) ENABLED_MODULES.clone();
@@ -124,6 +129,9 @@ public class ModuleManager {
                 ArrayList<Module> newArrayList1 = new ArrayList<>();
                 ESCAPE:
                 for (Module module : tempArrayList1) {
+                    if (module.text == null) {
+                        return;
+                    }
                     for (int i = 0; i < newArrayList1.size(); i++) {
                         Module existingModule = newArrayList1.get(i);
                         if (module.text.width() >= existingModule.text.width()) {

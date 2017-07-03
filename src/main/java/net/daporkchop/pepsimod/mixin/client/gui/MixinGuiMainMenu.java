@@ -42,6 +42,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
         }
         TITLE = new Texture(new ResourceLocation("textures/gui/pepsimod.png"));
         this.splashText = "";
+        ModuleManager.sortModules(ModuleManager.sortType);
     }
 
     @Redirect(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/texture/TextureManager;bindTexture(Lnet/minecraft/util/ResourceLocation;)V"))

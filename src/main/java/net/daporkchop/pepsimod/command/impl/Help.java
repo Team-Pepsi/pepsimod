@@ -1,6 +1,5 @@
 package net.daporkchop.pepsimod.command.impl;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.CommandRegistry;
 import net.daporkchop.pepsimod.command.api.Command;
 
@@ -11,7 +10,7 @@ public class Help extends Command {
 
     @Override
     public void execute(String cmd, String[] args) {
-        String toSend = PepsiMod.chatPrefix;
+        String toSend = "";
         for (Command command : CommandRegistry.COMMANDS) {
             toSend += command.name + ", ";
         }

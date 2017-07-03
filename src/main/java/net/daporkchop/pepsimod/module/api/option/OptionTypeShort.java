@@ -10,4 +10,8 @@ public class OptionTypeShort extends ModuleOption<Short> {
     public OptionTypeShort(Object defaultValue, String name)  {
         super((Short) defaultValue, name);
     }
+
+    public Short getDefaultValue() {
+        return 0;
+    }
 }

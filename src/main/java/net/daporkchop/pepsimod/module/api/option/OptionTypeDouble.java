@@ -10,4 +10,8 @@ public class OptionTypeDouble extends ModuleOption<Double> {
     public OptionTypeDouble(Object defaultValue, String name)  {
         super((Double) defaultValue, name);
     }
+
+    public Double getDefaultValue() {
+        return 0.0d;
+    }
 }

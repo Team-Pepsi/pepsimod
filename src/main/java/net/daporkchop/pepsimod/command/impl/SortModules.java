@@ -46,6 +46,20 @@ public class SortModules extends Command {
 
     @Override
     public String getSuggestion(String cmd, String[] args)  {
-        return "";
+        switch (args.length) {
+            case 1:
+                return ".sortmodules " + MODES[0];
+            case 2:
+                if (args[1].isEmpty()) {
+                    return ".sortmodules " + MODES[0];
+                }
+                for (String mode : MODES) {
+                    if (mode.startsWith(args[1])) {
+                        return ".sortmodules " + mode;
+                    }
+                }
+        }
+
+        return ".sortmodules";
     }
 }

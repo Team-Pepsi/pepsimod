@@ -10,4 +10,8 @@ public class OptionTypeByte extends ModuleOption<Byte> {
     public OptionTypeByte(Object defaultValue, String name)  {
         super((Byte) defaultValue, name);
     }
+
+    public Byte getDefaultValue() {
+        return 0;
+    }
 }

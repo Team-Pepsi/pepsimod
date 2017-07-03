@@ -113,7 +113,7 @@ public class PepsiMod {
         if (!file.exists()) {
             dataTag = new DataTag(file);
             for (Module module : ModuleManager.AVALIBLE_MODULES) {
-                dataTag.setSerializableArray("settings" + module.name, module.defaultOptions());
+                dataTag.setSerializableArray("settings" + module.nameFull, module.defaultOptions());
             }
             dataTag.setSerializable("friends", new HashMap<String, Friend>());
             dataTag.save();
@@ -123,11 +123,11 @@ public class PepsiMod {
 
         for (Module module : ModuleManager.AVALIBLE_MODULES) {
             ModuleOption[] defaultOptions = module.defaultOptions();
-            module.options = (ModuleOption[]) dataTag.getSerializableArray("settings" + module.name, defaultOptions);
+            module.options = (ModuleOption[]) dataTag.getSerializableArray("settings" + module.nameFull, defaultOptions);
             if (defaultOptions.length != module.options.length) {
                 //TODO: remove by name, not by index
                 if (defaultOptions.length > module.options.length) {
-                    System.out.println("New options have been added to module: " + module.name);
+                    System.out.println("New options have been added to module: " + module.nameFull);
                     ArrayList<ModuleOption> tempList = new ArrayList<>();
                     for (ModuleOption option : module.options) {
                         tempList.add(option);
@@ -137,7 +137,7 @@ public class PepsiMod {
                     }
                     module.options = tempList.toArray(new ModuleOption[tempList.size()]);
                 } else {
-                    System.out.println("Options have been removed from module: " + module.name);
+                    System.out.println("Options have been removed from module: " + module.nameFull);
                     ArrayList<ModuleOption> tempList = new ArrayList<>();
                     for (int i = 0; i < defaultOptions.length; i++) {
                         tempList.add(module.options[i]);
@@ -158,7 +158,7 @@ public class PepsiMod {
 
     public void saveConfig() {
         for (Module module : ModuleManager.AVALIBLE_MODULES) {
-            dataTag.setSerializableArray("settings" + module.name, module.options);
+            dataTag.setSerializableArray("settings" + module.nameFull, module.options);
         }
         dataTag.setSerializable("friends", Friends.FRIENDS);
         dataTag.save();

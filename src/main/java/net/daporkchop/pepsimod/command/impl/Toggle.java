@@ -31,6 +31,9 @@ public class Toggle extends Command {
             case 1:
                 return ".toggle " + ModuleManager.AVALIBLE_MODULES.get(0).name;
             case 2:
+                if (args[1].isEmpty()) {
+                    return ".toggle " + ModuleManager.AVALIBLE_MODULES.get(0).name;
+                }
                 for (Module module : ModuleManager.AVALIBLE_MODULES)    {
                     if (module.name.startsWith(args[1]))    {
                         return ".toggle " + module.name;

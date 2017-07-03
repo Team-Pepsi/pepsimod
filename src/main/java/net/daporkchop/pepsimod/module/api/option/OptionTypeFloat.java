@@ -10,4 +10,8 @@ public class OptionTypeFloat extends ModuleOption<Float> {
     public OptionTypeFloat(Object defaultValue, String name)  {
         super((Float) defaultValue, name);
     }
+
+    public Float getDefaultValue() {
+        return 0.0f;
+    }
 }

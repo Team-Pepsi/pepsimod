@@ -26,4 +26,6 @@ public abstract class ModuleOption<T> implements Serializable {
     public String getName() {
         return this.name;
     }
+
+    public abstract T getDefaultValue();
 }

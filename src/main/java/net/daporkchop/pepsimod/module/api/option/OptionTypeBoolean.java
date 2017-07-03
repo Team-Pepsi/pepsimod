@@ -10,4 +10,8 @@ public class OptionTypeBoolean extends ModuleOption<Boolean> {
     public OptionTypeBoolean(Object defaultValue, String name)  {
         super((Boolean) defaultValue, name);
     }
+
+    public Boolean getDefaultValue() {
+        return Boolean.FALSE;
+    }
 }

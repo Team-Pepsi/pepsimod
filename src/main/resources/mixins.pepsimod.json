@@ -11,6 +11,7 @@
     "client.gui.MixinGuiChat",
     "client.MixinMinecraft",
     "client.gui.MixinGuiBossOverlay",
-    "network.MixinNetworkManager"
+    "network.MixinNetworkManager",
+    "util.MixinTabCompleter"
   ]
 }

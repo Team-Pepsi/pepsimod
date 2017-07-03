@@ -10,4 +10,8 @@ public class OptionTypeString extends ModuleOption<String> {
     public OptionTypeString(Object defaultValue, String name)  {
         super((String) defaultValue, name);
     }
+
+    public String getDefaultValue() {
+        return "";
+    }
 }
