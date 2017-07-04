@@ -28,4 +28,6 @@ public abstract class ModuleOption<T> implements Serializable {
     }
 
     public abstract T getDefaultValue();
+
+    public abstract String[] defaultCompletions();
 }

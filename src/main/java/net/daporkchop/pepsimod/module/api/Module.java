@@ -2,6 +2,7 @@ package net.daporkchop.pepsimod.module.api;
 
 import net.daporkchop.pepsimod.command.CommandRegistry;
 import net.daporkchop.pepsimod.command.api.Command;
+import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
@@ -98,9 +99,7 @@ public abstract class Module extends Command {
         for (ModuleOption option : options) {
             temp.add(option.getName());
         }
-        temp.add("toggle");
-        temp.add("list");
-        temp.add("enabled");
+        //temp.add("list"); is this really needed? get opinions
         completionOptions = temp.toArray(new String[temp.size()]);
         this.init();
     }
@@ -222,7 +221,7 @@ public abstract class Module extends Command {
                         if (option == null) {
                             return "";
                         } else {
-                            return cmd + " " + option.getDefaultValue();
+                            return args[0] + " " + args[1] + " " + option.getDefaultValue();
                         }
                     } else if (mode.startsWith(args[1])) {
                         return "." + name + " " + mode;
@@ -234,14 +233,22 @@ public abstract class Module extends Command {
                     if (option == null) {
                         return "";
                     } else {
-                        return cmd + option.getDefaultValue();
+                        return args[0] + " " + args[1] + " " + option.getDefaultValue();
                     }
                 }
                 ModuleOption option = getOptionByName(args[1]);
-                if (option.getDefaultValue().toString().startsWith(args[2])) {
-                    return args[0] + " " + args[1] + " " + option.getDefaultValue();
-                } else {
+                if (option == null) {
                     return "";
+                } else {
+                    if (option.getDefaultValue().toString().startsWith(args[2])) {
+                        return args[0] + " " + args[1] + " " + option.getDefaultValue();
+                    } else {
+                        for (String s : option.defaultCompletions()) {
+                            if (s.startsWith(args[2])) {
+                                return args[0] + " " + args[1] + " " + s;
+                            }
+                        }
+                    }
                 }
         }
 
@@ -249,6 +256,94 @@ public abstract class Module extends Command {
     }
 
     public void execute(String cmd, String[] args) {
-        //TODO
+        switch (args.length) {
+            case 1:
+                String commands = "";
+                for (int i = 0; i < completionOptions.length; i++) {
+                    commands += PepsiUtils.COLOR_ESCAPE + "o" + completionOptions[i] + PepsiUtils.COLOR_ESCAPE + "r" + (i + 1 == completionOptions.length ? "" : ", ");
+                }
+                clientMessage(commands);
+                break;
+            case 2:
+                if (args[1].isEmpty()) {
+                    String cmds = "";
+                    for (int i = 0; i < completionOptions.length; i++) {
+                        cmds += PepsiUtils.COLOR_ESCAPE + "o" + completionOptions[i] + PepsiUtils.COLOR_ESCAPE + "r" + (i + 1 == completionOptions.length ? "" : ", ");
+                    }
+                    clientMessage(cmds);
+                    break;
+                }
+                ModuleOption option = getOptionByName(args[1]);
+                if (option == null) {
+                    clientMessage("Unknown option: " + PepsiUtils.COLOR_ESCAPE + "o" + args[1]);
+                    break;
+                } else {
+                    clientMessage(args[1] + ": " + option.getValue());
+                    break;
+                }
+            case 3:
+                if (args[2].isEmpty()) {
+                    ModuleOption opt = getOptionByName(args[1]);
+                    if (opt == null) {
+                        clientMessage("Unknown option: " + PepsiUtils.COLOR_ESCAPE + "o" + args[1]);
+                        break;
+                    } else {
+                        clientMessage(args[1] + ": " + opt.getValue());
+                        break;
+                    }
+                }
+                ModuleOption opt = getOptionByName(args[1]);
+                if (opt == null) {
+                    clientMessage("Unknown option: " + PepsiUtils.COLOR_ESCAPE + "o" + args[1]);
+                    break;
+                } else {
+                    try {
+                        switch (opt.getValue().getClass().getCanonicalName()) {
+                            case "java.lang.String":
+                                opt.setValue(args[2]);
+                                break;
+                            case "java.lang.Boolean":
+                                opt.setValue(Boolean.parseBoolean(args[2]));
+                                break;
+                            case "java.lang.Byte":
+                                opt.setValue(Byte.parseByte(args[2]));
+                                break;
+                            case "java.lang.Double":
+                                opt.setValue(Double.parseDouble(args[2]));
+                                break;
+                            case "java.lang.Float":
+                                opt.setValue(Float.parseFloat(args[2]));
+                                break;
+                            case "java.lang.Integer":
+                                opt.setValue(Integer.parseInt(args[2]));
+                                break;
+                            case "java.lang.Short":
+                                opt.setValue(Short.parseShort(args[2]));
+                                break;
+                            default:
+                                clientMessage("Unknown value type: " + PepsiUtils.COLOR_ESCAPE + "o" + opt.getValue().getClass().getCanonicalName() + PepsiUtils.COLOR_ESCAPE + "r. Please report to devs!");
+                                return;
+                        }
+
+                        switch (args[1]) {
+                            case "hidden":
+                                this.hide = (boolean) opt.getValue();
+                                break;
+                            case "enabled":
+                                if ((boolean) opt.getValue()) {
+                                    ModuleManager.enableModule(this);
+                                } else {
+                                    ModuleManager.disableModule(this);
+                                }
+                                break;
+                        }
+                        clientMessage("Set " + PepsiUtils.COLOR_ESCAPE + "o" + args[1] + PepsiUtils.COLOR_ESCAPE + "r to " + PepsiUtils.COLOR_ESCAPE + "o" + opt.getValue());
+                        return;
+                    } catch (NumberFormatException e) {
+                        clientMessage("Invalid number: " + PepsiUtils.COLOR_ESCAPE + "o" + args[2]);
+                        return;
+                    }
+                }
+        }
     }
 }

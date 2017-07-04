@@ -3,6 +3,8 @@ package net.daporkchop.pepsimod.module.api.option;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 
 public class OptionTypeByte extends ModuleOption<Byte> {
+    private static final String[] DEFAULT_COMPLETIONS = new String[]{"0"};
+
     public OptionTypeByte(String name)   {
         super(name);
     }
@@ -13,5 +15,10 @@ public class OptionTypeByte extends ModuleOption<Byte> {
 
     public Byte getDefaultValue() {
         return 0;
+    }
+
+
+    public String[] defaultCompletions() {
+        return DEFAULT_COMPLETIONS;
     }
 }
