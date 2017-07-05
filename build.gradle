@@ -66,7 +66,7 @@ processResources {
     }
 
     // move _at.cfg into META-INF
-    rename '(.+_at.cfg)', 'META-INF/$1'
+    //rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
 mixin {
@@ -79,6 +79,32 @@ reobf {
         mappingType = 'SEARGE'
         classpath = sourceSets.main.compileClasspath
     }
+}
+
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+task shadowDevJar(type: ShadowJar) {
+    classifier = 'dev-shaded'
+
+    from sourceSets.main.output
+    //from sourceSets.java8.output
+
+    // Default settings for shadow tasks
+    configurations = [project.configurations.runtime]
+    manifest.inheritFrom tasks.jar.manifest
+    exclude 'META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
+}
+
+//shadowDevJar shadowConfiguration
+
+// Upload shadowDevJar to Maven repository
+artifacts {
+    archives shadowDevJar
+}
+
+allprojects {
+    // Re-obfuscate only after creating the shadowDevJar
+    tasks.findByName('reobfJar')?.mustRunAfter rootProject.tasks.shadowDevJar
 }
 
 shadowJar {
@@ -100,8 +126,10 @@ jar {
                 "TweakOrder": 0,
                 'FMLCorePluginContainsFMLMod': 'true',
                 'FMLCorePlugin': 'net.daporkchop.pepsimod.PepsiModMixinLoader',
-                'FMLAT': 'pepsimod_at.cfg'
+                'FMLAT': 'pepsimod_at.cfg',
+                'ForceLoadAsMod': 'true'
         )
     }
 }
+
 sourceCompatibility = targetCompatibility = "1.8"

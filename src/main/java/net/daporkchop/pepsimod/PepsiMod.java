@@ -7,6 +7,7 @@ import net.daporkchop.pepsimod.key.KeyRegistry;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
+import net.daporkchop.pepsimod.module.api.ModuleSortType;
 import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
 import net.daporkchop.pepsimod.module.impl.AntiHunger;
 import net.daporkchop.pepsimod.module.impl.Criticals;
@@ -151,6 +152,7 @@ public class PepsiMod {
             module.hide = ((OptionTypeBoolean) module.getOptionByName("hidden")).getValue();
         }
         Friends.FRIENDS = (HashMap<String, Friend>) dataTag.getSerializable("friends", new HashMap<String, Friend>());
+        ModuleManager.sortType = (ModuleSortType) dataTag.getSerializable("sortType", ModuleSortType.SIZE);
 
         //save the tag in case new fields are added, this way they are saved right away
         dataTag.save();
@@ -161,6 +163,7 @@ public class PepsiMod {
             dataTag.setSerializableArray("settings" + module.nameFull, module.options);
         }
         dataTag.setSerializable("friends", Friends.FRIENDS);
+        dataTag.setSerializable("sortType", ModuleManager.sortType);
         dataTag.save();
     }
 }
