@@ -37,25 +37,30 @@ public abstract class MixinMinecraft {
 
     @Inject(method = "runTickMouse", at = @At(value = "INVOKE_ASSIGN", target = "Lorg/lwjgl/input/Mouse;getEventButton()I"))
     public void onMouseClick(CallbackInfo ci) {
-        if (Mouse.getEventButtonState()) {
-            int buttonID = Mouse.getEventButton();
-            switch (buttonID) {
-                case 2:
-                    if (Minecraft.getMinecraft().objectMouseOver != null) {
-                        RayTraceResult result = Minecraft.getMinecraft().objectMouseOver;
-                        if (result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit instanceof EntityPlayer) {
-                            if (Friends.isFriend(result.entityHit.getUniqueID().toString())) {
-                                player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + "Removed \u00A7c" + result.entityHit.getName() + "\u00A7r as a friend"));
-                                Friends.removeFriend(result.entityHit.getUniqueID().toString());
-                            } else {
-                                player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + "Added \u00A79" + result.entityHit.getName() + "\u00A7r as a friend"));
-                                Friends.addFriend(result.entityHit.getUniqueID().toString(), result.entityHit.getName());
+        try {
+            if (Mouse.getEventButtonState()) {
+                int buttonID = Mouse.getEventButton();
+                switch (buttonID) {
+                    case 2:
+                        if (Minecraft.getMinecraft().objectMouseOver != null) {
+                            RayTraceResult result = Minecraft.getMinecraft().objectMouseOver;
+                            if (result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit instanceof EntityPlayer) {
+                                if (Friends.isFriend(result.entityHit.getUniqueID().toString())) {
+                                    player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + "Removed \u00A7c" + result.entityHit.getName() + "\u00A7r as a friend"));
+                                    Friends.removeFriend(result.entityHit.getUniqueID().toString());
+                                } else {
+                                    player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + "Added \u00A79" + result.entityHit.getName() + "\u00A7r as a friend"));
+                                    Friends.addFriend(result.entityHit.getUniqueID().toString(), result.entityHit.getName());
+                                }
                             }
+                            System.out.println(result.entityHit.getClass().getCanonicalName());
                         }
-                        System.out.println(result.entityHit.getClass().getCanonicalName());
-                    }
-                    break;
+                        break;
+                }
             }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            System.out.println("MCF is borked lol");
         }
     }
 }

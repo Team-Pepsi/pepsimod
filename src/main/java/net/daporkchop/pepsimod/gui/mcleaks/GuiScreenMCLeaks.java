@@ -45,7 +45,7 @@ public class GuiScreenMCLeaks extends GuiScreen {
         this.tokenField = new GuiTextField(1, this.fontRenderer, this.width / 2 - 100, 106, 200, 20);
         this.tokenField.setMaxStringLength(128);
         this.tokenField.setText("");
-        ((GuiButton) this.buttonList.get(0)).enabled = !this.tokenField.getText().isEmpty();
+        this.buttonList.get(0).enabled = !this.tokenField.getText().isEmpty();
     }
 
     /**
@@ -106,7 +106,7 @@ public class GuiScreenMCLeaks extends GuiScreen {
         }
 
         if (keyCode == 28 || keyCode == 156) {
-            this.actionPerformed((GuiButton) this.buttonList.get(0));
+            this.actionPerformed(this.buttonList.get(0));
         }
     }
 
@@ -122,7 +122,7 @@ public class GuiScreenMCLeaks extends GuiScreen {
      * Draws the screen and all the components in it.
      */
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        ((GuiButton) this.buttonList.get(0)).enabled = !this.tokenField.getText().isEmpty();
+        this.buttonList.get(0).enabled = !this.tokenField.getText().isEmpty();
         this.drawDefaultBackground();
         this.drawCenteredString(this.fontRenderer, "§9§lMCLeaks login", this.width / 2, 17, 16777215);
         this.drawCenteredString(this.fontRenderer, "Username: " + mc.getSession().getUsername(), this.width / 2, 27, 10526880);

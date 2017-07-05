@@ -227,6 +227,7 @@ public abstract class Module extends Command {
                         return "." + name + " " + mode;
                     }
                 }
+                return "";
             case 3:
                 if (args[2].isEmpty()) {
                     ModuleOption option = getOptionByName(args[1].trim());
@@ -248,6 +249,7 @@ public abstract class Module extends Command {
                                 return args[0] + " " + args[1] + " " + s;
                             }
                         }
+                        return "";
                     }
                 }
         }

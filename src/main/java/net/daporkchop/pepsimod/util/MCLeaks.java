@@ -74,7 +74,7 @@ public class MCLeaks {
                 public void operationComplete(Future<? super Void> p_operationComplete_1_) throws Exception {
                     mgr.enableEncryption(secretkey);
                 }
-            }, new GenericFutureListener[0]);
+            });
 
         } catch (Exception e) {
             e.printStackTrace();

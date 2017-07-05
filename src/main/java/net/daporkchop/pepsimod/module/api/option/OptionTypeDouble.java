@@ -3,11 +3,7 @@ package net.daporkchop.pepsimod.module.api.option;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 
 public class OptionTypeDouble extends ModuleOption<Double> {
-    private static final String[] DEFAULT_COMPLETIONS = new String[]{"0.0"};
-
-    public OptionTypeDouble(String name)   {
-        super(name);
-    }
+    public static final String[] DEFAULT_COMPLETIONS = new String[]{"0.0"};
 
     public OptionTypeDouble(Object defaultValue, String name)  {
         super((Double) defaultValue, name);

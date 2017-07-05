@@ -5,17 +5,13 @@ import net.daporkchop.pepsimod.command.impl.*;
 import net.daporkchop.pepsimod.event.GuiRenderHandler;
 import net.daporkchop.pepsimod.key.KeyRegistry;
 import net.daporkchop.pepsimod.module.ModuleManager;
-import net.daporkchop.pepsimod.module.api.Module;
-import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.daporkchop.pepsimod.module.api.ModuleSortType;
+import net.daporkchop.pepsimod.module.api.*;
 import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
-import net.daporkchop.pepsimod.module.impl.AntiHunger;
-import net.daporkchop.pepsimod.module.impl.Criticals;
-import net.daporkchop.pepsimod.module.impl.Fullbright;
-import net.daporkchop.pepsimod.module.impl.NoFall;
+import net.daporkchop.pepsimod.module.impl.*;
 import net.daporkchop.pepsimod.util.Friend;
 import net.daporkchop.pepsimod.util.Friends;
 import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.TargetSettings;
 import net.daporkchop.pepsimod.util.datatag.DataTag;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
@@ -42,18 +38,14 @@ public class PepsiMod {
     public Minecraft mc;
     public DataTag dataTag = null;
     public boolean hasInitializedModules = false;
-
-    {
-        INSTANCE = this;
-    }
+    public TargetSettings targetSettings;
 
     public static void registerModules(FMLStateEvent event) {
-        //TODO: save enabled status
-        //TODO: save hidden status
         ModuleManager.registerModule(new NoFall(false, -1, false));
         ModuleManager.registerModule(new AntiHunger(false, -1, false));
         ModuleManager.registerModule(new Fullbright(false, -1, false));
         ModuleManager.registerModule(new Criticals(false, -1, false));
+        ModuleManager.registerModule(new Aura(false, -1, false));
     }
 
     public static void registerCommands(FMLStateEvent event) {
@@ -62,6 +54,7 @@ public class PepsiMod {
         CommandRegistry.registerCommand(new Toggle());
         CommandRegistry.registerCommand(new SortModules());
         CommandRegistry.registerCommand(new Save());
+        CommandRegistry.registerCommand(new Load());
     }
 
     /**
@@ -86,15 +79,17 @@ public class PepsiMod {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        INSTANCE = this;
         MinecraftForge.EVENT_BUS.register(new KeyRegistry());
         this.mc = Minecraft.getMinecraft();
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
+        loadConfig();
         registerModules(event);
         registerCommands(event);
-        loadConfig();
+        initModules();
     }
 
     @Mod.EventHandler
@@ -122,6 +117,35 @@ public class PepsiMod {
             dataTag = new DataTag(file);
         }
 
+        Friends.FRIENDS = (HashMap<String, Friend>) dataTag.getSerializable("friends", new HashMap<String, Friend>());
+        ModuleManager.sortType = (ModuleSortType) dataTag.getSerializable("sortType", ModuleSortType.SIZE);
+        targetSettings = (TargetSettings) dataTag.getSerializable("targetSettings", new TargetSettings());
+
+        //save the tag in case new fields are added, this way they are saved right away
+        dataTag.save();
+    }
+
+    public void saveConfig() {
+        for (Module module : ModuleManager.AVALIBLE_MODULES) {
+            ModuleOption[] options = new ModuleOption[module.options.length];
+            for (int i = 0; i < options.length; i++) {
+                ModuleOption option = module.options[i];
+                if (option instanceof CustomOption) {
+                    CustomOptionSave save = new CustomOptionSave((CustomOption) option);
+                    options[i] = save;
+                } else {
+                    options[i] = option;
+                }
+            }
+            dataTag.setSerializableArray("settings" + module.nameFull, options);
+        }
+        dataTag.setSerializable("friends", Friends.FRIENDS);
+        dataTag.setSerializable("sortType", ModuleManager.sortType);
+        dataTag.setSerializable("targetSettings", targetSettings);
+        dataTag.save();
+    }
+
+    public void initModules() {
         for (Module module : ModuleManager.AVALIBLE_MODULES) {
             ModuleOption[] defaultOptions = module.defaultOptions();
             module.options = (ModuleOption[]) dataTag.getSerializableArray("settings" + module.nameFull, defaultOptions);
@@ -146,24 +170,19 @@ public class PepsiMod {
                     module.options = tempList.toArray(new ModuleOption[tempList.size()]);
                 }
             }
+            for (int i = 0; i < module.options.length; i++) {
+                ModuleOption option = module.options[i];
+                if (option instanceof CustomOptionSave) {
+                    CustomOptionSave save = (CustomOptionSave) option;
+                    CustomOption defaultOption = (CustomOption) defaultOptions[i];
+                    CustomOption customOption = new CustomOption(save, defaultOption.SET, defaultOption.GET);
+                    module.options[i] = customOption;
+                }
+            }
             if (((OptionTypeBoolean) module.getOptionByName("enabled")).getValue()) {
                 ModuleManager.enableModule(module);
             }
             module.hide = ((OptionTypeBoolean) module.getOptionByName("hidden")).getValue();
         }
-        Friends.FRIENDS = (HashMap<String, Friend>) dataTag.getSerializable("friends", new HashMap<String, Friend>());
-        ModuleManager.sortType = (ModuleSortType) dataTag.getSerializable("sortType", ModuleSortType.SIZE);
-
-        //save the tag in case new fields are added, this way they are saved right away
-        dataTag.save();
-    }
-
-    public void saveConfig() {
-        for (Module module : ModuleManager.AVALIBLE_MODULES) {
-            dataTag.setSerializableArray("settings" + module.nameFull, module.options);
-        }
-        dataTag.setSerializable("friends", Friends.FRIENDS);
-        dataTag.setSerializable("sortType", ModuleManager.sortType);
-        dataTag.save();
     }
 }

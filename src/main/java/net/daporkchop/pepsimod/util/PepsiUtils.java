@@ -9,6 +9,9 @@ import net.daporkchop.pepsimod.util.colors.rainbow.RainbowCycle;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.Vec3d;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.awt.*;
@@ -244,5 +247,24 @@ public class PepsiUtils {
             }
         }
         return toRunOn;
+    }
+
+    public static boolean canEntityBeSeen(Entity entityIn, EntityPlayer player, TargetBone bone) {
+        return entityIn.world.rayTraceBlocks(new Vec3d(player.posX, player.posY + (double) player.getEyeHeight(), player.posZ), new Vec3d(entityIn.posX, entityIn.posY + getTargetHeight(entityIn, bone), entityIn.posZ), false, true, false) == null;
+    }
+
+    public static double getTargetHeight(Entity entity, TargetBone bone) {
+        double targetHeight = 0;
+        if (bone == TargetBone.HEAD) {
+            targetHeight = entity.getEyeHeight();
+        } else if (bone == TargetBone.MIDDLE) {
+            targetHeight = entity.getEyeHeight() / 2;
+        }
+        return targetHeight;
+    }
+
+    public static Vec3d adjustVectorForBone(Vec3d vec3d, Entity entity, TargetBone bone) {
+        vec3d.xCoord = getTargetHeight(entity, bone);
+        return vec3d;
     }
 }

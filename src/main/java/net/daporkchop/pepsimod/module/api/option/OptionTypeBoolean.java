@@ -3,11 +3,7 @@ package net.daporkchop.pepsimod.module.api.option;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 
 public class OptionTypeBoolean extends ModuleOption<Boolean> {
-    private static final String[] DEFAULT_COMPLETIONS = new String[]{"true", "false"};
-
-    public OptionTypeBoolean(String name)   {
-        super(name);
-    }
+    public static final String[] DEFAULT_COMPLETIONS = new String[]{"true", "false"};
 
     public OptionTypeBoolean(Object defaultValue, String name)  {
         super((Boolean) defaultValue, name);

@@ -28,9 +28,6 @@ public class Fullbright extends Module {
             return;
         }
         PepsiMod.INSTANCE.mc.player.removeActivePotionEffect(NIGHT_VISION);
-        for (PotionEffect effect : PepsiMod.INSTANCE.mc.player.getActivePotionEffects())    {
-
-        }
     }
 
     @Override

@@ -43,7 +43,7 @@ public abstract class MixinGuiChat extends GuiScreen {
             if (this.inputField.getText().startsWith(".")) {
                 CommandRegistry.runCommand(this.inputField.getText());
                 this.mc.ingameGUI.getChatGUI().addToSentMessages(this.inputField.getText());
-                this.mc.displayGuiScreen((GuiScreen) null);
+                this.mc.displayGuiScreen(null);
                 ci.cancel();
             }
         }
