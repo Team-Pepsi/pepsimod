@@ -13,7 +13,11 @@ public class Toggle extends Command {
     @Override
     public void execute(String cmd, String[] args) {
         if (args.length < 2)    {
-            clientMessage("Usage: .toggle <moduleName>");
+            String s = "";
+            for (int i = 0; i < ModuleManager.AVALIBLE_MODULES.size(); i++) {
+                s += ModuleManager.AVALIBLE_MODULES.get(i) + (i + 1 == ModuleManager.AVALIBLE_MODULES.size() ? "" : ", ");
+            }
+            clientMessage("Available modules: " + PepsiUtils.COLOR_ESCAPE + "o" + s);
             return;
         }
         Module module = ModuleManager.getModuleByName(args[1]);

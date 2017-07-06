@@ -8,6 +8,7 @@ import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
 import net.daporkchop.pepsimod.module.api.option.OptionTypeFloat;
 import net.daporkchop.pepsimod.module.api.option.OptionTypeInteger;
 import net.daporkchop.pepsimod.totally.not.skidded.EntityUtils;
+import net.daporkchop.pepsimod.totally.not.skidded.RotationUtils;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.TargetBone;
 import net.minecraft.entity.Entity;
@@ -43,6 +44,16 @@ public class Aura extends Module {
                 if (entity == null) {
                     return;
                 }
+
+                if (PepsiMod.INSTANCE.targetSettings.rotate) {
+                    if (!RotationUtils.faceEntityPacket(entity)) {
+                        return;
+                    }
+                    if (!PepsiMod.INSTANCE.targetSettings.silent) {
+                        RotationUtils.faceEntityClient(entity);
+                    }
+                }
+
                 PepsiMod.INSTANCE.mc.playerController.attackEntity(PepsiMod.INSTANCE.mc.player, entity);
                 if (!PepsiMod.INSTANCE.targetSettings.silent) {
                     PepsiMod.INSTANCE.mc.player.swingArm(EnumHand.MAIN_HAND);
@@ -58,6 +69,16 @@ public class Aura extends Module {
                 if (entity == null) {
                     return;
                 }
+
+                if (PepsiMod.INSTANCE.targetSettings.rotate) {
+                    if (!RotationUtils.faceEntityPacket(entity)) {
+                        return;
+                    }
+                    if (!PepsiMod.INSTANCE.targetSettings.silent) {
+                        RotationUtils.faceEntityClient(entity);
+                    }
+                }
+
                 PepsiMod.INSTANCE.mc.playerController.attackEntity(PepsiMod.INSTANCE.mc.player, entity);
                 if (!PepsiMod.INSTANCE.targetSettings.silent) {
                     PepsiMod.INSTANCE.mc.player.swingArm(EnumHand.MAIN_HAND);
@@ -168,6 +189,7 @@ public class Aura extends Module {
                 new CustomOption<>(PepsiMod.INSTANCE.targetSettings.silent, "silent", OptionTypeBoolean.DEFAULT_COMPLETIONS,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.silent = value;
+                            updateName();
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.silent;
@@ -175,6 +197,7 @@ public class Aura extends Module {
                 new CustomOption<>(PepsiMod.INSTANCE.targetSettings.rotate, "rotate", OptionTypeBoolean.DEFAULT_COMPLETIONS,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.rotate = value;
+                            updateName();
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.rotate;
@@ -218,7 +241,7 @@ public class Aura extends Module {
             } else {
                 for (String s : targetBoneStrings) {
                     if (s.startsWith(args[2])) {
-                        return cmd + s;
+                        return args[0] + " " + args[1] + " " + s;
                     }
                 }
 

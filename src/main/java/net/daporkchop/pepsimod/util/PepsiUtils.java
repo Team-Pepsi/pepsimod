@@ -264,7 +264,7 @@ public class PepsiUtils {
     }
 
     public static Vec3d adjustVectorForBone(Vec3d vec3d, Entity entity, TargetBone bone) {
-        vec3d.xCoord = getTargetHeight(entity, bone);
+        vec3d.yCoord = getTargetHeight(entity, bone);
         return vec3d;
     }
 }

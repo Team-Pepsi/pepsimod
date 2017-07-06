@@ -89,6 +89,7 @@ public abstract class Module extends Command {
      * Handles base initialization logic after minecraft is started
      */
     public final void doInit() {
+        this.init();
         if (hasModeInName()) {
             updateName();
         } else {
@@ -101,7 +102,6 @@ public abstract class Module extends Command {
         }
         //temp.add("list"); is this really needed? get opinions
         completionOptions = temp.toArray(new String[temp.size()]);
-        this.init();
     }
 
     /**
@@ -204,6 +204,7 @@ public abstract class Module extends Command {
     public void updateName() {
         if (hasModeInName()) {
             text = new RainbowText(nameFull + PepsiUtils.COLOR_ESCAPE + "customa8a8a8 [" + getModeForName() + "]");
+            ModuleManager.sortModules(ModuleManager.sortType);
         }
     }
 

@@ -46,6 +46,7 @@ public class PepsiMod {
         ModuleManager.registerModule(new Fullbright(false, -1, false));
         ModuleManager.registerModule(new Criticals(false, -1, false));
         ModuleManager.registerModule(new Aura(false, -1, false));
+        ModuleManager.registerModule(new Velocity(false, -1, false));
     }
 
     public static void registerCommands(FMLStateEvent event) {
@@ -55,6 +56,7 @@ public class PepsiMod {
         CommandRegistry.registerCommand(new SortModules());
         CommandRegistry.registerCommand(new Save());
         CommandRegistry.registerCommand(new Load());
+        CommandRegistry.registerCommand(new List());
     }
 
     /**
@@ -123,6 +125,7 @@ public class PepsiMod {
 
         //save the tag in case new fields are added, this way they are saved right away
         dataTag.save();
+        initModules();
     }
 
     public void saveConfig() {
