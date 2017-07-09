@@ -15,8 +15,8 @@ public class GuiButtonTooBeeTooTee extends GuiButton {
         this.enabled = true;
         this.visible = true;
         this.id = buttonId;
-        this.xPosition = x;
-        this.yPosition = y;
+        this.x = x;
+        this.y = y;
         this.width = widthIn;
         this.height = heightIn;
         this.location = new ResourceLocation("textures/gui/pepsibuttons.png");
@@ -27,13 +27,13 @@ public class GuiButtonTooBeeTooTee extends GuiButton {
         if (this.visible) {
             mc.getTextureManager().bindTexture(location);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
+            this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             int k = this.getHoverState(this.hovered);
             GlStateManager.enableBlend();
             GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
             GlStateManager.blendFunc(770, 771);
-            this.drawTexturedModalRect(this.xPosition, this.yPosition, 20, (hovered ? 20 : 0), this.width, this.height);
-            this.drawTexturedModalRect(this.xPosition + this.width, this.yPosition, 200 - this.width, k * 20, this.width, this.height);
+            this.drawTexturedModalRect(this.x, this.y, 20, (hovered ? 20 : 0), this.width, this.height);
+            this.drawTexturedModalRect(this.x + this.width, this.y, 200 - this.width, k * 20, this.width, this.height);
             this.mouseDragged(mc, mouseX, mouseY);
         }
     }

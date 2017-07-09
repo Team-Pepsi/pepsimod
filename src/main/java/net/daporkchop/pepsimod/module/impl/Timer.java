@@ -4,27 +4,27 @@ import net.daporkchop.pepsimod.module.api.CustomOption;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 
-public class Velocity extends Module {
+public class Timer extends Module {
     public static float PROCENT = 1.0f;
 
-    public static Velocity INSTANCE;
+    public static Timer INSTANCE;
 
     {
         INSTANCE = this;
     }
 
-    public Velocity(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "Velocity", key, hide);
+    public Timer(boolean isEnabled, int key, boolean hide) {
+        super(isEnabled, "Timer", key, hide);
     }
 
     @Override
     public void onEnable() {
-
+        INSTANCE = this;//adding this a bunch because it always seems to be null idk y
     }
 
     @Override
     public void onDisable() {
-
+        INSTANCE = this;//adding this a bunch because it always seems to be null idk y
     }
 
     @Override
@@ -34,19 +34,24 @@ public class Velocity extends Module {
 
     @Override
     public void init() {
-        PROCENT = (float) getOptionByName("strength").getValue();
+        PROCENT = (float) getOptionByName("multiplier").getValue();
+        INSTANCE = this; //adding this a bunch because it always seems to be null idk y
     }
 
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new CustomOption<>(1.0f, "strength", new String[]{"1.0", "0.0"},
+                new CustomOption<>(1.0f, "multiplier", new String[]{"1.0", "0.0"},
                         (value) -> {
-                            Velocity.PROCENT = value;
+                            if (value <= 0.0f) {
+                                clientMessage("Multiplier cannot be negative or 0!");
+                                return;
+                            }
+                            Timer.PROCENT = value;
                             updateName();
                         },
                         () -> {
-                            return Velocity.PROCENT;
+                            return Timer.PROCENT;
                         })
         };
     }
@@ -58,10 +63,10 @@ public class Velocity extends Module {
 
     @Override
     public String getModeForName() {
-        return String.valueOf((float) getOptionByName("strength").getValue());
+        return String.valueOf((float) getOptionByName("multiplier").getValue());
     }
 
-    public float getVelocity() {
+    public float getMultiplier() {
         if (this.isEnabled) {
             return PROCENT;
         } else {

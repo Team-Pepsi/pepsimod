@@ -3,6 +3,7 @@ package net.daporkchop.pepsimod.mixin.network;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import net.daporkchop.pepsimod.misc.TickRate;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -33,6 +34,7 @@ public abstract class MixinNetworkManager {
 
     @Inject(method = "channelRead0", at = @At("HEAD"), cancellable = true)
     public void preProcess(ChannelHandlerContext p_channelRead0_1_, Packet<?> p_channelRead0_2_, CallbackInfo callbackInfo) {
+        TickRate.update(p_channelRead0_2_);
         if (ModuleManager.preRecievePacket(p_channelRead0_2_)) {
             callbackInfo.cancel();
             return;

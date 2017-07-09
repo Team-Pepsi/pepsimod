@@ -2,6 +2,7 @@ package net.daporkchop.pepsimod.mixin.client.gui;
 
 import net.daporkchop.pepsimod.util.BossinfoCounted;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.BossInfoClient;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiBossOverlay;
 import net.minecraft.client.gui.ScaledResolution;
@@ -9,7 +10,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.network.play.server.SPacketUpdateBossInfo;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.BossInfo;
-import net.minecraft.world.BossInfoLerping;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -32,7 +32,7 @@ public abstract class MixinGuiBossOverlay extends Gui {
     public ResourceLocation GUI_BARS_TEXTURES_ALT = new ResourceLocation("textures/gui/bars.png");
     @Shadow
     @Final
-    private Map<UUID, BossInfoLerping> mapBossInfos;
+    private Map<UUID, BossInfoClient> mapBossInfos;
     @Shadow
     @Final
     private Minecraft client;
@@ -72,13 +72,13 @@ public abstract class MixinGuiBossOverlay extends Gui {
     public void updateCounter() {
         counted_cache.clear();
         ArrayList<String> known = new ArrayList<>();
-        for (BossInfoLerping infoLerping : mapBossInfos.values()) {
+        for (BossInfoClient infoLerping : mapBossInfos.values()) {
             if (known.contains(infoLerping.getName().getFormattedText()))
                 continue;
             String formattedText = infoLerping.getName().getFormattedText();
             BossinfoCounted counted = new BossinfoCounted();
             counted.info = infoLerping;
-            for (BossInfoLerping infoLerping2 : mapBossInfos.values()) {
+            for (BossInfoClient infoLerping2 : mapBossInfos.values()) {
                 if (infoLerping2.getName().getFormattedText().equals(formattedText))
                     counted.count++;
             }

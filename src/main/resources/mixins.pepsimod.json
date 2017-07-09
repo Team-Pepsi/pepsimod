@@ -13,6 +13,7 @@
     "client.gui.MixinGuiBossOverlay",
     "network.MixinNetworkManager",
     "util.MixinTabCompleter",
-    "entity.MixinEntity"
+    "entity.MixinEntity",
+    "util.MixinTimer"
   ]
 }

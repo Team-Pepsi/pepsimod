@@ -35,7 +35,7 @@ public class EntityUtils {
         }
 
         // entities outside the FOV
-        if (settings.getFOV() < 360F && RotationUtils.getAngleToClientRotation(PepsiUtils.adjustVectorForBone(en.boundingBox.getCenter(), en, settings.getTargetBone())) > settings.getFOV() / 2F) {
+        if (settings.getFOV() < 360F && RotationUtils.getAngleToClientRotation(PepsiUtils.adjustVectorForBone(en.getEntityBoundingBox().getCenter(), en, settings.getTargetBone())) > settings.getFOV() / 2F) {
             return false;
         }
 
@@ -186,7 +186,7 @@ public class EntityUtils {
             if (!isCorrectEntity(entity, settings))
                 continue;
 
-            float angle = RotationUtils.getAngleToServerRotation(PepsiUtils.adjustVectorForBone(entity.boundingBox.getCenter(), entity, settings.getTargetBone()));
+            float angle = RotationUtils.getAngleToServerRotation(PepsiUtils.adjustVectorForBone(entity.getEntityBoundingBox().getCenter(), entity, settings.getTargetBone()));
 
             if (angle < bestAngle) {
                 bestEntity = entity;

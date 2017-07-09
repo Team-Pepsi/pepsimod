@@ -1,9 +1,9 @@
 package net.daporkchop.pepsimod.util;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
@@ -30,7 +30,7 @@ public class Texture {
     public void render(float x, float y, float width, float height, float u, float v, float t, float s) {
         bindTexture();
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer renderer = tessellator.getBuffer();
+        BufferBuilder renderer = tessellator.getBuffer();
         renderer.begin(GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX);
         renderer.pos(x + width, y, 0F).tex(t, v).endVertex();
         renderer.pos(x, y, 0F).tex(u, v).endVertex();

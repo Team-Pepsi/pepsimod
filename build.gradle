@@ -11,9 +11,9 @@ buildscript {
         }
     }
     dependencies {
-        classpath "net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT"
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
         classpath 'org.spongepowered:mixingradle:0.4-SNAPSHOT'
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
     }
 }
 
@@ -21,14 +21,19 @@ apply plugin: "net.minecraftforge.gradle.forge"
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'com.github.johnrengelman.shadow'
 
-version = modVersion
-group = modGroup
-archivesBaseName = modBaseName
+version = "11.1"
+group = "net.daporkchop"
+archivesBaseName = "pepsimod"
+
+sourceCompatibility = targetCompatibility = '1.8'
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
 
 minecraft {
-    version = project.forgeVersion
+    version = "1.12-14.21.1.2397"
     runDir = "run"
-    mappings = project.mcpVersion
+    mappings = "snapshot_20170624"
     makeObfSourceJar = false
     coreMod = "net.daporkchop.pepsimod.PepsiModMixinLoader"
 }
@@ -42,7 +47,7 @@ repositories {
 }
 
 dependencies {
-    compile("org.spongepowered:mixin:0.6.4-SNAPSHOT") {
+    compile("org.spongepowered:mixin:0.6.15-SNAPSHOT") {
         exclude module: "launchwrapper"
     }
 }
@@ -66,7 +71,7 @@ processResources {
     }
 
     // move _at.cfg into META-INF
-    //rename '(.+_at.cfg)', 'META-INF/$1'
+    rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
 mixin {
@@ -131,5 +136,3 @@ jar {
         )
     }
 }
-
-sourceCompatibility = targetCompatibility = "1.8"

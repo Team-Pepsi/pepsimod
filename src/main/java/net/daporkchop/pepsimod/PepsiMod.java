@@ -47,6 +47,7 @@ public class PepsiMod {
         ModuleManager.registerModule(new Criticals(false, -1, false));
         ModuleManager.registerModule(new Aura(false, -1, false));
         ModuleManager.registerModule(new Velocity(false, -1, false));
+        ModuleManager.registerModule(new Timer(false, -1, false));
     }
 
     public static void registerCommands(FMLStateEvent event) {

@@ -41,9 +41,9 @@ public class RotationUtils {
     private static float[] getNeededRotations(Vec3d vec) {
         Vec3d eyesPos = getEyesPos();
 
-        double diffX = vec.xCoord - eyesPos.xCoord;
-        double diffY = vec.yCoord - eyesPos.yCoord;
-        double diffZ = vec.zCoord - eyesPos.zCoord;
+        double diffX = vec.x - eyesPos.x;
+        double diffY = vec.y - eyesPos.y;
+        double diffZ = vec.z - eyesPos.z;
 
         double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
 
@@ -56,9 +56,9 @@ public class RotationUtils {
     private static float[] getNeededRotations2(Vec3d vec) {
         Vec3d eyesPos = getEyesPos();
 
-        double diffX = vec.xCoord - eyesPos.xCoord;
-        double diffY = vec.yCoord - eyesPos.yCoord;
-        double diffZ = vec.zCoord - eyesPos.zCoord;
+        double diffX = vec.x - eyesPos.x;
+        double diffY = vec.y - eyesPos.y;
+        double diffZ = vec.z - eyesPos.z;
 
         double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
 
@@ -120,7 +120,7 @@ public class RotationUtils {
         Vec3d lookVec = getServerLookVec();
 
         // try to face center of boundingBox
-        AxisAlignedBB bb = entity.boundingBox;
+        AxisAlignedBB bb = entity.getEntityBoundingBox();
         if (faceVectorClient(bb.getCenter()))
             return true;
 
@@ -135,7 +135,7 @@ public class RotationUtils {
         Vec3d lookVec = getServerLookVec();
 
         // try to face center of boundingBox
-        AxisAlignedBB bb = entity.boundingBox;
+        AxisAlignedBB bb = entity.getEntityBoundingBox();
         if (faceVectorPacket(bb.getCenter()))
             return true;
 

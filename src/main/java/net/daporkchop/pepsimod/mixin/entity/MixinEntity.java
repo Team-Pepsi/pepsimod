@@ -20,7 +20,7 @@ public class MixinEntity {
     public void setVelocity(double x, double y, double z) {
         float strength = 1.0f;
         if (Entity.class.cast(this) == PepsiMod.INSTANCE.mc.player) {
-            strength = Velocity.PROCENT;
+            strength = Velocity.INSTANCE.getVelocity();
         }
         this.motionX = x * strength;
         this.motionY = y * strength;

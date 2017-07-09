@@ -25,8 +25,8 @@ public abstract class MixinGuiChat extends GuiScreen {
         if (inputField.getText().startsWith(".")) {
             GL11.glPushMatrix();
             GL11.glEnable(GL11.GL_BLEND);
-            int x = inputField.xPosition;
-            int y = inputField.yPosition;
+            int x = inputField.x;
+            int y = inputField.y;
             if (!prevText.equals(inputField.getText())) {
                 prevText = inputField.getText();
                 prevSuggestion = CommandRegistry.getSuggestionFor(prevText);
