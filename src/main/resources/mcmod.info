@@ -9,7 +9,7 @@
     "updateUrl": "",
     "authorList": ["Team Pepsi's awesome developer team"],
     "credits": "Pepsi, for being amazing",
-    "logoFile": "assets/minecraft/textures/gui/pepsimodBackground.png",
+    "logoFile": "assets/pepsimod/textures/gui/pepsimodBackground.png",
     "screenshots": [],
     "dependencies": []
   }

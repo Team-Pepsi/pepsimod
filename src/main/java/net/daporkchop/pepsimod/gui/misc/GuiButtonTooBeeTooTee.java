@@ -19,7 +19,7 @@ public class GuiButtonTooBeeTooTee extends GuiButton {
         this.y = y;
         this.width = widthIn;
         this.height = heightIn;
-        this.location = new ResourceLocation("textures/gui/pepsibuttons.png");
+        this.location = new ResourceLocation("pepsimod", "textures/gui/pepsibuttons.png");
     }
 
 

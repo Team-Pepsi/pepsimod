@@ -2,5 +2,6 @@ MixinConfigs: mixins.pepsimod.json
 tweakClass: org.spongepowered.asm.launch.MixinTweaker
 TweakOrder: 0
 FMLCorePluginContainsFMLMod: true
-FMLCorePlugin: net.daporkchop.pepsimod.MixinLoader
+FMLCorePlugin: net.daporkchop.pepsimod.PepsiModMixinLoader
 FMLAT: pepsimod_at.cfg
+ForceLoadAsMod: true

@@ -1,6 +1,7 @@
 package net.daporkchop.pepsimod.event;
 
 import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.misc.TickRate;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.util.PepsiUtils;
@@ -9,6 +10,8 @@ import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.awt.*;
 
 public class GuiRenderHandler {
     @SubscribeEvent
@@ -21,6 +24,7 @@ public class GuiRenderHandler {
 
         ScaledResolution scaled = new ScaledResolution(PepsiMod.INSTANCE.mc);
         int width = scaled.getScaledWidth();
+        int height = scaled.getScaledHeight();
 
         if ( PepsiUtils.PEPSI_NAME instanceof RainbowText) {
             ((RainbowText) PepsiUtils.PEPSI_NAME).drawAtPos(gui, 2, 2, 0);
@@ -39,5 +43,8 @@ public class GuiRenderHandler {
                 module.text.drawAtPos(gui, width - 2 - module.text.width(), 2 + i++ * 10);
             }
         }
+
+        String tpsText = PepsiUtils.COLOR_ESCAPE + "7TPS: " + PepsiUtils.COLOR_ESCAPE + "r" + TickRate.TPS;
+        gui.drawString(PepsiMod.INSTANCE.mc.fontRenderer, tpsText, width - (PepsiMod.INSTANCE.mc.fontRenderer.getStringWidth("TPS: " + TickRate.TPS) + 2), height - 12, Color.white.getRGB());
     }
 }

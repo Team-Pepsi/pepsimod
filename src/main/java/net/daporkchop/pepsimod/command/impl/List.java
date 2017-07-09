@@ -13,7 +13,7 @@ public class List extends Command {
     public void execute(String cmd, String[] args) {
         String s = "";
         for (int i = 0; i < ModuleManager.AVALIBLE_MODULES.size(); i++) {
-            s += ModuleManager.AVALIBLE_MODULES.get(i) + (i + 1 == ModuleManager.AVALIBLE_MODULES.size() ? "" : ", ");
+            s += ModuleManager.AVALIBLE_MODULES.get(i).name + (i + 1 == ModuleManager.AVALIBLE_MODULES.size() ? "" : ", ");
         }
         clientMessage("Available modules: " + PepsiUtils.COLOR_ESCAPE + "o" + s);
     }

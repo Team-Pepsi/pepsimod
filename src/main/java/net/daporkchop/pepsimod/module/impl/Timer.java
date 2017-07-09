@@ -1,13 +1,18 @@
 package net.daporkchop.pepsimod.module.impl;
 
+import net.daporkchop.pepsimod.misc.TickRate;
 import net.daporkchop.pepsimod.module.api.CustomOption;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
+import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
+import net.daporkchop.pepsimod.util.PepsiUtils;
+
+import java.util.TimerTask;
 
 public class Timer extends Module {
     public static float PROCENT = 1.0f;
-
     public static Timer INSTANCE;
+    public boolean tps_sync = false;
 
     {
         INSTANCE = this;
@@ -36,6 +41,16 @@ public class Timer extends Module {
     public void init() {
         PROCENT = (float) getOptionByName("multiplier").getValue();
         INSTANCE = this; //adding this a bunch because it always seems to be null idk y
+        PepsiUtils.timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    updateName();
+                } catch (NullPointerException e) {
+                    //meh, minecraft isn't initialized yet
+                }
+            }
+        }, 0, 1000);
     }
 
     @Override
@@ -52,6 +67,13 @@ public class Timer extends Module {
                         },
                         () -> {
                             return Timer.PROCENT;
+                        }),
+                new CustomOption<>(false, "tps_sync", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        (value) -> {
+                            tps_sync = value;
+                        },
+                        () -> {
+                            return tps_sync;
                         })
         };
     }
@@ -63,12 +85,16 @@ public class Timer extends Module {
 
     @Override
     public String getModeForName() {
-        return String.valueOf((float) getOptionByName("multiplier").getValue());
+        return String.valueOf(getMultiplier());
     }
 
     public float getMultiplier() {
         if (this.isEnabled) {
-            return PROCENT;
+            if (tps_sync) {
+                return TickRate.TPS / 20;
+            } else {
+                return PROCENT;
+            }
         } else {
             return 1.0f;
         }

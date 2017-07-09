@@ -15,7 +15,7 @@ public class Toggle extends Command {
         if (args.length < 2)    {
             String s = "";
             for (int i = 0; i < ModuleManager.AVALIBLE_MODULES.size(); i++) {
-                s += ModuleManager.AVALIBLE_MODULES.get(i) + (i + 1 == ModuleManager.AVALIBLE_MODULES.size() ? "" : ", ");
+                s += ModuleManager.AVALIBLE_MODULES.get(i).name + (i + 1 == ModuleManager.AVALIBLE_MODULES.size() ? "" : ", ");
             }
             clientMessage("Available modules: " + PepsiUtils.COLOR_ESCAPE + "o" + s);
             return;

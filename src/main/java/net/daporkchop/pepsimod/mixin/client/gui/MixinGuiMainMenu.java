@@ -40,7 +40,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
             }
             PepsiMod.INSTANCE.hasInitializedModules = true;
         }
-        TITLE = new Texture(new ResourceLocation("textures/gui/pepsimod.png"));
+        TITLE = new Texture(new ResourceLocation("pepsimod", "textures/gui/pepsimod.png"));
         this.splashText = "";
         ModuleManager.sortModules(ModuleManager.sortType);
     }
