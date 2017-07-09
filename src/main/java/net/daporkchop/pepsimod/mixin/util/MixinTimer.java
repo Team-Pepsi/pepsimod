@@ -25,9 +25,9 @@ public class MixinTimer {
 
     @Overwrite
     public void updateTimer() {
-        float timerSpeed = (net.daporkchop.pepsimod.module.impl.Timer.INSTANCE == null ?
+        float timerSpeed = (net.daporkchop.pepsimod.module.impl.misc.Timer.INSTANCE == null ?
                 1.0f :
-                net.daporkchop.pepsimod.module.impl.Timer.INSTANCE.getMultiplier());
+                net.daporkchop.pepsimod.module.impl.misc.Timer.INSTANCE.getMultiplier());
 
         long i = Minecraft.getSystemTime();
         this.elapsedPartialTicks = (float) (i - this.lastSyncSysClock) / this.tickLength * timerSpeed;

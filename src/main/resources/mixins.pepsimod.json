@@ -14,6 +14,7 @@
     "network.MixinNetworkManager",
     "util.MixinTabCompleter",
     "entity.MixinEntity",
-    "util.MixinTimer"
+    "util.MixinTimer",
+    "scoreboard.MixinScoreboard"
   ]
 }

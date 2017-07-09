@@ -1,7 +1,7 @@
 package net.daporkchop.pepsimod.mixin.network.play.client;
 
-import net.daporkchop.pepsimod.module.impl.AntiHunger;
-import net.daporkchop.pepsimod.module.impl.NoFall;
+import net.daporkchop.pepsimod.module.impl.misc.AntiHunger;
+import net.daporkchop.pepsimod.module.impl.misc.NoFall;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.CPacketPlayer;
 import org.spongepowered.asm.mixin.Mixin;

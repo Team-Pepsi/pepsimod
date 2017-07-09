@@ -1,7 +1,7 @@
 package net.daporkchop.pepsimod.mixin.entity;
 
 import net.daporkchop.pepsimod.PepsiMod;
-import net.daporkchop.pepsimod.module.impl.Velocity;
+import net.daporkchop.pepsimod.module.impl.movement.Velocity;
 import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;

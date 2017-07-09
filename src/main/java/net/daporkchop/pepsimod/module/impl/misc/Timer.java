@@ -1,4 +1,4 @@
-package net.daporkchop.pepsimod.module.impl;
+package net.daporkchop.pepsimod.module.impl.misc;
 
 import net.daporkchop.pepsimod.misc.TickRate;
 import net.daporkchop.pepsimod.module.api.CustomOption;
@@ -85,7 +85,7 @@ public class Timer extends Module {
 
     @Override
     public String getModeForName() {
-        return String.valueOf(getMultiplier());
+        return TickRate.format.format(getMultiplier());
     }
 
     public float getMultiplier() {

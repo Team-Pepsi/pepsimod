@@ -1,4 +1,4 @@
-package net.daporkchop.pepsimod.module.impl;
+package net.daporkchop.pepsimod.module.impl.combat;
 
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;

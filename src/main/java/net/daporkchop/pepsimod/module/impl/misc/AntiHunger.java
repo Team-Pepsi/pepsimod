@@ -1,23 +1,23 @@
-package net.daporkchop.pepsimod.module.impl;
+package net.daporkchop.pepsimod.module.impl.misc;
 
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 
-public class NoFall extends Module {
-    public static boolean NO_FALL = false;
+public class AntiHunger extends Module {
+    public static boolean ANTI_HUNGER = false;
 
-    public NoFall(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "NoFall", key, hide);
+    public AntiHunger(boolean isEnabled, int key, boolean hide) {
+        super(isEnabled, "AntiHunger", key, hide);
     }
 
     @Override
     public void onEnable() {
-        NO_FALL = true;
+        ANTI_HUNGER = true;
     }
 
     @Override
     public void onDisable() {
-        NO_FALL = false;
+        ANTI_HUNGER = false;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class NoFall extends Module {
     }
 
     @Override
-    public ModuleOption[] getDefaultOptions()   {
+    public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[0];
     }
 }
