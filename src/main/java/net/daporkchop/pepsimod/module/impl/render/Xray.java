@@ -36,6 +36,7 @@ public class Xray extends Module {
 
     @Override
     public void tick() {
+
     }
 
     @Override

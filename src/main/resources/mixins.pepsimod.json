@@ -20,6 +20,8 @@
     "client.renderer.MixinBlockFluidRenderer",
     "client.renderer.MixinBlockModelRenderer",
     "client.renderer.chunk.MixinVisGraph",
-    "block.MixinBlockLiquid"
+    "block.MixinBlockLiquid",
+    "entity.MixinEntityLivingBase",
+    "client.renderer.MixinEntityRenderer"
   ]
 }

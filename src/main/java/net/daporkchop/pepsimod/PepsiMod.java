@@ -13,6 +13,7 @@ import net.daporkchop.pepsimod.module.impl.misc.AntiHunger;
 import net.daporkchop.pepsimod.module.impl.misc.NoFall;
 import net.daporkchop.pepsimod.module.impl.misc.Timer;
 import net.daporkchop.pepsimod.module.impl.movement.Velocity;
+import net.daporkchop.pepsimod.module.impl.render.AntiBlind;
 import net.daporkchop.pepsimod.module.impl.render.Fullbright;
 import net.daporkchop.pepsimod.module.impl.render.Xray;
 import net.daporkchop.pepsimod.util.*;
@@ -53,6 +54,7 @@ public class PepsiMod {
         ModuleManager.registerModule(new Velocity(false, -1, false));
         ModuleManager.registerModule(new Timer(false, -1, false));
         ModuleManager.registerModule(new Xray(false, -1, false));
+        ModuleManager.registerModule(new AntiBlind(false, -1, false));
     }
 
     public static void registerCommands(FMLStateEvent event) {
