@@ -3,8 +3,8 @@ package net.daporkchop.pepsimod.command.impl;
 import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.api.Command;
 
-public class SetRot extends Command {
-    public SetRot() {
+public class SetRotCommand extends Command {
+    public SetRotCommand() {
         super("setrot");
     }
 

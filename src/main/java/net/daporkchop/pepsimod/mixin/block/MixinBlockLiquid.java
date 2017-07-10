@@ -1,6 +1,6 @@
 package net.daporkchop.pepsimod.mixin.block;
 
-import net.daporkchop.pepsimod.module.impl.render.Xray;
+import net.daporkchop.pepsimod.module.impl.render.XrayMod;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -28,7 +28,7 @@ public abstract class MixinBlockLiquid extends Block {
 
     @Overwrite
     public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
-        return Xray.INSTANCE.isEnabled || this.blockMaterial != Material.LAVA;
+        return XrayMod.INSTANCE.isEnabled || this.blockMaterial != Material.LAVA;
     }
 
     @Overwrite

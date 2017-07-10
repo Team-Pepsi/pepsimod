@@ -7,15 +7,16 @@ import net.daporkchop.pepsimod.key.KeyRegistry;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.*;
 import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
-import net.daporkchop.pepsimod.module.impl.combat.Aura;
-import net.daporkchop.pepsimod.module.impl.combat.Criticals;
-import net.daporkchop.pepsimod.module.impl.misc.AntiHunger;
-import net.daporkchop.pepsimod.module.impl.misc.NoFall;
-import net.daporkchop.pepsimod.module.impl.misc.Timer;
-import net.daporkchop.pepsimod.module.impl.movement.Velocity;
-import net.daporkchop.pepsimod.module.impl.render.AntiBlind;
-import net.daporkchop.pepsimod.module.impl.render.Fullbright;
-import net.daporkchop.pepsimod.module.impl.render.Xray;
+import net.daporkchop.pepsimod.module.impl.combat.AuraMod;
+import net.daporkchop.pepsimod.module.impl.combat.CriticalsMod;
+import net.daporkchop.pepsimod.module.impl.misc.AntiHungerMod;
+import net.daporkchop.pepsimod.module.impl.misc.NoFallMod;
+import net.daporkchop.pepsimod.module.impl.misc.TimerMod;
+import net.daporkchop.pepsimod.module.impl.movement.VelocityMod;
+import net.daporkchop.pepsimod.module.impl.render.AntiBlindMod;
+import net.daporkchop.pepsimod.module.impl.render.FullbrightMod;
+import net.daporkchop.pepsimod.module.impl.render.StorageESPMod;
+import net.daporkchop.pepsimod.module.impl.render.XrayMod;
 import net.daporkchop.pepsimod.util.*;
 import net.daporkchop.pepsimod.util.datatag.DataTag;
 import net.minecraft.client.Minecraft;
@@ -44,27 +45,29 @@ public class PepsiMod {
     public DataTag dataTag = null;
     public boolean hasInitializedModules = false;
     public TargetSettings targetSettings;
+    public ESPSettings espSettings;
 
     public static void registerModules(FMLStateEvent event) {
-        ModuleManager.registerModule(new NoFall(false, -1, false));
-        ModuleManager.registerModule(new AntiHunger(false, -1, false));
-        ModuleManager.registerModule(new Fullbright(false, -1, false));
-        ModuleManager.registerModule(new Criticals(false, -1, false));
-        ModuleManager.registerModule(new Aura(false, -1, false));
-        ModuleManager.registerModule(new Velocity(false, -1, false));
-        ModuleManager.registerModule(new Timer(false, -1, false));
-        ModuleManager.registerModule(new Xray(false, -1, false));
-        ModuleManager.registerModule(new AntiBlind(false, -1, false));
+        ModuleManager.registerModule(new NoFallMod(false, -1, false));
+        ModuleManager.registerModule(new AntiHungerMod(false, -1, false));
+        ModuleManager.registerModule(new FullbrightMod(false, -1, false));
+        ModuleManager.registerModule(new CriticalsMod(false, -1, false));
+        ModuleManager.registerModule(new AuraMod(false, -1, false));
+        ModuleManager.registerModule(new VelocityMod(false, -1, false));
+        ModuleManager.registerModule(new TimerMod(false, -1, false));
+        ModuleManager.registerModule(new XrayMod(false, -1, false));
+        ModuleManager.registerModule(new AntiBlindMod(false, -1, false));
+        ModuleManager.registerModule(new StorageESPMod(false, -1, false));
     }
 
     public static void registerCommands(FMLStateEvent event) {
-        CommandRegistry.registerCommand(new Help());
-        CommandRegistry.registerCommand(new SetRot());
-        CommandRegistry.registerCommand(new Toggle());
-        CommandRegistry.registerCommand(new SortModules());
-        CommandRegistry.registerCommand(new Save());
-        CommandRegistry.registerCommand(new Load());
-        CommandRegistry.registerCommand(new List());
+        CommandRegistry.registerCommand(new HelpCommand());
+        CommandRegistry.registerCommand(new SetRotCommand());
+        CommandRegistry.registerCommand(new ToggleCommand());
+        CommandRegistry.registerCommand(new SortModulesCommand());
+        CommandRegistry.registerCommand(new SaveCommand());
+        CommandRegistry.registerCommand(new LoadCommand());
+        CommandRegistry.registerCommand(new ListCommand());
     }
 
     /**
@@ -131,6 +134,7 @@ public class PepsiMod {
         ModuleManager.sortType = (ModuleSortType) dataTag.getSerializable("sortType", ModuleSortType.SIZE);
         targetSettings = (TargetSettings) dataTag.getSerializable("targetSettings", new TargetSettings());
         XrayUtils.target_blocks = (ArrayList<Integer>) dataTag.getSerializable("xrayBlocks", new ArrayList<Integer>());
+        espSettings = (ESPSettings) dataTag.getSerializable("espSettings", new ESPSettings());
 
         //save the tag in case new fields are added, this way they are saved right away
         dataTag.save();
@@ -155,6 +159,7 @@ public class PepsiMod {
         dataTag.setSerializable("sortType", ModuleManager.sortType);
         dataTag.setSerializable("targetSettings", targetSettings);
         dataTag.setSerializable("xrayBlocks", XrayUtils.target_blocks);
+        dataTag.setSerializable("espSettings", espSettings);
         dataTag.save();
     }
 

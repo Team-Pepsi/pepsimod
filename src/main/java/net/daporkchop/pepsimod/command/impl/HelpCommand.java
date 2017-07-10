@@ -3,8 +3,8 @@ package net.daporkchop.pepsimod.command.impl;
 import net.daporkchop.pepsimod.command.CommandRegistry;
 import net.daporkchop.pepsimod.command.api.Command;
 
-public class Help extends Command {
-    public Help() {
+public class HelpCommand extends Command {
+    public HelpCommand() {
         super("help");
     }
 

@@ -3,10 +3,10 @@ package net.daporkchop.pepsimod.module.impl.misc;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 
-public class NoFall extends Module {
+public class NoFallMod extends Module {
     public static boolean NO_FALL = false;
 
-    public NoFall(boolean isEnabled, int key, boolean hide) {
+    public NoFallMod(boolean isEnabled, int key, boolean hide) {
         super(isEnabled, "NoFall", key, hide);
     }
 

@@ -1,6 +1,6 @@
 package net.daporkchop.pepsimod.mixin.client.renderer;
 
-import net.daporkchop.pepsimod.module.impl.render.Xray;
+import net.daporkchop.pepsimod.module.impl.render.XrayMod;
 import net.daporkchop.pepsimod.util.XrayUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.BlockModelRenderer;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MixinBlockModelRenderer {
     @Inject(method = "renderModel", at = @At("HEAD"), cancellable = true)
     public void preRenderModel(IBlockAccess blockAccessIn, IBakedModel modelIn, IBlockState blockStateIn, BlockPos blockPosIn, BufferBuilder buffer, boolean checkSides, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (Xray.INSTANCE.isEnabled) {
+        if (XrayMod.INSTANCE.isEnabled) {
             if (!XrayUtils.isTargeted(blockStateIn.getBlock())) {
                 callbackInfoReturnable.setReturnValue(false);
                 callbackInfoReturnable.cancel();
@@ -28,7 +28,7 @@ public abstract class MixinBlockModelRenderer {
 
     @Inject(method = "renderModelSmooth", at = @At("HEAD"), cancellable = true)
     public void preRenderQuadsSmooth(IBlockAccess access, IBakedModel model, IBlockState stateIn, BlockPos pos, BufferBuilder bufferBuilder, boolean idk, long ok, CallbackInfoReturnable<Boolean> returnable) {
-        if (Xray.INSTANCE.isEnabled) {
+        if (XrayMod.INSTANCE.isEnabled) {
             if (!XrayUtils.isTargeted(stateIn.getBlock())) {
                 returnable.setReturnValue(false);
                 returnable.cancel();

@@ -1,6 +1,6 @@
 package net.daporkchop.pepsimod.mixin.block;
 
-import net.daporkchop.pepsimod.module.impl.render.Xray;
+import net.daporkchop.pepsimod.module.impl.render.XrayMod;
 import net.daporkchop.pepsimod.util.XrayUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -22,7 +22,7 @@ public abstract class MixinBlock extends net.minecraftforge.registries.IForgeReg
 
     @Overwrite
     public boolean isFullCube(IBlockState state) {
-        if (Xray.INSTANCE.isEnabled) {
+        if (XrayMod.INSTANCE.isEnabled) {
             return XrayUtils.isTargeted(Block.class.cast(this));
         }
         return true;
@@ -39,7 +39,7 @@ public abstract class MixinBlock extends net.minecraftforge.registries.IForgeReg
 
     @Inject(method = "shouldSideBeRendered", at = @At("HEAD"), cancellable = true)
     public void preShouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side, CallbackInfoReturnable<Boolean> callbackInfo) {
-        if (Xray.INSTANCE.isEnabled) {
+        if (XrayMod.INSTANCE.isEnabled) {
             callbackInfo.setReturnValue(true);
             callbackInfo.cancel();
         }

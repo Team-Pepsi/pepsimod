@@ -9,10 +9,10 @@ import net.daporkchop.pepsimod.util.XrayUtils;
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 
-public class Xray extends Module {
-    public static Xray INSTANCE;
+public class XrayMod extends Module {
+    public static XrayMod INSTANCE;
 
-    public Xray(boolean isEnabled, int key, boolean hide) {
+    public XrayMod(boolean isEnabled, int key, boolean hide) {
         super(isEnabled, "Xray", key, hide);
     }
 

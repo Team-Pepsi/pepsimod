@@ -10,9 +10,13 @@ import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.renderer.Vector3d;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.awt.*;
@@ -308,5 +312,72 @@ public class PepsiUtils {
         }
         return -1; //the code will NEVER get here!
         // thanks java for forcing me to add this
+    }
+
+    public static AxisAlignedBB cloneBB(AxisAlignedBB bb) {
+        return new AxisAlignedBB(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ);
+    }
+
+    public static AxisAlignedBB getBoundingBox(World world, BlockPos pos) {
+        return world.getBlockState(pos).getBoundingBox(world, pos);
+    }
+
+    public static AxisAlignedBB offsetBB(AxisAlignedBB bb, BlockPos pos) {
+        bb.minX += pos.getX();
+        bb.maxX += pos.getX();
+        bb.minY += pos.getY();
+        bb.maxY += pos.getY();
+        bb.minZ += pos.getZ();
+        bb.maxZ += pos.getZ();
+        return bb;
+    }
+
+    public static AxisAlignedBB unionBB(AxisAlignedBB bb1, AxisAlignedBB bb2) {
+        bb1.minX = Math.min(bb1.minX, bb2.minX);
+        bb1.minY = Math.min(bb1.minY, bb2.minY);
+        bb1.minZ = Math.min(bb1.minZ, bb2.minZ);
+        bb1.maxX = Math.max(bb1.maxX, bb2.maxX);
+        bb1.maxY = Math.max(bb1.maxY, bb2.maxY);
+        bb1.maxZ = Math.max(bb1.maxZ, bb2.maxZ);
+        return bb1;
+    }
+
+    public static Vector3d vector3d(BlockPos pos) {
+        Vector3d v3d = new Vector3d();
+        v3d.x = pos.getX();
+        v3d.y = pos.getY();
+        v3d.z = pos.getZ();
+        return v3d;
+    }
+
+    public static Vector3d sub(Vector3d in, Vector3d with) {
+        in.x -= with.x;
+        in.y -= with.y;
+        in.z -= with.z;
+        return in;
+    }
+
+    public static int toRGBA(int r, int g, int b, int a) {
+        return (r << 16) + (g << 8) + (b << 0) + (a << 24);
+    }
+
+    public static Vec3d getInterpolatedPos(Entity entity, float ticks) {
+        return new Vec3d(entity.lastTickPosX, entity.lastTickPosY, entity.lastTickPosZ).add(getInterpolatedAmount(entity, ticks));
+    }
+
+    public static Vec3d getInterpolatedAmount(Entity entity, double x, double y, double z) {
+        return new Vec3d(
+                (entity.posX - entity.lastTickPosX) * x,
+                (entity.posY - entity.lastTickPosY) * y,
+                (entity.posZ - entity.lastTickPosZ) * z
+        );
+    }
+
+    public static Vec3d getInterpolatedAmount(Entity entity, Vec3d vec) {
+        return getInterpolatedAmount(entity, vec.x, vec.y, vec.z);
+    }
+
+    public static Vec3d getInterpolatedAmount(Entity entity, double ticks) {
+        return getInterpolatedAmount(entity, ticks, ticks, ticks);
     }
 }

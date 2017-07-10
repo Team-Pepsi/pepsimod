@@ -1,5 +1,6 @@
 package net.daporkchop.pepsimod.mixin.util;
 
+import net.daporkchop.pepsimod.module.impl.misc.TimerMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Timer;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,9 +29,9 @@ public abstract class MixinTimer {
      */
     @Overwrite
     public void updateTimer() {
-        float timerSpeed = (net.daporkchop.pepsimod.module.impl.misc.Timer.INSTANCE == null ?
+        float timerSpeed = (TimerMod.INSTANCE == null ?
                 1.0f :
-                net.daporkchop.pepsimod.module.impl.misc.Timer.INSTANCE.getMultiplier());
+                TimerMod.INSTANCE.getMultiplier());
 
         long i = Minecraft.getSystemTime();
         this.elapsedPartialTicks = (float) (i - this.lastSyncSysClock) / this.tickLength * timerSpeed;

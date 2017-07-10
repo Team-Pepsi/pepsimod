@@ -9,16 +9,16 @@ import net.daporkchop.pepsimod.util.PepsiUtils;
 
 import java.util.TimerTask;
 
-public class Timer extends Module {
+public class TimerMod extends Module {
     public static float PROCENT = 1.0f;
-    public static Timer INSTANCE;
+    public static TimerMod INSTANCE;
     public boolean tps_sync = false;
 
     {
         INSTANCE = this;
     }
 
-    public Timer(boolean isEnabled, int key, boolean hide) {
+    public TimerMod(boolean isEnabled, int key, boolean hide) {
         super(isEnabled, "Timer", key, hide);
     }
 
@@ -62,11 +62,11 @@ public class Timer extends Module {
                                 clientMessage("Multiplier cannot be negative or 0!");
                                 return;
                             }
-                            Timer.PROCENT = value;
+                            TimerMod.PROCENT = value;
                             updateName();
                         },
                         () -> {
-                            return Timer.PROCENT;
+                            return TimerMod.PROCENT;
                         }),
                 new CustomOption<>(false, "tps_sync", OptionTypeBoolean.DEFAULT_COMPLETIONS,
                         (value) -> {

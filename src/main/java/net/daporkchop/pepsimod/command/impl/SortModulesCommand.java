@@ -4,10 +4,10 @@ import net.daporkchop.pepsimod.command.api.Command;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.ModuleSortType;
 
-public class SortModules extends Command {
+public class SortModulesCommand extends Command {
     public static final String[] MODES = new String[] {"alphabetical", "default", "size", "random"};
 
-    public SortModules()    {
+    public SortModulesCommand() {
         super("sortmodules");
     }
 

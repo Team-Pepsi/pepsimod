@@ -6,11 +6,11 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 
-public class Fullbright extends Module {
+public class FullbrightMod extends Module {
     public static final Potion NIGHT_VISION = Potion.getPotionById(16);
     private static final PotionEffect BRIGHTNESS_EFFECT = new PotionEffect(NIGHT_VISION, Integer.MAX_VALUE, 1, false, false);
 
-    public Fullbright(boolean isEnabled, int key, boolean hide) {
+    public FullbrightMod(boolean isEnabled, int key, boolean hide) {
         super(isEnabled, "Fullbright", key, hide);
     }
 

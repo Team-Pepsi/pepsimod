@@ -14,11 +14,11 @@ import net.daporkchop.pepsimod.util.TargetBone;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumHand;
 
-public class Aura extends Module {
+public class AuraMod extends Module {
     public static final String[] targetBoneStrings = new String[]{"head", "feet", "middle"};
     public int lastTick = 0;
 
-    public Aura(boolean isEnabled, int key, boolean hide) {
+    public AuraMod(boolean isEnabled, int key, boolean hide) {
         super(isEnabled, "Aura", key, hide);
     }
 

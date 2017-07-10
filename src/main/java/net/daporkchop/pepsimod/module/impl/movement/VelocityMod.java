@@ -4,16 +4,16 @@ import net.daporkchop.pepsimod.module.api.CustomOption;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 
-public class Velocity extends Module {
+public class VelocityMod extends Module {
     public static float PROCENT = 1.0f;
 
-    public static Velocity INSTANCE;
+    public static VelocityMod INSTANCE;
 
     {
         INSTANCE = this;
     }
 
-    public Velocity(boolean isEnabled, int key, boolean hide) {
+    public VelocityMod(boolean isEnabled, int key, boolean hide) {
         super(isEnabled, "Velocity", key, hide);
     }
 
@@ -42,11 +42,11 @@ public class Velocity extends Module {
         return new ModuleOption[]{
                 new CustomOption<>(1.0f, "strength", new String[]{"1.0", "0.0"},
                         (value) -> {
-                            Velocity.PROCENT = value;
+                            VelocityMod.PROCENT = value;
                             updateName();
                         },
                         () -> {
-                            return Velocity.PROCENT;
+                            return VelocityMod.PROCENT;
                         })
         };
     }

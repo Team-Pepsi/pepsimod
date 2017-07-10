@@ -1,6 +1,6 @@
 package net.daporkchop.pepsimod.mixin.client.renderer;
 
-import net.daporkchop.pepsimod.module.impl.render.Xray;
+import net.daporkchop.pepsimod.module.impl.render.XrayMod;
 import net.daporkchop.pepsimod.util.XrayUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.BlockFluidRenderer;
@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MixinBlockFluidRenderer {
     @Inject(method = "renderFluid", at = @At("HEAD"), cancellable = true)
     public void preRenderFluid(IBlockAccess blockAccess, IBlockState blockStateIn, BlockPos blockPosIn, BufferBuilder worldRendererIn, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (Xray.INSTANCE.isEnabled) {
+        if (XrayMod.INSTANCE.isEnabled) {
             if (!XrayUtils.isTargeted(blockStateIn.getBlock())) {
                 callbackInfoReturnable.setReturnValue(false);
                 callbackInfoReturnable.cancel();

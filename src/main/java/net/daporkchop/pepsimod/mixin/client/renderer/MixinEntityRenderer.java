@@ -1,16 +1,26 @@
 package net.daporkchop.pepsimod.mixin.client.renderer;
 
-import net.daporkchop.pepsimod.module.impl.render.AntiBlind;
+import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.module.ModuleManager;
+import net.daporkchop.pepsimod.module.api.Module;
+import net.daporkchop.pepsimod.module.impl.render.AntiBlindMod;
+import net.daporkchop.pepsimod.totally.not.skidded.GeometryTessellator;
+import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityRenderer.class)
 public abstract class MixinEntityRenderer {
@@ -71,7 +81,7 @@ public abstract class MixinEntityRenderer {
 
         float f1 = this.mc.player.prevTimeInPortal + (this.mc.player.timeInPortal - this.mc.player.prevTimeInPortal) * partialTicks;
 
-        if (f1 > 0.0F && !AntiBlind.INSTANCE.isEnabled) {
+        if (f1 > 0.0F && !AntiBlindMod.INSTANCE.isEnabled) {
             int i = 20;
 
             if (this.mc.player.isPotionActive(MobEffects.NAUSEA)) {

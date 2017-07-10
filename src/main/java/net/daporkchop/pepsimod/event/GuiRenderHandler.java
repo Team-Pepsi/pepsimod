@@ -4,12 +4,17 @@ import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.misc.TickRate;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
+import net.daporkchop.pepsimod.totally.not.skidded.GeometryTessellator;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
@@ -46,5 +51,35 @@ public class GuiRenderHandler {
 
         String tpsText = PepsiUtils.COLOR_ESCAPE + "7TPS: " + PepsiUtils.COLOR_ESCAPE + "r" + TickRate.TPS;
         gui.drawString(PepsiMod.INSTANCE.mc.fontRenderer, tpsText, width - (PepsiMod.INSTANCE.mc.fontRenderer.getStringWidth("TPS: " + TickRate.TPS) + 2), height - 10, Color.white.getRGB());
+    }
+
+    @SubscribeEvent
+    public void onRenderWorld(RenderWorldLastEvent event)   {
+        GlStateManager.pushMatrix();
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        GlStateManager.disableDepth();
+
+        GlStateManager.glLineWidth(1.f);
+
+        Vec3d renderPos = PepsiUtils.getInterpolatedPos(PepsiMod.INSTANCE.mc.player, event.getPartialTicks());
+        GeometryTessellator.instance.setTranslation(-renderPos.x, -renderPos.y, -renderPos.z);
+
+        for (Module module : ModuleManager.ENABLED_MODULES) {
+            module.onRender(event.getPartialTicks());
+        }
+
+        GlStateManager.glLineWidth(1.f);
+
+        GlStateManager.shadeModel(GL11.GL_FLAT);
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableDepth();
+        GlStateManager.enableCull();
+        GlStateManager.popMatrix();
     }
 }

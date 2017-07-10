@@ -10,9 +10,9 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketUseEntity;
 
-public class Criticals extends Module {
+public class CriticalsMod extends Module {
 
-    public Criticals(boolean isEnabled, int key, boolean hide) {
+    public CriticalsMod(boolean isEnabled, int key, boolean hide) {
         super(isEnabled, "Criticals", key, hide);
     }
 

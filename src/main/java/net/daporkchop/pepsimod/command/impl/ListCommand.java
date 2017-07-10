@@ -4,8 +4,8 @@ import net.daporkchop.pepsimod.command.api.Command;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 
-public class List extends Command {
-    public List() {
+public class ListCommand extends Command {
+    public ListCommand() {
         super("list");
     }
 

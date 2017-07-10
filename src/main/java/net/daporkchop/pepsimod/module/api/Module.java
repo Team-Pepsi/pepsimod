@@ -349,4 +349,11 @@ public abstract class Module extends Command {
                 }
         }
     }
+
+    /**
+     * called every frame
+     */
+    public void onRender(float partialTicks) {
+
+    }
 }

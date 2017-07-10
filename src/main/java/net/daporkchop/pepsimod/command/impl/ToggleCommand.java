@@ -5,8 +5,8 @@ import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 
-public class Toggle extends Command {
-    public Toggle() {
+public class ToggleCommand extends Command {
+    public ToggleCommand() {
         super("toggle");
     }
 
