@@ -12,7 +12,7 @@ public class TickRate {
 
     public static float[] tpsCounts = new float[10];
 
-    public static DecimalFormat format = new DecimalFormat("##.##");
+    public static DecimalFormat format = new DecimalFormat("##.0#");
 
     public static void update(Packet packet) {
         if (!(packet instanceof SPacketTimeUpdate)) {
@@ -45,7 +45,6 @@ public class TickRate {
         }
         total /= tpsCounts.length;
 
-        System.out.println("tps: " + total);
         if (total > 20.0) {
             total = 20.0;
         }

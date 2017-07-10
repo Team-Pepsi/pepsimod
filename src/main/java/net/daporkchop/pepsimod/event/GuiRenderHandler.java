@@ -45,6 +45,6 @@ public class GuiRenderHandler {
         }
 
         String tpsText = PepsiUtils.COLOR_ESCAPE + "7TPS: " + PepsiUtils.COLOR_ESCAPE + "r" + TickRate.TPS;
-        gui.drawString(PepsiMod.INSTANCE.mc.fontRenderer, tpsText, width - (PepsiMod.INSTANCE.mc.fontRenderer.getStringWidth("TPS: " + TickRate.TPS) + 2), height - 12, Color.white.getRGB());
+        gui.drawString(PepsiMod.INSTANCE.mc.fontRenderer, tpsText, width - (PepsiMod.INSTANCE.mc.fontRenderer.getStringWidth("TPS: " + TickRate.TPS) + 2), height - 10, Color.white.getRGB());
     }
 }

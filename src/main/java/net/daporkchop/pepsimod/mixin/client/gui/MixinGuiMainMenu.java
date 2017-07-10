@@ -38,6 +38,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
             for (Module module : ModuleManager.AVALIBLE_MODULES) {
                 module.doInit();
             }
+            PepsiUtils.setBlockIdFields();
             PepsiMod.INSTANCE.hasInitializedModules = true;
         }
         TITLE = new Texture(new ResourceLocation("pepsimod", "textures/gui/pepsimod.png"));

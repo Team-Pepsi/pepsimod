@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.Map;
 
 @Mixin(Scoreboard.class)
-public class MixinScoreboard {
+public abstract class MixinScoreboard {
     @Shadow
     @Final
     private Map<String, ScorePlayerTeam> teamMemberships;
@@ -20,6 +20,9 @@ public class MixinScoreboard {
         return null;
     }
 
+    /**
+     * this hides a stupid warning
+     */
     @Overwrite
     public void removePlayerFromTeam(String username, ScorePlayerTeam playerTeam) {
         try {

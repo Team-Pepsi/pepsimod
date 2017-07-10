@@ -19,11 +19,11 @@ public class GuiButtonMCLeaks extends GuiButton {
         this.y = y;
         this.width = widthIn;
         this.height = heightIn;
-        this.location = new ResourceLocation("textures/gui/pepsibuttons.png");
+        this.location = new ResourceLocation("pepsimod", "textures/gui/pepsibuttons.png");
     }
 
-
-    public void drawButton(Minecraft mc, int mouseX, int mouseY) {
+    @Override
+    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
             mc.getTextureManager().bindTexture(location);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

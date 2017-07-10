@@ -14,10 +14,8 @@ import net.daporkchop.pepsimod.module.impl.misc.NoFall;
 import net.daporkchop.pepsimod.module.impl.misc.Timer;
 import net.daporkchop.pepsimod.module.impl.movement.Velocity;
 import net.daporkchop.pepsimod.module.impl.render.Fullbright;
-import net.daporkchop.pepsimod.util.Friend;
-import net.daporkchop.pepsimod.util.Friends;
-import net.daporkchop.pepsimod.util.PepsiUtils;
-import net.daporkchop.pepsimod.util.TargetSettings;
+import net.daporkchop.pepsimod.module.impl.render.Xray;
+import net.daporkchop.pepsimod.util.*;
 import net.daporkchop.pepsimod.util.datatag.DataTag;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
@@ -36,7 +34,7 @@ import java.util.TimerTask;
 
 @Mod(name = "PepsiMod", modid = "pepsimod", version = PepsiMod.VERSION)
 public class PepsiMod {
-    public static final String VERSION = "11.0";
+    public static final String VERSION = "11.1";
     public static final String chatPrefix = PepsiUtils.COLOR_ESCAPE + "0" + PepsiUtils.COLOR_ESCAPE + "l[" + PepsiUtils.COLOR_ESCAPE + "c" + PepsiUtils.COLOR_ESCAPE + "lpepsi" + PepsiUtils.COLOR_ESCAPE + "9" + PepsiUtils.COLOR_ESCAPE + "lmod" + PepsiUtils.COLOR_ESCAPE + "0" + PepsiUtils.COLOR_ESCAPE + "l]" + PepsiUtils.COLOR_ESCAPE + "r ";
     public static PepsiMod INSTANCE;
     public boolean isMcLeaksAccount = false;
@@ -54,6 +52,7 @@ public class PepsiMod {
         ModuleManager.registerModule(new Aura(false, -1, false));
         ModuleManager.registerModule(new Velocity(false, -1, false));
         ModuleManager.registerModule(new Timer(false, -1, false));
+        ModuleManager.registerModule(new Xray(false, -1, false));
     }
 
     public static void registerCommands(FMLStateEvent event) {
@@ -129,6 +128,7 @@ public class PepsiMod {
         Friends.FRIENDS = (HashMap<String, Friend>) dataTag.getSerializable("friends", new HashMap<String, Friend>());
         ModuleManager.sortType = (ModuleSortType) dataTag.getSerializable("sortType", ModuleSortType.SIZE);
         targetSettings = (TargetSettings) dataTag.getSerializable("targetSettings", new TargetSettings());
+        XrayUtils.target_blocks = (ArrayList<Integer>) dataTag.getSerializable("xrayBlocks", new ArrayList<Integer>());
 
         //save the tag in case new fields are added, this way they are saved right away
         dataTag.save();
@@ -152,6 +152,7 @@ public class PepsiMod {
         dataTag.setSerializable("friends", Friends.FRIENDS);
         dataTag.setSerializable("sortType", ModuleManager.sortType);
         dataTag.setSerializable("targetSettings", targetSettings);
+        dataTag.setSerializable("xrayBlocks", XrayUtils.target_blocks);
         dataTag.save();
     }
 

@@ -233,10 +233,10 @@ public class Aura extends Module {
 
     @Override
     public String getSuggestion(String cmd, String[] args) {
-        if (args.length == 2 && args[1].startsWith("bone")) {
+        if (args.length == 2 && args[1].equals("bone")) {
             return cmd + " " + targetBoneStrings[0];
-        } else if (args.length == 3) {
-            if (args[2].isEmpty() && args[1].equals("bone")) {
+        } else if (args.length == 3 && args[1].equals("bone")) {
+            if (args[2].isEmpty()) {
                 return cmd + targetBoneStrings[0];
             } else {
                 for (String s : targetBoneStrings) {

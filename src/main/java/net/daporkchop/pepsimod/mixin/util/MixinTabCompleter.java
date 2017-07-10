@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(TabCompleter.class)
-public class MixinTabCompleter {
+public abstract class MixinTabCompleter {
     @Shadow
     @Final
     protected GuiTextField textField;

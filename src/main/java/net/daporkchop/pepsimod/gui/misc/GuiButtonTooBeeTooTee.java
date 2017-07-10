@@ -22,8 +22,8 @@ public class GuiButtonTooBeeTooTee extends GuiButton {
         this.location = new ResourceLocation("pepsimod", "textures/gui/pepsibuttons.png");
     }
 
-
-    public void drawButton(Minecraft mc, int mouseX, int mouseY) {
+    @Override
+    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
             mc.getTextureManager().bindTexture(location);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

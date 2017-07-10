@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Timer.class)
-public class MixinTimer {
+public abstract class MixinTimer {
     @Shadow
     public int elapsedTicks;
 
@@ -23,6 +23,9 @@ public class MixinTimer {
     @Shadow
     private float tickLength;
 
+    /**
+     * this hides a stupid warning
+     */
     @Overwrite
     public void updateTimer() {
         float timerSpeed = (net.daporkchop.pepsimod.module.impl.misc.Timer.INSTANCE == null ?

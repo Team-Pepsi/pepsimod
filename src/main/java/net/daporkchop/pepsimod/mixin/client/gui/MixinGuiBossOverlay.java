@@ -37,6 +37,9 @@ public abstract class MixinGuiBossOverlay extends Gui {
     @Final
     private Minecraft client;
 
+    /**
+     * this hides a stupid warning
+     */
     @Overwrite
     public void renderBossHealth() {
         if (!this.mapBossInfos.isEmpty()) {

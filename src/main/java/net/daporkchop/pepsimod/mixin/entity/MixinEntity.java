@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Entity.class)
-public class MixinEntity {
+public abstract class MixinEntity {
     @Shadow
     public double motionX;
     @Shadow
@@ -16,6 +16,9 @@ public class MixinEntity {
     @Shadow
     public double motionZ;
 
+    /**
+     * this hides a stupid warning
+     */
     @Overwrite
     public void setVelocity(double x, double y, double z) {
         float strength = 1.0f;

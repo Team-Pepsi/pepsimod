@@ -7,6 +7,7 @@ import net.daporkchop.pepsimod.util.colors.GradientText;
 import net.daporkchop.pepsimod.util.colors.rainbow.ColorChangeType;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowCycle;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.entity.Entity;
@@ -15,6 +16,8 @@ import net.minecraft.util.math.Vec3d;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.awt.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -29,6 +32,7 @@ public class PepsiUtils {
     public static RainbowCycle rainbowCycle = new RainbowCycle();
     public static Color RAINBOW_COLOR = new Color(0, 0, 0);
     public static ColorizedText PEPSI_NAME = new RainbowText("PepsiMod " + PepsiMod.VERSION);
+    public static Field block_pepsimod_id = null;
 
     static {
         TOOBEETOOTEE_DATA.setResourceMode(ServerData.ServerResourceMode.PROMPT);
@@ -266,5 +270,43 @@ public class PepsiUtils {
     public static Vec3d adjustVectorForBone(Vec3d vec3d, Entity entity, TargetBone bone) {
         vec3d.y = getTargetHeight(entity, bone);
         return vec3d;
+    }
+
+    public static void setBlockIdFields() {
+        try {
+            if (block_pepsimod_id != null) {
+                return;
+            }
+            Class clazz = Block.class;
+            block_pepsimod_id = clazz.getDeclaredField("pepsimod_id");
+            Method setPepsimod_id = clazz.getDeclaredMethod("setPepsimod_id");
+            Block.REGISTRY.forEach((block -> {
+                try {
+                    setPepsimod_id.invoke(block);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                    Runtime.getRuntime().exit(8742043);
+                }
+            }));
+        } catch (Throwable e) {
+            e.printStackTrace();
+            Runtime.getRuntime().exit(2349573);
+        }
+    }
+
+    /**
+     * this is important because getting a block id normally involves iterating through every object in the block registry
+     * in a modded environment there might be 1000s of entrys there
+     * so if we can get the id like this, it saves us lots of Time™
+     */
+    public static int getBlockId(Block block) {
+        try {
+            return (int) block_pepsimod_id.get(block);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            Runtime.getRuntime().exit(97348562);
+        }
+        return -1; //the code will NEVER get here!
+        // thanks java for forcing me to add this
     }
 }
