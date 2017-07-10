@@ -10,6 +10,7 @@ import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
 import net.daporkchop.pepsimod.module.impl.combat.AuraMod;
 import net.daporkchop.pepsimod.module.impl.combat.CriticalsMod;
 import net.daporkchop.pepsimod.module.impl.misc.AntiHungerMod;
+import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
 import net.daporkchop.pepsimod.module.impl.misc.NoFallMod;
 import net.daporkchop.pepsimod.module.impl.misc.TimerMod;
 import net.daporkchop.pepsimod.module.impl.movement.VelocityMod;
@@ -58,6 +59,7 @@ public class PepsiMod {
         ModuleManager.registerModule(new XrayMod(false, -1, false));
         ModuleManager.registerModule(new AntiBlindMod(false, -1, false));
         ModuleManager.registerModule(new StorageESPMod(false, -1, false));
+        ModuleManager.registerModule(new FreecamMod(false, -1, false));
     }
 
     public static void registerCommands(FMLStateEvent event) {
@@ -160,6 +162,7 @@ public class PepsiMod {
         dataTag.setSerializable("targetSettings", targetSettings);
         dataTag.setSerializable("xrayBlocks", XrayUtils.target_blocks);
         dataTag.setSerializable("espSettings", espSettings);
+        dataTag.setFloat("Freecam_speed", FreecamMod.SPEED);
         dataTag.save();
     }
 
@@ -197,8 +200,12 @@ public class PepsiMod {
                     module.options[i] = customOption;
                 }
             }
+
+            module.getOptionByName("enabled").setValue(Module.shouldBeEnabled((boolean) module.getOptionByName("enabled").getValue(), module.getLaunchState()));
             if (((OptionTypeBoolean) module.getOptionByName("enabled")).getValue()) {
                 ModuleManager.enableModule(module);
+            } else {
+                ModuleManager.disableModule(module);
             }
             module.hide = ((OptionTypeBoolean) module.getOptionByName("hidden")).getValue();
         }

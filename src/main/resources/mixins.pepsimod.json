@@ -22,6 +22,10 @@
     "client.renderer.chunk.MixinVisGraph",
     "block.MixinBlockLiquid",
     "entity.MixinEntityLivingBase",
-    "client.renderer.MixinEntityRenderer"
+    "client.renderer.MixinEntityRenderer",
+    "block.MixinBlockSlab",
+    "client.multiplayer.MixinWorldClient",
+    "client.entity.MixinEntityPlayerSP",
+    "client.entity.MixinAbstractClientPlayer"
   ]
 }

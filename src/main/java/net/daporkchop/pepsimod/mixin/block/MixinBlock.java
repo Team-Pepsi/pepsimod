@@ -1,5 +1,6 @@
 package net.daporkchop.pepsimod.mixin.block;
 
+import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
 import net.daporkchop.pepsimod.module.impl.render.XrayMod;
 import net.daporkchop.pepsimod.util.XrayUtils;
 import net.minecraft.block.Block;
@@ -25,7 +26,7 @@ public abstract class MixinBlock extends net.minecraftforge.registries.IForgeReg
         if (XrayMod.INSTANCE.isEnabled) {
             return XrayUtils.isTargeted(Block.class.cast(this));
         }
-        return true;
+        return FreecamMod.INSTANCE.isEnabled;
         //TODO: add some other modules so i can put stuff here
         //https://github.com/Wurst-Imperium/Wurst-MC-1.12/blob/979c016f60f19b158c35d3c48956208c6840ac38/patch/minecraft.patch#L167-L168
     }

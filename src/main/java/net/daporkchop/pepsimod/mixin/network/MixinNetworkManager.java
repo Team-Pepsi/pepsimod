@@ -5,6 +5,7 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.daporkchop.pepsimod.misc.TickRate;
 import net.daporkchop.pepsimod.module.ModuleManager;
+import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.util.text.ITextComponent;
@@ -50,5 +51,8 @@ public abstract class MixinNetworkManager {
     @Inject(method = "closeChannel", at = @At("HEAD"))
     public void preCloseChannel(ITextComponent message, CallbackInfo callbackInfo) {
         TickRate.reset();
+        if (FreecamMod.INSTANCE.isEnabled) {
+            ModuleManager.disableModule(FreecamMod.INSTANCE);
+        }
     }
 }

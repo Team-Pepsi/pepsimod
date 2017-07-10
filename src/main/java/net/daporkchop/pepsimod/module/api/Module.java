@@ -32,15 +32,26 @@ public abstract class Module extends Command {
     public Module(boolean def, String name, int keybind, boolean hide) {
         super(name.toLowerCase());
         nameFull = name;
-        this.isEnabled = def;
+        ModuleLaunchState state = getLaunchState();
+        this.isEnabled = shouldBeEnabled(def, getLaunchState());
         this.keybind = new KeyBinding(name, keybind == -1 ? Keyboard.KEY_NONE : keybind, "key.categories.pepsimod");
         ClientRegistry.registerKeyBinding(this.keybind);
-        if (def) {
+        if (this.isEnabled) {
             this.onEnable();
         } else {
             this.onDisable();
         }
         this.hide = hide;
+    }
+
+    public static boolean shouldBeEnabled(boolean in, ModuleLaunchState state) {
+        if (state == ModuleLaunchState.ENABLED) {
+            return true;
+        } else if (state == ModuleLaunchState.DISABLED) {
+            return false;
+        } else {
+            return in;
+        }
     }
 
     /**
@@ -355,5 +366,9 @@ public abstract class Module extends Command {
      */
     public void onRender(float partialTicks) {
 
+    }
+
+    public ModuleLaunchState getLaunchState() {
+        return ModuleLaunchState.AUTO;
     }
 }

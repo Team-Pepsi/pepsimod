@@ -41,7 +41,6 @@ public class MCLeaks {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NullPointerException e) {
-            //TODO: notify user about bad token
             JOptionPane.showMessageDialog(null, "Invalid or expired token!", "MCLeaks Error", JOptionPane.OK_OPTION);
         }
         return new RedeemResponse();
