@@ -42,10 +42,15 @@ public class TimerMod extends Module {
         PROCENT = (float) getOptionByName("multiplier").getValue();
         INSTANCE = this; //adding this a bunch because it always seems to be null idk y
         PepsiUtils.timer.schedule(new TimerTask() {
+            float lasttps = TickRate.TPS;
+
             @Override
             public void run() {
                 try {
-                    updateName();
+                    if (TickRate.TPS != lasttps) {
+                        updateName();
+                    }
+                    lasttps = TickRate.TPS;
                 } catch (NullPointerException e) {
                     //meh, minecraft isn't initialized yet
                 }

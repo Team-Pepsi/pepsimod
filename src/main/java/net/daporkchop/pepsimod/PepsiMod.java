@@ -14,10 +14,7 @@ import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
 import net.daporkchop.pepsimod.module.impl.misc.NoFallMod;
 import net.daporkchop.pepsimod.module.impl.misc.TimerMod;
 import net.daporkchop.pepsimod.module.impl.movement.VelocityMod;
-import net.daporkchop.pepsimod.module.impl.render.AntiBlindMod;
-import net.daporkchop.pepsimod.module.impl.render.FullbrightMod;
-import net.daporkchop.pepsimod.module.impl.render.StorageESPMod;
-import net.daporkchop.pepsimod.module.impl.render.XrayMod;
+import net.daporkchop.pepsimod.module.impl.render.*;
 import net.daporkchop.pepsimod.util.*;
 import net.daporkchop.pepsimod.util.datatag.DataTag;
 import net.minecraft.client.Minecraft;
@@ -60,6 +57,10 @@ public class PepsiMod {
         ModuleManager.registerModule(new AntiBlindMod(false, -1, false));
         ModuleManager.registerModule(new StorageESPMod(false, -1, false));
         ModuleManager.registerModule(new FreecamMod(false, -1, false));
+        ModuleManager.registerModule(new HealthTagsMod(false, -1, false));
+        ModuleManager.registerModule(new NameTagsMod(false, -1, false));
+        ModuleManager.registerModule(new NoHurtCamMod(false, -1, false));
+        ModuleManager.registerModule(new NoOverlayMod(false, -1, false));
     }
 
     public static void registerCommands(FMLStateEvent event) {
@@ -137,6 +138,8 @@ public class PepsiMod {
         targetSettings = (TargetSettings) dataTag.getSerializable("targetSettings", new TargetSettings());
         XrayUtils.target_blocks = (ArrayList<Integer>) dataTag.getSerializable("xrayBlocks", new ArrayList<Integer>());
         espSettings = (ESPSettings) dataTag.getSerializable("espSettings", new ESPSettings());
+        NameTagsMod.scale = dataTag.getFloat("NameTags_scale", 1.0f);
+        FreecamMod.SPEED = dataTag.getFloat("Freecam_speed", 1.0f);
 
         //save the tag in case new fields are added, this way they are saved right away
         dataTag.save();
@@ -163,6 +166,7 @@ public class PepsiMod {
         dataTag.setSerializable("xrayBlocks", XrayUtils.target_blocks);
         dataTag.setSerializable("espSettings", espSettings);
         dataTag.setFloat("Freecam_speed", FreecamMod.SPEED);
+        dataTag.setFloat("NameTags_scale", NameTagsMod.scale);
         dataTag.save();
     }
 

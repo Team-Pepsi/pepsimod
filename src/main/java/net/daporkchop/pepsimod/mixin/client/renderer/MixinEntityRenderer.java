@@ -1,18 +1,21 @@
 package net.daporkchop.pepsimod.mixin.client.renderer;
 
-import net.daporkchop.pepsimod.PepsiMod;
-import net.daporkchop.pepsimod.module.ModuleManager;
-import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.impl.render.AntiBlindMod;
-import net.daporkchop.pepsimod.totally.not.skidded.GeometryTessellator;
-import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.module.impl.render.NameTagsMod;
+import net.daporkchop.pepsimod.module.impl.render.NoHurtCamMod;
+import net.daporkchop.pepsimod.module.impl.render.NoOverlayMod;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.Project;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -48,6 +51,61 @@ public abstract class MixinEntityRenderer {
 
     @Shadow
     private boolean debugView;
+    @Shadow
+    private boolean cloudFog;
+
+    @Overwrite
+    public static void drawNameplate(FontRenderer fontRendererIn, String str, float x, float y, float z, int verticalShift, float viewerYaw, float viewerPitch, boolean isThirdPersonFrontal, boolean isSneaking) {
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x, y, z);
+        GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(-viewerYaw, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate((float) (isThirdPersonFrontal ? -1 : 1) * viewerPitch, 1.0F, 0.0F, 0.0F);
+
+        float scale = 0.025f;
+        if (NameTagsMod.INSTANCE.isEnabled) {
+            scale *= NameTagsMod.INSTANCE.getScale();
+            isSneaking = false;
+            double distance = Math.sqrt(x * x + y * y + z * z);
+            if (distance > 10) {
+                scale *= distance / 10;
+            }
+        }
+        GlStateManager.scale(-scale, -scale, scale);
+
+        GlStateManager.disableLighting();
+        GlStateManager.depthMask(false);
+
+        if (!isSneaking) {
+            GlStateManager.disableDepth();
+        }
+
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        int i = fontRendererIn.getStringWidth(str) / 2;
+        GlStateManager.disableTexture2D();
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        bufferbuilder.pos((double) (-i - 1), (double) (-1 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        bufferbuilder.pos((double) (-i - 1), (double) (8 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        bufferbuilder.pos((double) (i + 1), (double) (8 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        bufferbuilder.pos((double) (i + 1), (double) (-1 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        tessellator.draw();
+        GlStateManager.enableTexture2D();
+
+        if (!isSneaking) {
+            fontRendererIn.drawString(str, -fontRendererIn.getStringWidth(str) / 2, verticalShift, 553648127);
+            GlStateManager.enableDepth();
+        }
+
+        GlStateManager.depthMask(true);
+        fontRendererIn.drawString(str, -fontRendererIn.getStringWidth(str) / 2, verticalShift, isSneaking ? 553648127 : -1);
+        GlStateManager.enableLighting();
+        GlStateManager.disableBlend();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.popMatrix();
+    }
 
     @Overwrite
     private void setupCameraTransform(float partialTicks, int pass) {
@@ -127,6 +185,13 @@ public abstract class MixinEntityRenderer {
 
     }
 
+    @Inject(method = "hurtCameraEffect", at = @At("HEAD"), cancellable = true)
+    public void preHurtCameraEffect(float partialTicks, CallbackInfo callbackInfo) {
+        if (NoHurtCamMod.INSTANCE.isEnabled) {
+            callbackInfo.cancel();
+        }
+    }
+
     @Shadow
     private void applyBobbing(float partialTicks) {
 
@@ -134,6 +199,91 @@ public abstract class MixinEntityRenderer {
 
     @Shadow
     private void orientCamera(float partialTicks) {
+
+    }
+
+    @Overwrite
+    private void setupFog(int startCoords, float partialTicks) {
+        Entity entity = this.mc.getRenderViewEntity();
+        this.setupFogColor(false);
+        GlStateManager.glNormal3f(0.0F, -1.0F, 0.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        IBlockState iblockstate = ActiveRenderInfo.getBlockStateAtEntityViewpoint(this.mc.world, entity, partialTicks);
+        float hook = net.minecraftforge.client.ForgeHooksClient.getFogDensity(EntityRenderer.class.cast(this), entity, iblockstate, partialTicks, 0.1F);
+        if (hook >= 0) GlStateManager.setFogDensity(hook);
+        else if (entity instanceof EntityLivingBase && ((EntityLivingBase) entity).isPotionActive(MobEffects.BLINDNESS)) {
+            float f1 = 5.0F;
+            int i = ((EntityLivingBase) entity).getActivePotionEffect(MobEffects.BLINDNESS).getDuration();
+
+            if (i < 20) {
+                f1 = 5.0F + (this.farPlaneDistance - 5.0F) * (1.0F - (float) i / 20.0F);
+            }
+
+            GlStateManager.setFog(GlStateManager.FogMode.LINEAR);
+
+            if (startCoords == -1) {
+                GlStateManager.setFogStart(0.0F);
+                GlStateManager.setFogEnd(f1 * 0.8F);
+            } else {
+                GlStateManager.setFogStart(f1 * 0.25F);
+                GlStateManager.setFogEnd(f1);
+            }
+
+            if (GLContext.getCapabilities().GL_NV_fog_distance) {
+                GlStateManager.glFogi(34138, 34139);
+            }
+        } else if (this.cloudFog) {
+            GlStateManager.setFog(GlStateManager.FogMode.EXP);
+            GlStateManager.setFogDensity(0.1F);
+        } else if (iblockstate.getMaterial() == Material.WATER) {
+            GlStateManager.setFog(GlStateManager.FogMode.EXP);
+
+            if (entity instanceof EntityLivingBase) {
+                if (NoOverlayMod.INSTANCE.isEnabled || ((EntityLivingBase) entity).isPotionActive(MobEffects.WATER_BREATHING)) {
+                    GlStateManager.setFogDensity(0.01F);
+                } else {
+                    GlStateManager.setFogDensity(0.1F - (float) EnchantmentHelper.getRespirationModifier((EntityLivingBase) entity) * 0.03F);
+                }
+            } else {
+                GlStateManager.setFogDensity(0.1F);
+            }
+        } else if (iblockstate.getMaterial() == Material.LAVA) {
+            if (NoOverlayMod.INSTANCE.isEnabled) {
+                GlStateManager.setFogDensity(0.01f);
+            } else {
+                GlStateManager.setFog(GlStateManager.FogMode.EXP);
+                GlStateManager.setFogDensity(2.0F);
+            }
+        } else {
+            float f = this.farPlaneDistance;
+            GlStateManager.setFog(GlStateManager.FogMode.LINEAR);
+
+            if (startCoords == -1) {
+                GlStateManager.setFogStart(0.0F);
+                GlStateManager.setFogEnd(f);
+            } else {
+                GlStateManager.setFogStart(f * 0.75F);
+                GlStateManager.setFogEnd(f);
+            }
+
+            if (GLContext.getCapabilities().GL_NV_fog_distance) {
+                GlStateManager.glFogi(34138, 34139);
+            }
+
+            if (this.mc.world.provider.doesXZShowFog((int) entity.posX, (int) entity.posZ) || this.mc.ingameGUI.getBossOverlay().shouldCreateFog()) {
+                GlStateManager.setFogStart(f * 0.05F);
+                GlStateManager.setFogEnd(Math.min(f, 192.0F) * 0.5F);
+            }
+            net.minecraftforge.client.ForgeHooksClient.onFogRender(EntityRenderer.class.cast(this), entity, iblockstate, partialTicks, startCoords, f);
+        }
+
+        GlStateManager.enableColorMaterial();
+        GlStateManager.enableFog();
+        GlStateManager.colorMaterial(1028, 4608);
+    }
+
+    @Shadow
+    public void setupFogColor(boolean black) {
 
     }
 }

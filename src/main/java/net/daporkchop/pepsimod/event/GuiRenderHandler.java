@@ -4,17 +4,13 @@ import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.misc.TickRate;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
-import net.daporkchop.pepsimod.totally.not.skidded.GeometryTessellator;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
@@ -55,7 +51,7 @@ public class GuiRenderHandler {
 
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event)   {
-        GlStateManager.pushMatrix();
+        /*GlStateManager.pushMatrix();
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();
@@ -67,12 +63,12 @@ public class GuiRenderHandler {
 
         Vec3d renderPos = PepsiUtils.getInterpolatedPos(PepsiMod.INSTANCE.mc.player, event.getPartialTicks());
         GeometryTessellator.instance.setTranslation(-renderPos.x, -renderPos.y, -renderPos.z);
-
+*/
         for (Module module : ModuleManager.ENABLED_MODULES) {
             module.onRender(event.getPartialTicks());
         }
 
-        GlStateManager.glLineWidth(1.f);
+        /*GlStateManager.glLineWidth(1.f);
 
         GlStateManager.shadeModel(GL11.GL_FLAT);
         GlStateManager.disableBlend();
@@ -80,6 +76,6 @@ public class GuiRenderHandler {
         GlStateManager.enableTexture2D();
         GlStateManager.enableDepth();
         GlStateManager.enableCull();
-        GlStateManager.popMatrix();
+        GlStateManager.popMatrix();*/
     }
 }

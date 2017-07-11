@@ -5,39 +5,28 @@ import net.daporkchop.pepsimod.module.api.CustomOption;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
-import net.daporkchop.pepsimod.totally.not.skidded.GeometryMasks;
-import net.daporkchop.pepsimod.totally.not.skidded.GeometryTessellator;
 import net.daporkchop.pepsimod.totally.not.skidded.RenderUtils;
-import net.daporkchop.pepsimod.util.ESPEntry;
 import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.RenderColor;
 import net.minecraft.block.BlockChest;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.Vector3d;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.tileentity.*;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 
 public class StorageESPMod extends Module {
+    public static final RenderColor chestColor = new RenderColor(196, 139, 53, 128);
+    public static final RenderColor trappedColor = new RenderColor(81, 57, 22, 128);
+    public static final RenderColor enderColor = new RenderColor(25, 35, 40, 128);
+    public static final RenderColor hopperColor = new RenderColor(45, 45, 45, 128);
+    public static final RenderColor furnaceColor = new RenderColor(151, 151, 151, 128);
     public static StorageESPMod INSTANCE;
-
-    public final ArrayList<ESPEntry> basic = new ArrayList<>();
-    public final ArrayList<ESPEntry> trapped = new ArrayList<>();
-    public final ArrayList<ESPEntry> ender = new ArrayList<>();
-    public final ArrayList<ESPEntry> hopper = new ArrayList<>();
-    public final ArrayList<ESPEntry> furnace = new ArrayList<>();
-
-    public static final int chestColor = PepsiUtils.toRGBA(196, 139, 53, 200);
-    public static final int trappedColor = PepsiUtils.toRGBA(171, 121, 45, 200);
-    public static final int enderColor = PepsiUtils.toRGBA(25, 35, 40, 200);
-    public static final int hopperColor = PepsiUtils.toRGBA(45, 45, 45, 200);
-    public static final int furnaceColor = PepsiUtils.toRGBA(151, 151, 151, 200);
+    public final ArrayList<AxisAlignedBB> basic = new ArrayList<>();
+    public final ArrayList<AxisAlignedBB> trapped = new ArrayList<>();
+    public final ArrayList<AxisAlignedBB> ender = new ArrayList<>();
+    public final ArrayList<AxisAlignedBB> hopper = new ArrayList<>();
+    public final ArrayList<AxisAlignedBB> furnace = new ArrayList<>();
 
     public StorageESPMod(boolean isEnabled, int key, boolean hide) {
         super(isEnabled, "StorageESP", key, hide);
@@ -69,30 +58,29 @@ public class StorageESPMod extends Module {
                     continue;
                 }
 
-                BlockPos pos = te.getPos();
-                BlockPos other = null;
+                AxisAlignedBB bb = PepsiUtils.offsetBB(PepsiUtils.cloneBB(PepsiUtils.getBoundingBox(PepsiMod.INSTANCE.mc.world, te.getPos())), te.getPos());
 
                 if (chestTe.adjacentChestXNeg != null) {
-                    other = chestTe.adjacentChestXNeg.getPos();
+                    PepsiUtils.unionBB(bb, PepsiUtils.offsetBB(PepsiUtils.cloneBB(PepsiUtils.getBoundingBox(PepsiMod.INSTANCE.mc.world, chestTe.adjacentChestXNeg.getPos())), chestTe.adjacentChestXNeg.getPos()));
                 } else if (chestTe.adjacentChestZNeg != null) {
-                    other = chestTe.adjacentChestZNeg.getPos();
+                    PepsiUtils.unionBB(bb, PepsiUtils.offsetBB(PepsiUtils.cloneBB(PepsiUtils.getBoundingBox(PepsiMod.INSTANCE.mc.world, chestTe.adjacentChestZNeg.getPos())), chestTe.adjacentChestZNeg.getPos()));
                 }
 
                 if (chestTe.getChestType() == BlockChest.Type.TRAP) {
                     if (PepsiMod.INSTANCE.espSettings.trapped) {
-                        trapped.add(new ESPEntry(pos, other == null ? pos : other));
+                        trapped.add(bb);
                     }
                 } else {
                     if (PepsiMod.INSTANCE.espSettings.basic) {
-                        basic.add(new ESPEntry(pos, other == null ? pos : other));
+                        basic.add(bb);
                     }
                 }
             } else if (PepsiMod.INSTANCE.espSettings.ender && te instanceof TileEntityEnderChest) {
-                ender.add(new ESPEntry(te.getPos()));
+                ender.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(PepsiUtils.getBoundingBox(PepsiMod.INSTANCE.mc.world, te.getPos())), te.getPos()));
             } else if (PepsiMod.INSTANCE.espSettings.furnace && te instanceof TileEntityFurnace) {
-                furnace.add(new ESPEntry(te.getPos()));
+                furnace.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(PepsiUtils.getBoundingBox(PepsiMod.INSTANCE.mc.world, te.getPos())), te.getPos()));
             } else if (PepsiMod.INSTANCE.espSettings.hopper && te instanceof TileEntityHopper) {
-                hopper.add(new ESPEntry(te.getPos()));
+                hopper.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(PepsiUtils.getBoundingBox(PepsiMod.INSTANCE.mc.world, te.getPos())), te.getPos()));
             }
         }
     }
@@ -104,7 +92,7 @@ public class StorageESPMod extends Module {
 
     @Override
     public ModuleOption[] getDefaultOptions() {
-        return new ModuleOption[]   {
+        return new ModuleOption[]{
                 new CustomOption<>(PepsiMod.INSTANCE.espSettings.basic, "normal", OptionTypeBoolean.DEFAULT_COMPLETIONS,
                         (value) -> {
                             PepsiMod.INSTANCE.espSettings.basic = value;
@@ -145,39 +133,63 @@ public class StorageESPMod extends Module {
 
     @Override
     public void onRender(float partialTicks) {
-        BufferBuilder builder = GeometryTessellator.instance.getBuffer();
-        builder.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glLineWidth(2);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+
+        GL11.glPushMatrix();
+        GL11.glTranslated(-PepsiMod.INSTANCE.mc.getRenderManager().renderPosX, -PepsiMod.INSTANCE.mc.getRenderManager().renderPosY, -PepsiMod.INSTANCE.mc.getRenderManager().renderPosZ);
 
         if (PepsiMod.INSTANCE.espSettings.basic) {
+            GL11.glColor4b(chestColor.r, chestColor.g, chestColor.b, chestColor.a);
+
             basic.forEach((entry) -> {
-                GeometryTessellator.instance.drawCuboid(builder, entry.start, entry.end, GeometryMasks.Line.ALL, chestColor);
+                RenderUtils.drawOutlinedBox(entry);
             });
         }
 
         if (PepsiMod.INSTANCE.espSettings.trapped) {
+            GL11.glColor4b(trappedColor.r, trappedColor.g, trappedColor.b, trappedColor.a);
+
             trapped.forEach((entry) -> {
-                GeometryTessellator.instance.drawCuboid(builder, entry.start, entry.end, GeometryMasks.Line.ALL, trappedColor);
+                RenderUtils.drawOutlinedBox(entry);
             });
         }
 
         if (PepsiMod.INSTANCE.espSettings.ender) {
+            GL11.glColor4b(enderColor.r, enderColor.g, enderColor.b, enderColor.a);
+
             ender.forEach((entry) -> {
-                GeometryTessellator.instance.drawCuboid(builder, entry.start, entry.end, GeometryMasks.Line.ALL, enderColor);
+                RenderUtils.drawOutlinedBox(entry);
             });
         }
 
         if (PepsiMod.INSTANCE.espSettings.hopper) {
+            GL11.glColor4b(hopperColor.r, hopperColor.g, hopperColor.b, hopperColor.a);
+
             hopper.forEach((entry) -> {
-                GeometryTessellator.instance.drawCuboid(builder, entry.start, entry.end, GeometryMasks.Line.ALL, hopperColor);
+                RenderUtils.drawOutlinedBox(entry);
             });
         }
 
         if (PepsiMod.INSTANCE.espSettings.furnace) {
+            GL11.glColor4b(furnaceColor.r, furnaceColor.g, furnaceColor.b, furnaceColor.a);
+
             furnace.forEach((entry) -> {
-                GeometryTessellator.instance.drawCuboid(builder, entry.start, entry.end, GeometryMasks.Line.ALL, furnaceColor);
+                RenderUtils.drawOutlinedBox(entry);
             });
         }
 
-        GeometryTessellator.instance.draw();
+        GL11.glPopMatrix();
+
+        // GL resets
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
     }
 }

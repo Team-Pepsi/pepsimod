@@ -18,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.ArrayUtils;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.lang.reflect.Field;
@@ -383,5 +384,9 @@ public class PepsiUtils {
 
     public static void copyPlayerModel(EntityPlayer from, EntityPlayer to) {
         to.getDataManager().set(EntityPlayer.PLAYER_MODEL_FLAG, from.getDataManager().get(EntityPlayer.PLAYER_MODEL_FLAG));
+    }
+
+    public static void glColor(RenderColor color) {
+        GL11.glColor4f(color.r, color.g, color.b, color.a);
     }
 }

@@ -134,9 +134,14 @@ public class ModuleManager {
                     }
                     for (int i = 0; i < newArrayList1.size(); i++) {
                         Module existingModule = newArrayList1.get(i);
-                        if (module.text.width() >= existingModule.text.width()) {
+                        if (module.text.width() > existingModule.text.width()) {
                             newArrayList1.add(i, module);
                             continue ESCAPE;
+                        } else if (module.text.width() == existingModule.text.width()) {
+                            if (module.name.compareTo(existingModule.name) < 0) {
+                                newArrayList1.add(i, module);
+                                continue ESCAPE;
+                            }
                         }
                     }
                     newArrayList1.add(module);

@@ -3,12 +3,8 @@ package net.daporkchop.pepsimod.module.impl.render;
 import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 
 public class FullbrightMod extends Module {
-    public static final Potion NIGHT_VISION = Potion.getPotionById(16);
-    private static final PotionEffect BRIGHTNESS_EFFECT = new PotionEffect(NIGHT_VISION, Integer.MAX_VALUE, 1, false, false);
 
     public FullbrightMod(boolean isEnabled, int key, boolean hide) {
         super(isEnabled, "Fullbright", key, hide);
@@ -16,26 +12,24 @@ public class FullbrightMod extends Module {
 
     @Override
     public void onEnable() {
-        if (PepsiMod.INSTANCE.mc.player == null) {
-            return;
-        }
-        PepsiMod.INSTANCE.mc.player.addPotionEffect(BRIGHTNESS_EFFECT);
     }
 
     @Override
     public void onDisable() {
-        if (PepsiMod.INSTANCE.mc.player == null) {
-            return;
-        }
-        PepsiMod.INSTANCE.mc.player.removeActivePotionEffect(NIGHT_VISION);
     }
 
     @Override
     public void tick() {
-        if (isEnabled) {
-            PepsiMod.INSTANCE.mc.player.addPotionEffect(BRIGHTNESS_EFFECT);
-        } else {
-            PepsiMod.INSTANCE.mc.player.removeActivePotionEffect(NIGHT_VISION);
+        if (this.isEnabled || XrayMod.INSTANCE.isEnabled) {
+            if (PepsiMod.INSTANCE.mc.gameSettings.gammaSetting < 16f) {
+                PepsiMod.INSTANCE.mc.gameSettings.gammaSetting += 0.5f;
+            }
+        } else if (PepsiMod.INSTANCE.mc.gameSettings.gammaSetting > 0.5f) {
+            if (PepsiMod.INSTANCE.mc.gameSettings.gammaSetting < 1F) {
+                PepsiMod.INSTANCE.mc.gameSettings.gammaSetting = 0.5F;
+            } else {
+                PepsiMod.INSTANCE.mc.gameSettings.gammaSetting -= 0.5F;
+            }
         }
     }
 
@@ -47,5 +41,10 @@ public class FullbrightMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[0];
+    }
+
+    @Override
+    public boolean shouldTick() {
+        return true;
     }
 }

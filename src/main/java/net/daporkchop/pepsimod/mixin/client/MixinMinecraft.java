@@ -29,8 +29,10 @@ public abstract class MixinMinecraft {
     @Inject(method = "runGameLoop", at = @At("RETURN"))
     public void onClientPreTick(CallbackInfo callbackInfo)  {
         if (PepsiMod.INSTANCE.mc.player != null) { // is ingame
-            for (Module module : ModuleManager.ENABLED_MODULES) {
-                module.tick();
+            for (Module module : ModuleManager.AVALIBLE_MODULES) {
+                if (module.shouldTick()) {
+                    module.tick();
+                }
             }
         }
     }
@@ -59,8 +61,7 @@ public abstract class MixinMinecraft {
                 }
             }
         } catch (NullPointerException e) {
-            e.printStackTrace();
-            System.out.println("MCF is borked lol");
+            //wtf who cares
         }
     }
 }

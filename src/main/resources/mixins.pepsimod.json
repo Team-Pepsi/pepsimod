@@ -26,6 +26,9 @@
     "block.MixinBlockSlab",
     "client.multiplayer.MixinWorldClient",
     "client.entity.MixinEntityPlayerSP",
-    "client.entity.MixinAbstractClientPlayer"
+    "client.entity.MixinAbstractClientPlayer",
+    "client.renderer.entity.MixinRender",
+    "client.gui.MixinGuiIngame",
+    "client.renderer.MixinItemRenderer"
   ]
 }

@@ -371,4 +371,8 @@ public abstract class Module extends Command {
     public ModuleLaunchState getLaunchState() {
         return ModuleLaunchState.AUTO;
     }
+
+    public boolean shouldTick() {
+        return this.isEnabled;
+    }
 }
