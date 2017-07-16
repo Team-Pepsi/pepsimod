@@ -68,10 +68,11 @@ public class FreecamMod extends Module {
                         (value) -> {
                             if (value <= 0.0f) {
                                 clientMessage("Speed cannot be negative or 0!");
-                                return;
+                                return false;
                             }
                             FreecamMod.SPEED = value;
                             updateName();
+                            return true;
                         },
                         () -> {
                             return FreecamMod.SPEED;

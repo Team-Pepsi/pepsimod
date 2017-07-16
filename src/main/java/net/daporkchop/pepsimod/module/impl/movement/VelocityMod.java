@@ -44,6 +44,7 @@ public class VelocityMod extends Module {
                         (value) -> {
                             VelocityMod.PROCENT = value;
                             updateName();
+                            return true;
                         },
                         () -> {
                             return VelocityMod.PROCENT;

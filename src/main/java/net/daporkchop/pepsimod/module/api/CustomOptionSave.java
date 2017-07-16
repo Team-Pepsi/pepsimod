@@ -15,8 +15,8 @@ public class CustomOptionSave<T> extends ModuleOption<T> {
     }
 
     @Override
-    public T setValue(T value) {
-        return value;
+    public boolean setValue(T value) {
+        return true;
     }
 
     @Override

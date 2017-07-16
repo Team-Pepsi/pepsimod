@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GuiIngame.class)
-public class MixinGuiIngame extends Gui {
+public abstract class MixinGuiIngame extends Gui {
     @Inject(method = "renderPumpkinOverlay", at = @At("HEAD"), cancellable = true)
     protected void preRenderPumpkinOverlay(ScaledResolution scaledRes, CallbackInfo callbackInfo) {
         if (NoOverlayMod.INSTANCE.isEnabled) {

@@ -96,6 +96,7 @@ public class StorageESPMod extends Module {
                 new CustomOption<>(PepsiMod.INSTANCE.espSettings.basic, "normal", OptionTypeBoolean.DEFAULT_COMPLETIONS,
                         (value) -> {
                             PepsiMod.INSTANCE.espSettings.basic = value;
+                            return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.espSettings.basic;
@@ -103,6 +104,7 @@ public class StorageESPMod extends Module {
                 new CustomOption<>(PepsiMod.INSTANCE.espSettings.trapped, "trapped", OptionTypeBoolean.DEFAULT_COMPLETIONS,
                         (value) -> {
                             PepsiMod.INSTANCE.espSettings.trapped = value;
+                            return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.espSettings.trapped;
@@ -110,6 +112,7 @@ public class StorageESPMod extends Module {
                 new CustomOption<>(PepsiMod.INSTANCE.espSettings.ender, "ender", OptionTypeBoolean.DEFAULT_COMPLETIONS,
                         (value) -> {
                             PepsiMod.INSTANCE.espSettings.ender = value;
+                            return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.espSettings.ender;
@@ -117,6 +120,7 @@ public class StorageESPMod extends Module {
                 new CustomOption<>(PepsiMod.INSTANCE.espSettings.hopper, "hopper", OptionTypeBoolean.DEFAULT_COMPLETIONS,
                         (value) -> {
                             PepsiMod.INSTANCE.espSettings.hopper = value;
+                            return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.espSettings.hopper;
@@ -124,6 +128,7 @@ public class StorageESPMod extends Module {
                 new CustomOption<>(PepsiMod.INSTANCE.espSettings.furnace, "furnace", OptionTypeBoolean.DEFAULT_COMPLETIONS,
                         (value) -> {
                             PepsiMod.INSTANCE.espSettings.furnace = value;
+                            return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.espSettings.furnace;

@@ -44,6 +44,7 @@ public class PepsiMod {
     public boolean hasInitializedModules = false;
     public TargetSettings targetSettings;
     public ESPSettings espSettings;
+    public NoWeatherSettings noWeatherSettings;
 
     public static void registerModules(FMLStateEvent event) {
         ModuleManager.registerModule(new NoFallMod(false, -1, false));
@@ -61,6 +62,7 @@ public class PepsiMod {
         ModuleManager.registerModule(new NameTagsMod(false, -1, false));
         ModuleManager.registerModule(new NoHurtCamMod(false, -1, false));
         ModuleManager.registerModule(new NoOverlayMod(false, -1, false));
+        ModuleManager.registerModule(new NoWeatherMod(false, -1, false));
     }
 
     public static void registerCommands(FMLStateEvent event) {
@@ -116,7 +118,7 @@ public class PepsiMod {
             public void run() {
                 PepsiMod.INSTANCE.saveConfig();
             }
-        }, 300000, 300000);
+        }, 360000, 360000);
     }
 
     public void loadConfig() {
@@ -140,6 +142,7 @@ public class PepsiMod {
         espSettings = (ESPSettings) dataTag.getSerializable("espSettings", new ESPSettings());
         NameTagsMod.scale = dataTag.getFloat("NameTags_scale", 1.0f);
         FreecamMod.SPEED = dataTag.getFloat("Freecam_speed", 1.0f);
+        noWeatherSettings = (NoWeatherSettings) dataTag.getSerializable("noweatherSettings", new NoWeatherSettings());
 
         //save the tag in case new fields are added, this way they are saved right away
         dataTag.save();
@@ -167,6 +170,7 @@ public class PepsiMod {
         dataTag.setSerializable("espSettings", espSettings);
         dataTag.setFloat("Freecam_speed", FreecamMod.SPEED);
         dataTag.setFloat("NameTags_scale", NameTagsMod.scale);
+        dataTag.setSerializable("noweatherSettings", noWeatherSettings);
         dataTag.save();
     }
 

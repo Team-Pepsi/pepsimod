@@ -1,6 +1,7 @@
 package net.daporkchop.pepsimod.module.api;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -11,12 +12,17 @@ import java.util.function.Supplier;
  * @param <T> the type of the option
  */
 public class CustomOption<T> extends ModuleOption<T> {
-    public final Consumer<T> SET;
+    /**
+     * this returns a boolean because if there's an invalid value sent you might want to cancel the value set
+     * if the return value is true, execution will continue as usual
+     * if it's false, then the value will not be sent
+     */
+    public final Function<T, Boolean> SET;
     public final Supplier<T> GET;
     private final String[] DEFAULT_COMPLETIONS;
     private final T DEFAULT_VALUE;
 
-    public CustomOption(T defaultValue, String name, String[] defaultCompletions, Consumer<T> set, Supplier<T> get) {
+    public CustomOption(T defaultValue, String name, String[] defaultCompletions, Function<T, Boolean> set, Supplier<T> get) {
         super(defaultValue, name);
         DEFAULT_COMPLETIONS = defaultCompletions;
         DEFAULT_VALUE = defaultValue;
@@ -24,7 +30,7 @@ public class CustomOption<T> extends ModuleOption<T> {
         GET = get;
     }
 
-    public CustomOption(ModuleOption<T> option, Consumer<T> set, Supplier<T> get) {
+    public CustomOption(ModuleOption<T> option, Function<T, Boolean> set, Supplier<T> get) {
         super(option.getDefaultValue(), option.getName());
         DEFAULT_VALUE = option.getDefaultValue();
         DEFAULT_COMPLETIONS = option.defaultCompletions();
@@ -33,9 +39,8 @@ public class CustomOption<T> extends ModuleOption<T> {
     }
 
     @Override
-    public T setValue(T value) {
-        SET.accept(value);
-        return value;
+    public boolean setValue(T value) {
+        return SET.apply(value);
     }
 
     @Override

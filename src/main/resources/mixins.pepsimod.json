@@ -29,6 +29,7 @@
     "client.entity.MixinAbstractClientPlayer",
     "client.renderer.entity.MixinRender",
     "client.gui.MixinGuiIngame",
-    "client.renderer.MixinItemRenderer"
+    "client.renderer.MixinItemRenderer",
+    "world.MixinWorld"
   ]
 }

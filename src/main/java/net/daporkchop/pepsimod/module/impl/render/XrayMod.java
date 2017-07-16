@@ -47,14 +47,20 @@ public class XrayMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new CustomOption<>(0, "add", new String[0], (value) -> {
-                }, () -> {
-                    return 0;
-                }),
-                new CustomOption<>(0, "remove", new String[0], (value) -> {
-                }, () -> {
-                    return 0;
-                })
+                new CustomOption<>(0, "add", new String[0],
+                        (value) -> {
+                            return true;
+                        },
+                        () -> {
+                            return 0;
+                        }),
+                new CustomOption<>(0, "remove", new String[0],
+                        (value) -> {
+                            return true;
+                        },
+                        () -> {
+                            return 0;
+                        })
         };
     }
 
@@ -98,7 +104,7 @@ public class XrayMod extends Module {
     }
 
     @Override
-    public void execute(String cmd, String[] args) {
+    public void execute(String cmd, String[] args) { //TODO: make this less dirty by actually using the amazing system i made
         if (args.length == 3 && !args[2].isEmpty() && cmd.startsWith(".xray add ")) {
             String s = args[2].toLowerCase();
             try {

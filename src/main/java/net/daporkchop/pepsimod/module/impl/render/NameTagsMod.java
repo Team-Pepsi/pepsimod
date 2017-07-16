@@ -40,6 +40,7 @@ public class NameTagsMod extends Module {
                 new CustomOption<>(1.0f, "scale", OptionTypeFloat.DEFAULT_COMPLETIONS,
                         (value) -> {
                             scale = value;
+                            return true;
                         },
                         () -> {
                             return scale;

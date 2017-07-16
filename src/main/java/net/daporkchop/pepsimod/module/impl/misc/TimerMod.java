@@ -65,10 +65,11 @@ public class TimerMod extends Module {
                         (value) -> {
                             if (value <= 0.0f) {
                                 clientMessage("Multiplier cannot be negative or 0!");
-                                return;
+                                return false;
                             }
                             TimerMod.PROCENT = value;
                             updateName();
+                            return true;
                         },
                         () -> {
                             return TimerMod.PROCENT;
@@ -76,6 +77,7 @@ public class TimerMod extends Module {
                 new CustomOption<>(false, "tps_sync", OptionTypeBoolean.DEFAULT_COMPLETIONS,
                         (value) -> {
                             tps_sync = value;
+                            return true;
                         },
                         () -> {
                             return tps_sync;

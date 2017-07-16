@@ -98,6 +98,7 @@ public class AuraMod extends Module {
                 new CustomOption<>(PepsiMod.INSTANCE.targetSettings.players, "players", OptionTypeBoolean.DEFAULT_COMPLETIONS,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.players = value;
+                            return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.players;
@@ -105,6 +106,7 @@ public class AuraMod extends Module {
                 new CustomOption<>(PepsiMod.INSTANCE.targetSettings.animals, "animals", OptionTypeBoolean.DEFAULT_COMPLETIONS,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.animals = value;
+                            return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.animals;
@@ -112,6 +114,7 @@ public class AuraMod extends Module {
                 new CustomOption<>(PepsiMod.INSTANCE.targetSettings.monsters, "monsters", OptionTypeBoolean.DEFAULT_COMPLETIONS,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.monsters = value;
+                            return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.monsters;
@@ -119,6 +122,7 @@ public class AuraMod extends Module {
                 new CustomOption<>(PepsiMod.INSTANCE.targetSettings.golems, "golems", OptionTypeBoolean.DEFAULT_COMPLETIONS,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.golems = value;
+                            return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.golems;
@@ -126,6 +130,7 @@ public class AuraMod extends Module {
                 new CustomOption<>(PepsiMod.INSTANCE.targetSettings.sleeping, "sleeping", OptionTypeBoolean.DEFAULT_COMPLETIONS,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.sleeping = value;
+                            return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.sleeping;
@@ -133,6 +138,7 @@ public class AuraMod extends Module {
                 new CustomOption<>(PepsiMod.INSTANCE.targetSettings.invisible, "invisible", OptionTypeBoolean.DEFAULT_COMPLETIONS,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.invisible = value;
+                            return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.invisible;
@@ -140,6 +146,7 @@ public class AuraMod extends Module {
                 new CustomOption<>(PepsiMod.INSTANCE.targetSettings.teams, "teams", OptionTypeBoolean.DEFAULT_COMPLETIONS,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.teams = value;
+                            return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.teams;
@@ -147,6 +154,7 @@ public class AuraMod extends Module {
                 new CustomOption<>(PepsiMod.INSTANCE.targetSettings.friends, "friends", OptionTypeBoolean.DEFAULT_COMPLETIONS,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.friends = value;
+                            return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.friends;
@@ -154,6 +162,7 @@ public class AuraMod extends Module {
                 new CustomOption<>(PepsiMod.INSTANCE.targetSettings.through_walls, "through_walls", OptionTypeBoolean.DEFAULT_COMPLETIONS,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.through_walls = value;
+                            return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.through_walls;
@@ -161,6 +170,7 @@ public class AuraMod extends Module {
                 new CustomOption<>(PepsiMod.INSTANCE.targetSettings.fov, "fov", OptionTypeFloat.DEFAULT_COMPLETIONS,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.fov = value;
+                            return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.fov;
@@ -168,6 +178,7 @@ public class AuraMod extends Module {
                 new CustomOption<>(PepsiMod.INSTANCE.targetSettings.reach, "reach", OptionTypeFloat.DEFAULT_COMPLETIONS,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.reach = value;
+                            return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.reach;
@@ -175,6 +186,7 @@ public class AuraMod extends Module {
                 new CustomOption<>(PepsiMod.INSTANCE.targetSettings.delay, "delay", OptionTypeInteger.DEFAULT_COMPLETIONS,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.delay = value;
+                            return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.delay;
@@ -182,6 +194,7 @@ public class AuraMod extends Module {
                 new CustomOption<>(PepsiMod.INSTANCE.targetSettings.use_cooldown, "use_cooldown", OptionTypeBoolean.DEFAULT_COMPLETIONS,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.use_cooldown = value;
+                            return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.use_cooldown;
@@ -190,6 +203,7 @@ public class AuraMod extends Module {
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.silent = value;
                             updateName();
+                            return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.silent;
@@ -198,6 +212,7 @@ public class AuraMod extends Module {
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.rotate = value;
                             updateName();
+                            return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.rotate;
@@ -205,6 +220,7 @@ public class AuraMod extends Module {
                 new CustomOption<>(PepsiMod.INSTANCE.targetSettings.targetBone, "bone", targetBoneStrings,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.targetBone = value;
+                            return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.targetBone;

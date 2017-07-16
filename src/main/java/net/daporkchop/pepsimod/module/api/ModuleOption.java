@@ -15,8 +15,12 @@ public abstract class ModuleOption<T> implements Serializable {
         this.name = name;
     }
 
-    public T setValue(T newValue)   {
-        return this.value = newValue;
+    /**
+     * @return true if value could be set, false otherwise
+     */
+    public boolean setValue(T newValue)   {
+        this.value = newValue;
+        return true;
     }
 
     public T getValue() {
