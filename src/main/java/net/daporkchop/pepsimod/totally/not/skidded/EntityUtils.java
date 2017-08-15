@@ -3,7 +3,7 @@ package net.daporkchop.pepsimod.totally.not.skidded;
 import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.util.Friends;
 import net.daporkchop.pepsimod.util.PepsiUtils;
-import net.daporkchop.pepsimod.util.TargetBone;
+import net.daporkchop.pepsimod.util.module.TargetBone;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.monster.EntityMob;

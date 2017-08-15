@@ -22,6 +22,7 @@ public abstract class MixinGuiMultiplayer extends GuiScreen {
     public void createButtons(CallbackInfo ci) {
         this.buttonList.add(new GuiButtonMCLeaks(9, 6, 6, 20, 20));
         this.buttonList.add(new GuiButtonTooBeeTooTee(10, this.width - 26, 6, 20, 20));
+        this.buttonList.add(PepsiUtils.protocolSwitchButton);
     }
 
     @Inject(method = "actionPerformed", at = @At("HEAD"), cancellable = true)
@@ -32,6 +33,14 @@ public abstract class MixinGuiMultiplayer extends GuiScreen {
             ci.cancel();
         } else if (button.id == 10) {
             FMLClientHandler.instance().connectToServer(new GuiMainMenu(), PepsiUtils.TOOBEETOOTEE_DATA);
+            ci.cancel();
+        } else if (button.id == 11) {
+            PepsiUtils.versionIndex++;
+            if (PepsiUtils.versionIndex == PepsiUtils.protocols.length) {
+                PepsiUtils.versionIndex = 0;
+            }
+            PepsiUtils.protocolVersion = PepsiUtils.protocols[PepsiUtils.versionIndex];
+            PepsiUtils.updateProtocolButton();
             ci.cancel();
         }
     }

@@ -5,7 +5,7 @@ import net.daporkchop.pepsimod.module.api.CustomOption;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleLaunchState;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.daporkchop.pepsimod.util.EntityFakePlayer;
+import net.daporkchop.pepsimod.util.module.EntityFakePlayer;
 
 public class FreecamMod extends Module {
     public static float SPEED = 1.0f;

@@ -1,5 +1,6 @@
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.util.module;
 
+import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.minecraft.block.Block;
 
 import java.util.ArrayList;

@@ -10,7 +10,7 @@ import net.daporkchop.pepsimod.module.api.option.OptionTypeInteger;
 import net.daporkchop.pepsimod.totally.not.skidded.EntityUtils;
 import net.daporkchop.pepsimod.totally.not.skidded.RotationUtils;
 import net.daporkchop.pepsimod.util.PepsiUtils;
-import net.daporkchop.pepsimod.util.TargetBone;
+import net.daporkchop.pepsimod.util.module.TargetBone;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumHand;
 

@@ -1,6 +1,7 @@
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.util.module;
 
 import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 
 public class EntityFakePlayer extends EntityOtherPlayerMP {

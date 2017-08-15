@@ -15,8 +15,11 @@ import net.daporkchop.pepsimod.module.impl.misc.NoFallMod;
 import net.daporkchop.pepsimod.module.impl.misc.TimerMod;
 import net.daporkchop.pepsimod.module.impl.movement.VelocityMod;
 import net.daporkchop.pepsimod.module.impl.render.*;
-import net.daporkchop.pepsimod.util.*;
+import net.daporkchop.pepsimod.util.Friend;
+import net.daporkchop.pepsimod.util.Friends;
+import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.datatag.DataTag;
+import net.daporkchop.pepsimod.util.module.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
 import net.minecraftforge.common.MinecraftForge;
@@ -45,6 +48,7 @@ public class PepsiMod {
     public TargetSettings targetSettings;
     public ESPSettings espSettings;
     public NoWeatherSettings noWeatherSettings;
+    public TracerSettings tracerSettings;
 
     public static void registerModules(FMLStateEvent event) {
         ModuleManager.registerModule(new NoFallMod(false, -1, false));
@@ -63,6 +67,9 @@ public class PepsiMod {
         ModuleManager.registerModule(new NoHurtCamMod(false, -1, false));
         ModuleManager.registerModule(new NoOverlayMod(false, -1, false));
         ModuleManager.registerModule(new NoWeatherMod(false, -1, false));
+        ModuleManager.registerModule(new AntiInvisibleMod(false, -1, false));
+        ModuleManager.registerModule(new TrajectoriesMod(false, -1, false));
+        ModuleManager.registerModule(new TracersMod(false, -1, false));
     }
 
     public static void registerCommands(FMLStateEvent event) {
@@ -143,6 +150,7 @@ public class PepsiMod {
         NameTagsMod.scale = dataTag.getFloat("NameTags_scale", 1.0f);
         FreecamMod.SPEED = dataTag.getFloat("Freecam_speed", 1.0f);
         noWeatherSettings = (NoWeatherSettings) dataTag.getSerializable("noweatherSettings", new NoWeatherSettings());
+        tracerSettings = (TracerSettings) dataTag.getSerializable("tracerSettings", new TracerSettings());
 
         //save the tag in case new fields are added, this way they are saved right away
         dataTag.save();
@@ -171,6 +179,7 @@ public class PepsiMod {
         dataTag.setFloat("Freecam_speed", FreecamMod.SPEED);
         dataTag.setFloat("NameTags_scale", NameTagsMod.scale);
         dataTag.setSerializable("noweatherSettings", noWeatherSettings);
+        dataTag.setSerializable("tracerSettings", tracerSettings);
         dataTag.save();
     }
 

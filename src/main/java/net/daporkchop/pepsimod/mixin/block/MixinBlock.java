@@ -2,7 +2,7 @@ package net.daporkchop.pepsimod.mixin.block;
 
 import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
 import net.daporkchop.pepsimod.module.impl.render.XrayMod;
-import net.daporkchop.pepsimod.util.XrayUtils;
+import net.daporkchop.pepsimod.util.module.XrayUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;

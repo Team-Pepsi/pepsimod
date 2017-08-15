@@ -1,4 +1,4 @@
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.util.module;
 
 import java.io.Serializable;
 

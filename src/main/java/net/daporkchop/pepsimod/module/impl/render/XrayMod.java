@@ -5,7 +5,7 @@ import net.daporkchop.pepsimod.module.api.CustomOption;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.util.PepsiUtils;
-import net.daporkchop.pepsimod.util.XrayUtils;
+import net.daporkchop.pepsimod.util.module.XrayUtils;
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 

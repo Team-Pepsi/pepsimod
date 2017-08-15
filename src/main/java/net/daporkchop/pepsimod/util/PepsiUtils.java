@@ -7,12 +7,15 @@ import net.daporkchop.pepsimod.util.colors.GradientText;
 import net.daporkchop.pepsimod.util.colors.rainbow.ColorChangeType;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowCycle;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
+import net.daporkchop.pepsimod.util.module.TargetBone;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.renderer.Vector3d;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -38,6 +41,12 @@ public class PepsiUtils {
     public static Color RAINBOW_COLOR = new Color(0, 0, 0);
     public static ColorizedText PEPSI_NAME = new RainbowText("PepsiMod " + PepsiMod.VERSION);
     public static Field block_pepsimod_id = null;
+    public static int protocolVersion = 335, versionIndex = 0;
+    public static int[] protocols = new int[]{
+            335, // 1.12
+            338  // 1.12.1
+    };
+    public static GuiButton protocolSwitchButton = new GuiButton(11, 32, 6, 70, 20, "v" + protocolVersion);
 
     static {
         TOOBEETOOTEE_DATA.setResourceMode(ServerData.ServerResourceMode.PROMPT);
@@ -387,6 +396,15 @@ public class PepsiUtils {
     }
 
     public static void glColor(RenderColor color) {
-        GL11.glColor4f(color.r, color.g, color.b, color.a);
+        GL11.glColor4b(color.r, color.g, color.b, color.a);
+    }
+
+    public static boolean isThrowable(ItemStack stack) {
+        Item item = stack.getItem();
+        return item instanceof ItemBow || item instanceof ItemSnowball || item instanceof ItemEgg || item instanceof ItemEnderPearl || item instanceof ItemSplashPotion || item instanceof ItemLingeringPotion || item instanceof ItemFishingRod;
+    }
+
+    public static void updateProtocolButton() {
+        protocolSwitchButton.displayString = "v" + protocolVersion;
     }
 }

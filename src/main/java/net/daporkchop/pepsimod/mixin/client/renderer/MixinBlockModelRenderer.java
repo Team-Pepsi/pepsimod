@@ -1,7 +1,7 @@
 package net.daporkchop.pepsimod.mixin.client.renderer;
 
 import net.daporkchop.pepsimod.module.impl.render.XrayMod;
-import net.daporkchop.pepsimod.util.XrayUtils;
+import net.daporkchop.pepsimod.util.module.XrayUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.BlockModelRenderer;
 import net.minecraft.client.renderer.BufferBuilder;

@@ -1,9 +1,6 @@
 package net.daporkchop.pepsimod.mixin.client.renderer;
 
-import net.daporkchop.pepsimod.module.impl.render.AntiBlindMod;
-import net.daporkchop.pepsimod.module.impl.render.NameTagsMod;
-import net.daporkchop.pepsimod.module.impl.render.NoHurtCamMod;
-import net.daporkchop.pepsimod.module.impl.render.NoOverlayMod;
+import net.daporkchop.pepsimod.module.impl.render.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -285,5 +282,10 @@ public abstract class MixinEntityRenderer {
     @Shadow
     public void setupFogColor(boolean black) {
 
+    }
+
+    @Inject(method = "renderWorldPass", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/EntityRenderer;renderHand:Z", shift = At.Shift.BEFORE))
+    public void renderLines(int pass, float partialTicks, long finishTimeNano, CallbackInfo ci) {
+        TracersMod.INSTANCE.drawLines(partialTicks);
     }
 }
