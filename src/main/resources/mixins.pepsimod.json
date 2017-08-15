@@ -30,7 +30,6 @@
     "client.renderer.entity.MixinRender",
     "client.gui.MixinGuiIngame",
     "client.renderer.MixinItemRenderer",
-    "world.MixinWorld",
-    "network.handshake.client.MixinC00Handshake"
+    "world.MixinWorld"
   ]
 }
