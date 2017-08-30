@@ -32,10 +32,8 @@ public abstract class Module extends Command {
     public Module(boolean def, String name, int keybind, boolean hide) {
         super(name.toLowerCase());
         nameFull = name;
-        ModuleLaunchState state = getLaunchState();
+        registerKeybind(name, keybind);
         this.isEnabled = shouldBeEnabled(def, getLaunchState());
-        this.keybind = new KeyBinding(name, keybind == -1 ? Keyboard.KEY_NONE : keybind, "key.categories.pepsimod");
-        ClientRegistry.registerKeyBinding(this.keybind);
         if (this.isEnabled) {
             this.onEnable();
         } else {
@@ -374,5 +372,10 @@ public abstract class Module extends Command {
 
     public boolean shouldTick() {
         return this.isEnabled;
+    }
+
+    public void registerKeybind(String name, int key)   {
+        this.keybind = new KeyBinding(name, key == -1 ? Keyboard.KEY_NONE : key, "key.categories.pepsimod");
+        ClientRegistry.registerKeyBinding(this.keybind);
     }
 }

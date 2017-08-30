@@ -1,6 +1,8 @@
 package net.daporkchop.pepsimod.util;
 
 import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.totally.not.skidded.clickgui.elements.Window;
+import net.daporkchop.pepsimod.totally.not.skidded.clickgui.GuiClick;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
 import net.daporkchop.pepsimod.util.colors.FixedColorElement;
 import net.daporkchop.pepsimod.util.colors.GradientText;
@@ -40,6 +42,7 @@ public class PepsiUtils {
     public static Color RAINBOW_COLOR = new Color(0, 0, 0);
     public static ColorizedText PEPSI_NAME = new RainbowText("PepsiMod " + PepsiMod.VERSION);
     public static Field block_pepsimod_id = null;
+    public static GuiClick clickGui;
 
     static {
         TOOBEETOOTEE_DATA.setResourceMode(ServerData.ServerResourceMode.PROMPT);
@@ -395,5 +398,20 @@ public class PepsiUtils {
     public static boolean isThrowable(ItemStack stack) {
         Item item = stack.getItem();
         return item instanceof ItemBow || item instanceof ItemSnowball || item instanceof ItemEgg || item instanceof ItemEnderPearl || item instanceof ItemSplashPotion || item instanceof ItemLingeringPotion || item instanceof ItemFishingRod;
+    }
+
+    public static net.daporkchop.pepsimod.totally.not.skidded.clickgui.elements.Window getWindowByName(String name) {
+        if (name.contains("¦")) {
+            name = name.split("¦")[0];
+        }
+
+        for (Window window : GuiClick.windowList)   {
+            if (name.equals(window.getTitle())) {
+                return window;
+            }
+        }
+
+        System.out.println("Unable to find window: " + name);
+        return null;
     }
 }

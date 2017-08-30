@@ -15,6 +15,14 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.awt.*;
 
 public class GuiRenderHandler {
+    public static GuiRenderHandler INSTANCE;
+
+    {
+        INSTANCE = this;
+    }
+
+    public ScaledResolution scaled = new ScaledResolution(PepsiMod.INSTANCE.mc);
+
     @SubscribeEvent
     public void onRenderGui(RenderGameOverlayEvent.Post event) {
         if (event.getType() != RenderGameOverlayEvent.ElementType.EXPERIENCE) {
@@ -23,7 +31,6 @@ public class GuiRenderHandler {
 
         GuiIngame gui = PepsiMod.INSTANCE.mc.ingameGUI;
 
-        ScaledResolution scaled = new ScaledResolution(PepsiMod.INSTANCE.mc);
         int width = scaled.getScaledWidth();
         int height = scaled.getScaledHeight();
 
