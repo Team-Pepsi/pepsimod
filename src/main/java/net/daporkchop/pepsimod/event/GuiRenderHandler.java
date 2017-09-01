@@ -61,7 +61,7 @@ public class GuiRenderHandler {
 
         GlStateManager.glLineWidth(1.f);
 
-        Vec3d renderPos = PepsiUtils.getInterpolatedPos(PepsiMod.INSTANCE.mc.player, event.getPartialTicks());
+        Vec3d renderPos = PepsiUtils.getInterpolatedPos(PepsiMod.pepsimodInstance.mc.player, event.getPartialTicks());
         GeometryTessellator.instance.setTranslation(-renderPos.x, -renderPos.y, -renderPos.z);
 */
         for (Module module : ModuleManager.ENABLED_MODULES) {

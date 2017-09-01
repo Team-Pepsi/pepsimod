@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TimerTask;
 
-@Mod(name = "PepsiMod", modid = "pepsimod", version = PepsiMod.VERSION)
+//@Mod(modid = "pepsimodorig", name = "pepsimod", version = "11.1")
 public class PepsiMod {
     public static final String VERSION = "11.1";
     public static final String chatPrefix = PepsiUtils.COLOR_ESCAPE + "0" + PepsiUtils.COLOR_ESCAPE + "l[" + PepsiUtils.COLOR_ESCAPE + "c" + PepsiUtils.COLOR_ESCAPE + "lpepsi" + PepsiUtils.COLOR_ESCAPE + "9" + PepsiUtils.COLOR_ESCAPE + "lmod" + PepsiUtils.COLOR_ESCAPE + "0" + PepsiUtils.COLOR_ESCAPE + "l]" + PepsiUtils.COLOR_ESCAPE + "r ";
@@ -104,8 +104,10 @@ public class PepsiMod {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        event.getModLog().info("launching preInit");
         INSTANCE = this;
         MinecraftForge.EVENT_BUS.register(new KeyRegistry());
+        event.getModLog().info("setting MC instance!");
         this.mc = Minecraft.getMinecraft();
     }
 

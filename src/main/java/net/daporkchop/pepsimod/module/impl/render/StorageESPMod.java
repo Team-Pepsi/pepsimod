@@ -11,6 +11,8 @@ import net.daporkchop.pepsimod.util.RenderColor;
 import net.minecraft.block.BlockChest;
 import net.minecraft.tileentity.*;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -30,6 +32,10 @@ public class StorageESPMod extends Module {
 
     public StorageESPMod(boolean isEnabled, int key, boolean hide) {
         super(isEnabled, "StorageESP", key, hide);
+    }
+
+    public static AxisAlignedBB getBoundingBox(World world, BlockPos pos) {
+        return world.getBlockState(pos).getBoundingBox(world, pos);
     }
 
     @Override
@@ -58,12 +64,12 @@ public class StorageESPMod extends Module {
                     continue;
                 }
 
-                AxisAlignedBB bb = PepsiUtils.offsetBB(PepsiUtils.cloneBB(PepsiUtils.getBoundingBox(PepsiMod.INSTANCE.mc.world, te.getPos())), te.getPos());
+                AxisAlignedBB bb = PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(PepsiMod.INSTANCE.mc.world, te.getPos())), te.getPos());
 
                 if (chestTe.adjacentChestXNeg != null) {
-                    PepsiUtils.unionBB(bb, PepsiUtils.offsetBB(PepsiUtils.cloneBB(PepsiUtils.getBoundingBox(PepsiMod.INSTANCE.mc.world, chestTe.adjacentChestXNeg.getPos())), chestTe.adjacentChestXNeg.getPos()));
+                    PepsiUtils.unionBB(bb, PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(PepsiMod.INSTANCE.mc.world, chestTe.adjacentChestXNeg.getPos())), chestTe.adjacentChestXNeg.getPos()));
                 } else if (chestTe.adjacentChestZNeg != null) {
-                    PepsiUtils.unionBB(bb, PepsiUtils.offsetBB(PepsiUtils.cloneBB(PepsiUtils.getBoundingBox(PepsiMod.INSTANCE.mc.world, chestTe.adjacentChestZNeg.getPos())), chestTe.adjacentChestZNeg.getPos()));
+                    PepsiUtils.unionBB(bb, PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(PepsiMod.INSTANCE.mc.world, chestTe.adjacentChestZNeg.getPos())), chestTe.adjacentChestZNeg.getPos()));
                 }
 
                 if (chestTe.getChestType() == BlockChest.Type.TRAP) {
@@ -76,11 +82,11 @@ public class StorageESPMod extends Module {
                     }
                 }
             } else if (PepsiMod.INSTANCE.espSettings.ender && te instanceof TileEntityEnderChest) {
-                ender.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(PepsiUtils.getBoundingBox(PepsiMod.INSTANCE.mc.world, te.getPos())), te.getPos()));
+                ender.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(PepsiMod.INSTANCE.mc.world, te.getPos())), te.getPos()));
             } else if (PepsiMod.INSTANCE.espSettings.furnace && te instanceof TileEntityFurnace) {
-                furnace.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(PepsiUtils.getBoundingBox(PepsiMod.INSTANCE.mc.world, te.getPos())), te.getPos()));
+                furnace.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(PepsiMod.INSTANCE.mc.world, te.getPos())), te.getPos()));
             } else if (PepsiMod.INSTANCE.espSettings.hopper && te instanceof TileEntityHopper) {
-                hopper.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(PepsiUtils.getBoundingBox(PepsiMod.INSTANCE.mc.world, te.getPos())), te.getPos()));
+                hopper.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(PepsiMod.INSTANCE.mc.world, te.getPos())), te.getPos()));
             }
         }
     }

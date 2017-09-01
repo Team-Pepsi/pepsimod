@@ -1,20 +1,23 @@
 package net.daporkchop.pepsimod;
 
 import net.minecraft.client.ClientBrandRetriever;
-import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.Mixins;
+import team.pepsi.pepsimod.launcher.IPepsiModMixinLoader;
+import team.pepsi.pepsimod.launcher.LauncherMixinLoader;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-public class PepsiModMixinLoader implements IFMLLoadingPlugin {
+public class PepsiModMixinLoader implements IPepsiModMixinLoader {
 
     public static boolean isObfuscatedEnvironment = false;
+    public LauncherMixinLoader launcherMixinLoader;
 
-    public PepsiModMixinLoader() {
+    public void inALoadingPluginThisWouldBeTheConstructor(LauncherMixinLoader loader) {
+        launcherMixinLoader = loader;
         System.out.println("\n\n\nPepsiMod Mixin init\n\n");
         MixinBootstrap.init();
         Mixins.addConfiguration("mixins.pepsimod.json");

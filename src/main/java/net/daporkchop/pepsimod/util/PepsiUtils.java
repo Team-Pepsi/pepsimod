@@ -18,7 +18,6 @@ import net.minecraft.item.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.opengl.GL11;
 
@@ -319,10 +318,6 @@ public class PepsiUtils {
 
     public static AxisAlignedBB cloneBB(AxisAlignedBB bb) {
         return new AxisAlignedBB(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ);
-    }
-
-    public static AxisAlignedBB getBoundingBox(World world, BlockPos pos) {
-        return world.getBlockState(pos).getBoundingBox(world, pos);
     }
 
     public static AxisAlignedBB offsetBB(AxisAlignedBB bb, BlockPos pos) {

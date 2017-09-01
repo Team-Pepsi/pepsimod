@@ -35,7 +35,7 @@ public class FreecamMod extends Module {
             fakePlayer.resetPlayerPosition();
             fakePlayer.despawn();
 
-            //PepsiMod.INSTANCE.mc.renderGlobal.loadRenderers();
+            //PepsiMod.pepsimodInstance.mc.renderGlobal.loadRenderers();
         }
     }
 
