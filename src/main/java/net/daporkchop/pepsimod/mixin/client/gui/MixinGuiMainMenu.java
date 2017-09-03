@@ -4,6 +4,7 @@ import net.daporkchop.pepsimod.PepsiInjectMethods;
 import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
+import net.daporkchop.pepsimod.util.ImageUtils;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.Texture;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
@@ -40,7 +41,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
             PepsiUtils.setBlockIdFields();
             PepsiMod.INSTANCE.hasInitializedModules = true;
         }
-        TITLE = new Texture(new ResourceLocation("pepsimod", "textures/gui/pepsimod.png"));
+        TITLE = new Texture(ImageUtils.imgs.get(1));
         this.splashText = "";
         ModuleManager.sortModules(ModuleManager.sortType);
     }

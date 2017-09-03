@@ -1,5 +1,6 @@
 package net.daporkchop.pepsimod.gui.mcleaks;
 
+import net.daporkchop.pepsimod.util.ImageUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
@@ -19,11 +20,14 @@ public class GuiButtonMCLeaks extends GuiButton {
         this.y = y;
         this.width = widthIn;
         this.height = heightIn;
-        this.location = new ResourceLocation("pepsimod", "textures/gui/pepsibuttons.png");
+        this.location = null;
     }
 
     @Override
     public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+        if (location == null) {
+            location = ImageUtils.imgs.get(0);
+        }
         if (this.visible) {
             mc.getTextureManager().bindTexture(location);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

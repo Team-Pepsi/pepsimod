@@ -35,7 +35,7 @@ minecraft {
     runDir = "run"
     mappings = "snapshot_20170706"
     makeObfSourceJar = false
-    coreMod = "team.pepsi.pepsimod.launcher.LauncherMixinLoader"
+    coreMod = "net.daporkchop.pepsimod.PepsiModMixinLoader"
 }
 
 repositories {
@@ -75,7 +75,7 @@ processResources {
 }
 
 mixin {
-    defaultObfuscationEnv searge
+    defaultObfuscationEnv notch
     add sourceSets.main, "mixins.pepsimod.refmap.json"
 }
 
@@ -96,8 +96,8 @@ task shadowDevJar(type: ShadowJar) {
 
     // Default settings for shadow tasks
     configurations = [project.configurations.runtime]
-    manifest.inheritFrom tasks.jar.manifest
-    exclude 'META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
+    //manifest.inheritFrom tasks.jar.manifest
+    //exclude 'META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
 }
 
 //shadowDevJar shadowConfiguration
@@ -127,10 +127,10 @@ jar {
     manifest {
         attributes(
                 "MixinConfigs": 'mixins.pepsimod.json',
-                "tweakClass": 'team.pepsi.pepsimod.launcher.LauncherTweaker',
+                "tweakClass": 'org.spongepowered.asm.launch.MixinTweaker',
                 "TweakOrder": 0,
                 'FMLCorePluginContainsFMLMod': 'true',
-                'FMLCorePlugin': 'team.pepsi.pepsimod.launcher.LauncherMixinLoader',
+                'FMLCorePlugin': 'net.daporkchop.pepsimod.PepsiModMixinLoader',
                 'FMLAT': 'pepsimod_at.cfg',
                 'ForceLoadAsMod': 'true'
         )

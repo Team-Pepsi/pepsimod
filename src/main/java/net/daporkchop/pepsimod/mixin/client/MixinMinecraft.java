@@ -21,7 +21,7 @@ public abstract class MixinMinecraft {
     @Shadow
     public EntityPlayerSP player;
 
-    @Inject(method = "shutdown", at = @At("HEAD"))
+    @Inject(method = "shutdown()V", at = @At("HEAD"))
     public void saveSettingsOnShutdown(CallbackInfo ci) {
         PepsiMod.INSTANCE.saveConfig();
     }

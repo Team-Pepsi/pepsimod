@@ -1,7 +1,0 @@
-MixinConfigs: mixins.pepsimod.json
-tweakClass: team.pepsi.pepsimod.launcher.LauncherTweaker
-TweakOrder: 0
-FMLCorePluginContainsFMLMod: true
-FMLCorePlugin: team.pepsi.pepsimod.launcher.LauncherMixinLoader
-FMLAT: pepsimod_at.cfg
-ForceLoadAsMod: true

@@ -1,39 +1,14 @@
 package net.daporkchop.pepsimod;
 
-import net.minecraft.client.ClientBrandRetriever;
-import org.spongepowered.asm.launch.MixinBootstrap;
-import org.spongepowered.asm.mixin.MixinEnvironment;
-import org.spongepowered.asm.mixin.Mixins;
-import team.pepsi.pepsimod.launcher.IPepsiModMixinLoader;
-import team.pepsi.pepsimod.launcher.LauncherMixinLoader;
+import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Method;
 import java.util.Map;
 
-public class PepsiModMixinLoader implements IPepsiModMixinLoader {
-
+public class PepsiModMixinLoader implements IFMLLoadingPlugin {
     public static boolean isObfuscatedEnvironment = false;
-    public LauncherMixinLoader launcherMixinLoader;
 
-    public void inALoadingPluginThisWouldBeTheConstructor(LauncherMixinLoader loader) {
-        launcherMixinLoader = loader;
-        System.out.println("\n\n\nPepsiMod Mixin init\n\n");
-        MixinBootstrap.init();
-        Mixins.addConfiguration("mixins.pepsimod.json");
-
-        for (Method m : ClientBrandRetriever.class.getDeclaredMethods()) {
-            System.out.println(m.getName() + " " + m.toString());
-        }
-
-        try {
-            ClientBrandRetriever.class.getDeclaredMethod("getClientModName", null);
-            MixinEnvironment.getDefaultEnvironment().setObfuscationContext("mcp");
-        } catch (NoSuchMethodException e) {
-            //this is not mcp!
-            MixinEnvironment.getDefaultEnvironment().setObfuscationContext("searge");
-        }
-        System.out.println(MixinEnvironment.getDefaultEnvironment().getObfuscationContext());
+    public PepsiModMixinLoader() {
     }
 
     @Override
