@@ -274,7 +274,7 @@ public class PepsiUtils {
     }
 
     public static Vec3d adjustVectorForBone(Vec3d vec3d, Entity entity, TargetBone bone) {
-        vec3d.y = getTargetHeight(entity, bone);
+        ReflectionStuff.setY_vec3d(vec3d, getTargetHeight(entity, bone));
         return vec3d;
     }
 
@@ -321,22 +321,22 @@ public class PepsiUtils {
     }
 
     public static AxisAlignedBB offsetBB(AxisAlignedBB bb, BlockPos pos) {
-        bb.minX += pos.getX();
-        bb.maxX += pos.getX();
-        bb.minY += pos.getY();
-        bb.maxY += pos.getY();
-        bb.minZ += pos.getZ();
-        bb.maxZ += pos.getZ();
+        ReflectionStuff.setMinX(bb, ReflectionStuff.getMinX(bb) + pos.getX());
+        ReflectionStuff.setMinY(bb, ReflectionStuff.getMinY(bb) + pos.getY());
+        ReflectionStuff.setMinZ(bb, ReflectionStuff.getMinZ(bb) + pos.getZ());
+        ReflectionStuff.setMaxX(bb, ReflectionStuff.getMaxX(bb) + pos.getX());
+        ReflectionStuff.setMaxY(bb, ReflectionStuff.getMaxY(bb) + pos.getY());
+        ReflectionStuff.setMaxZ(bb, ReflectionStuff.getMaxZ(bb) + pos.getZ());
         return bb;
     }
 
     public static AxisAlignedBB unionBB(AxisAlignedBB bb1, AxisAlignedBB bb2) {
-        bb1.minX = Math.min(bb1.minX, bb2.minX);
-        bb1.minY = Math.min(bb1.minY, bb2.minY);
-        bb1.minZ = Math.min(bb1.minZ, bb2.minZ);
-        bb1.maxX = Math.max(bb1.maxX, bb2.maxX);
-        bb1.maxY = Math.max(bb1.maxY, bb2.maxY);
-        bb1.maxZ = Math.max(bb1.maxZ, bb2.maxZ);
+        ReflectionStuff.setMinX(bb1, Math.min(ReflectionStuff.getMinX(bb1), ReflectionStuff.getMinX(bb2)));
+        ReflectionStuff.setMinY(bb1, Math.min(ReflectionStuff.getMinY(bb1), ReflectionStuff.getMinY(bb2)));
+        ReflectionStuff.setMinZ(bb1, Math.min(ReflectionStuff.getMinZ(bb1), ReflectionStuff.getMinZ(bb2)));
+        ReflectionStuff.setMaxX(bb1, Math.min(ReflectionStuff.getMaxX(bb1), ReflectionStuff.getMaxX(bb2)));
+        ReflectionStuff.setMaxY(bb1, Math.min(ReflectionStuff.getMaxY(bb1), ReflectionStuff.getMaxY(bb2)));
+        ReflectionStuff.setMaxZ(bb1, Math.min(ReflectionStuff.getMaxZ(bb1), ReflectionStuff.getMaxZ(bb2)));
         return bb1;
     }
 
@@ -380,7 +380,7 @@ public class PepsiUtils {
     }
 
     public static void copyPlayerModel(EntityPlayer from, EntityPlayer to) {
-        to.getDataManager().set(EntityPlayer.PLAYER_MODEL_FLAG, from.getDataManager().get(EntityPlayer.PLAYER_MODEL_FLAG));
+        to.getDataManager().set(ReflectionStuff.getPLAYER_MODEL_FLAG(), from.getDataManager().get(ReflectionStuff.getPLAYER_MODEL_FLAG()));
     }
 
     public static void glColor(RenderColor color) {

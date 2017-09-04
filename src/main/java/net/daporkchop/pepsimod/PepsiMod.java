@@ -15,12 +15,11 @@ import net.daporkchop.pepsimod.module.impl.misc.NoFallMod;
 import net.daporkchop.pepsimod.module.impl.misc.TimerMod;
 import net.daporkchop.pepsimod.module.impl.movement.VelocityMod;
 import net.daporkchop.pepsimod.module.impl.render.*;
-import net.daporkchop.pepsimod.util.Friend;
-import net.daporkchop.pepsimod.util.Friends;
-import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.*;
 import net.daporkchop.pepsimod.util.datatag.DataTag;
 import net.daporkchop.pepsimod.util.module.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Session;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -121,6 +120,14 @@ public class PepsiMod {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        ReflectionStuff.init();
+        if (ImageUtils.imgs == null) {
+            ImageUtils.imgs = new HashMap<>();
+            for (int i = 0; i < ImageUtils.names.length; i++) {
+                String s = ImageUtils.names[i];
+                ImageUtils.imgs.put(i, new ResourceLocation("pepsimod", "textures/" + s));
+            }
+        }
         MinecraftForge.EVENT_BUS.register(new GuiRenderHandler());
         PepsiUtils.timer.schedule(new TimerTask() {
             @Override

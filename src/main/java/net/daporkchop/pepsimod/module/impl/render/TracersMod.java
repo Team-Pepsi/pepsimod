@@ -8,6 +8,7 @@ import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
 import net.daporkchop.pepsimod.totally.not.skidded.RotationUtils;
 import net.daporkchop.pepsimod.util.Friends;
 import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.RenderColor;
 import net.daporkchop.pepsimod.util.module.EntityFakePlayer;
 import net.minecraft.entity.Entity;
@@ -149,10 +150,10 @@ public class TracersMod extends Module {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
         GL11.glPushMatrix();
-        GL11.glTranslated(-PepsiMod.INSTANCE.mc.getRenderManager().renderPosX, -PepsiMod.INSTANCE.mc.getRenderManager().renderPosY, -PepsiMod.INSTANCE.mc.getRenderManager().renderPosZ);
+        GL11.glTranslated(-ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager()), -ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager()), -ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager()));
 
         // set start position
-        Vec3d start = RotationUtils.getClientLookVec().addVector(0, PepsiMod.INSTANCE.mc.player.getEyeHeight(), 0).addVector(PepsiMod.INSTANCE.mc.getRenderManager().renderPosX, PepsiMod.INSTANCE.mc.getRenderManager().renderPosY, PepsiMod.INSTANCE.mc.getRenderManager().renderPosZ);
+        Vec3d start = RotationUtils.getClientLookVec().addVector(0, PepsiMod.INSTANCE.mc.player.getEyeHeight(), 0).addVector(ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager()), ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager()), ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager()));
 
         GL11.glBegin(GL11.GL_LINES);
 
@@ -172,7 +173,7 @@ public class TracersMod extends Module {
                     continue;
                 }
 
-                if (!PepsiMod.INSTANCE.tracerSettings.sleeping && ((EntityPlayer) entity).sleeping) {
+                if (!PepsiMod.INSTANCE.tracerSettings.sleeping && ReflectionStuff.getSleeping((EntityPlayer) entity)) {
                     continue;
                 }
 

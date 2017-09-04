@@ -5,6 +5,7 @@ import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.totally.not.skidded.RenderUtils;
 import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.RenderColor;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -65,9 +66,9 @@ public class TrajectoriesMod extends Module {
         boolean usingBow = stack.getItem() instanceof ItemBow;
 
         // calculate starting position
-        double arrowPosX = player.lastTickPosX + (player.posX - player.lastTickPosX) * PepsiMod.INSTANCE.mc.timer.renderPartialTicks - Math.cos((float) Math.toRadians(player.rotationYaw)) * 0.16F;
-        double arrowPosY = player.lastTickPosY + (player.posY - player.lastTickPosY) * PepsiMod.INSTANCE.mc.timer.renderPartialTicks + player.getEyeHeight() - 0.1;
-        double arrowPosZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * PepsiMod.INSTANCE.mc.timer.renderPartialTicks - Math.sin((float) Math.toRadians(player.rotationYaw)) * 0.16F;
+        double arrowPosX = player.lastTickPosX + (player.posX - player.lastTickPosX) * ReflectionStuff.getTimer().renderPartialTicks - Math.cos((float) Math.toRadians(player.rotationYaw)) * 0.16F;
+        double arrowPosY = player.lastTickPosY + (player.posY - player.lastTickPosY) * ReflectionStuff.getTimer().renderPartialTicks + player.getEyeHeight() - 0.1;
+        double arrowPosZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * ReflectionStuff.getTimer().renderPartialTicks - Math.sin((float) Math.toRadians(player.rotationYaw)) * 0.16F;
 
         // calculate starting motion
         float arrowMotionFactor = usingBow ? 1F : 0.4F;
@@ -116,7 +117,7 @@ public class TrajectoriesMod extends Module {
         PepsiUtils.glColor(lineColor);
         GL11.glBegin(GL11.GL_LINE_STRIP);
         for (int i = 0; i < 1000; i++) {
-            GL11.glVertex3d(arrowPosX - renderManager.renderPosX, arrowPosY - renderManager.renderPosY, arrowPosZ - renderManager.renderPosZ);
+            GL11.glVertex3d(arrowPosX - ReflectionStuff.getRenderPosX(renderManager), arrowPosY - ReflectionStuff.getRenderPosY(renderManager), arrowPosZ - ReflectionStuff.getRenderPosZ(renderManager));
 
             arrowPosX += arrowMotionX * 0.1;
             arrowPosY += arrowMotionY * 0.1;
@@ -133,9 +134,9 @@ public class TrajectoriesMod extends Module {
         GL11.glEnd();
 
         // draw end of trajectory line
-        double renderX = arrowPosX - renderManager.renderPosX;
-        double renderY = arrowPosY - renderManager.renderPosY;
-        double renderZ = arrowPosZ - renderManager.renderPosZ;
+        double renderX = arrowPosX - ReflectionStuff.getRenderPosX(renderManager);
+        double renderY = arrowPosY - ReflectionStuff.getRenderPosY(renderManager);
+        double renderZ = arrowPosZ - ReflectionStuff.getRenderPosZ(renderManager);
 
         GL11.glPushMatrix();
         GL11.glTranslated(renderX - 0.5, renderY - 0.5, renderZ - 0.5);
