@@ -9,7 +9,6 @@
     "updateUrl": "",
     "authorList": ["Team Pepsi's awesome developer team"],
     "credits": "Pepsi, for being amazing",
-    "logoFile": "assets/pepsimod/textures/gui/pepsimodBackground.png",
     "screenshots": [],
     "dependencies": []
   }
