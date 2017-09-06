@@ -1,3 +1,18 @@
+/*
+ * Adapted from the Wizardry License
+ *
+ * Copyright (c) 2017 Team Pepsi
+ *
+ * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
+ * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
+ *
+ * The persons and/or organizations are also disallowed from sub-licensing and/or trademarking this software without explicit permission from Team Pepsi.
+ *
+ * Any persons and/or organizations using this software must disclose their source code and have it publicly available, include this license, provide sufficient credit to the original authors of the project (IE: Team Pepsi), as well as provide a link to the original project.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package net.daporkchop.pepsimod;
 
 import net.daporkchop.pepsimod.command.CommandRegistry;
@@ -15,12 +30,11 @@ import net.daporkchop.pepsimod.module.impl.misc.NoFallMod;
 import net.daporkchop.pepsimod.module.impl.misc.TimerMod;
 import net.daporkchop.pepsimod.module.impl.movement.VelocityMod;
 import net.daporkchop.pepsimod.module.impl.render.*;
-import net.daporkchop.pepsimod.util.Friend;
-import net.daporkchop.pepsimod.util.Friends;
-import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.*;
 import net.daporkchop.pepsimod.util.datatag.DataTag;
 import net.daporkchop.pepsimod.util.module.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Session;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -35,7 +49,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TimerTask;
 
-@Mod(name = "PepsiMod", modid = "pepsimod", version = PepsiMod.VERSION)
+@Mod(modid = "pepsimoddev", name = "pepsimod - Dev", version = "11.1-dev")
 public class PepsiMod {
     public static final String VERSION = "11.1";
     public static final String chatPrefix = PepsiUtils.COLOR_ESCAPE + "0" + PepsiUtils.COLOR_ESCAPE + "l[" + PepsiUtils.COLOR_ESCAPE + "c" + PepsiUtils.COLOR_ESCAPE + "lpepsi" + PepsiUtils.COLOR_ESCAPE + "9" + PepsiUtils.COLOR_ESCAPE + "lmod" + PepsiUtils.COLOR_ESCAPE + "0" + PepsiUtils.COLOR_ESCAPE + "l]" + PepsiUtils.COLOR_ESCAPE + "r ";
@@ -104,8 +118,10 @@ public class PepsiMod {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        event.getModLog().info("launching preInit");
         INSTANCE = this;
         MinecraftForge.EVENT_BUS.register(new KeyRegistry());
+        event.getModLog().info("setting MC instance!");
         this.mc = Minecraft.getMinecraft();
     }
 
@@ -119,6 +135,14 @@ public class PepsiMod {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        ReflectionStuff.init();
+        if (ImageUtils.imgs == null) {
+            ImageUtils.imgs = new HashMap<>();
+            for (int i = 0; i < ImageUtils.names.length; i++) {
+                String s = ImageUtils.names[i];
+                ImageUtils.imgs.put(i, new ResourceLocation("pepsimod", "textures/" + s));
+            }
+        }
         MinecraftForge.EVENT_BUS.register(new GuiRenderHandler());
         PepsiUtils.timer.schedule(new TimerTask() {
             @Override

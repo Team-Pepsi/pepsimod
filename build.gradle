@@ -75,7 +75,7 @@ processResources {
 }
 
 mixin {
-    defaultObfuscationEnv searge
+    defaultObfuscationEnv notch
     add sourceSets.main, "mixins.pepsimod.refmap.json"
 }
 
@@ -96,8 +96,8 @@ task shadowDevJar(type: ShadowJar) {
 
     // Default settings for shadow tasks
     configurations = [project.configurations.runtime]
-    manifest.inheritFrom tasks.jar.manifest
-    exclude 'META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
+    //manifest.inheritFrom tasks.jar.manifest
+    //exclude 'META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
 }
 
 //shadowDevJar shadowConfiguration
@@ -131,7 +131,6 @@ jar {
                 "TweakOrder": 0,
                 'FMLCorePluginContainsFMLMod': 'true',
                 'FMLCorePlugin': 'net.daporkchop.pepsimod.PepsiModMixinLoader',
-                'FMLAT': 'pepsimod_at.cfg',
                 'ForceLoadAsMod': 'true'
         )
     }

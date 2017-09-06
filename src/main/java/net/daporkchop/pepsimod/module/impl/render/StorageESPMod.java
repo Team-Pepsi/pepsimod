@@ -1,3 +1,18 @@
+/*
+ * Adapted from the Wizardry License
+ *
+ * Copyright (c) 2017 Team Pepsi
+ *
+ * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
+ * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
+ *
+ * The persons and/or organizations are also disallowed from sub-licensing and/or trademarking this software without explicit permission from Team Pepsi.
+ *
+ * Any persons and/or organizations using this software must disclose their source code and have it publicly available, include this license, provide sufficient credit to the original authors of the project (IE: Team Pepsi), as well as provide a link to the original project.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package net.daporkchop.pepsimod.module.impl.render;
 
 import net.daporkchop.pepsimod.PepsiMod;
@@ -7,10 +22,13 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
 import net.daporkchop.pepsimod.totally.not.skidded.RenderUtils;
 import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.RenderColor;
 import net.minecraft.block.BlockChest;
 import net.minecraft.tileentity.*;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -30,6 +48,10 @@ public class StorageESPMod extends Module {
 
     public StorageESPMod(boolean isEnabled, int key, boolean hide) {
         super(isEnabled, "StorageESP", key, hide);
+    }
+
+    public static AxisAlignedBB getBoundingBox(World world, BlockPos pos) {
+        return world.getBlockState(pos).getBoundingBox(world, pos);
     }
 
     @Override
@@ -58,12 +80,12 @@ public class StorageESPMod extends Module {
                     continue;
                 }
 
-                AxisAlignedBB bb = PepsiUtils.offsetBB(PepsiUtils.cloneBB(PepsiUtils.getBoundingBox(PepsiMod.INSTANCE.mc.world, te.getPos())), te.getPos());
+                AxisAlignedBB bb = PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(PepsiMod.INSTANCE.mc.world, te.getPos())), te.getPos());
 
                 if (chestTe.adjacentChestXNeg != null) {
-                    PepsiUtils.unionBB(bb, PepsiUtils.offsetBB(PepsiUtils.cloneBB(PepsiUtils.getBoundingBox(PepsiMod.INSTANCE.mc.world, chestTe.adjacentChestXNeg.getPos())), chestTe.adjacentChestXNeg.getPos()));
+                    PepsiUtils.unionBB(bb, PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(PepsiMod.INSTANCE.mc.world, chestTe.adjacentChestXNeg.getPos())), chestTe.adjacentChestXNeg.getPos()));
                 } else if (chestTe.adjacentChestZNeg != null) {
-                    PepsiUtils.unionBB(bb, PepsiUtils.offsetBB(PepsiUtils.cloneBB(PepsiUtils.getBoundingBox(PepsiMod.INSTANCE.mc.world, chestTe.adjacentChestZNeg.getPos())), chestTe.adjacentChestZNeg.getPos()));
+                    PepsiUtils.unionBB(bb, PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(PepsiMod.INSTANCE.mc.world, chestTe.adjacentChestZNeg.getPos())), chestTe.adjacentChestZNeg.getPos()));
                 }
 
                 if (chestTe.getChestType() == BlockChest.Type.TRAP) {
@@ -76,11 +98,11 @@ public class StorageESPMod extends Module {
                     }
                 }
             } else if (PepsiMod.INSTANCE.espSettings.ender && te instanceof TileEntityEnderChest) {
-                ender.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(PepsiUtils.getBoundingBox(PepsiMod.INSTANCE.mc.world, te.getPos())), te.getPos()));
+                ender.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(PepsiMod.INSTANCE.mc.world, te.getPos())), te.getPos()));
             } else if (PepsiMod.INSTANCE.espSettings.furnace && te instanceof TileEntityFurnace) {
-                furnace.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(PepsiUtils.getBoundingBox(PepsiMod.INSTANCE.mc.world, te.getPos())), te.getPos()));
+                furnace.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(PepsiMod.INSTANCE.mc.world, te.getPos())), te.getPos()));
             } else if (PepsiMod.INSTANCE.espSettings.hopper && te instanceof TileEntityHopper) {
-                hopper.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(PepsiUtils.getBoundingBox(PepsiMod.INSTANCE.mc.world, te.getPos())), te.getPos()));
+                hopper.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(PepsiMod.INSTANCE.mc.world, te.getPos())), te.getPos()));
             }
         }
     }
@@ -147,7 +169,7 @@ public class StorageESPMod extends Module {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
         GL11.glPushMatrix();
-        GL11.glTranslated(-PepsiMod.INSTANCE.mc.getRenderManager().renderPosX, -PepsiMod.INSTANCE.mc.getRenderManager().renderPosY, -PepsiMod.INSTANCE.mc.getRenderManager().renderPosZ);
+        GL11.glTranslated(-ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager()), -ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager()), -ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager()));
 
         if (PepsiMod.INSTANCE.espSettings.basic) {
             GL11.glColor4b(chestColor.r, chestColor.g, chestColor.b, chestColor.a);
