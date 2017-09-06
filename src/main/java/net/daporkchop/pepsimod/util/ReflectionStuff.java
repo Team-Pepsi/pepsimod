@@ -1,3 +1,18 @@
+/*
+ * Adapted from the Wizardry License
+ *
+ * Copyright (c) 2017 Team Pepsi
+ *
+ * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
+ * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
+ *
+ * The persons and/or organizations are also disallowed from sub-licensing and/or trademarking this software without explicit permission from Team Pepsi.
+ *
+ * Any persons and/or organizations using this software must disclose their source code and have it publicly available, include this license, provide sufficient credit to the original authors of the project (IE: Team Pepsi), as well as provide a link to the original project.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package net.daporkchop.pepsimod.util;
 
 import net.daporkchop.pepsimod.PepsiMod;
@@ -10,6 +25,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 public class ReflectionStuff {
     public static Field renderPosX;
@@ -26,21 +42,32 @@ public class ReflectionStuff {
     public static Field y_vec3d;
     public static Field timer;
 
+    public static Field getField(Class c, String... names)   {
+        for (String s : names)  {
+            try {
+                return c.getDeclaredField(s);
+            } catch (NoSuchFieldException e)    {
+            }
+        }
+
+        throw new IllegalStateException("Field with names: " + names + " not found!");
+    }
+
     public static void init() {
         try {
-            renderPosX = RenderManager.class.getDeclaredField("renderPosX");
-            renderPosY = RenderManager.class.getDeclaredField("renderPosY");
-            renderPosZ = RenderManager.class.getDeclaredField("renderPosZ");
-            sleeping = EntityPlayer.class.getDeclaredField("sleeping");
-            PLAYER_MODEL_FLAG = EntityPlayer.class.getDeclaredField("PLAYER_MODEL_FLAG");
-            minX = AxisAlignedBB.class.getDeclaredField("minX");
-            minY = AxisAlignedBB.class.getDeclaredField("minY");
-            minZ = AxisAlignedBB.class.getDeclaredField("minZ");
-            maxX = AxisAlignedBB.class.getDeclaredField("maxX");
-            maxY = AxisAlignedBB.class.getDeclaredField("maxY");
-            maxZ = AxisAlignedBB.class.getDeclaredField("maxZ");
-            y_vec3d = Vec3d.class.getDeclaredField("y");
-            timer = Minecraft.class.getDeclaredField("timer");
+            renderPosX = getField(RenderManager.class, "renderPosX", "field_78725_b", "o");
+            renderPosY = getField(RenderManager.class, "renderPosY", "field_78726_c", "p");
+            renderPosZ = getField(RenderManager.class, "renderPosZ", "field_78723_d", "q");
+            sleeping = getField(EntityPlayer.class, "sleeping", "field_71083_bS", "bK");
+            PLAYER_MODEL_FLAG = getField(EntityPlayer.class, "PLAYER_MODEL_FLAG", "field_184827_bp", "br");
+            minX = getField(AxisAlignedBB.class, "minX", "field_72340_a", "a");
+            minY = getField(AxisAlignedBB.class, "minY", "field_72338_b", "b");
+            minZ = getField(AxisAlignedBB.class, "minZ", "field_72339_c", "c");
+            maxX = getField(AxisAlignedBB.class, "maxX", "field_72336_d", "d");
+            maxY = getField(AxisAlignedBB.class, "maxY", "field_72337_e", "e");
+            maxZ = getField(AxisAlignedBB.class, "maxZ", "field_72334_f", "f");
+            y_vec3d = getField(Vec3d.class, "y", "field_72448_b", "c");
+            timer = getField(Minecraft.class, "timer", "field_71428_T", "Y");
 
             renderPosX.setAccessible(true);
             renderPosY.setAccessible(true);
