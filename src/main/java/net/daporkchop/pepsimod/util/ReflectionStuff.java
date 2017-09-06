@@ -18,6 +18,7 @@ package net.daporkchop.pepsimod.util;
 import net.daporkchop.pepsimod.PepsiMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.Timer;
@@ -41,6 +42,7 @@ public class ReflectionStuff {
     public static Field maxZ;
     public static Field y_vec3d;
     public static Field timer;
+    public static Field boundingBox;
 
     public static Field getField(Class c, String... names)   {
         for (String s : names)  {
@@ -68,6 +70,7 @@ public class ReflectionStuff {
             maxZ = getField(AxisAlignedBB.class, "maxZ", "field_72334_f", "f");
             y_vec3d = getField(Vec3d.class, "y", "field_72448_b", "c");
             timer = getField(Minecraft.class, "timer", "field_71428_T", "Y");
+            boundingBox = getField(Entity.class, "boundingBox", "field_70121_D", "av");
 
             renderPosX.setAccessible(true);
             renderPosY.setAccessible(true);
@@ -85,6 +88,16 @@ public class ReflectionStuff {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static AxisAlignedBB getBoundingBox(Entity entity) {
+        try {
+            return (AxisAlignedBB) boundingBox.get(entity);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        throw new IllegalStateException("wtf how");
     }
 
     public static Timer getTimer() {
