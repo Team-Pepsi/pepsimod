@@ -17,24 +17,25 @@ package net.daporkchop.pepsimod.module.impl.render;
 
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.daporkchop.pepsimod.totally.not.skidded.clickgui.GuiClick;
-import net.daporkchop.pepsimod.totally.not.skidded.clickgui.elements.Window;
 
 public class NoOverlayMod extends Module {
     public static NoOverlayMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
     public NoOverlayMod(boolean isEnabled, int key, boolean hide) {
         super(isEnabled, "NoOverlay", key, hide);
     }
 
     @Override
     public void onEnable() {
-
+        INSTANCE = this;
     }
 
     @Override
     public void onDisable() {
-
+        INSTANCE = this;
     }
 
     @Override
@@ -45,8 +46,6 @@ public class NoOverlayMod extends Module {
     @Override
     public void init() {
         INSTANCE = this;
-        Window.loadClass();
-        GuiClick.loadClass();
     }
 
     @Override

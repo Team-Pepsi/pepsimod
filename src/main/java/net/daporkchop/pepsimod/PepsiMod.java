@@ -15,9 +15,11 @@
 
 package net.daporkchop.pepsimod;
 
+import net.daporkchop.pepsimod.clickgui.ClickGUI;
 import net.daporkchop.pepsimod.command.CommandRegistry;
 import net.daporkchop.pepsimod.command.impl.*;
 import net.daporkchop.pepsimod.event.GuiRenderHandler;
+import net.daporkchop.pepsimod.gui.clickgui.WindowRender;
 import net.daporkchop.pepsimod.key.KeyRegistry;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.*;
@@ -27,8 +29,6 @@ import net.daporkchop.pepsimod.module.impl.combat.CriticalsMod;
 import net.daporkchop.pepsimod.module.impl.misc.*;
 import net.daporkchop.pepsimod.module.impl.movement.VelocityMod;
 import net.daporkchop.pepsimod.module.impl.render.*;
-import net.daporkchop.pepsimod.totally.not.skidded.clickgui.elements.Window;
-import net.daporkchop.pepsimod.totally.not.skidded.clickgui.GuiClick;
 import net.daporkchop.pepsimod.util.*;
 import net.daporkchop.pepsimod.util.datatag.DataTag;
 import net.daporkchop.pepsimod.util.module.*;
@@ -131,10 +131,9 @@ public class PepsiMod {
         loadConfig();
         registerModules(event);
 
-        PepsiUtils.clickGui = new GuiClick();
-
         registerCommands(event);
         initModules();
+        new ClickGUI().windows.add(new WindowRender()); //TODO: fix
     }
 
     @Mod.EventHandler
@@ -180,14 +179,15 @@ public class PepsiMod {
         noWeatherSettings = (NoWeatherSettings) dataTag.getSerializable("noweatherSettings", new NoWeatherSettings());
         tracerSettings = (TracerSettings) dataTag.getSerializable("tracerSettings", new TracerSettings());
 
-        for (Window window : GuiClick.windowList)   {
+        /*for (Window window : GuiClick.windowList)   {
             int[] data = dataTag.getIntegerArray(window.getTitle() + "¦window", new int[] {0, 0, 0, 0});
 
             window.setX(data[0]);
             window.setY(data[1]);
             window.setOpen(data[2] == 1);
             window.setPinned(data[3] == 1);
-        }
+        }*/
+        //TODO
 
         //save the tag in case new fields are added, this way they are saved right away
         dataTag.save();
@@ -208,9 +208,10 @@ public class PepsiMod {
             }
             dataTag.setSerializableArray("settings" + module.nameFull, options);
         }
-        for (Window window : GuiClick.windowList)   {
+        /*for (Window window : GuiClick.windowList)   {
             dataTag.setIntegerArray(window.getTitle() + "¦window", new int[] {window.dragX, window.dragX, window.isOpen() ? 1 : 0, window.isPinned() ? 1 : 0});
-        }
+        }*/
+        //TODO
         dataTag.setSerializable("friends", Friends.FRIENDS);
         dataTag.setSerializable("sortType", ModuleManager.sortType);
         dataTag.setSerializable("targetSettings", targetSettings);

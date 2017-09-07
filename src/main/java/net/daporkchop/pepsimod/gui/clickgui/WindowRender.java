@@ -1,10 +1,24 @@
+/*
+ * Adapted from the Wizardry License
+ *
+ * Copyright (c) 2017 Team Pepsi
+ *
+ * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
+ * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
+ *
+ * The persons and/or organizations are also disallowed from sub-licensing and/or trademarking this software without explicit permission from Team Pepsi.
+ *
+ * Any persons and/or organizations using this software must disclose their source code and have it publicly available, include this license, provide sufficient credit to the original authors of the project (IE: Team Pepsi), as well as provide a link to the original project.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package net.daporkchop.pepsimod.gui.clickgui;
 
-import net.daporkchop.pepsimod.module.impl.render.FullbrightMod;
+import net.daporkchop.pepsimod.clickgui.Window;
+import net.daporkchop.pepsimod.clickgui.entry.Button;
+import net.daporkchop.pepsimod.clickgui.entry.SubButton;
 import net.daporkchop.pepsimod.module.impl.render.NoOverlayMod;
-import net.daporkchop.pepsimod.totally.not.skidded.clickgui.GuiClick;
-import net.daporkchop.pepsimod.totally.not.skidded.clickgui.elements.Button;
-import net.daporkchop.pepsimod.totally.not.skidded.clickgui.elements.Window;
 
 public class WindowRender extends Window {
     /*
@@ -13,10 +27,9 @@ public class WindowRender extends Window {
      */
 
     public WindowRender()   {
-        super("Render", 2, 2);
-        Button b = this.addButton(NoOverlayMod.INSTANCE);
-        this.addSubButton(b, "test");
-        this.addSubButton(b, "other");
-        System.out.println("Made window, window count:" + GuiClick.windowList.size());
+        super(2, 2, "Render");
+        Button b = this.addButton(new Button(this, NoOverlayMod.INSTANCE));
+        this.addSubButton(new SubButton(b, "jklö"));
+        this.addSubButton(new SubButton(b, "qwertzuiop"));
     }
 }

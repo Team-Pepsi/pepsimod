@@ -13,51 +13,36 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.module.impl.misc;
+package net.daporkchop.pepsimod.clickgui.api;
 
 import net.daporkchop.pepsimod.PepsiMod;
-import net.daporkchop.pepsimod.clickgui.ClickGUI;
-import net.daporkchop.pepsimod.module.api.Module;
-import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import org.lwjgl.input.Keyboard;
 
-public class ClickGuiMod extends Module {
-    public static ClickGuiMod INSTANCE;
+public abstract class EntryImplBase implements IEntry {
+    public final int width;
+    public final int height;
+    public int x;
+    public int y;
+    private boolean isHoveredCached = false;
 
-    public ClickGuiMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "ClickGUI", key, hide);
+    public EntryImplBase(int x, int y, int width, int height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
     }
 
-    @Override
-    public void onEnable() {
-        PepsiMod.INSTANCE.mc.displayGuiScreen(ClickGUI.INSTANCE);
+    public static void drawString(int x, int y, String text, int color) {
+        //System.out.println("Drawing string: " + text + " at " + x + "," + y + " with color " + color);
+        PepsiMod.INSTANCE.mc.fontRenderer.drawString(text, x, y, color, false);
     }
 
-    @Override
-    public void onDisable() {
-
+    public boolean isMouseHovered() {
+        return isHoveredCached;
     }
 
-    @Override
-    public void tick() {
-
-    }
-
-    @Override
-    public void init() {
-        INSTANCE = this;
-    }
-
-    @Override
-    public ModuleOption[] getDefaultOptions() {
-        return new ModuleOption[0];
-    }
-
-    @Override
-    public void registerKeybind(String name, int key)   {
-        this.keybind = new KeyBinding("\u00A7cOpen ClickGUI", Keyboard.KEY_RSHIFT, "key.categories.pepsimod");
-        ClientRegistry.registerKeyBinding(this.keybind);
+    protected void updateIsMouseHovered(int mouseX, int mouseY) {
+        int x = getX(), y = getY();
+        int maxX = x + width, maxY = y + height;
+        isHoveredCached = (x <= mouseX && mouseX <= maxX && y <= mouseY && mouseY <= maxY);
     }
 }

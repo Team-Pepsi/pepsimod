@@ -13,51 +13,30 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.module.impl.misc;
+package net.daporkchop.pepsimod.clickgui.api;
 
-import net.daporkchop.pepsimod.PepsiMod;
-import net.daporkchop.pepsimod.clickgui.ClickGUI;
-import net.daporkchop.pepsimod.module.api.Module;
-import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import org.lwjgl.input.Keyboard;
+public interface IEntry {
+    boolean isMouseHovered();
 
-public class ClickGuiMod extends Module {
-    public static ClickGuiMod INSTANCE;
+    void draw(int mouseX, int mouseY);
 
-    public ClickGuiMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "ClickGUI", key, hide);
-    }
+    void processMouseClick(int x, int y, int button);
 
-    @Override
-    public void onEnable() {
-        PepsiMod.INSTANCE.mc.displayGuiScreen(ClickGUI.INSTANCE);
-    }
+    void processMouseRelease(int x, int y, int button);
 
-    @Override
-    public void onDisable() {
+    int getX();
 
-    }
+    void setX(int x);
 
-    @Override
-    public void tick() {
+    int getY();
 
-    }
+    void setY(int y);
 
-    @Override
-    public void init() {
-        INSTANCE = this;
-    }
+    int getWidth();
 
-    @Override
-    public ModuleOption[] getDefaultOptions() {
-        return new ModuleOption[0];
-    }
+    int getHeight();
 
-    @Override
-    public void registerKeybind(String name, int key)   {
-        this.keybind = new KeyBinding("\u00A7cOpen ClickGUI", Keyboard.KEY_RSHIFT, "key.categories.pepsimod");
-        ClientRegistry.registerKeyBinding(this.keybind);
-    }
+    int getColor();
+
+    boolean shouldRender();
 }
