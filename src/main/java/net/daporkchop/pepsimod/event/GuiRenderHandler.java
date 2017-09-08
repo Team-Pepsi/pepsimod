@@ -19,10 +19,10 @@ import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.misc.TickRate;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
+import net.daporkchop.pepsimod.util.BetterScaledResolution;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
 import net.minecraft.client.gui.GuiIngame;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -34,9 +34,8 @@ public class GuiRenderHandler {
 
     {
         INSTANCE = this;
+        new BetterScaledResolution();
     }
-
-    public ScaledResolution scaled = new ScaledResolution(PepsiMod.INSTANCE.mc);
 
     @SubscribeEvent
     public void onRenderGui(RenderGameOverlayEvent.Post event) {
@@ -46,8 +45,9 @@ public class GuiRenderHandler {
 
         GuiIngame gui = PepsiMod.INSTANCE.mc.ingameGUI;
 
-        int width = scaled.getScaledWidth();
-        int height = scaled.getScaledHeight();
+        BetterScaledResolution.INSTANCE.update();
+        int width = BetterScaledResolution.INSTANCE.scaledWidth;
+        int height = BetterScaledResolution.INSTANCE.scaledHeight;
 
         if ( PepsiUtils.PEPSI_NAME instanceof RainbowText) {
             ((RainbowText) PepsiUtils.PEPSI_NAME).drawAtPos(gui, 2, 2, 0);

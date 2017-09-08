@@ -176,9 +176,6 @@ public class PepsiUtils {
 
     public static int ensureRange(int value, int min, int max) {
         int toReturn = Math.min(Math.max(value, min), max);
-        /*if (toReturn != value)  {
-            System.out.println("Changed value, old: " + value + ", new: " + toReturn);
-        }*/
         return toReturn;
     }
 
@@ -405,5 +402,18 @@ public class PepsiUtils {
     public static boolean isThrowable(ItemStack stack) {
         Item item = stack.getItem();
         return item instanceof ItemBow || item instanceof ItemSnowball || item instanceof ItemEgg || item instanceof ItemEnderPearl || item instanceof ItemSplashPotion || item instanceof ItemLingeringPotion || item instanceof ItemFishingRod;
+    }
+
+    public static float round(float input, float step) {
+        return ((Math.round(input / step)) * step);
+    }
+
+    public static float ensureRange(float value, float min, float max) {
+        float toReturn = Math.min(Math.max(value, min), max);
+        return toReturn;
+    }
+
+    public static String roundFloatForSlider(float f) {
+        return String.format("%.2g", f);
     }
 }

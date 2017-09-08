@@ -15,9 +15,10 @@
 
 package net.daporkchop.pepsimod.module.impl.combat;
 
+import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
+import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.NetworkManager;
@@ -49,7 +50,14 @@ public class CriticalsMod extends Module {
 
     @Override
     public ModuleOption[] getDefaultOptions() {
-        return new ModuleOption[]{new OptionTypeBoolean(true, "packet")};
+        return new ModuleOption[]{new ModuleOption<>(true, "packet", OptionCompletions.BOOLEAN,
+                (value) -> {
+                    PepsiMod.INSTANCE.miscOptions.criticals_packet = value;
+                    return true;
+                },
+                () -> {
+                    return PepsiMod.INSTANCE.miscOptions.criticals_packet;
+                }, "Packet")};
     }
 
     @Override

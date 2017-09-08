@@ -16,14 +16,20 @@
 package net.daporkchop.pepsimod;
 
 import net.daporkchop.pepsimod.clickgui.ClickGUI;
+import net.daporkchop.pepsimod.clickgui.Window;
 import net.daporkchop.pepsimod.command.CommandRegistry;
 import net.daporkchop.pepsimod.command.impl.*;
 import net.daporkchop.pepsimod.event.GuiRenderHandler;
+import net.daporkchop.pepsimod.gui.clickgui.WindowCombat;
+import net.daporkchop.pepsimod.gui.clickgui.WindowMisc;
+import net.daporkchop.pepsimod.gui.clickgui.WindowMovement;
 import net.daporkchop.pepsimod.gui.clickgui.WindowRender;
 import net.daporkchop.pepsimod.key.KeyRegistry;
 import net.daporkchop.pepsimod.module.ModuleManager;
-import net.daporkchop.pepsimod.module.api.*;
-import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
+import net.daporkchop.pepsimod.module.api.Module;
+import net.daporkchop.pepsimod.module.api.ModuleOption;
+import net.daporkchop.pepsimod.module.api.ModuleOptionSave;
+import net.daporkchop.pepsimod.module.api.ModuleSortType;
 import net.daporkchop.pepsimod.module.impl.combat.AuraMod;
 import net.daporkchop.pepsimod.module.impl.combat.CriticalsMod;
 import net.daporkchop.pepsimod.module.impl.misc.*;
@@ -63,6 +69,7 @@ public class PepsiMod {
     public ESPSettings espSettings;
     public NoWeatherSettings noWeatherSettings;
     public TracerSettings tracerSettings;
+    public MiscOptions miscOptions;
 
     public static void registerModules(FMLStateEvent event) {
         ModuleManager.registerModule(new NoFallMod(false, -1, false));
@@ -128,12 +135,16 @@ public class PepsiMod {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
+        new ClickGUI(); //TODO: fix
         loadConfig();
         registerModules(event);
 
         registerCommands(event);
         initModules();
-        new ClickGUI().windows.add(new WindowRender()); //TODO: fix
+        ClickGUI.INSTANCE.windows.add(new WindowRender());
+        ClickGUI.INSTANCE.windows.add(new WindowCombat());
+        ClickGUI.INSTANCE.windows.add(new WindowMisc());
+        ClickGUI.INSTANCE.windows.add(new WindowMovement());
     }
 
     @Mod.EventHandler
@@ -179,15 +190,15 @@ public class PepsiMod {
         noWeatherSettings = (NoWeatherSettings) dataTag.getSerializable("noweatherSettings", new NoWeatherSettings());
         tracerSettings = (TracerSettings) dataTag.getSerializable("tracerSettings", new TracerSettings());
 
-        /*for (Window window : GuiClick.windowList)   {
-            int[] data = dataTag.getIntegerArray(window.getTitle() + "¦window", new int[] {0, 0, 0, 0});
+        for (Window window : ClickGUI.INSTANCE.windows) {
+            int[] data = dataTag.getIntegerArray(window.text + "¦window", new int[]{window.getX(), window.getY(), 0});
 
             window.setX(data[0]);
             window.setY(data[1]);
-            window.setOpen(data[2] == 1);
-            window.setPinned(data[3] == 1);
-        }*/
-        //TODO
+            window.isOpen = (data[2] == 1);
+        }
+
+        miscOptions = (MiscOptions) dataTag.getSerializable("miscOptions", new MiscOptions());
 
         //save the tag in case new fields are added, this way they are saved right away
         dataTag.save();
@@ -196,22 +207,17 @@ public class PepsiMod {
 
     public void saveConfig() {
         for (Module module : ModuleManager.AVALIBLE_MODULES) {
-            ModuleOption[] options = new ModuleOption[module.options.length];
+            ModuleOptionSave[] options = new ModuleOptionSave[module.options.length];
             for (int i = 0; i < options.length; i++) {
                 ModuleOption option = module.options[i];
-                if (option instanceof CustomOption) {
-                    CustomOptionSave save = new CustomOptionSave((CustomOption) option);
-                    options[i] = save;
-                } else {
-                    options[i] = option;
-                }
+                ModuleOptionSave save = new ModuleOptionSave(option, option.displayName);
+                options[i] = save;
             }
             dataTag.setSerializableArray("settings" + module.nameFull, options);
         }
-        /*for (Window window : GuiClick.windowList)   {
-            dataTag.setIntegerArray(window.getTitle() + "¦window", new int[] {window.dragX, window.dragX, window.isOpen() ? 1 : 0, window.isPinned() ? 1 : 0});
-        }*/
-        //TODO
+        for (Window window : ClickGUI.INSTANCE.windows) {
+            dataTag.setIntegerArray(window.text + "¦window", new int[]{window.getX(), window.getY(), window.isOpen ? 1 : 0});
+        }
         dataTag.setSerializable("friends", Friends.FRIENDS);
         dataTag.setSerializable("sortType", ModuleManager.sortType);
         dataTag.setSerializable("targetSettings", targetSettings);
@@ -221,13 +227,24 @@ public class PepsiMod {
         dataTag.setFloat("NameTags_scale", NameTagsMod.scale);
         dataTag.setSerializable("noweatherSettings", noWeatherSettings);
         dataTag.setSerializable("tracerSettings", tracerSettings);
+        dataTag.setSerializable("miscOptions", miscOptions);
         dataTag.save();
     }
 
     public void initModules() {
         for (Module module : ModuleManager.AVALIBLE_MODULES) {
             ModuleOption[] defaultOptions = module.defaultOptions();
-            module.options = (ModuleOption[]) dataTag.getSerializableArray("settings" + module.nameFull, defaultOptions);
+            ModuleOptionSave[] backup = new ModuleOptionSave[defaultOptions.length];
+            for (int i = 0; i < defaultOptions.length; i++) {
+                backup[i] = new ModuleOptionSave(defaultOptions[i], defaultOptions[i].getName(), defaultOptions[i].getDefaultValue());
+            }
+            module.tempOptionLoading = (ModuleOptionSave[]) dataTag.getSerializableArray("settings" + module.nameFull, backup);
+            module.options = new ModuleOption[module.tempOptionLoading.length];
+            for (int i = 0; i < module.tempOptionLoading.length; i++) {
+                module.options[i] = new ModuleOption(module.tempOptionLoading[i], defaultOptions[i].SET, defaultOptions[i].GET, defaultOptions[i].displayName, defaultOptions[i].extended, defaultOptions[i].makeButton);
+            }
+            module.tempOptionLoading = null;
+
             if (defaultOptions.length != module.options.length) {
                 //TODO: remove by name, not by index
                 if (defaultOptions.length > module.options.length) {
@@ -249,23 +266,17 @@ public class PepsiMod {
                     module.options = tempList.toArray(new ModuleOption[tempList.size()]);
                 }
             }
-            for (int i = 0; i < module.options.length; i++) {
-                ModuleOption option = module.options[i];
-                if (option instanceof CustomOptionSave) {
-                    CustomOptionSave save = (CustomOptionSave) option;
-                    CustomOption defaultOption = (CustomOption) defaultOptions[i];
-                    CustomOption customOption = new CustomOption(save, defaultOption.SET, defaultOption.GET);
-                    module.options[i] = customOption;
-                }
-            }
 
-            module.getOptionByName("enabled").setValue(Module.shouldBeEnabled((boolean) module.getOptionByName("enabled").getValue(), module.getLaunchState()));
-            if (((OptionTypeBoolean) module.getOptionByName("enabled")).getValue()) {
+            module.getOptionByName("enabled")
+                    .setValue(Module.shouldBeEnabled(
+                            (boolean) module.getOptionByName("enabled").getValue(),
+                            module.getLaunchState()));
+            if (((boolean) module.getOptionByName("enabled").getValue())) {
                 ModuleManager.enableModule(module);
             } else {
                 ModuleManager.disableModule(module);
             }
-            module.hide = ((OptionTypeBoolean) module.getOptionByName("hidden")).getValue();
+            module.hide = ((boolean) module.getOptionByName("hidden").getValue());
         }
     }
 }

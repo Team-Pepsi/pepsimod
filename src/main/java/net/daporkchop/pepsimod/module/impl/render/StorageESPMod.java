@@ -16,10 +16,9 @@
 package net.daporkchop.pepsimod.module.impl.render;
 
 import net.daporkchop.pepsimod.PepsiMod;
-import net.daporkchop.pepsimod.module.api.CustomOption;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
+import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.totally.not.skidded.RenderUtils;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
@@ -115,46 +114,46 @@ public class StorageESPMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new CustomOption<>(PepsiMod.INSTANCE.espSettings.basic, "normal", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                new ModuleOption<>(PepsiMod.INSTANCE.espSettings.basic, "normal", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.espSettings.basic = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.espSettings.basic;
-                        }),
-                new CustomOption<>(PepsiMod.INSTANCE.espSettings.trapped, "trapped", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Normal"),
+                new ModuleOption<>(PepsiMod.INSTANCE.espSettings.trapped, "trapped", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.espSettings.trapped = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.espSettings.trapped;
-                        }),
-                new CustomOption<>(PepsiMod.INSTANCE.espSettings.ender, "ender", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Trapped"),
+                new ModuleOption<>(PepsiMod.INSTANCE.espSettings.ender, "ender", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.espSettings.ender = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.espSettings.ender;
-                        }),
-                new CustomOption<>(PepsiMod.INSTANCE.espSettings.hopper, "hopper", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Ender"),
+                new ModuleOption<>(PepsiMod.INSTANCE.espSettings.hopper, "hopper", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.espSettings.hopper = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.espSettings.hopper;
-                        }),
-                new CustomOption<>(PepsiMod.INSTANCE.espSettings.furnace, "furnace", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Hopper"),
+                new ModuleOption<>(PepsiMod.INSTANCE.espSettings.furnace, "furnace", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.espSettings.furnace = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.espSettings.furnace;
-                        })
+                        }, "Furnace")
         };
     }
 

@@ -16,12 +16,11 @@
 package net.daporkchop.pepsimod.module.impl.combat;
 
 import net.daporkchop.pepsimod.PepsiMod;
-import net.daporkchop.pepsimod.module.api.CustomOption;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
-import net.daporkchop.pepsimod.module.api.option.OptionTypeFloat;
-import net.daporkchop.pepsimod.module.api.option.OptionTypeInteger;
+import net.daporkchop.pepsimod.module.api.OptionCompletions;
+import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
+import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 import net.daporkchop.pepsimod.totally.not.skidded.EntityUtils;
 import net.daporkchop.pepsimod.totally.not.skidded.RotationUtils;
 import net.daporkchop.pepsimod.util.PepsiUtils;
@@ -110,111 +109,111 @@ public class AuraMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{ //wtf why is this throwing an NPE
-                new CustomOption<>(PepsiMod.INSTANCE.targetSettings.players, "players", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                new ModuleOption<>(PepsiMod.INSTANCE.targetSettings.players, "players", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.players = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.players;
-                        }),
-                new CustomOption<>(PepsiMod.INSTANCE.targetSettings.animals, "animals", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Players"),
+                new ModuleOption<>(PepsiMod.INSTANCE.targetSettings.animals, "animals", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.animals = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.animals;
-                        }),
-                new CustomOption<>(PepsiMod.INSTANCE.targetSettings.monsters, "monsters", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Animals"),
+                new ModuleOption<>(PepsiMod.INSTANCE.targetSettings.monsters, "monsters", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.monsters = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.monsters;
-                        }),
-                new CustomOption<>(PepsiMod.INSTANCE.targetSettings.golems, "golems", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Monsters"),
+                new ModuleOption<>(PepsiMod.INSTANCE.targetSettings.golems, "golems", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.golems = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.golems;
-                        }),
-                new CustomOption<>(PepsiMod.INSTANCE.targetSettings.sleeping, "sleeping", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Golems"),
+                new ModuleOption<>(PepsiMod.INSTANCE.targetSettings.sleeping, "sleeping", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.sleeping = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.sleeping;
-                        }),
-                new CustomOption<>(PepsiMod.INSTANCE.targetSettings.invisible, "invisible", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Sleeping"),
+                new ModuleOption<>(PepsiMod.INSTANCE.targetSettings.invisible, "invisible", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.invisible = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.invisible;
-                        }),
-                new CustomOption<>(PepsiMod.INSTANCE.targetSettings.teams, "teams", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Invisible"),
+                new ModuleOption<>(PepsiMod.INSTANCE.targetSettings.teams, "teams", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.teams = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.teams;
-                        }),
-                new CustomOption<>(PepsiMod.INSTANCE.targetSettings.friends, "friends", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Teams"),
+                new ModuleOption<>(PepsiMod.INSTANCE.targetSettings.friends, "friends", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.friends = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.friends;
-                        }),
-                new CustomOption<>(PepsiMod.INSTANCE.targetSettings.through_walls, "through_walls", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Friends"),
+                new ModuleOption<>(PepsiMod.INSTANCE.targetSettings.through_walls, "through_walls", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.through_walls = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.through_walls;
-                        }),
-                new CustomOption<>(PepsiMod.INSTANCE.targetSettings.fov, "fov", OptionTypeFloat.DEFAULT_COMPLETIONS,
+                        }, "Through Walls"),
+                new ModuleOption<>(PepsiMod.INSTANCE.targetSettings.fov, "fov", OptionCompletions.FLOAT,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.fov = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.fov;
-                        }),
-                new CustomOption<>(PepsiMod.INSTANCE.targetSettings.reach, "reach", OptionTypeFloat.DEFAULT_COMPLETIONS,
+                        }, "FOV", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.0f, 360.0f, 0.5f)),
+                new ModuleOption<>(PepsiMod.INSTANCE.targetSettings.reach, "reach", OptionCompletions.FLOAT,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.reach = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.reach;
-                        }),
-                new CustomOption<>(PepsiMod.INSTANCE.targetSettings.delay, "delay", OptionTypeInteger.DEFAULT_COMPLETIONS,
+                        }, "Reach", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.0f, 10.0f, 0.1f)),
+                new ModuleOption<>(PepsiMod.INSTANCE.targetSettings.delay, "delay", OptionCompletions.INTEGER,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.delay = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.delay;
-                        }),
-                new CustomOption<>(PepsiMod.INSTANCE.targetSettings.use_cooldown, "use_cooldown", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Delay", new ExtensionSlider(ExtensionType.VALUE_INT, 0, 50, 1)),
+                new ModuleOption<>(PepsiMod.INSTANCE.targetSettings.use_cooldown, "use_cooldown", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.use_cooldown = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.use_cooldown;
-                        }),
-                new CustomOption<>(PepsiMod.INSTANCE.targetSettings.silent, "silent", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Use Cooldown"),
+                new ModuleOption<>(PepsiMod.INSTANCE.targetSettings.silent, "silent", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.silent = value;
                             updateName();
@@ -222,8 +221,8 @@ public class AuraMod extends Module {
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.silent;
-                        }),
-                new CustomOption<>(PepsiMod.INSTANCE.targetSettings.rotate, "rotate", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Silent"),
+                new ModuleOption<>(PepsiMod.INSTANCE.targetSettings.rotate, "rotate", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.rotate = value;
                             updateName();
@@ -231,15 +230,15 @@ public class AuraMod extends Module {
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.rotate;
-                        }),
-                new CustomOption<>(PepsiMod.INSTANCE.targetSettings.targetBone, "bone", targetBoneStrings,
+                        }, "Rotate"),
+                new ModuleOption<>(PepsiMod.INSTANCE.targetSettings.targetBone, "bone", targetBoneStrings,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.targetBone = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.targetSettings.targetBone;
-                        })
+                        }, "Bone", false)
         };
     }
 

@@ -15,20 +15,19 @@
 
 package net.daporkchop.pepsimod.module.api.option;
 
-import net.daporkchop.pepsimod.module.api.ModuleOption;
+public class ExtensionSlider extends OptionExtended {
+    public final ExtensionType dataType;
+    public final Object min, max, step;
 
-public class OptionTypeString extends ModuleOption<String> {
-    public static final String[] DEFAULT_COMPLETIONS = new String[]{""};
-
-    public OptionTypeString(Object defaultValue, String name)  {
-        super((String) defaultValue, name);
+    public ExtensionSlider(ExtensionType dataType, Object min, Object max, Object step) {
+        this.dataType = dataType;
+        this.min = min;
+        this.max = max;
+        this.step = step;
     }
 
-    public String getDefaultValue() {
-        return "";
-    }
-
-    public String[] defaultCompletions() {
-        return DEFAULT_COMPLETIONS;
+    @Override
+    public ExtensionType getType() {
+        return ExtensionType.TYPE_SLIDER;
     }
 }

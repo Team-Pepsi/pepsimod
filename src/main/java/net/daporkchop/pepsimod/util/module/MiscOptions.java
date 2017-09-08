@@ -13,14 +13,23 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.gui.clickgui;
+package net.daporkchop.pepsimod.util.module;
 
-import net.daporkchop.pepsimod.clickgui.Window;
+import java.io.Serializable;
+import java.util.HashMap;
 
-public class WindowRender extends Window {
+public class MiscOptions implements Serializable {
+    public HashMap<String, ModuleState> states = new HashMap<>();
+    public boolean criticals_packet = true;
 
-    public WindowRender()   {
-        super(2, 2, "Render");
-        this.init("render");
+    public static class ModuleState implements Serializable {
+        public boolean enabled;
+        public boolean hidden;
+
+        public ModuleState(boolean a, boolean b) {
+            enabled = a;
+            hidden = b;
+        }
     }
 }
+

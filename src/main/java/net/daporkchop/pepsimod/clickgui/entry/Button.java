@@ -17,6 +17,7 @@ package net.daporkchop.pepsimod.clickgui.entry;
 
 import net.daporkchop.pepsimod.clickgui.Window;
 import net.daporkchop.pepsimod.clickgui.api.EntryImplBase;
+import net.daporkchop.pepsimod.clickgui.api.IEntry;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.totally.not.skidded.RenderUtilsXdolf;
@@ -27,7 +28,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Button extends EntryImplBase {
-    public ArrayList<SubButton> subButtons = new ArrayList<>();
+    public ArrayList<IEntry> subEntries = new ArrayList<>();
     public boolean isOpen = false;
     public Window window;
     public Module module;
@@ -81,7 +82,7 @@ public class Button extends EntryImplBase {
     public int getHeight() {
         int i = height;
         if (isOpen) {
-            i += 13 * subButtons.size(); //13 px for padding
+            i += 13 * subEntries.size(); //13 px for padding
         }
         return i;
     }
@@ -96,5 +97,9 @@ public class Button extends EntryImplBase {
 
     public boolean shouldRender() {
         return window.isOpen;
+    }
+
+    public void openGui() {
+
     }
 }

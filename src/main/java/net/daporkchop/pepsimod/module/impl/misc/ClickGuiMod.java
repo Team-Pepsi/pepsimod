@@ -17,6 +17,7 @@ package net.daporkchop.pepsimod.module.impl.misc;
 
 import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.clickgui.ClickGUI;
+import net.daporkchop.pepsimod.clickgui.Window;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.minecraft.client.settings.KeyBinding;
@@ -32,6 +33,9 @@ public class ClickGuiMod extends Module {
 
     @Override
     public void onEnable() {
+        for (Window window : ClickGUI.INSTANCE.windows) {
+            window.openGui();
+        }
         PepsiMod.INSTANCE.mc.displayGuiScreen(ClickGUI.INSTANCE);
     }
 

@@ -1,12 +1,25 @@
+/*
+ * Adapted from the Wizardry License
+ *
+ * Copyright (c) 2017 Team Pepsi
+ *
+ * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
+ * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
+ *
+ * The persons and/or organizations are also disallowed from sub-licensing and/or trademarking this software without explicit permission from Team Pepsi.
+ *
+ * Any persons and/or organizations using this software must disclose their source code and have it publicly available, include this license, provide sufficient credit to the original authors of the project (IE: Team Pepsi), as well as provide a link to the original project.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package net.daporkchop.pepsimod.totally.not.skidded;
 
 
 import net.daporkchop.pepsimod.PepsiMod;
-import net.daporkchop.pepsimod.event.GuiRenderHandler;
+import net.daporkchop.pepsimod.util.BetterScaledResolution;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -14,27 +27,16 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
-import org.lwjgl.util.glu.GLU;
-import org.lwjgl.util.glu.Sphere;
 
 import java.awt.*;
 
 import static org.lwjgl.opengl.GL11.*;
-
-/*
- * Copyright © 2014 - 2017 | Wurst-Imperium | All rights reserved.
- *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- */
 
 public class RenderUtilsXdolf {
     public static int enemy = 0;
@@ -56,12 +58,12 @@ public class RenderUtilsXdolf {
      */
     public static void box(double x, double y, double z, double x2, double y2, double z2, float red, float green,
                            float blue, float alpha) {
-        x = x - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());;
-        y = y - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());;
-        z = z - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());;
-        x2 = x2 - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());;
-        y2 = y2 - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());;
-        z2 = z2 - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());;
+        x = x - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());
+        y = y - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());
+        z = z - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());
+        x2 = x2 - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());
+        y2 = y2 - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());
+        z2 = z2 - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());
         GL11.glBlendFunc(770, 771);
         GL11.glEnable(GL_BLEND);
         GL11.glLineWidth(2.0F);
@@ -91,12 +93,12 @@ public class RenderUtilsXdolf {
      * @param color
      */
     public static void frame(double x, double y, double z, double x2, double y2, double z2, Color color) {
-        x = x - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());;
-        y = y - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());;
-        z = z - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());;
-        x2 = x2 - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());;
-        y2 = y2 - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());;
-        z2 = z2 - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());;
+        x = x - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());
+        y = y - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());
+        z = z - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());
+        x2 = x2 - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());
+        y2 = y2 - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());
+        z2 = z2 - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());
         GL11.glBlendFunc(770, 771);
         GL11.glEnable(GL_BLEND);
         GL11.glLineWidth(2.0F);
@@ -125,9 +127,9 @@ public class RenderUtilsXdolf {
      * BlockPos.
      */
     public static void blockEsp(BlockPos blockPos, Color c, double length, double length2) {
-        double x = blockPos.getX() - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());;
-        double y = blockPos.getY() - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());;
-        double z = blockPos.getZ() - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());;
+        double x = blockPos.getX() - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());
+        double y = blockPos.getY() - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());
+        double z = blockPos.getZ() - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());
         GL11.glPushMatrix();
         GL11.glBlendFunc(770, 771);
         GL11.glEnable(GL_BLEND);
@@ -148,9 +150,9 @@ public class RenderUtilsXdolf {
     }
 
     public static void blockEspFrame(BlockPos blockPos, double red, double green, double blue) {
-        double x = blockPos.getX() - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());;
-        double y = blockPos.getY() - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());;
-        double z = blockPos.getZ() - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());;
+        double x = blockPos.getX() - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());
+        double y = blockPos.getY() - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());
+        double z = blockPos.getZ() - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());
         GL11.glBlendFunc(770, 771);
         GL11.glEnable(GL_BLEND);
         GL11.glLineWidth(1.0F);
@@ -166,9 +168,9 @@ public class RenderUtilsXdolf {
     }
 
     public static void blockEspBox(BlockPos blockPos, double red, double green, double blue) {
-        double x = blockPos.getX() - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());;
-        double y = blockPos.getY() - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());;
-        double z = blockPos.getZ() - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());;
+        double x = blockPos.getX() - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());
+        double y = blockPos.getY() - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());
+        double z = blockPos.getZ() - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());
         GL11.glBlendFunc(770, 771);
         GL11.glEnable(GL_BLEND);
         GL11.glLineWidth(2.0F);
@@ -184,9 +186,9 @@ public class RenderUtilsXdolf {
     }
 
     public static void emptyBlockESPBox(BlockPos blockPos) {
-        double x = blockPos.getX() - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());;
-        double y = blockPos.getY() - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());;
-        double z = blockPos.getZ() - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());;
+        double x = blockPos.getX() - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());
+        double y = blockPos.getY() - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());
+        double z = blockPos.getZ() - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());
         GL11.glBlendFunc(770, 771);
         GL11.glEnable(GL_BLEND);
         GL11.glLineWidth(2.0F);
@@ -224,9 +226,9 @@ public class RenderUtilsXdolf {
     }
 
     public static void nukerBox(BlockPos blockPos, float damage) {
-        double x = blockPos.getX() - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());;
-        double y = blockPos.getY() - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());;
-        double z = blockPos.getZ() - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());;
+        double x = blockPos.getX() - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());
+        double y = blockPos.getY() - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());
+        double z = blockPos.getZ() - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());
         GL11.glBlendFunc(770, 771);
         GL11.glEnable(GL_BLEND);
         GL11.glLineWidth(1.0F);
@@ -248,9 +250,9 @@ public class RenderUtilsXdolf {
     }
 
     public static void searchBox(BlockPos blockPos) {
-        double x = blockPos.getX() - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());;
-        double y = blockPos.getY() - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());;
-        double z = blockPos.getZ() - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());;
+        double x = blockPos.getX() - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());
+        double y = blockPos.getY() - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());
+        double z = blockPos.getZ() - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());
         GL11.glBlendFunc(770, 771);
         GL11.glEnable(GL_BLEND);
         GL11.glLineWidth(1.0F);
@@ -338,9 +340,9 @@ public class RenderUtilsXdolf {
         Vec3d eyes = new Vec3d(0, 0, 1)
                 .rotatePitch(-(float) Math.toRadians(Minecraft.getMinecraft().player.rotationPitch))
                 .rotateYaw(-(float) Math.toRadians(Minecraft.getMinecraft().player.rotationYaw));
-        double x = entity.posX - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());;
-        double y = entity.posY + entity.height / 2 - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());;
-        double z = entity.posZ - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());;
+        double x = entity.posX - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());
+        double y = entity.posY + entity.height / 2 - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());
+        double z = entity.posZ - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());
         glBlendFunc(770, 771);
         glEnable(GL_BLEND);
         glLineWidth(2.0F);
@@ -350,8 +352,8 @@ public class RenderUtilsXdolf {
         setColor(color);
         glBegin(GL_LINES);
         {
-            glVertex3d(GuiRenderHandler.INSTANCE.scaled.getScaledWidth() / 2, Minecraft.getMinecraft().player.getEyeHeight(),
-                    GuiRenderHandler.INSTANCE.scaled.getScaledHeight() / 2);
+            glVertex3d(BetterScaledResolution.INSTANCE.scaledWidth / 2, Minecraft.getMinecraft().player.getEyeHeight(),
+                    BetterScaledResolution.INSTANCE.scaledHeight / 2);
             glVertex3d(x, y, z);
         }
         glEnd();
@@ -362,9 +364,9 @@ public class RenderUtilsXdolf {
     }
 
     public static void tracerLine(int x, int y, int z, Color color) {
-        x += 0.5 - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());;
-        y += 0.5 - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());;
-        z += 0.5 - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());;
+        x += 0.5 - ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager());
+        y += 0.5 - ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager());
+        z += 0.5 - ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager());
         glBlendFunc(770, 771);
         glEnable(GL_BLEND);
         glLineWidth(2.0F);

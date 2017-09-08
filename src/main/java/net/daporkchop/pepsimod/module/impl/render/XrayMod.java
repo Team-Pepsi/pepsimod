@@ -16,7 +16,6 @@
 package net.daporkchop.pepsimod.module.impl.render;
 
 import net.daporkchop.pepsimod.PepsiMod;
-import net.daporkchop.pepsimod.module.api.CustomOption;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.util.PepsiUtils;
@@ -62,20 +61,20 @@ public class XrayMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new CustomOption<>(0, "add", new String[0],
+                new ModuleOption<>(0, "add", new String[0],
                         (value) -> {
                             return true;
                         },
                         () -> {
                             return 0;
-                        }),
-                new CustomOption<>(0, "remove", new String[0],
+                        }, "add", false),
+                new ModuleOption<>(0, "remove", new String[0],
                         (value) -> {
                             return true;
                         },
                         () -> {
                             return 0;
-                        })
+                        }, "remove", false)
         };
     }
 

@@ -24,7 +24,8 @@ public class ColorUtils {
     public static final int BUTTON_ON_ON = new Color(88, 143, 239).getRGB();
     public static final int WINDOW_ON = new Color(255, 255, 255).getRGB();
     public static final int WINDOW_OFF = new Color(183, 183, 183).getRGB();
-    public static final int TYPE_BUTTON = 0, TYPE_WINDOW = 1;
+    public static final int BACKGROUND = new Color(128, 128, 128).getRGB();
+    public static final int TYPE_BUTTON = 0, TYPE_WINDOW = 1, TYPE_SLIDER = 2, TYPE_BG = 3;
 
     public static int getColorForGuiEntry(int type, boolean hovered, boolean state) {
         switch (type) {
@@ -47,6 +48,12 @@ public class ColorUtils {
                     return WINDOW_ON;
                 } else {
                     return WINDOW_OFF;
+                }
+            case TYPE_SLIDER:
+                if (hovered) {
+                    return BUTTON_ON_ON;
+                } else {
+                    return BUTTON_OFF_ON;
                 }
             default:
                 throw new IllegalStateException("Invalid type: " + type);

@@ -39,4 +39,6 @@ public interface IEntry {
     int getColor();
 
     boolean shouldRender();
+
+    void openGui();
 }

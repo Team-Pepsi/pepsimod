@@ -13,22 +13,14 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.module.api.option;
+package net.daporkchop.pepsimod.gui.clickgui;
 
-import net.daporkchop.pepsimod.module.api.ModuleOption;
+import net.daporkchop.pepsimod.clickgui.Window;
 
-public class OptionTypeShort extends ModuleOption<Short> {
-    public static final String[] DEFAULT_COMPLETIONS = new String[]{"0"};
+public class WindowMisc extends Window {
 
-    public OptionTypeShort(Object defaultValue, String name)  {
-        super((Short) defaultValue, name);
-    }
-
-    public Short getDefaultValue() {
-        return 0;
-    }
-
-    public String[] defaultCompletions() {
-        return DEFAULT_COMPLETIONS;
+    public WindowMisc() {
+        super(2, 202, "Misc");
+        this.init("misc");
     }
 }

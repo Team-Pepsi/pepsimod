@@ -15,15 +15,24 @@
 
 package net.daporkchop.pepsimod.clickgui;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.reflect.ClassPath;
 import net.daporkchop.pepsimod.clickgui.api.EntryImplBase;
 import net.daporkchop.pepsimod.clickgui.api.IEntry;
 import net.daporkchop.pepsimod.clickgui.entry.Button;
 import net.daporkchop.pepsimod.clickgui.entry.SubButton;
+import net.daporkchop.pepsimod.clickgui.entry.SubSlider;
+import net.daporkchop.pepsimod.module.ModuleManager;
+import net.daporkchop.pepsimod.module.api.Module;
+import net.daporkchop.pepsimod.module.api.ModuleOption;
+import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 import net.daporkchop.pepsimod.totally.not.skidded.RenderUtilsXdolf;
 import net.daporkchop.pepsimod.util.colors.ColorUtils;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Window extends EntryImplBase {
@@ -138,8 +147,14 @@ public class Window extends EntryImplBase {
 
     public SubButton addSubButton(SubButton b) {
         entries.add(entries.indexOf(b.parent) + 1, b);
-        b.parent.subButtons.add(b);
+        b.parent.subEntries.add(b);
         return b;
+    }
+
+    public SubSlider addSubSlider(SubSlider slider) {
+        entries.add(entries.indexOf(slider.parent) + 1, slider);
+        slider.parent.subEntries.add(slider);
+        return slider;
     }
 
     public int getRenderYButton() {
@@ -148,5 +163,37 @@ public class Window extends EntryImplBase {
 
     public boolean shouldRender() {
         return true;
+    }
+
+    public void openGui() {
+        for (IEntry entry : entries) {
+            entry.openGui();
+        }
+    }
+
+    protected void init(String pkg) {
+        try {
+            ImmutableSet<ClassPath.ClassInfo> classes = ClassPath.from(getClass().getClassLoader()).getTopLevelClasses("net.daporkchop.pepsimod.module.impl." + pkg);
+            for (ClassPath.ClassInfo info : classes) {
+                Module module = ModuleManager.CLASS_NAME_TO_MODULE.get(info.getName());
+                Button b = this.addButton(new Button(this, module));
+                for (ModuleOption option : module.options) {
+                    if (!option.makeButton || !(option.getName().equals("enabled") || option.getName().equals("hidden"))) {
+                        if (option.extended == null) {
+                            System.out.println("new subbutton: " + option.getName());
+                            this.addSubButton(new SubButton(b, option));
+                        } else if (option.extended.getType() == ExtensionType.TYPE_SLIDER) {
+                            System.out.println("new subslider: " + option.getName());
+                            this.addSubSlider(new SubSlider(b, option));
+                        } else {
+                            throw new IllegalStateException("Option " + option.getName() + " uses an unsupported extension type!");
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(59743, true);
+        }
     }
 }

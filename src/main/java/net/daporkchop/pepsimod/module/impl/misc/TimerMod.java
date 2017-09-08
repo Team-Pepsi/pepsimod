@@ -16,10 +16,11 @@
 package net.daporkchop.pepsimod.module.impl.misc;
 
 import net.daporkchop.pepsimod.misc.TickRate;
-import net.daporkchop.pepsimod.module.api.CustomOption;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
+import net.daporkchop.pepsimod.module.api.OptionCompletions;
+import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
+import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 
 import java.util.TimerTask;
@@ -76,7 +77,7 @@ public class TimerMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new CustomOption<>(1.0f, "multiplier", new String[]{"1.0", "0.0"},
+                new ModuleOption<>(1.0f, "multiplier", new String[]{"1.0", "0.0"},
                         (value) -> {
                             if (value <= 0.0f) {
                                 clientMessage("Multiplier cannot be negative or 0!");
@@ -88,15 +89,15 @@ public class TimerMod extends Module {
                         },
                         () -> {
                             return TimerMod.PROCENT;
-                        }),
-                new CustomOption<>(false, "tps_sync", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Multiplier", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.0f, 1.0f, 0.01f)),
+                new ModuleOption<>(false, "tps_sync", OptionCompletions.BOOLEAN,
                         (value) -> {
                             tps_sync = value;
                             return true;
                         },
                         () -> {
                             return tps_sync;
-                        })
+                        }, "TpsSync")
         };
     }
 

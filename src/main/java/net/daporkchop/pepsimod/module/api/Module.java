@@ -15,13 +15,14 @@
 
 package net.daporkchop.pepsimod.module.api;
 
+import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.CommandRegistry;
 import net.daporkchop.pepsimod.command.api.Command;
 import net.daporkchop.pepsimod.module.ModuleManager;
-import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
+import net.daporkchop.pepsimod.util.module.MiscOptions;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.network.Packet;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -43,6 +44,7 @@ public abstract class Module extends Command {
     public ModuleOption[] options;
     public String nameFull;
     public String[] completionOptions;
+    public ModuleOptionSave[] tempOptionLoading;
 
     public Module(boolean def, String name, int keybind, boolean hide) {
         super(name.toLowerCase());
@@ -106,7 +108,23 @@ public abstract class Module extends Command {
      * @return all the default module options
      */
     public final ModuleOption[] defaultOptions() {
-        return ArrayUtils.addAll(new ModuleOption[]{new OptionTypeBoolean(false, "enabled"), new OptionTypeBoolean(false, "hidden")}, this.getDefaultOptions());
+        return ArrayUtils.addAll(new ModuleOption[]{new ModuleOption<>(false, "enabled", OptionCompletions.BOOLEAN,
+                (value) -> {
+                    PepsiMod.INSTANCE.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(false, false)).enabled = value;
+                    return true;
+                },
+                () -> {
+                    return PepsiMod.INSTANCE.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(false, false)).enabled;
+                }, "Enabled"),
+                new ModuleOption<>(false, "hidden", OptionCompletions.BOOLEAN,
+                        (value) -> {
+                            PepsiMod.INSTANCE.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(false, false)).hidden = value;
+                            return true;
+                        },
+                        () -> {
+                            return PepsiMod.INSTANCE.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(false, false)).hidden;
+                        }, "Hidden")
+        }, this.getDefaultOptions());
     }
 
     /**
@@ -389,7 +407,7 @@ public abstract class Module extends Command {
         return this.isEnabled;
     }
 
-    public void registerKeybind(String name, int key)   {
+    public void registerKeybind(String name, int key) {
         this.keybind = new KeyBinding(name, key == -1 ? Keyboard.KEY_NONE : key, "key.categories.pepsimod");
         ClientRegistry.registerKeyBinding(this.keybind);
     }
