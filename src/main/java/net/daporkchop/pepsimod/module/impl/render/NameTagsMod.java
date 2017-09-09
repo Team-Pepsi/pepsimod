@@ -15,10 +15,11 @@
 
 package net.daporkchop.pepsimod.module.impl.render;
 
-import net.daporkchop.pepsimod.module.api.CustomOption;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.daporkchop.pepsimod.module.api.option.OptionTypeFloat;
+import net.daporkchop.pepsimod.module.api.OptionCompletions;
+import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
+import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 
 public class NameTagsMod extends Module {
     public static NameTagsMod INSTANCE;
@@ -52,14 +53,14 @@ public class NameTagsMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new CustomOption<>(1.0f, "scale", OptionTypeFloat.DEFAULT_COMPLETIONS,
+                new ModuleOption<>(1.0f, "scale", OptionCompletions.FLOAT,
                         (value) -> {
                             scale = value;
                             return true;
                         },
                         () -> {
                             return scale;
-                        })
+                        }, "Scale", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.1f, 1.0f, 0.1f))
         };
     }
 

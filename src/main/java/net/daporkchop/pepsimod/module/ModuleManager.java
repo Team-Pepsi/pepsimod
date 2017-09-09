@@ -21,6 +21,7 @@ import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.minecraft.network.Packet;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ModuleManager {
 
@@ -33,6 +34,8 @@ public class ModuleManager {
      * All modules that are currently enabled
      */
     public static ArrayList<Module> ENABLED_MODULES = new ArrayList<>();
+
+    public static HashMap<String, Module> CLASS_NAME_TO_MODULE = new HashMap<>();
 
     public static ModuleSortType sortType = ModuleSortType.SIZE;
 
@@ -47,6 +50,7 @@ public class ModuleManager {
         if (toRegister.isEnabled) {
             ENABLED_MODULES.add(toRegister);
         }
+        CLASS_NAME_TO_MODULE.put(toRegister.getClass().getCanonicalName(), toRegister);
         return toRegister;
     }
 

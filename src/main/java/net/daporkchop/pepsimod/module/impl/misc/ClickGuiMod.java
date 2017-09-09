@@ -13,37 +13,56 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.module.api;
+package net.daporkchop.pepsimod.module.impl.misc;
 
-/**
- * used to save CustomOptions
- * because Consumers and Suppliers cannot be serialized
- */
-public class CustomOptionSave<T> extends ModuleOption<T> {
-    private final String[] DEFAULT_COMPLETIONS;
-    private final T DEFAULT_VALUE;
+import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.clickgui.ClickGUI;
+import net.daporkchop.pepsimod.clickgui.Window;
+import net.daporkchop.pepsimod.module.api.Module;
+import net.daporkchop.pepsimod.module.api.ModuleOption;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import org.lwjgl.input.Keyboard;
 
-    public CustomOptionSave(CustomOption<T> option) {
-        super(option.getDefaultValue(), option.getName());
-        DEFAULT_COMPLETIONS = option.defaultCompletions();
-        DEFAULT_VALUE = option.getDefaultValue();
+public class ClickGuiMod extends Module {
+    public static ClickGuiMod INSTANCE;
+
+    public ClickGuiMod(boolean isEnabled, int key, boolean hide) {
+        super(isEnabled, "ClickGUI", key, hide);
     }
 
     @Override
-    public boolean setValue(T value) {
-        return true;
+    public void onEnable() {
+        for (Window window : ClickGUI.INSTANCE.windows) {
+            window.openGui();
+        }
+
+        PepsiMod.INSTANCE.mc.displayGuiScreen(ClickGUI.INSTANCE);
     }
 
     @Override
-    public T getValue() {
-        return null;
+    public void onDisable() {
+
     }
 
-    public T getDefaultValue() {
-        return DEFAULT_VALUE;
+    @Override
+    public void tick() {
+
     }
 
-    public String[] defaultCompletions() {
-        return DEFAULT_COMPLETIONS;
+    @Override
+    public void init() {
+        INSTANCE = this;
+    }
+
+    @Override
+    public ModuleOption[] getDefaultOptions() {
+        return new ModuleOption[0];
+    }
+
+    @Override
+    public void registerKeybind(String name, int key)   {
+        this.keybind = new KeyBinding("\u00A7cOpen ClickGUI", Keyboard.KEY_RSHIFT, "key.categories.pepsimod");
+        ClientRegistry.registerKeyBinding(this.keybind);
     }
 }

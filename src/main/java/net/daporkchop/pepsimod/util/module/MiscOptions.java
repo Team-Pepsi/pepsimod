@@ -16,9 +16,20 @@
 package net.daporkchop.pepsimod.util.module;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
-public class NoWeatherSettings implements Serializable {
-    public boolean disableRain = false;
-    public boolean changeTime = false;
-    public int time = 0;
+public class MiscOptions implements Serializable {
+    public HashMap<String, ModuleState> states = new HashMap<>();
+    public boolean criticals_packet = true;
+
+    public static class ModuleState implements Serializable {
+        public boolean enabled;
+        public boolean hidden;
+
+        public ModuleState(boolean a, boolean b) {
+            enabled = a;
+            hidden = b;
+        }
+    }
 }
+

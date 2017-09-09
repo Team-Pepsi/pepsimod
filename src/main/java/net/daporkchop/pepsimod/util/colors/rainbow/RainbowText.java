@@ -73,13 +73,6 @@ public class RainbowText extends ColorizedText {
             }
             cycle = PepsiUtils.rainbowCycle(1, cycle);
             Color color = new Color(PepsiUtils.ensureRange(cycle.r, 0, 255), PepsiUtils.ensureRange(cycle.g, 0, 255), PepsiUtils.ensureRange(cycle.b, 0, 255));
-            /*if (color.getRed() != cycle.r)  {
-                System.out.println("had to ensure range! original color " + cycle.r + ", actual " + color.getRed());
-            }*/
-            /*if (Math.abs(debug - color.getRed()) > 4)   {
-                System.out.println("difference in one color tick was " + Math.abs(debug - color.getRed()));
-            }
-            debug = color.getRed();*/
             screen.drawString(Minecraft.getMinecraft().fontRenderer, element.text, x + i, y, color.getRGB());
             i += element.width;
         }

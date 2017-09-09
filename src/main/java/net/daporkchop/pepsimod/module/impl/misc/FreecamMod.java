@@ -16,10 +16,11 @@
 package net.daporkchop.pepsimod.module.impl.misc;
 
 import net.daporkchop.pepsimod.PepsiMod;
-import net.daporkchop.pepsimod.module.api.CustomOption;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleLaunchState;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
+import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
+import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 import net.daporkchop.pepsimod.util.module.EntityFakePlayer;
 
 public class FreecamMod extends Module {
@@ -79,7 +80,7 @@ public class FreecamMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new CustomOption<>(1.0f, "speed", new String[]{"1.0", "0.0"},
+                new ModuleOption<>(1.0f, "speed", new String[]{"1.0", "0.0"},
                         (value) -> {
                             if (value <= 0.0f) {
                                 clientMessage("Speed cannot be negative or 0!");
@@ -91,7 +92,7 @@ public class FreecamMod extends Module {
                         },
                         () -> {
                             return FreecamMod.SPEED;
-                        })
+                        }, "Speed", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.0f, 1.0f, 0.1f))
         };
     }
 

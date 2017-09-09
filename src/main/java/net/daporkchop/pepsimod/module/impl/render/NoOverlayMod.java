@@ -21,18 +21,21 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 public class NoOverlayMod extends Module {
     public static NoOverlayMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
     public NoOverlayMod(boolean isEnabled, int key, boolean hide) {
         super(isEnabled, "NoOverlay", key, hide);
     }
 
     @Override
     public void onEnable() {
-
+        INSTANCE = this;
     }
 
     @Override
     public void onDisable() {
-
+        INSTANCE = this;
     }
 
     @Override

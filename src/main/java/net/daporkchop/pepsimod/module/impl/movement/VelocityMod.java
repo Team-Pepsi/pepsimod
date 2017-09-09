@@ -15,9 +15,10 @@
 
 package net.daporkchop.pepsimod.module.impl.movement;
 
-import net.daporkchop.pepsimod.module.api.CustomOption;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
+import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
+import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 
 public class VelocityMod extends Module {
     public static float PROCENT = 1.0f;
@@ -55,7 +56,7 @@ public class VelocityMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new CustomOption<>(1.0f, "strength", new String[]{"1.0", "0.0"},
+                new ModuleOption<>(1.0f, "strength", new String[]{"1.0", "0.0"},
                         (value) -> {
                             VelocityMod.PROCENT = value;
                             updateName();
@@ -63,7 +64,7 @@ public class VelocityMod extends Module {
                         },
                         () -> {
                             return VelocityMod.PROCENT;
-                        })
+                        }, "Strength", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.0f, 1.0f, 0.1f))
         };
     }
 

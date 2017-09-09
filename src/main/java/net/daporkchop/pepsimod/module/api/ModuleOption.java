@@ -15,38 +15,66 @@
 
 package net.daporkchop.pepsimod.module.api;
 
-import java.io.Serializable;
+import net.daporkchop.pepsimod.module.api.option.OptionExtended;
 
-public abstract class ModuleOption<T> implements Serializable {
+import java.io.Serializable;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+public class ModuleOption<T> implements Serializable {
+    public final Function<T, Boolean> SET;
+    public final Supplier<T> GET;
+    private final String[] DEFAULT_COMPLETIONS;
+    private final T DEFAULT_VALUE;
+    public String displayName;
+    public boolean makeButton = true;
+    public OptionExtended extended = null;
     private T value;
     private String name;
 
-    public ModuleOption(String name)   {
-        this(null, name);
+    public ModuleOption(T defaultValue, String name, String[] defaultCompletions, Function<T, Boolean> set, Supplier<T> get, String displayName, OptionExtended extended, boolean makeWindow) {
+        this(defaultValue, name, defaultCompletions, set, get, displayName, makeWindow);
+        this.extended = extended;
     }
 
-    public ModuleOption(T defaultValue, String name) {
+    public ModuleOption(T defaultValue, String name, String[] defaultCompletions, Function<T, Boolean> set, Supplier<T> get, String displayName, OptionExtended extended) {
+        this(defaultValue, name, defaultCompletions, set, get, displayName);
+        this.extended = extended;
+    }
+
+    public ModuleOption(T defaultValue, String name, String[] defaultCompletions, Function<T, Boolean> set, Supplier<T> get, String displayName, boolean makeButton) {
+        this(defaultValue, name, defaultCompletions, set, get, displayName);
+        this.makeButton = makeButton;
+    }
+
+    public ModuleOption(T defaultValue, String name, String[] defaultCompletions, Function<T, Boolean> set, Supplier<T> get, String displayName) {
+        DEFAULT_COMPLETIONS = defaultCompletions;
+        DEFAULT_VALUE = defaultValue;
+        SET = set;
+        GET = get;
         this.value = defaultValue;
         this.name = name;
-    }
-
-    /**
-     * @return true if value could be set, false otherwise
-     */
-    public boolean setValue(T newValue)   {
-        this.value = newValue;
-        return true;
-    }
-
-    public T getValue() {
-        return this.value;
+        this.displayName = displayName;
     }
 
     public String getName() {
-        return this.name;
+        return this.name == null ? this.displayName.toLowerCase() : this.name;
     }
 
-    public abstract T getDefaultValue();
+    public boolean setValue(T value) {
+        return SET.apply(value);
+    }
 
-    public abstract String[] defaultCompletions();
+    public T getValue() {
+        T toReturn = GET.get();
+        return toReturn == null ? getDefaultValue() : toReturn;
+    }
+
+    public T getDefaultValue() {
+        return DEFAULT_VALUE;
+    }
+
+    public String[] defaultCompletions() {
+        return DEFAULT_COMPLETIONS;
+    }
 }

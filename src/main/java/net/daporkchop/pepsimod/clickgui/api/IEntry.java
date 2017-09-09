@@ -13,24 +13,38 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.command.impl;
+package net.daporkchop.pepsimod.clickgui.api;
 
-import net.daporkchop.pepsimod.PepsiMod;
-import net.daporkchop.pepsimod.command.api.Command;
+public interface IEntry {
+    boolean isMouseHovered();
 
-public class LoadCommand extends Command {
-    public LoadCommand() {
-        super("load");
-    }
+    void draw(int mouseX, int mouseY);
 
-    @Override
-    public void execute(String cmd, String[] args) {
-        PepsiMod.INSTANCE.saveConfig();
-        clientMessage("Loaded config!");
-    }
+    void processMouseClick(int x, int y, int button);
 
-    @Override
-    public String getSuggestion(String cmd, String[] args) {
-        return ".load";
-    }
+    void processMouseRelease(int x, int y, int button);
+
+    int getX();
+
+    void setX(int x);
+
+    int getY();
+
+    void setY(int y);
+
+    int getWidth();
+
+    int getHeight();
+
+    int getColor();
+
+    boolean shouldRender();
+
+    void openGui();
+
+    String getName();
+
+    boolean isOpen();
+
+    void setOpen(boolean val);
 }

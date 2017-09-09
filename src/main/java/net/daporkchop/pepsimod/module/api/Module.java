@@ -15,13 +15,14 @@
 
 package net.daporkchop.pepsimod.module.api;
 
+import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.CommandRegistry;
 import net.daporkchop.pepsimod.command.api.Command;
 import net.daporkchop.pepsimod.module.ModuleManager;
-import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
+import net.daporkchop.pepsimod.util.module.MiscOptions;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.network.Packet;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -43,14 +44,13 @@ public abstract class Module extends Command {
     public ModuleOption[] options;
     public String nameFull;
     public String[] completionOptions;
+    public ModuleOptionSave[] tempOptionLoading;
 
     public Module(boolean def, String name, int keybind, boolean hide) {
         super(name.toLowerCase());
         nameFull = name;
-        ModuleLaunchState state = getLaunchState();
+        registerKeybind(name, keybind);
         this.isEnabled = shouldBeEnabled(def, getLaunchState());
-        this.keybind = new KeyBinding(name, keybind == -1 ? Keyboard.KEY_NONE : keybind, "key.categories.pepsimod");
-        ClientRegistry.registerKeyBinding(this.keybind);
         if (this.isEnabled) {
             this.onEnable();
         } else {
@@ -108,7 +108,23 @@ public abstract class Module extends Command {
      * @return all the default module options
      */
     public final ModuleOption[] defaultOptions() {
-        return ArrayUtils.addAll(new ModuleOption[]{new OptionTypeBoolean(false, "enabled"), new OptionTypeBoolean(false, "hidden")}, this.getDefaultOptions());
+        return ArrayUtils.addAll(new ModuleOption[]{new ModuleOption<>(false, "enabled", OptionCompletions.BOOLEAN,
+                (value) -> {
+                    PepsiMod.INSTANCE.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(false, false)).enabled = value;
+                    return true;
+                },
+                () -> {
+                    return PepsiMod.INSTANCE.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(false, false)).enabled;
+                }, "Enabled"),
+                new ModuleOption<>(false, "hidden", OptionCompletions.BOOLEAN,
+                        (value) -> {
+                            PepsiMod.INSTANCE.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(false, false)).hidden = value;
+                            return true;
+                        },
+                        () -> {
+                            return PepsiMod.INSTANCE.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(false, false)).hidden;
+                        }, "Hidden")
+        }, this.getDefaultOptions());
     }
 
     /**
@@ -228,7 +244,7 @@ public abstract class Module extends Command {
      * Does nothing if the module has no custom name
      */
     public void updateName() {
-        if (hasModeInName()) {
+        if (PepsiMod.INSTANCE.isInitialized && hasModeInName()) {
             text = new RainbowText(nameFull + PepsiUtils.COLOR_ESCAPE + "customa8a8a8 [" + getModeForName() + "]");
             ModuleManager.sortModules(ModuleManager.sortType);
         }
@@ -389,5 +405,10 @@ public abstract class Module extends Command {
 
     public boolean shouldTick() {
         return this.isEnabled;
+    }
+
+    public void registerKeybind(String name, int key) {
+        this.keybind = new KeyBinding(name, key == -1 ? Keyboard.KEY_NONE : key, "key.categories.pepsimod");
+        ClientRegistry.registerKeyBinding(this.keybind);
     }
 }

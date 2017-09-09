@@ -13,12 +13,36 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.util.module;
+package net.daporkchop.pepsimod.clickgui.api;
 
-import java.io.Serializable;
+import net.daporkchop.pepsimod.PepsiMod;
 
-public class NoWeatherSettings implements Serializable {
-    public boolean disableRain = false;
-    public boolean changeTime = false;
-    public int time = 0;
+public abstract class EntryImplBase implements IEntry {
+    public final int width;
+    public final int height;
+    public int x;
+    public int y;
+    private boolean isHoveredCached = false;
+
+    public EntryImplBase(int x, int y, int width, int height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
+    public static void drawString(int x, int y, String text, int color) {
+        //System.out.println("Drawing string: " + text + " at " + x + "," + y + " with color " + color);
+        PepsiMod.INSTANCE.mc.fontRenderer.drawString(text, x, y, color, false);
+    }
+
+    public boolean isMouseHovered() {
+        return isHoveredCached;
+    }
+
+    protected void updateIsMouseHovered(int mouseX, int mouseY) {
+        int x = getX(), y = getY();
+        int maxX = x + width, maxY = y + height;
+        isHoveredCached = (x <= mouseX && mouseX <= maxX && y <= mouseY && mouseY <= maxY);
+    }
 }

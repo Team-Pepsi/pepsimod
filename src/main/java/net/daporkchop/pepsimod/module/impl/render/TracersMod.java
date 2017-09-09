@@ -16,10 +16,9 @@
 package net.daporkchop.pepsimod.module.impl.render;
 
 import net.daporkchop.pepsimod.PepsiMod;
-import net.daporkchop.pepsimod.module.api.CustomOption;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.daporkchop.pepsimod.module.api.option.OptionTypeBoolean;
+import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.totally.not.skidded.RotationUtils;
 import net.daporkchop.pepsimod.util.Friends;
 import net.daporkchop.pepsimod.util.PepsiUtils;
@@ -79,78 +78,78 @@ public class TracersMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new CustomOption<>(false, "sleeping", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                new ModuleOption<>(false, "sleeping", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.tracerSettings.sleeping = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.tracerSettings.sleeping;
-                        }),
-                new CustomOption<>(false, "invisible", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Sleeping"),
+                new ModuleOption<>(false, "invisible", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.tracerSettings.invisible = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.tracerSettings.invisible;
-                        }),
-                new CustomOption<>(true, "friendColors", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Invisible"),
+                new ModuleOption<>(true, "friendColors", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.tracerSettings.friendColors = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.tracerSettings.friendColors;
-                        }),
-                new CustomOption<>(false, "animals", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "FriendColors"),
+                new ModuleOption<>(false, "animals", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.tracerSettings.animals = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.tracerSettings.animals;
-                        }),
-                new CustomOption<>(false, "monsters", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Animals"),
+                new ModuleOption<>(false, "monsters", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.tracerSettings.monsters = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.tracerSettings.monsters;
-                        }),
-                new CustomOption<>(false, "players", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Monsters"),
+                new ModuleOption<>(false, "players", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.tracerSettings.players = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.tracerSettings.players;
-                        }),
-                new CustomOption<>(false, "items", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Players"),
+                new ModuleOption<>(false, "items", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.tracerSettings.items = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.tracerSettings.items;
-                        }),
-                new CustomOption<>(false, "everything", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Items"),
+                new ModuleOption<>(false, "everything", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.tracerSettings.everything = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.tracerSettings.everything;
-                        }),
-                new CustomOption<>(true, "distanceColor", OptionTypeBoolean.DEFAULT_COMPLETIONS,
+                        }, "Everything"),
+                new ModuleOption<>(true, "distanceColor", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.tracerSettings.distanceColor = value;
                             return true;
                         },
                         () -> {
                             return PepsiMod.INSTANCE.tracerSettings.distanceColor;
-                        })
+                        }, "DistanceColor")
         };
     }
 

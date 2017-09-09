@@ -28,15 +28,7 @@ public abstract class MixinWorld {
     @Inject(method = "getCelestialAngle", at = @At("HEAD"), cancellable = true)
     public void preGetCelestialAngle(float partialTicks, CallbackInfoReturnable<Float> callbackInfoReturnable)  {
         if (NoWeatherMod.INSTANCE.isEnabled && PepsiMod.INSTANCE.noWeatherSettings.changeTime)    {
-            callbackInfoReturnable.setReturnValue(PepsiMod.INSTANCE.noWeatherSettings.time);
-            callbackInfoReturnable.cancel();
-        }
-    }
-
-    @Inject(method = "getMoonPhase", at = @At("HEAD"), cancellable = true)
-    public void preGetMoonPhase(CallbackInfoReturnable<Integer> callbackInfoReturnable) {
-        if (NoWeatherMod.INSTANCE.isEnabled && PepsiMod.INSTANCE.noWeatherSettings.changeMoon)  {
-            callbackInfoReturnable.setReturnValue(PepsiMod.INSTANCE.noWeatherSettings.moonPhase);
+            callbackInfoReturnable.setReturnValue(PepsiMod.INSTANCE.noWeatherSettings.time + 0.0f);
             callbackInfoReturnable.cancel();
         }
     }

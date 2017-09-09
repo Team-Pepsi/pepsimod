@@ -13,22 +13,30 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.module.api.option;
+package net.daporkchop.pepsimod.module.api;
 
-import net.daporkchop.pepsimod.module.api.ModuleOption;
+import java.io.Serializable;
 
-public class OptionTypeDouble extends ModuleOption<Double> {
-    public static final String[] DEFAULT_COMPLETIONS = new String[]{"0.0"};
+/**
+ * used to save CustomOptions
+ * because lambdas cannot be serialized
+ */
+public class ModuleOptionSave<T> implements Serializable {
+    final T VALUE;
 
-    public OptionTypeDouble(Object defaultValue, String name)  {
-        super((Double) defaultValue, name);
+    public ModuleOptionSave(ModuleOption<T> option) {
+        VALUE = option.getValue();
     }
 
-    public Double getDefaultValue() {
-        return 0.0d;
+    public ModuleOptionSave(T defaultValue) {
+        VALUE = defaultValue;
     }
 
-    public String[] defaultCompletions() {
-        return DEFAULT_COMPLETIONS;
+    public boolean setValue(T value) {
+        return true;
+    }
+
+    public T getValue() {
+        return VALUE;
     }
 }
