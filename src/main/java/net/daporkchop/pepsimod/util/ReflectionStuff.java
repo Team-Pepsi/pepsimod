@@ -24,7 +24,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.Timer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -50,8 +49,6 @@ public class ReflectionStuff {
             try {
                 return c.getDeclaredField(s);
             } catch (NoSuchFieldException e)    {
-                e.printStackTrace();
-                FMLCommonHandler.instance().exitJava(2937, false);
             }
         }
 
