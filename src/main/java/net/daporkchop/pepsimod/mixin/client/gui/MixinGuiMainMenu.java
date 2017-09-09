@@ -87,7 +87,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
     }
 
     @Inject(method = "addSingleplayerMultiplayerButtons", at = @At("RETURN"))
-    public void preAddSingleplayerMultiplayerButtons(int i, int j, CallbackInfo callbackInfo)   {
+    public void preAddSingleplayerMultiplayerButtons(int i, int j, CallbackInfo callbackInfo) {
         this.buttonList.add(new GuiButton(12345, this.width / 2 + 102, i + j * 1, 98, 20, "Password"));
     }
 
@@ -96,7 +96,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
         if (button.id == 12345) {
             try {
                 Class.forName("team.pepsi.pepsimod.launcher.PepsiModServerManager").getDeclaredMethod("setPassword").invoke(null);
-            } catch (Exception e)   {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             callbackInfo.cancel();
