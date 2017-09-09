@@ -16,11 +16,12 @@
 package net.daporkchop.pepsimod.gui.clickgui;
 
 import net.daporkchop.pepsimod.clickgui.Window;
+import net.daporkchop.pepsimod.module.ModuleCategory;
 
 public class WindowRender extends Window {
 
     public WindowRender()   {
         super(2, 2, "Render");
-        this.init("render");
+        this.init(ModuleCategory.RENDER);
     }
 }

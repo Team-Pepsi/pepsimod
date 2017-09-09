@@ -16,6 +16,7 @@
 package net.daporkchop.pepsimod.module.impl.render;
 
 import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
@@ -81,5 +82,9 @@ public class NoWeatherMod extends Module {
                             return PepsiMod.INSTANCE.noWeatherSettings.time;
                         }, "Time", new ExtensionSlider(ExtensionType.VALUE_INT, 0, 24000, 500))
         };
+    }
+
+    public ModuleCategory getCategory() {
+        return ModuleCategory.RENDER;
     }
 }

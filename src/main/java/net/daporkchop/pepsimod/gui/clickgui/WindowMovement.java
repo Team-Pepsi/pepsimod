@@ -16,11 +16,12 @@
 package net.daporkchop.pepsimod.gui.clickgui;
 
 import net.daporkchop.pepsimod.clickgui.Window;
+import net.daporkchop.pepsimod.module.ModuleCategory;
 
 public class WindowMovement extends Window {
 
     public WindowMovement() {
         super(308, 2, "Movement");
-        this.init("movement");
+        this.init(ModuleCategory.MOVEMENT);
     }
 }

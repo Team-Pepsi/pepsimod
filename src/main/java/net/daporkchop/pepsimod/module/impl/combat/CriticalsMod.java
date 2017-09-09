@@ -16,6 +16,7 @@
 package net.daporkchop.pepsimod.module.impl.combat;
 
 import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
@@ -109,5 +110,9 @@ public class CriticalsMod extends Module {
         } else {
             return "Jump";
         }
+    }
+
+    public ModuleCategory getCategory() {
+        return ModuleCategory.COMBAT;
     }
 }

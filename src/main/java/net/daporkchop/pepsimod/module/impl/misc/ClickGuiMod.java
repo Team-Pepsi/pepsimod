@@ -18,6 +18,7 @@ package net.daporkchop.pepsimod.module.impl.misc;
 import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.clickgui.ClickGUI;
 import net.daporkchop.pepsimod.clickgui.Window;
+import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.minecraft.client.settings.KeyBinding;
@@ -64,5 +65,9 @@ public class ClickGuiMod extends Module {
     public void registerKeybind(String name, int key)   {
         this.keybind = new KeyBinding("\u00A7cOpen ClickGUI", Keyboard.KEY_RSHIFT, "key.categories.pepsimod");
         ClientRegistry.registerKeyBinding(this.keybind);
+    }
+
+    public ModuleCategory getCategory() {
+        return ModuleCategory.MISC;
     }
 }

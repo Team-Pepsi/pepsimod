@@ -15,6 +15,7 @@
 
 package net.daporkchop.pepsimod.module.impl.misc;
 
+import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 
@@ -48,5 +49,9 @@ public class AntiHungerMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[0];
+    }
+
+    public ModuleCategory getCategory() {
+        return ModuleCategory.MISC;
     }
 }

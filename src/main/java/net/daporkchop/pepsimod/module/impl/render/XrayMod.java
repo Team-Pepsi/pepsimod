@@ -16,6 +16,7 @@
 package net.daporkchop.pepsimod.module.impl.render;
 
 import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.util.PepsiUtils;
@@ -190,5 +191,9 @@ public class XrayMod extends Module {
         }
 
         super.execute(cmd, args);
+    }
+
+    public ModuleCategory getCategory() {
+        return ModuleCategory.RENDER;
     }
 }

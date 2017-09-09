@@ -13,45 +13,11 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.module.impl.render;
+package net.daporkchop.pepsimod.module;
 
-import net.daporkchop.pepsimod.module.ModuleCategory;
-import net.daporkchop.pepsimod.module.api.Module;
-import net.daporkchop.pepsimod.module.api.ModuleOption;
-
-public class NoHurtCamMod extends Module {
-    public static NoHurtCamMod INSTANCE;
-
-    public NoHurtCamMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "NoHurtCam", key, hide);
-    }
-
-    @Override
-    public void onEnable() {
-
-    }
-
-    @Override
-    public void onDisable() {
-
-    }
-
-    @Override
-    public void tick() {
-
-    }
-
-    @Override
-    public void init() {
-        INSTANCE = this;
-    }
-
-    @Override
-    public ModuleOption[] getDefaultOptions() {
-        return new ModuleOption[0];
-    }
-
-    public ModuleCategory getCategory() {
-        return ModuleCategory.RENDER;
-    }
+public enum ModuleCategory {
+    RENDER,
+    COMBAT,
+    MISC,
+    MOVEMENT
 }

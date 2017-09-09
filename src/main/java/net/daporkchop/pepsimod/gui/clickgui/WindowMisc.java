@@ -16,11 +16,12 @@
 package net.daporkchop.pepsimod.gui.clickgui;
 
 import net.daporkchop.pepsimod.clickgui.Window;
+import net.daporkchop.pepsimod.module.ModuleCategory;
 
 public class WindowMisc extends Window {
 
     public WindowMisc() {
         super(206, 2, "Misc");
-        this.init("misc");
+        this.init(ModuleCategory.MISC);
     }
 }

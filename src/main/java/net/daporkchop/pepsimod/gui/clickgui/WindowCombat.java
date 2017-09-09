@@ -16,11 +16,12 @@
 package net.daporkchop.pepsimod.gui.clickgui;
 
 import net.daporkchop.pepsimod.clickgui.Window;
+import net.daporkchop.pepsimod.module.ModuleCategory;
 
 public class WindowCombat extends Window {
 
     public WindowCombat() {
         super(104, 2, "Combat");
-        this.init("combat");
+        this.init(ModuleCategory.COMBAT);
     }
 }

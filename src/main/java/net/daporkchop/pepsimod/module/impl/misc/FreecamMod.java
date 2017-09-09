@@ -16,6 +16,7 @@
 package net.daporkchop.pepsimod.module.impl.misc;
 
 import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleLaunchState;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -99,5 +100,9 @@ public class FreecamMod extends Module {
     @Override
     public ModuleLaunchState getLaunchState() {
         return ModuleLaunchState.DISABLED;
+    }
+
+    public ModuleCategory getCategory() {
+        return ModuleCategory.MISC;
     }
 }

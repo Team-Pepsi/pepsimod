@@ -18,6 +18,7 @@ package net.daporkchop.pepsimod.module.api;
 import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.CommandRegistry;
 import net.daporkchop.pepsimod.command.api.Command;
+import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
@@ -411,4 +412,6 @@ public abstract class Module extends Command {
         this.keybind = new KeyBinding(name, key == -1 ? Keyboard.KEY_NONE : key, "key.categories.pepsimod");
         ClientRegistry.registerKeyBinding(this.keybind);
     }
+
+    public abstract ModuleCategory getCategory();
 }

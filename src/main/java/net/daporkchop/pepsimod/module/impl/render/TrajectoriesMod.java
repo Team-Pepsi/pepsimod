@@ -16,6 +16,7 @@
 package net.daporkchop.pepsimod.module.impl.render;
 
 import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.totally.not.skidded.RenderUtils;
@@ -170,5 +171,9 @@ public class TrajectoriesMod extends Module {
         GL11.glDepthMask(true);
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
         GL11.glPopMatrix();
+    }
+
+    public ModuleCategory getCategory() {
+        return ModuleCategory.RENDER;
     }
 }

@@ -30,7 +30,6 @@ import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
  * kek
  */
 public class Texture {
-
     private final ResourceLocation texture;
 
     public Texture(ResourceLocation textureURL) {

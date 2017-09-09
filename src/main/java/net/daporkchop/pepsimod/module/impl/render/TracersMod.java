@@ -16,6 +16,7 @@
 package net.daporkchop.pepsimod.module.impl.render;
 
 import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
@@ -246,5 +247,9 @@ public class TracersMod extends Module {
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
+    }
+
+    public ModuleCategory getCategory() {
+        return ModuleCategory.RENDER;
     }
 }

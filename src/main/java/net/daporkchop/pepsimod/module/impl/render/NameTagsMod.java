@@ -15,6 +15,7 @@
 
 package net.daporkchop.pepsimod.module.impl.render;
 
+import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
@@ -70,5 +71,9 @@ public class NameTagsMod extends Module {
         } else {
             return 1.0f;
         }
+    }
+
+    public ModuleCategory getCategory() {
+        return ModuleCategory.RENDER;
     }
 }

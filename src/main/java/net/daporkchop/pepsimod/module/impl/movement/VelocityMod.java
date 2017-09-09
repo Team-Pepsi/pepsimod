@@ -15,6 +15,7 @@
 
 package net.daporkchop.pepsimod.module.impl.movement;
 
+import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
@@ -84,5 +85,9 @@ public class VelocityMod extends Module {
         } else {
             return 1.0f;
         }
+    }
+
+    public ModuleCategory getCategory() {
+        return ModuleCategory.MOVEMENT;
     }
 }
