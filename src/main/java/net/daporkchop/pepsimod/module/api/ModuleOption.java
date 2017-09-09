@@ -57,20 +57,8 @@ public class ModuleOption<T> implements Serializable {
         this.displayName = displayName;
     }
 
-    public ModuleOption(ModuleOptionSave<T> option, Function<T, Boolean> set, Supplier<T> get, String displayName, OptionExtended extended, boolean makeWindow) {
-        DEFAULT_VALUE = option.getDefaultValue();
-        DEFAULT_COMPLETIONS = option.defaultCompletions();
-        SET = set;
-        GET = get;
-        this.displayName = displayName == null ? option.name : displayName;
-        this.name = option.name;
-        this.value = option.getValue();
-        this.extended = extended;
-        this.makeButton = makeButton;
-    }
-
     public String getName() {
-        return this.name;
+        return this.name == null ? this.displayName.toLowerCase() : this.name;
     }
 
     public boolean setValue(T value) {
@@ -78,7 +66,8 @@ public class ModuleOption<T> implements Serializable {
     }
 
     public T getValue() {
-        return GET.get();
+        T toReturn = GET.get();
+        return toReturn == null ? getDefaultValue() : toReturn;
     }
 
     public T getDefaultValue() {

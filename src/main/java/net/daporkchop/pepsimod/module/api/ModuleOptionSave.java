@@ -22,20 +22,14 @@ import java.io.Serializable;
  * because lambdas cannot be serialized
  */
 public class ModuleOptionSave<T> implements Serializable {
-    private final String[] DEFAULT_COMPLETIONS;
-    private final T DEFAULT_VALUE;
-    public String name;
+    final T VALUE;
 
-    public ModuleOptionSave(ModuleOption<T> option, String name) {
-        DEFAULT_COMPLETIONS = option.defaultCompletions();
-        DEFAULT_VALUE = option.getValue();
-        this.name = name;
+    public ModuleOptionSave(ModuleOption<T> option) {
+        VALUE = option.getValue();
     }
 
-    public ModuleOptionSave(ModuleOption<T> option, String name, T defaultValue) {
-        DEFAULT_COMPLETIONS = option.defaultCompletions();
-        DEFAULT_VALUE = defaultValue;
-        this.name = name;
+    public ModuleOptionSave(T defaultValue) {
+        VALUE = defaultValue;
     }
 
     public boolean setValue(T value) {
@@ -43,14 +37,6 @@ public class ModuleOptionSave<T> implements Serializable {
     }
 
     public T getValue() {
-        return DEFAULT_VALUE;
-    }
-
-    public T getDefaultValue() {
-        return DEFAULT_VALUE;
-    }
-
-    public String[] defaultCompletions() {
-        return DEFAULT_COMPLETIONS;
+        return VALUE;
     }
 }

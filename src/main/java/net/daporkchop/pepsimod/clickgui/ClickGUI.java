@@ -20,14 +20,17 @@ import net.daporkchop.pepsimod.module.impl.misc.ClickGuiMod;
 import net.minecraft.client.gui.GuiScreen;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
-public class ClickGUI extends GuiScreen {
+public class ClickGUI extends GuiScreen { //TODO: scrolling!
     public static ClickGUI INSTANCE;
-    public ArrayList<Window> windows = new ArrayList<>();
+    public Window[] windows;
 
     {
         INSTANCE = this;
+    }
+
+    public void setWindows(Window... windows) {
+        this.windows = windows;
     }
 
     protected void keyTyped(char eventChar, int eventKey) {
@@ -42,31 +45,40 @@ public class ClickGUI extends GuiScreen {
         }
     }
 
-    public void sendToFront(Window window) {
-        if (windows.contains(window)) {
-            int panelIndex = windows.indexOf(window);
-            windows.remove(panelIndex);
-            windows.add(windows.size(), window);
+    public synchronized void sendToFront(Window window) {
+        if (containsWindow(window)) {
+            int panelIndex = 0;
+            for (int i = 0; i < windows.length; i++) {
+                if (windows[i] == window) {
+                    panelIndex = i;
+                    break;
+                }
+            }
+            Window t = windows[0];
+            windows[0] = windows[panelIndex];
+            windows[panelIndex] = t;
         }
     }
 
     public void mouseClicked(int x, int y, int b) throws IOException {
-        for (Window w : windows) {
-            w.processMouseClick(x, y, b);
+        for (Window window : windows) {
+            window.processMouseClick(x, y, b);
         }
+
         super.mouseClicked(x, y, b);
     }
 
     public void mouseReleased(int x, int y, int state) {
-        for (Window w : windows) {
-            w.processMouseRelease(x, y, state);
+        for (Window window : windows) {
+            window.processMouseRelease(x, y, state);
         }
+
         super.mouseReleased(x, y, state);
     }
 
     public void drawScreen(int x, int y, float ticks) {
-        for (Window w : windows) {
-            w.draw(x, y);
+        for (Window window : windows) {
+            window.draw(x, y);
         }
 
         super.drawScreen(x, y, ticks);
@@ -74,6 +86,16 @@ public class ClickGUI extends GuiScreen {
 
     @Override
     public boolean doesGuiPauseGame() {
+        return false;
+    }
+
+    public boolean containsWindow(Window window) {
+        for (Window window1 : windows) {
+            if (window == window1) {
+                return true;
+            }
+        }
+
         return false;
     }
 }

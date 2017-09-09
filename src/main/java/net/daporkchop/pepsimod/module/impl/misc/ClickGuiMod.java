@@ -36,6 +36,7 @@ public class ClickGuiMod extends Module {
         for (Window window : ClickGUI.INSTANCE.windows) {
             window.openGui();
         }
+
         PepsiMod.INSTANCE.mc.displayGuiScreen(ClickGUI.INSTANCE);
     }
 

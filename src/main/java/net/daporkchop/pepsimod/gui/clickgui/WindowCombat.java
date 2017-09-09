@@ -20,7 +20,7 @@ import net.daporkchop.pepsimod.clickgui.Window;
 public class WindowCombat extends Window {
 
     public WindowCombat() {
-        super(2, 102, "Combat");
+        super(104, 2, "Combat");
         this.init("combat");
     }
 }

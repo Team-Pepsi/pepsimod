@@ -71,7 +71,12 @@ public class SubSlider extends EntryImplBase {
 
     public void draw(int mouseX, int mouseY) {
         if (dragging) {
-            currentWidth = PepsiUtils.ensureRange(mouseX - getX(), 0, 96);
+            currentWidth = mouseX - getX();
+            if (currentWidth < 0) {
+                currentWidth = 0;
+            } else if (currentWidth > 94) {
+                currentWidth = 94;
+            }
             updateValueFromWidth();
         }
         y = window.getRenderYButton();
@@ -84,10 +89,11 @@ public class SubSlider extends EntryImplBase {
     }
 
     public void updateValueFromWidth() {
-        float val = (currentWidth / 96);
+        float val = (currentWidth / 94f);
         val *= (getMax() - getMin());
         val += getMin();
-        val = PepsiUtils.ensureRange(PepsiUtils.round(val, getStep()), getMin(), getMax());
+        val = PepsiUtils.round(val, getStep());
+        val = PepsiUtils.ensureRange(val, getMin(), getMax());
         if (isFloat) {
             floatValue = val;
             option.setValue(val);
@@ -113,12 +119,11 @@ public class SubSlider extends EntryImplBase {
     }
 
     public int getWidthFromValue() {
-        System.out.println("processing value " + option.getName() + " of module " + parent.module.nameFull);
         float val = isFloat ? floatValue : intValue + 0.0f;
         val -= getMin();
         val /= (getMax() - getMin());
-        val *= 96;
-        return currentWidth = PepsiUtils.ensureRange((int) val, 0, 96);
+        val *= 94;
+        return currentWidth = PepsiUtils.ensureRange((int) val, 0, 94);
     }
 
     public int getX() {
@@ -160,5 +165,16 @@ public class SubSlider extends EntryImplBase {
             intValue = (int) (Object) option.getValue();
         }
         getWidthFromValue();
+    }
+
+    public String getName() {
+        return option.getName();
+    }
+
+    public boolean isOpen() {
+        return false;
+    }
+
+    public void setOpen(boolean val) {
     }
 }

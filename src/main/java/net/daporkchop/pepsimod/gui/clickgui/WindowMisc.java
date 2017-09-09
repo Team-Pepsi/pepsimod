@@ -20,7 +20,7 @@ import net.daporkchop.pepsimod.clickgui.Window;
 public class WindowMisc extends Window {
 
     public WindowMisc() {
-        super(2, 202, "Misc");
+        super(206, 2, "Misc");
         this.init("misc");
     }
 }

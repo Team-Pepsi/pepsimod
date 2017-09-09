@@ -20,7 +20,7 @@ import net.daporkchop.pepsimod.clickgui.Window;
 public class WindowMovement extends Window {
 
     public WindowMovement() {
-        super(2, 302, "Movement");
+        super(308, 2, "Movement");
         this.init("movement");
     }
 }

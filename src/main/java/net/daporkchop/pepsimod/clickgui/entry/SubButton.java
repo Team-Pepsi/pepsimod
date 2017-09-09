@@ -24,15 +24,11 @@ import net.daporkchop.pepsimod.util.colors.ColorUtils;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.function.Supplier;
 
-public class SubButton extends EntryImplBase { //TODO: sliders and multi options
+public class SubButton extends EntryImplBase {
     public final Button parent;
     public Window window;
     public ModuleOption option;
-    public Supplier<Boolean> getState = () -> {
-        return false;
-    };
 
     public SubButton(Button parent, ModuleOption option) {
         super(parent.window.getX() + 4, parent.getY() + 4, parent.window.getWidth() - 6, 12);
@@ -43,6 +39,11 @@ public class SubButton extends EntryImplBase { //TODO: sliders and multi options
 
     public void processMouseClick(int mouseX, int mouseY, int button) {
         updateIsMouseHovered(mouseX, mouseY);
+        if (isMouseHovered()) {
+            if (button == 0) {
+                option.setValue(!((boolean) option.getValue()));
+            }
+        }
     }
 
     public void processMouseRelease(int mouseX, int mouseY, int button) {
@@ -83,7 +84,7 @@ public class SubButton extends EntryImplBase { //TODO: sliders and multi options
     }
 
     public int getColor() {
-        return ColorUtils.getColorForGuiEntry(ColorUtils.TYPE_BUTTON, isMouseHovered(), getState.get());
+        return ColorUtils.getColorForGuiEntry(ColorUtils.TYPE_BUTTON, isMouseHovered(), (boolean) option.getValue());
     }
 
     public boolean shouldRender() {
@@ -92,5 +93,16 @@ public class SubButton extends EntryImplBase { //TODO: sliders and multi options
 
     public void openGui() {
 
+    }
+
+    public String getName() {
+        return option.getName();
+    }
+
+    public boolean isOpen() {
+        return false;
+    }
+
+    public void setOpen(boolean val) {
     }
 }

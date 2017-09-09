@@ -17,6 +17,7 @@ package net.daporkchop.pepsimod;
 
 import net.daporkchop.pepsimod.clickgui.ClickGUI;
 import net.daporkchop.pepsimod.clickgui.Window;
+import net.daporkchop.pepsimod.clickgui.api.IEntry;
 import net.daporkchop.pepsimod.command.CommandRegistry;
 import net.daporkchop.pepsimod.command.impl.*;
 import net.daporkchop.pepsimod.event.GuiRenderHandler;
@@ -70,6 +71,7 @@ public class PepsiMod {
     public NoWeatherSettings noWeatherSettings;
     public TracerSettings tracerSettings;
     public MiscOptions miscOptions;
+    public boolean isInitialized = false;
 
     public static void registerModules(FMLStateEvent event) {
         ModuleManager.registerModule(new NoFallMod(false, -1, false));
@@ -100,7 +102,6 @@ public class PepsiMod {
         CommandRegistry.registerCommand(new ToggleCommand());
         CommandRegistry.registerCommand(new SortModulesCommand());
         CommandRegistry.registerCommand(new SaveCommand());
-        CommandRegistry.registerCommand(new LoadCommand());
         CommandRegistry.registerCommand(new ListCommand());
     }
 
@@ -135,16 +136,30 @@ public class PepsiMod {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        new ClickGUI(); //TODO: fix
+        new ClickGUI();
         loadConfig();
         registerModules(event);
 
+        initModules();
+
+        ClickGUI.INSTANCE.setWindows(new WindowRender(), new WindowCombat(), new WindowMisc(), new WindowMovement());
+
+        for (Window window : ClickGUI.INSTANCE.windows) {
+            int[] data = dataTag.getIntegerArray(window.text + "¦window", new int[]{window.getX(), window.getY(), 0});
+            window.setX(data[0]);
+            window.setY(data[1]);
+            window.isOpen = (data[2] == 1);
+            for (IEntry entry : window.entries) {
+                data = dataTag.getIntegerArray(window.text + "¦window" + entry.getName(), new int[]{0});
+                entry.setOpen(data[0] == 1);
+            }
+        }
+
+        //save the tag in case new fields are added, this way they are saved right away
+        dataTag.save();
+
         registerCommands(event);
         initModules();
-        ClickGUI.INSTANCE.windows.add(new WindowRender());
-        ClickGUI.INSTANCE.windows.add(new WindowCombat());
-        ClickGUI.INSTANCE.windows.add(new WindowMisc());
-        ClickGUI.INSTANCE.windows.add(new WindowMovement());
     }
 
     @Mod.EventHandler
@@ -190,19 +205,7 @@ public class PepsiMod {
         noWeatherSettings = (NoWeatherSettings) dataTag.getSerializable("noweatherSettings", new NoWeatherSettings());
         tracerSettings = (TracerSettings) dataTag.getSerializable("tracerSettings", new TracerSettings());
 
-        for (Window window : ClickGUI.INSTANCE.windows) {
-            int[] data = dataTag.getIntegerArray(window.text + "¦window", new int[]{window.getX(), window.getY(), 0});
-
-            window.setX(data[0]);
-            window.setY(data[1]);
-            window.isOpen = (data[2] == 1);
-        }
-
         miscOptions = (MiscOptions) dataTag.getSerializable("miscOptions", new MiscOptions());
-
-        //save the tag in case new fields are added, this way they are saved right away
-        dataTag.save();
-        initModules();
     }
 
     public void saveConfig() {
@@ -210,13 +213,16 @@ public class PepsiMod {
             ModuleOptionSave[] options = new ModuleOptionSave[module.options.length];
             for (int i = 0; i < options.length; i++) {
                 ModuleOption option = module.options[i];
-                ModuleOptionSave save = new ModuleOptionSave(option, option.displayName);
+                ModuleOptionSave save = new ModuleOptionSave(option);
                 options[i] = save;
             }
             dataTag.setSerializableArray("settings" + module.nameFull, options);
         }
         for (Window window : ClickGUI.INSTANCE.windows) {
             dataTag.setIntegerArray(window.text + "¦window", new int[]{window.getX(), window.getY(), window.isOpen ? 1 : 0});
+            for (IEntry entry : window.entries) {
+                dataTag.setIntegerArray(window.text + "¦window" + entry.getName(), new int[]{entry.isOpen() ? 1 : 0});
+            }
         }
         dataTag.setSerializable("friends", Friends.FRIENDS);
         dataTag.setSerializable("sortType", ModuleManager.sortType);
@@ -234,36 +240,20 @@ public class PepsiMod {
     public void initModules() {
         for (Module module : ModuleManager.AVALIBLE_MODULES) {
             ModuleOption[] defaultOptions = module.defaultOptions();
-            ModuleOptionSave[] backup = new ModuleOptionSave[defaultOptions.length];
-            for (int i = 0; i < defaultOptions.length; i++) {
-                backup[i] = new ModuleOptionSave(defaultOptions[i], defaultOptions[i].getName(), defaultOptions[i].getDefaultValue());
-            }
-            module.tempOptionLoading = (ModuleOptionSave[]) dataTag.getSerializableArray("settings" + module.nameFull, backup);
-            module.options = new ModuleOption[module.tempOptionLoading.length];
-            for (int i = 0; i < module.tempOptionLoading.length; i++) {
-                module.options[i] = new ModuleOption(module.tempOptionLoading[i], defaultOptions[i].SET, defaultOptions[i].GET, defaultOptions[i].displayName, defaultOptions[i].extended, defaultOptions[i].makeButton);
-            }
-            module.tempOptionLoading = null;
-
-            if (defaultOptions.length != module.options.length) {
-                //TODO: remove by name, not by index
-                if (defaultOptions.length > module.options.length) {
-                    System.out.println("New options have been added to module: " + module.nameFull);
-                    ArrayList<ModuleOption> tempList = new ArrayList<>();
-                    for (ModuleOption option : module.options) {
-                        tempList.add(option);
+            ModuleOptionSave[] loaded = (ModuleOptionSave[]) dataTag.getSerializableArray("settings" + module.nameFull, null);
+            if (loaded == null) {
+                module.options = defaultOptions;
+            } else {
+                module.options = new ModuleOption[defaultOptions.length];
+                for (int i = 0; i < defaultOptions.length; i++) {
+                    ModuleOption defaultOption = defaultOptions[i];
+                    try {
+                        ModuleOptionSave savedValue = loaded[i];
+                        defaultOption.setValue(savedValue.getValue());
+                        module.options[i] = defaultOption;
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        module.options[i] = defaultOption;
                     }
-                    for (int i = tempList.size(); i < defaultOptions.length; i++) {
-                        tempList.add(defaultOptions[i]);
-                    }
-                    module.options = tempList.toArray(new ModuleOption[tempList.size()]);
-                } else {
-                    System.out.println("Options have been removed from module: " + module.nameFull);
-                    ArrayList<ModuleOption> tempList = new ArrayList<>();
-                    for (int i = 0; i < defaultOptions.length; i++) {
-                        tempList.add(module.options[i]);
-                    }
-                    module.options = tempList.toArray(new ModuleOption[tempList.size()]);
                 }
             }
 

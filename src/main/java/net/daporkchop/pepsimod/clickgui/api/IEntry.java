@@ -41,4 +41,10 @@ public interface IEntry {
     boolean shouldRender();
 
     void openGui();
+
+    String getName();
+
+    boolean isOpen();
+
+    void setOpen(boolean val);
 }

@@ -26,9 +26,11 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Button extends EntryImplBase {
-    public ArrayList<IEntry> subEntries = new ArrayList<>();
+    public List<IEntry> subEntries = Collections.synchronizedList(new ArrayList<IEntry>());
     public boolean isOpen = false;
     public Window window;
     public Module module;
@@ -101,5 +103,17 @@ public class Button extends EntryImplBase {
 
     public void openGui() {
 
+    }
+
+    public String getName() {
+        return module.name;
+    }
+
+    public boolean isOpen() {
+        return isOpen;
+    }
+
+    public void setOpen(boolean val) {
+        isOpen = val;
     }
 }

@@ -50,6 +50,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
 
     @Inject(method = "initGui", at = @At("RETURN"))
     public void addPepsiIconAndChangeSplash(CallbackInfo ci) {
+        PepsiMod.INSTANCE.isInitialized = true;
         if (!PepsiMod.INSTANCE.hasInitializedModules) {
             for (Module module : ModuleManager.AVALIBLE_MODULES) {
                 module.doInit();

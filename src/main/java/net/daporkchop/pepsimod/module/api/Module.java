@@ -244,7 +244,7 @@ public abstract class Module extends Command {
      * Does nothing if the module has no custom name
      */
     public void updateName() {
-        if (hasModeInName()) {
+        if (PepsiMod.INSTANCE.isInitialized && hasModeInName()) {
             text = new RainbowText(nameFull + PepsiUtils.COLOR_ESCAPE + "customa8a8a8 [" + getModeForName() + "]");
             ModuleManager.sortModules(ModuleManager.sortType);
         }

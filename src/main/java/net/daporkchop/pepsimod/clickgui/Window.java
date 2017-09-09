@@ -34,10 +34,12 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Window extends EntryImplBase {
     public final String text;
-    public ArrayList<IEntry> entries = new ArrayList<>();
+    public List<IEntry> entries = Collections.synchronizedList(new ArrayList<IEntry>());
     public boolean isOpen = false;
     private int renderYButton = 0;
     private boolean isDragging = false;
@@ -95,6 +97,7 @@ public class Window extends EntryImplBase {
         updateIsMouseHovered(mouseX, mouseY);
         renderYButton = getY();
         RenderUtilsXdolf.drawRect(getX(), getY(), getX() + getWidth(), getY() + getHeight(), getColor());
+        GL11.glColor3f(0f, 0f, 0f);
         drawString(getX() + 2, getY() + 2, text, Color.BLACK.getRGB());
         for (IEntry entry : entries) {
             if (entry.shouldRender()) {
@@ -178,12 +181,10 @@ public class Window extends EntryImplBase {
                 Module module = ModuleManager.CLASS_NAME_TO_MODULE.get(info.getName());
                 Button b = this.addButton(new Button(this, module));
                 for (ModuleOption option : module.options) {
-                    if (!option.makeButton || !(option.getName().equals("enabled") || option.getName().equals("hidden"))) {
+                    if (option.makeButton && !(option.getName().equals("enabled") || option.getName().equals("hidden"))) {
                         if (option.extended == null) {
-                            System.out.println("new subbutton: " + option.getName());
                             this.addSubButton(new SubButton(b, option));
                         } else if (option.extended.getType() == ExtensionType.TYPE_SLIDER) {
-                            System.out.println("new subslider: " + option.getName());
                             this.addSubSlider(new SubSlider(b, option));
                         } else {
                             throw new IllegalStateException("Option " + option.getName() + " uses an unsupported extension type!");
@@ -195,5 +196,17 @@ public class Window extends EntryImplBase {
             e.printStackTrace();
             FMLCommonHandler.instance().exitJava(59743, true);
         }
+    }
+
+    public String getName() {
+        return text;
+    }
+
+    public boolean isOpen() {
+        return isOpen;
+    }
+
+    public void setOpen(boolean val) {
+        isOpen = val;
     }
 }
