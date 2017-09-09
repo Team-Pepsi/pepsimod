@@ -414,6 +414,6 @@ public class PepsiUtils {
     }
 
     public static String roundFloatForSlider(float f) {
-        return String.format("%.2g", f);
+        return String.format("%.2f", f);
     }
 }

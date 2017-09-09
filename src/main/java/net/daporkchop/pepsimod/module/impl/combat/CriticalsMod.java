@@ -53,6 +53,7 @@ public class CriticalsMod extends Module {
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{new ModuleOption<>(true, "packet", OptionCompletions.BOOLEAN,
                 (value) -> {
+                    updateName();
                     PepsiMod.INSTANCE.miscOptions.criticals_packet = value;
                     return true;
                 },
