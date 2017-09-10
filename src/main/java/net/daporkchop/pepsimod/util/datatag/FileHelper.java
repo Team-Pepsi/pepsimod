@@ -15,11 +15,9 @@
 
 package net.daporkchop.pepsimod.util.datatag;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import net.minecraftforge.fml.common.FMLLog;
+
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -173,7 +171,7 @@ public class FileHelper {
         String[] lines = getFileContents(fileName);
 
         for (int i = 0; i < lines.length; i++) {
-            System.out.println("Line[" + i + "]: " + lines[i]);
+            FMLLog.log.info("Line[" + i + "]: " + lines[i]);
         }
     }
 

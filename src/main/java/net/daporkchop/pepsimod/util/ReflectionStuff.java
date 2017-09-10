@@ -24,6 +24,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.Timer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.common.FMLLog;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -49,6 +50,7 @@ public class ReflectionStuff {
             try {
                 return c.getDeclaredField(s);
             } catch (NoSuchFieldException e)    {
+                FMLLog.log.info("unable to find field: " + s);
             }
         }
 
@@ -131,9 +133,8 @@ public class ReflectionStuff {
             y_vec3d.set(vec, val);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException("wtf how");
         }
-
-        throw new IllegalStateException("wtf how");
     }
 
     public static double getMinX(AxisAlignedBB bb) {
@@ -201,9 +202,8 @@ public class ReflectionStuff {
             minX.set(bb, val);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException("wtf how");
         }
-
-        throw new IllegalStateException("wtf how");
     }
 
     public static void setMinY(AxisAlignedBB bb, double val) {
@@ -211,9 +211,8 @@ public class ReflectionStuff {
             minY.set(bb, val);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException("wtf how");
         }
-
-        throw new IllegalStateException("wtf how");
     }
 
     public static void setMinZ(AxisAlignedBB bb, double val) {
@@ -221,9 +220,8 @@ public class ReflectionStuff {
             minZ.set(bb, val);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException("wtf how");
         }
-
-        throw new IllegalStateException("wtf how");
     }
 
     public static void setMaxX(AxisAlignedBB bb, double val) {
@@ -231,9 +229,8 @@ public class ReflectionStuff {
             maxX.set(bb, val);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException("wtf how");
         }
-
-        throw new IllegalStateException("wtf how");
     }
 
     public static void setMaxY(AxisAlignedBB bb, double val) {
@@ -241,9 +238,8 @@ public class ReflectionStuff {
             maxY.set(bb, val);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException("wtf how");
         }
-
-        throw new IllegalStateException("wtf how");
     }
 
     public static void setMaxZ(AxisAlignedBB bb, double val) {
@@ -251,9 +247,8 @@ public class ReflectionStuff {
             maxZ.set(bb, val);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException("wtf how");
         }
-
-        throw new IllegalStateException("wtf how");
     }
 
     public static DataParameter<Byte> getPLAYER_MODEL_FLAG() {

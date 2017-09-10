@@ -27,7 +27,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.BossInfo;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -52,11 +51,8 @@ public abstract class MixinGuiBossOverlay extends Gui {
     @Final
     private Minecraft client;
 
-    /**
-     * this hides a stupid warning
-     */
-    @Overwrite
-    public void renderBossHealth() {
+    @Inject(method = "renderBossHealth", at = @At("HEAD"), cancellable = true)
+    public void preRenderBossHealth(CallbackInfo callbackInfo) {
         if (!this.mapBossInfos.isEmpty()) {
             ScaledResolution scaledresolution = new ScaledResolution(this.client);
             int i = scaledresolution.getScaledWidth();
@@ -75,6 +71,7 @@ public abstract class MixinGuiBossOverlay extends Gui {
                 }
             }
         }
+        callbackInfo.cancel();
     }
 
     @Shadow

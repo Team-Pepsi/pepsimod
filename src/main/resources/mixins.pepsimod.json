@@ -15,7 +15,6 @@
     "util.MixinTabCompleter",
     "entity.MixinEntity",
     "util.MixinTimer",
-    "scoreboard.MixinScoreboard",
     "block.MixinBlock",
     "client.renderer.MixinBlockFluidRenderer",
     "client.renderer.MixinBlockModelRenderer",
@@ -25,11 +24,11 @@
     "client.renderer.MixinEntityRenderer",
     "block.MixinBlockSlab",
     "client.multiplayer.MixinWorldClient",
-    "client.entity.MixinEntityPlayerSP",
     "client.entity.MixinAbstractClientPlayer",
     "client.renderer.entity.MixinRender",
     "client.gui.MixinGuiIngame",
     "client.renderer.MixinItemRenderer",
-    "world.MixinWorld"
+    "world.MixinWorld",
+    "client.network.MixinNetHandlerPlayClient"
   ]
 }

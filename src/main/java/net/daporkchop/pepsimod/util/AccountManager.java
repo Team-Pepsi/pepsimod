@@ -55,7 +55,7 @@ public class AccountManager {
             for (Field f : mc.getDeclaredFields()) {
                 if (f.getType().isInstance(s)) {
                     session = f;
-                    //System.out.println("Found field " + f.toString() + ", injecting...");
+                    //FMLLog.log.info("Found field " + f.toString() + ", injecting...");
                 }
             }
 

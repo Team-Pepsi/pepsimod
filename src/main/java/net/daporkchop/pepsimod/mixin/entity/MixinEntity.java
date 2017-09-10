@@ -24,7 +24,6 @@ import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -40,11 +39,8 @@ public abstract class MixinEntity {
     @Shadow
     public double motionZ;
 
-    /**
-     * this hides a stupid warning
-     */
-    @Overwrite
-    public void setVelocity(double x, double y, double z) {
+    @Inject(method = "setVelocity", at = @At("HEAD"), cancellable = true)
+    public void preSetVelocity(double x, double y, double z, CallbackInfo callbackInfo) {
         float strength = 1.0f;
         if (Entity.class.cast(this) == PepsiMod.INSTANCE.mc.player) {
             strength = VelocityMod.INSTANCE.getVelocity();
@@ -52,6 +48,7 @@ public abstract class MixinEntity {
         this.motionX = x * strength;
         this.motionY = y * strength;
         this.motionZ = z * strength;
+        callbackInfo.cancel();
     }
 
     @Inject(method = "move", at = @At("HEAD"))

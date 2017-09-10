@@ -16,18 +16,15 @@
 package net.daporkchop.pepsimod.mixin.client.renderer;
 
 import net.daporkchop.pepsimod.module.impl.render.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.MathHelper;
-import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.Project;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -35,6 +32,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityRenderer.class)
@@ -87,10 +85,7 @@ public abstract class MixinEntityRenderer {
 
         GlStateManager.disableLighting();
         GlStateManager.depthMask(false);
-
-        if (!isSneaking) {
-            GlStateManager.disableDepth();
-        }
+        GlStateManager.disableDepth();
 
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
@@ -105,11 +100,8 @@ public abstract class MixinEntityRenderer {
         bufferbuilder.pos((double) (i + 1), (double) (-1 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
         tessellator.draw();
         GlStateManager.enableTexture2D();
-
-        if (!isSneaking) {
-            fontRendererIn.drawString(str, -fontRendererIn.getStringWidth(str) / 2, verticalShift, 553648127);
-            GlStateManager.enableDepth();
-        }
+        fontRendererIn.drawString(str, -fontRendererIn.getStringWidth(str) / 2, verticalShift, 553648127);
+        GlStateManager.enableDepth();
 
         GlStateManager.depthMask(true);
         fontRendererIn.drawString(str, -fontRendererIn.getStringWidth(str) / 2, verticalShift, isSneaking ? 553648127 : -1);
@@ -117,10 +109,11 @@ public abstract class MixinEntityRenderer {
         GlStateManager.disableBlend();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.popMatrix();
+        //TODO: draw items in name tag
     }
 
     @Overwrite
-    private void setupCameraTransform(float partialTicks, int pass) {
+    public void setupCameraTransform(float partialTicks, int pass) {
         this.farPlaneDistance = (float) (this.mc.gameSettings.renderDistanceChunks * 16);
         GlStateManager.matrixMode(5889);
         GlStateManager.loadIdentity();
@@ -151,7 +144,7 @@ public abstract class MixinEntityRenderer {
 
         float f1 = this.mc.player.prevTimeInPortal + (this.mc.player.timeInPortal - this.mc.player.prevTimeInPortal) * partialTicks;
 
-        if (f1 > 0.0F && !AntiBlindMod.INSTANCE.isEnabled) {
+        if (f1 > 0.0F && !AntiBlindMod.INSTANCE.isEnabled) { //TODO: find way to inject this
             int i = 20;
 
             if (this.mc.player.isPotionActive(MobEffects.NAUSEA)) {
@@ -214,84 +207,13 @@ public abstract class MixinEntityRenderer {
 
     }
 
-    @Overwrite
-    private void setupFog(int startCoords, float partialTicks) {
-        Entity entity = this.mc.getRenderViewEntity();
-        this.setupFogColor(false);
-        GlStateManager.glNormal3f(0.0F, -1.0F, 0.0F);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        IBlockState iblockstate = ActiveRenderInfo.getBlockStateAtEntityViewpoint(this.mc.world, entity, partialTicks);
-        float hook = net.minecraftforge.client.ForgeHooksClient.getFogDensity(EntityRenderer.class.cast(this), entity, iblockstate, partialTicks, 0.1F);
-        if (hook >= 0) GlStateManager.setFogDensity(hook);
-        else if (entity instanceof EntityLivingBase && ((EntityLivingBase) entity).isPotionActive(MobEffects.BLINDNESS)) {
-            float f1 = 5.0F;
-            int i = ((EntityLivingBase) entity).getActivePotionEffect(MobEffects.BLINDNESS).getDuration();
-
-            if (i < 20) {
-                f1 = 5.0F + (this.farPlaneDistance - 5.0F) * (1.0F - (float) i / 20.0F);
-            }
-
-            GlStateManager.setFog(GlStateManager.FogMode.LINEAR);
-
-            if (startCoords == -1) {
-                GlStateManager.setFogStart(0.0F);
-                GlStateManager.setFogEnd(f1 * 0.8F);
-            } else {
-                GlStateManager.setFogStart(f1 * 0.25F);
-                GlStateManager.setFogEnd(f1);
-            }
-
-            if (GLContext.getCapabilities().GL_NV_fog_distance) {
-                GlStateManager.glFogi(34138, 34139);
-            }
-        } else if (this.cloudFog) {
-            GlStateManager.setFog(GlStateManager.FogMode.EXP);
-            GlStateManager.setFogDensity(0.1F);
-        } else if (iblockstate.getMaterial() == Material.WATER) {
-            GlStateManager.setFog(GlStateManager.FogMode.EXP);
-
-            if (entity instanceof EntityLivingBase) {
-                if (NoOverlayMod.INSTANCE.isEnabled || ((EntityLivingBase) entity).isPotionActive(MobEffects.WATER_BREATHING)) {
-                    GlStateManager.setFogDensity(0.01F);
-                } else {
-                    GlStateManager.setFogDensity(0.1F - (float) EnchantmentHelper.getRespirationModifier((EntityLivingBase) entity) * 0.03F);
-                }
-            } else {
-                GlStateManager.setFogDensity(0.1F);
-            }
-        } else if (iblockstate.getMaterial() == Material.LAVA) {
-            if (NoOverlayMod.INSTANCE.isEnabled) {
-                GlStateManager.setFogDensity(0.01f);
-            } else {
-                GlStateManager.setFog(GlStateManager.FogMode.EXP);
-                GlStateManager.setFogDensity(2.0F);
-            }
+    @Redirect(method = "setupFog", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;setFogDensity(F)V"))
+    public void changeFog(float density) {
+        if (NoOverlayMod.INSTANCE.isEnabled) {
+            GlStateManager.setFogDensity(0.01f);
         } else {
-            float f = this.farPlaneDistance;
-            GlStateManager.setFog(GlStateManager.FogMode.LINEAR);
-
-            if (startCoords == -1) {
-                GlStateManager.setFogStart(0.0F);
-                GlStateManager.setFogEnd(f);
-            } else {
-                GlStateManager.setFogStart(f * 0.75F);
-                GlStateManager.setFogEnd(f);
-            }
-
-            if (GLContext.getCapabilities().GL_NV_fog_distance) {
-                GlStateManager.glFogi(34138, 34139);
-            }
-
-            if (this.mc.world.provider.doesXZShowFog((int) entity.posX, (int) entity.posZ) || this.mc.ingameGUI.getBossOverlay().shouldCreateFog()) {
-                GlStateManager.setFogStart(f * 0.05F);
-                GlStateManager.setFogEnd(Math.min(f, 192.0F) * 0.5F);
-            }
-            net.minecraftforge.client.ForgeHooksClient.onFogRender(EntityRenderer.class.cast(this), entity, iblockstate, partialTicks, startCoords, f);
+            GlStateManager.setFogDensity(density);
         }
-
-        GlStateManager.enableColorMaterial();
-        GlStateManager.enableFog();
-        GlStateManager.colorMaterial(1028, 4608);
     }
 
     @Shadow

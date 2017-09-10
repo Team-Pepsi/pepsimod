@@ -24,7 +24,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -36,12 +35,16 @@ public abstract class MixinBlock extends net.minecraftforge.registries.IForgeReg
      */
     public int pepsimod_id = 0;
 
-    @Overwrite
-    public boolean isFullCube(IBlockState state) {
+    @Inject(method = "isFullCube", at = @At("HEAD"), cancellable = true)
+    public void preIsFullCube(IBlockState state, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (XrayMod.INSTANCE.isEnabled) {
-            return XrayUtils.isTargeted(Block.class.cast(this));
+            callbackInfoReturnable.setReturnValue(XrayUtils.isTargeted(Block.class.cast(this)));
+            return;
         }
-        return FreecamMod.INSTANCE.isEnabled;
+        if (FreecamMod.INSTANCE.isEnabled) {
+            callbackInfoReturnable.setReturnValue(false);
+            return;
+        }
         //TODO: add some other modules so i can put stuff here
         //https://github.com/Wurst-Imperium/Wurst-MC-1.12/blob/979c016f60f19b158c35d3c48956208c6840ac38/patch/minecraft.patch#L167-L168
     }

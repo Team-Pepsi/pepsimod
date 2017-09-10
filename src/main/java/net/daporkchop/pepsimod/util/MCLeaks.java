@@ -27,6 +27,7 @@ import net.minecraft.network.login.client.CPacketEncryptionResponse;
 import net.minecraft.network.login.server.SPacketEncryptionRequest;
 import net.minecraft.util.CryptManager;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fml.common.FMLLog;
 
 import javax.annotation.Nullable;
 import javax.crypto.SecretKey;
@@ -73,11 +74,11 @@ public class MCLeaks {
                     "\"serverhash\": \"" + serverhash + "\", \"server\": " +
                     "\"" + (Minecraft.getMinecraft().getCurrentServerData().serverIP.split(":").length == 1 ? Minecraft.getMinecraft().getCurrentServerData().serverIP + ":25565" : Minecraft.getMinecraft().getCurrentServerData().serverIP) + "\" }";
 
-            System.out.println(request);
+            FMLLog.log.info(request);
 
             String result = HTTPUtils.performPostRequest(joinUrl, request, "application/json");
 
-            System.out.println(result);
+            FMLLog.log.info(result);
 
             JsonObject json = (new JsonParser()).parse(result).getAsJsonObject();
             if (!json.get("success").getAsBoolean()) {

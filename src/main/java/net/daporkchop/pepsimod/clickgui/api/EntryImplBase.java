@@ -32,7 +32,7 @@ public abstract class EntryImplBase implements IEntry {
     }
 
     public static void drawString(int x, int y, String text, int color) {
-        //System.out.println("Drawing string: " + text + " at " + x + "," + y + " with color " + color);
+        //FMLLog.log.info("Drawing string: " + text + " at " + x + "," + y + " with color " + color);
         PepsiMod.INSTANCE.mc.fontRenderer.drawString(text, x, y, color, false);
     }
 

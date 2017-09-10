@@ -30,9 +30,6 @@ public abstract class MixinCPacketPlayer {
     @Shadow
     protected boolean onGround;
 
-    /**
-     * this hides a stupid warning
-     */
     @Overwrite
     public void writePacketData(PacketBuffer buf) throws IOException {
         if (NoFallMod.NO_FALL && AntiHungerMod.ANTI_HUNGER) {

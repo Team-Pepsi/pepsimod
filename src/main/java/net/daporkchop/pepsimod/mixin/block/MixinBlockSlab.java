@@ -20,8 +20,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.state.IBlockState;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BlockSlab.class)
 public abstract class MixinBlockSlab extends Block {
@@ -32,8 +34,11 @@ public abstract class MixinBlockSlab extends Block {
     @Shadow
     public abstract boolean isDouble();
 
-    @Overwrite
-    public boolean isFullCube(IBlockState state) {
-        return this.isDouble() && !FreecamMod.INSTANCE.isEnabled;
+    @Inject(method = "isFullCube", at = @At("HEAD"), cancellable = true)
+    public void preIsFullCube(IBlockState state, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
+        if (FreecamMod.INSTANCE.isEnabled) {
+            callbackInfoReturnable.setReturnValue(false);
+            return;
+        }
     }
 }
