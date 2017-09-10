@@ -13,14 +13,30 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.util.colors;
+package net.daporkchop.pepsimod.event;
 
-import net.minecraft.client.gui.Gui;
+import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.misc.TickRate;
+import net.daporkchop.pepsimod.module.ModuleManager;
+import net.daporkchop.pepsimod.module.api.Module;
+import net.daporkchop.pepsimod.module.impl.misc.HUDMod;
+import net.daporkchop.pepsimod.util.BetterScaledResolution;
+import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
+import net.daporkchop.pepsimod.util.module.HUDSettings;
+import net.minecraft.client.gui.GuiIngame;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
-public abstract class ColorizedText {
-    public abstract int width();
+import java.awt.*;
 
-    public abstract void drawAtPos(Gui screen, int x, int y);
+public class MiscEventHandler {
+    public static MiscEventHandler INSTANCE;
 
-    public abstract String getRawText();
+    @SubscribeEvent
+    public void onDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event)  {
+        HUDMod.INSTANCE.serverBrand = "";
+    }
 }

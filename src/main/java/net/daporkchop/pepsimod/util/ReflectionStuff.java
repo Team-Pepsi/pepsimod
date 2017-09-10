@@ -44,6 +44,7 @@ public class ReflectionStuff {
     public static Field y_vec3d;
     public static Field timer;
     public static Field boundingBox;
+    public static Field fpsCounter;
 
     public static Field getField(Class c, String... names)   {
         for (String s : names)  {
@@ -76,6 +77,7 @@ public class ReflectionStuff {
             y_vec3d = getField(Vec3d.class, "y", "field_72448_b", "c");
             timer = getField(Minecraft.class, "timer", "field_71428_T", "Y");
             boundingBox = getField(Entity.class, "boundingBox", "field_70121_D", "av");
+            fpsCounter = getField(Minecraft.class, "fpsCounter", "field_71420_M", "aW");
 
             renderPosX.setAccessible(true);
             modifiersField.setInt(renderPosX, renderPosX.getModifiers() & ~Modifier.FINAL);
@@ -103,9 +105,21 @@ public class ReflectionStuff {
             modifiersField.setInt(y_vec3d, y_vec3d.getModifiers() & ~Modifier.FINAL);
             timer.setAccessible(true);
             modifiersField.setInt(timer, timer.getModifiers() & ~Modifier.FINAL);
+            fpsCounter.setAccessible(true);
+            modifiersField.setInt(fpsCounter, fpsCounter.getModifiers() & ~Modifier.FINAL);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static int getFpsCounter()   {
+        try {
+            return (int) fpsCounter.get(PepsiMod.INSTANCE.mc);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        throw new IllegalStateException("wtf how");
     }
 
     public static AxisAlignedBB getBoundingBox(Entity entity) {

@@ -21,6 +21,7 @@ import net.daporkchop.pepsimod.clickgui.api.IEntry;
 import net.daporkchop.pepsimod.command.CommandRegistry;
 import net.daporkchop.pepsimod.command.impl.*;
 import net.daporkchop.pepsimod.event.GuiRenderHandler;
+import net.daporkchop.pepsimod.event.MiscEventHandler;
 import net.daporkchop.pepsimod.gui.clickgui.WindowCombat;
 import net.daporkchop.pepsimod.gui.clickgui.WindowMisc;
 import net.daporkchop.pepsimod.gui.clickgui.WindowMovement;
@@ -72,6 +73,7 @@ public class PepsiMod {
     public TracerSettings tracerSettings;
     public MiscOptions miscOptions;
     public boolean isInitialized = false;
+    public HUDSettings hudSettings;
 
     public static void registerModules(FMLStateEvent event) {
         ModuleManager.registerModule(new NoFallMod(false, -1, false));
@@ -173,6 +175,7 @@ public class PepsiMod {
             }
         }
         MinecraftForge.EVENT_BUS.register(new GuiRenderHandler());
+        MinecraftForge.EVENT_BUS.register(new MiscEventHandler());
         PepsiUtils.timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -204,6 +207,7 @@ public class PepsiMod {
         FreecamMod.SPEED = dataTag.getFloat("Freecam_speed", 1.0f);
         noWeatherSettings = (NoWeatherSettings) dataTag.getSerializable("noweatherSettings", new NoWeatherSettings());
         tracerSettings = (TracerSettings) dataTag.getSerializable("tracerSettings", new TracerSettings());
+        hudSettings = (HUDSettings) dataTag.getSerializable("hudSettings", new HUDSettings());
 
         miscOptions = (MiscOptions) dataTag.getSerializable("miscOptions", new MiscOptions());
     }
@@ -234,6 +238,7 @@ public class PepsiMod {
         dataTag.setSerializable("noweatherSettings", noWeatherSettings);
         dataTag.setSerializable("tracerSettings", tracerSettings);
         dataTag.setSerializable("miscOptions", miscOptions);
+        dataTag.setSerializable("hudSettings", hudSettings);
         dataTag.save();
     }
 

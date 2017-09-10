@@ -43,7 +43,9 @@ public class ClickGuiMod extends Module {
 
     @Override
     public void onDisable() {
-
+        if (PepsiMod.INSTANCE.mc.currentScreen instanceof ClickGUI) {
+            PepsiMod.INSTANCE.mc.displayGuiScreen(null);
+        }
     }
 
     @Override
