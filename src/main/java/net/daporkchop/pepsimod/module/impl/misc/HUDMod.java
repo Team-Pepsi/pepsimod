@@ -224,25 +224,6 @@ public class HUDMod extends Module {
         return ModuleCategory.MISC;
     }
 
-    public static String getFacingString()  {
-        Entity entity = PepsiMod.INSTANCE.mc.getRenderViewEntity();
-        EnumFacing enumfacing = entity.getHorizontalFacing();
-        String s = "Invalid";
-
-        switch (enumfacing)
-        {
-            case NORTH:
-                s = "-Z";
-                break;
-            case SOUTH:
-                s = "+Z";
-                break;
-            case WEST:
-                s = "-X";
-                break;
-            case EAST:
-                s = "+X";
-        }
-        return s;
+    public void registerKeybind(String name, int key) {
     }
 }

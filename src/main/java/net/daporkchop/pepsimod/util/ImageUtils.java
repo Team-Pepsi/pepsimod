@@ -32,7 +32,8 @@ public class ImageUtils {
     public static String[] names = new String[]{
             "gui/pepsibuttons.png",
             "gui/pepsimod.png",
-            "gui/pepsimodBackground.png"
+            "gui/pepsimodBackground.png",
+            "misc/cape.png"
     };
 
     public static void init(HashMap<String, byte[]> images) {

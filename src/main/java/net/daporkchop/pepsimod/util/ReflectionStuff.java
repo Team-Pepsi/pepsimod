@@ -44,14 +44,30 @@ public class ReflectionStuff {
     public static Field y_vec3d;
     public static Field timer;
     public static Field boundingBox;
-    public static Field fpsCounter;
+    public static Field debugFps;
+
+    private static Field modifiersField;
+
+    static {
+        try {
+            modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+        } catch (Exception e)   {
+            //impossable!
+        }
+    }
 
     public static Field getField(Class c, String... names)   {
         for (String s : names)  {
             try {
-                return c.getDeclaredField(s);
+                Field f = c.getDeclaredField(s);
+                f.setAccessible(true);
+                modifiersField.setInt(f, f.getModifiers() & ~Modifier.FINAL);
+                return f;
             } catch (NoSuchFieldException e)    {
                 FMLLog.log.info("unable to find field: " + s);
+            } catch (IllegalAccessException e)  {
+                FMLLog.log.info("unable to make field changeable!");
             }
         }
 
@@ -60,9 +76,6 @@ public class ReflectionStuff {
 
     public static void init() {
         try {
-            Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-
             renderPosX = getField(RenderManager.class, "renderPosX", "field_78725_b", "o");
             renderPosY = getField(RenderManager.class, "renderPosY", "field_78726_c", "p");
             renderPosZ = getField(RenderManager.class, "renderPosZ", "field_78723_d", "q");
@@ -77,44 +90,15 @@ public class ReflectionStuff {
             y_vec3d = getField(Vec3d.class, "y", "field_72448_b", "c");
             timer = getField(Minecraft.class, "timer", "field_71428_T", "Y");
             boundingBox = getField(Entity.class, "boundingBox", "field_70121_D", "av");
-            fpsCounter = getField(Minecraft.class, "fpsCounter", "field_71420_M", "aW");
-
-            renderPosX.setAccessible(true);
-            modifiersField.setInt(renderPosX, renderPosX.getModifiers() & ~Modifier.FINAL);
-            renderPosY.setAccessible(true);
-            modifiersField.setInt(renderPosY, renderPosY.getModifiers() & ~Modifier.FINAL);
-            renderPosZ.setAccessible(true);
-            modifiersField.setInt(renderPosZ, renderPosZ.getModifiers() & ~Modifier.FINAL);
-            sleeping.setAccessible(true);
-            modifiersField.setInt(sleeping, sleeping.getModifiers() & ~Modifier.FINAL);
-            PLAYER_MODEL_FLAG.setAccessible(true);
-            modifiersField.setInt(PLAYER_MODEL_FLAG, PLAYER_MODEL_FLAG.getModifiers() & ~Modifier.FINAL);
-            minX.setAccessible(true);
-            modifiersField.setInt(minX, minX.getModifiers() & ~Modifier.FINAL);
-            minY.setAccessible(true);
-            modifiersField.setInt(minY, minY.getModifiers() & ~Modifier.FINAL);
-            minZ.setAccessible(true);
-            modifiersField.setInt(minZ, minZ.getModifiers() & ~Modifier.FINAL);
-            maxX.setAccessible(true);
-            modifiersField.setInt(maxX, maxX.getModifiers() & ~Modifier.FINAL);
-            maxY.setAccessible(true);
-            modifiersField.setInt(maxY, maxY.getModifiers() & ~Modifier.FINAL);
-            maxZ.setAccessible(true);
-            modifiersField.setInt(maxZ, maxZ.getModifiers() & ~Modifier.FINAL);
-            y_vec3d.setAccessible(true);
-            modifiersField.setInt(y_vec3d, y_vec3d.getModifiers() & ~Modifier.FINAL);
-            timer.setAccessible(true);
-            modifiersField.setInt(timer, timer.getModifiers() & ~Modifier.FINAL);
-            fpsCounter.setAccessible(true);
-            modifiersField.setInt(fpsCounter, fpsCounter.getModifiers() & ~Modifier.FINAL);
+            debugFps = getField(Minecraft.class, "debugFPS", "field_71470_ab", "ar");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static int getFpsCounter()   {
+    public static int getDebugFps()   {
         try {
-            return (int) fpsCounter.get(PepsiMod.INSTANCE.mc);
+            return (int) debugFps.get(null);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -21,10 +21,14 @@ import net.minecraft.client.gui.Gui;
 public class GradientText extends ColorizedText {
     public final FixedColorElement[] elements;
     public final int width;
+    public String text = "";
 
     public GradientText(FixedColorElement[] elements, int width) {
         this.elements = elements;
         this.width = width;
+        for (FixedColorElement element : elements)  {
+            text += element.text;
+        }
     }
 
     public void drawAtPos(Gui screen, int x, int y) {
@@ -48,5 +52,9 @@ public class GradientText extends ColorizedText {
 
     public int width() {
         return width;
+    }
+
+    public String getRawText() {
+        return text;
     }
 }

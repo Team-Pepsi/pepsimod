@@ -24,7 +24,7 @@ public class KeyRegistry {
     @SubscribeEvent
     public void onKeyPress(InputEvent.KeyInputEvent event) {
         for (Module module : ModuleManager.AVALIBLE_MODULES) {
-            if (module.keybind.isPressed()) {
+            if (module.keybind != null && module.keybind.isPressed()) {
                 ModuleManager.toggleModule(module);
             }
         }

@@ -88,4 +88,8 @@ public class RainbowText extends ColorizedText {
     public int width() {
         return width;
     }
+
+    public String getRawText() {
+        return text;
+    }
 }

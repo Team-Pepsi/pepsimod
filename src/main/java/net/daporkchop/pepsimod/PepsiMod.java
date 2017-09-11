@@ -96,6 +96,7 @@ public class PepsiMod {
         ModuleManager.registerModule(new TrajectoriesMod(false, -1, false));
         ModuleManager.registerModule(new TracersMod(false, -1, false));
         ModuleManager.registerModule(new ClickGuiMod(false, Keyboard.KEY_RSHIFT, false));
+        ModuleManager.registerModule(new HUDMod(true, -1, true));
     }
 
     public static void registerCommands(FMLStateEvent event) {
