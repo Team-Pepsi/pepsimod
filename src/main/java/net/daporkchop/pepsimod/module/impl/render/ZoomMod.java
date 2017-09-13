@@ -13,49 +13,57 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.module.impl.misc;
+package net.daporkchop.pepsimod.module.impl.render;
 
 import net.daporkchop.pepsimod.PepsiMod;
-import net.daporkchop.pepsimod.clickgui.ClickGUI;
-import net.daporkchop.pepsimod.clickgui.Window;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import org.lwjgl.input.Keyboard;
 
-public class ClickGuiMod extends Module {
-    public static ClickGuiMod INSTANCE;
+public class ZoomMod extends Module {
+    public static ZoomMod INSTANCE;
+    public float fov = -1f;
 
-    public ClickGuiMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "ClickGUI", key, true);
+    {
+        INSTANCE = this;
+    }
+
+    public ZoomMod(boolean isEnabled, int key, boolean hide) {
+        super(false, "Zoom", key, true);
     }
 
     @Override
     public void onEnable() {
-        for (Window window : ClickGUI.INSTANCE.windows) {
-            window.openGui();
+        if (fov == -1f || PepsiMod.INSTANCE.mc.gameSettings.fovSetting == fov) {
+            fov = PepsiMod.INSTANCE.mc.gameSettings.fovSetting;
         }
-
-        PepsiMod.INSTANCE.mc.displayGuiScreen(ClickGUI.INSTANCE);
     }
 
     @Override
     public void onDisable() {
-        if (PepsiMod.INSTANCE.mc.currentScreen instanceof ClickGUI) {
-            PepsiMod.INSTANCE.mc.displayGuiScreen(null);
-        }
+
     }
 
     @Override
     public void tick() {
-
+        if (this.isEnabled) {
+            if (PepsiMod.INSTANCE.mc.gameSettings.fovSetting > 12f) {
+                for (int i = 0; i < 100; i++) {
+                    if (PepsiMod.INSTANCE.mc.gameSettings.fovSetting > 12f) {
+                        PepsiMod.INSTANCE.mc.gameSettings.fovSetting -= 0.1f;
+                    }
+                }
+            }
+        } else if (PepsiMod.INSTANCE.mc.gameSettings.fovSetting < fov) {
+            for (int i = 0; i < 100; i++) {
+                PepsiMod.INSTANCE.mc.gameSettings.fovSetting += 0.1F;
+            }
+        }
     }
 
     @Override
     public void init() {
-        INSTANCE = this;
+
     }
 
     @Override
@@ -64,12 +72,16 @@ public class ClickGuiMod extends Module {
     }
 
     @Override
-    public void registerKeybind(String name, int key)   {
-        this.keybind = new KeyBinding("\u00A7cOpen ClickGUI", Keyboard.KEY_RSHIFT, "key.categories.pepsimod");
-        ClientRegistry.registerKeyBinding(this.keybind);
+    public boolean shouldTick() {
+        return true;
     }
 
     public ModuleCategory getCategory() {
-        return ModuleCategory.MISC;
+        return ModuleCategory.RENDER;
+    }
+
+    @Override
+    public Boolean forceState() {
+        return false;
     }
 }

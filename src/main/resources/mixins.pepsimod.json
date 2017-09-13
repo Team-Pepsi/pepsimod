@@ -29,6 +29,7 @@
     "client.gui.MixinGuiIngame",
     "client.renderer.MixinItemRenderer",
     "world.MixinWorld",
-    "client.network.MixinNetHandlerPlayClient"
+    "client.network.MixinNetHandlerPlayClient",
+    "client.settings.MixinGameSettings"
   ]
 }

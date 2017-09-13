@@ -23,19 +23,17 @@ public class HUDSettings implements Serializable {
     public boolean drawLogo = true;  //
     public boolean arrayList = true; //
     public boolean TPS = false;      //
-    public boolean coords = false;
-    public boolean netherCoords = false;
+    public boolean coords = false;//
+    public boolean netherCoords = false;//
     public boolean arrayListTop = true;//
     public boolean serverBrand = false;
-    public boolean rainbow = true;
-    public int r = 0;
-    public int g = 0;
-    public int b = 0;
-    public boolean direction = true;
+    public boolean rainbow = true;//
+    public int r = 0;//
+    public int g = 0;//
+    public int b = 0;//
+    public boolean direction = true;//
     public boolean armor = false;
-    public boolean effects = false;
-    public boolean liquidVision = false;
-    public boolean capes = true;
+    public boolean effects = false;//
     public boolean fps = true;//
     public boolean ping = true;//
 

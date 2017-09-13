@@ -35,6 +35,7 @@ import net.daporkchop.pepsimod.module.api.ModuleSortType;
 import net.daporkchop.pepsimod.module.impl.combat.AuraMod;
 import net.daporkchop.pepsimod.module.impl.combat.CriticalsMod;
 import net.daporkchop.pepsimod.module.impl.misc.*;
+import net.daporkchop.pepsimod.module.impl.movement.ElytraFlyMod;
 import net.daporkchop.pepsimod.module.impl.movement.VelocityMod;
 import net.daporkchop.pepsimod.module.impl.render.*;
 import net.daporkchop.pepsimod.util.*;
@@ -74,6 +75,7 @@ public class PepsiMod {
     public MiscOptions miscOptions;
     public boolean isInitialized = false;
     public HUDSettings hudSettings;
+    public ElytraFlySettings elytraFlySettings;
 
     public static void registerModules(FMLStateEvent event) {
         ModuleManager.registerModule(new NoFallMod(false, -1, false));
@@ -97,6 +99,8 @@ public class PepsiMod {
         ModuleManager.registerModule(new TracersMod(false, -1, false));
         ModuleManager.registerModule(new ClickGuiMod(false, Keyboard.KEY_RSHIFT, false));
         ModuleManager.registerModule(new HUDMod(true, -1, true));
+        ModuleManager.registerModule(new ZoomMod(false, -1, true));
+        ModuleManager.registerModule(new ElytraFlyMod(false, -1, false));
     }
 
     public static void registerCommands(FMLStateEvent event) {
@@ -106,6 +110,8 @@ public class PepsiMod {
         CommandRegistry.registerCommand(new SortModulesCommand());
         CommandRegistry.registerCommand(new SaveCommand());
         CommandRegistry.registerCommand(new ListCommand());
+        CommandRegistry.registerCommand(new InvSeeCommand());
+        CommandRegistry.registerCommand(new PeekCommand());
     }
 
     /**
@@ -209,6 +215,7 @@ public class PepsiMod {
         noWeatherSettings = (NoWeatherSettings) dataTag.getSerializable("noweatherSettings", new NoWeatherSettings());
         tracerSettings = (TracerSettings) dataTag.getSerializable("tracerSettings", new TracerSettings());
         hudSettings = (HUDSettings) dataTag.getSerializable("hudSettings", new HUDSettings());
+        elytraFlySettings = (ElytraFlySettings) dataTag.getSerializable("elytraFlySettings", new ElytraFlySettings());
 
         miscOptions = (MiscOptions) dataTag.getSerializable("miscOptions", new MiscOptions());
     }
@@ -240,6 +247,7 @@ public class PepsiMod {
         dataTag.setSerializable("tracerSettings", tracerSettings);
         dataTag.setSerializable("miscOptions", miscOptions);
         dataTag.setSerializable("hudSettings", hudSettings);
+        dataTag.setSerializable("elytraFlySettings", elytraFlySettings);
         dataTag.save();
     }
 
@@ -263,10 +271,11 @@ public class PepsiMod {
                 }
             }
 
-            module.getOptionByName("enabled")
-                    .setValue(Module.shouldBeEnabled(
-                            (boolean) module.getOptionByName("enabled").getValue(),
-                            module.getLaunchState()));
+            if (module.forceState() == null) {
+                module.getOptionByName("enabled").setValue(Module.shouldBeEnabled((boolean) module.getOptionByName("enabled").getValue(), module.getLaunchState()));
+            } else {
+                module.getOptionByName("enabled").setValue(module.forceState());
+            }
             if (((boolean) module.getOptionByName("enabled").getValue())) {
                 ModuleManager.enableModule(module);
             } else {

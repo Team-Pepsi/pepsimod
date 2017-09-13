@@ -26,6 +26,8 @@ import net.daporkchop.pepsimod.util.module.TargetBone;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Vector3d;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -49,14 +51,7 @@ public class PepsiUtils {
     public static final String[] colorCodes = new String[]{"c", "9", "f", "1", "4"};
     public static final Timer timer = new Timer();
     public static final ServerData TOOBEETOOTEE_DATA = new ServerData("toobeetootee", "2b2t.org", false);
-    private static final Random random = new Random(System.currentTimeMillis());
-    public static String buttonPrefix = COLOR_ESCAPE + "c";
-    public static RainbowCycle rainbowCycle = new RainbowCycle();
-    public static Color RAINBOW_COLOR = new Color(0, 0, 0);
-    public static RainbowText PEPSI_NAME = new RainbowText("PepsiMod " + PepsiMod.VERSION);
-    public static Field block_pepsimod_id = null;
-
-    public static final String[] PEPSI_MEMBERS = new String[] {
+    public static final String[] PEPSI_MEMBERS = new String[]{
             "8f8cef60-1f3a-4778-849d-5dab58c46639",
             "a4f77739-d15e-4dc2-b957-219a2f6f9244",
             "2f8731ca-c2a7-454e-85b6-6d072ed199c1",
@@ -91,6 +86,12 @@ public class PepsiUtils {
             "4495eebb-7a4e-43aa-9784-02ea86f705ed",
             "1e8c7d13-9118-41e2-b334-fdb213970135"
     };
+    private static final Random random = new Random(System.currentTimeMillis());
+    public static String buttonPrefix = COLOR_ESCAPE + "c";
+    public static RainbowCycle rainbowCycle = new RainbowCycle();
+    public static Color RAINBOW_COLOR = new Color(0, 0, 0);
+    public static RainbowText PEPSI_NAME = new RainbowText("PepsiMod " + PepsiMod.VERSION);
+    public static Field block_pepsimod_id = null;
 
     static {
         TOOBEETOOTEE_DATA.setResourceMode(ServerData.ServerResourceMode.PROMPT);
@@ -480,13 +481,36 @@ public class PepsiUtils {
         return s;
     }
 
-    public static boolean isPepsimodPlayer(String uuid)    {
-        for (String s : PEPSI_MEMBERS)  {
+    public static boolean isPepsimodPlayer(String uuid) {
+        for (String s : PEPSI_MEMBERS) {
             if (s.equals(uuid)) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    public static void renderItem(int x, int y, float partialTicks, EntityPlayer player, ItemStack stack) {
+        if (!stack.isEmpty()) {
+            GlStateManager.pushMatrix();
+            RenderHelper.enableGUIStandardItemLighting();
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            try {
+                GlStateManager.translate(0.0F, 0.0F, 32.0F);
+                PepsiMod.INSTANCE.mc.getRenderItem().zLevel = 200F;
+                PepsiMod.INSTANCE.mc.getRenderItem().renderItemAndEffectIntoGUI(stack, x, y);
+                PepsiMod.INSTANCE.mc.getRenderItem().renderItemOverlayIntoGUI(PepsiMod.INSTANCE.mc.fontRenderer, stack, x, y, "");
+                PepsiMod.INSTANCE.mc.getRenderItem().zLevel = 0F;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            RenderHelper.disableStandardItemLighting();
+            GlStateManager.popMatrix();
+        }
+    }
+
+    public static ItemStack getWearingArmor(int armorType) {
+        return PepsiMod.INSTANCE.mc.player.inventoryContainer.getSlot(5 + armorType).getStack();
     }
 }

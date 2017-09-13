@@ -13,31 +13,29 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.mixin.client.gui;
+package net.daporkchop.pepsimod.module.api;
 
-import net.daporkchop.pepsimod.PepsiMod;
-import net.daporkchop.pepsimod.module.impl.render.NoOverlayMod;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiIngame;
-import net.minecraft.client.gui.ScaledResolution;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+public abstract class TimeModule extends Module {
+    public long currentMS = 0L;
+    public long lastMS = -1L;
 
-@Mixin(GuiIngame.class)
-public abstract class MixinGuiIngame extends Gui {
-    @Inject(method = "renderPumpkinOverlay", at = @At("HEAD"), cancellable = true)
-    protected void preRenderPumpkinOverlay(ScaledResolution scaledRes, CallbackInfo callbackInfo) {
-        if (NoOverlayMod.INSTANCE.isEnabled) {
-            callbackInfo.cancel();
-        }
+    public TimeModule(boolean enabled, String name, int key, boolean hide) {
+        super(enabled, name, key, hide);
     }
 
-    @Inject(method = "renderPotionEffects", at = @At("HEAD"), cancellable = true)
-    public void prerenderPotionEffects(ScaledResolution resolution, CallbackInfo callbackInfo) {
-        if (!PepsiMod.INSTANCE.hudSettings.effects) {
-            callbackInfo.cancel();
-        }
+    public final void updateMS() {
+        currentMS = System.currentTimeMillis();
+    }
+
+    public final void updateLastMS() {
+        lastMS = System.currentTimeMillis();
+    }
+
+    public final boolean hasTimePassedM(long MS) {
+        return currentMS >= lastMS + MS;
+    }
+
+    public final boolean hasTimePassedS(float speed) {
+        return currentMS >= lastMS + (long) (1000 / speed);
     }
 }

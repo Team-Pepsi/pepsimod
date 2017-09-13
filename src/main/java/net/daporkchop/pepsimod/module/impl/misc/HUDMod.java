@@ -16,21 +16,15 @@
 package net.daporkchop.pepsimod.module.impl.misc;
 
 import net.daporkchop.pepsimod.PepsiMod;
-import net.daporkchop.pepsimod.clickgui.ClickGUI;
-import net.daporkchop.pepsimod.clickgui.Window;
 import net.daporkchop.pepsimod.module.ModuleCategory;
+import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.Entity;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketCustomPayload;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import org.lwjgl.input.Keyboard;
 
 public class HUDMod extends Module {
     public static HUDMod INSTANCE;
@@ -122,6 +116,9 @@ public class HUDMod extends Module {
                 new ModuleOption<>(PepsiMod.INSTANCE.hudSettings.rainbow, "rainbow", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.hudSettings.rainbow = value;
+                            for (Module module : ModuleManager.AVALIBLE_MODULES) {
+                                module.updateName();
+                            }
                             return true;
                         },
                         () -> {
@@ -151,22 +148,6 @@ public class HUDMod extends Module {
                         () -> {
                             return PepsiMod.INSTANCE.hudSettings.effects;
                         }, "Effects"),
-                new ModuleOption<>(PepsiMod.INSTANCE.hudSettings.liquidVision, "liquid_vision", OptionCompletions.BOOLEAN,
-                        (value) -> {
-                            PepsiMod.INSTANCE.hudSettings.liquidVision = value;
-                            return true;
-                        },
-                        () -> {
-                            return PepsiMod.INSTANCE.hudSettings.liquidVision;
-                        }, "LiquidVision"),
-                new ModuleOption<>(PepsiMod.INSTANCE.hudSettings.capes, "capes", OptionCompletions.BOOLEAN,
-                        (value) -> {
-                            PepsiMod.INSTANCE.hudSettings.capes = value;
-                            return true;
-                        },
-                        () -> {
-                            return PepsiMod.INSTANCE.hudSettings.capes;
-                        }, "Capes"),
                 new ModuleOption<>(PepsiMod.INSTANCE.hudSettings.fps, "fps", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.hudSettings.fps = value;

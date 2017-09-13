@@ -246,7 +246,11 @@ public abstract class Module extends Command {
      */
     public void updateName() {
         if (PepsiMod.INSTANCE.isInitialized && hasModeInName()) {
-            text = new RainbowText(nameFull + PepsiUtils.COLOR_ESCAPE + "customa8a8a8 [" + getModeForName() + "]");
+            if (PepsiMod.INSTANCE.hudSettings.rainbow) {
+                text = new RainbowText(nameFull + PepsiUtils.COLOR_ESCAPE + "customa8a8a8 [" + getModeForName() + "]");
+            } else {
+                text = new RainbowText(nameFull + PepsiUtils.COLOR_ESCAPE + "7 [" + getModeForName() + "]");
+            }
             ModuleManager.sortModules(ModuleManager.sortType);
         }
     }
@@ -414,4 +418,12 @@ public abstract class Module extends Command {
     }
 
     public abstract ModuleCategory getCategory();
+
+    /**
+     * what the default state of the module should be
+     * null means it should take it's state from the last save
+     */
+    public Boolean forceState() {
+        return null;
+    }
 }

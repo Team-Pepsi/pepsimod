@@ -13,31 +13,21 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.mixin.client.gui;
+package net.daporkchop.pepsimod.mixin.client.settings;
 
-import net.daporkchop.pepsimod.PepsiMod;
-import net.daporkchop.pepsimod.module.impl.render.NoOverlayMod;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiIngame;
-import net.minecraft.client.gui.ScaledResolution;
+import net.daporkchop.pepsimod.module.impl.render.ZoomMod;
+import net.minecraft.client.settings.GameSettings;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(GuiIngame.class)
-public abstract class MixinGuiIngame extends Gui {
-    @Inject(method = "renderPumpkinOverlay", at = @At("HEAD"), cancellable = true)
-    protected void preRenderPumpkinOverlay(ScaledResolution scaledRes, CallbackInfo callbackInfo) {
-        if (NoOverlayMod.INSTANCE.isEnabled) {
-            callbackInfo.cancel();
-        }
-    }
-
-    @Inject(method = "renderPotionEffects", at = @At("HEAD"), cancellable = true)
-    public void prerenderPotionEffects(ScaledResolution resolution, CallbackInfo callbackInfo) {
-        if (!PepsiMod.INSTANCE.hudSettings.effects) {
-            callbackInfo.cancel();
+@Mixin(GameSettings.class)
+public abstract class MixinGameSettings {
+    @Inject(method = "setOptionFloatValue", at = @At("HEAD"))
+    public void preSetOptionFloatValue(GameSettings.Options settingsOption, float value, CallbackInfo callbackInfo) {
+        if (settingsOption == GameSettings.Options.FOV) {
+            ZoomMod.INSTANCE.fov = value;
         }
     }
 }

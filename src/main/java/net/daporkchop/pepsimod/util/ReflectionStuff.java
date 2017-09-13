@@ -17,6 +17,8 @@ package net.daporkchop.pepsimod.util;
 
 import net.daporkchop.pepsimod.PepsiMod;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,6 +47,7 @@ public class ReflectionStuff {
     public static Field timer;
     public static Field boundingBox;
     public static Field debugFps;
+    public static Field itemRenderer;
 
     private static Field modifiersField;
 
@@ -91,9 +94,20 @@ public class ReflectionStuff {
             timer = getField(Minecraft.class, "timer", "field_71428_T", "Y");
             boundingBox = getField(Entity.class, "boundingBox", "field_70121_D", "av");
             debugFps = getField(Minecraft.class, "debugFPS", "field_71470_ab", "ar");
+            itemRenderer = getField(ItemRenderer.class, "itemRenderer", "field_178112_h", "k");
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static RenderItem getItemRenderer() {
+        try {
+            return (RenderItem) itemRenderer.get(PepsiMod.INSTANCE.mc.getItemRenderer());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        throw new IllegalStateException("wtf how");
     }
 
     public static int getDebugFps()   {
