@@ -13,14 +13,24 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.util.colors;
+package net.daporkchop.pepsimod.mixin.client.gui;
 
-import net.minecraft.client.gui.Gui;
+import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.module.ModuleManager;
+import net.daporkchop.pepsimod.module.impl.render.ZoomMod;
+import net.minecraft.client.gui.GuiDisconnected;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-public abstract class ColorizedText {
-    public abstract int width();
-
-    public abstract void drawAtPos(Gui screen, int x, int y);
-
-    public abstract String getRawText();
+@Mixin(GuiDisconnected.class)
+public abstract class MixinGuiDisconnected {
+    @Inject(method = "drawScreen", at = @At("HEAD"))
+    public void preDrawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo callbackInfo) {
+        if (ZoomMod.INSTANCE.isEnabled) {
+            ModuleManager.disableModule(ZoomMod.INSTANCE);
+            PepsiMod.INSTANCE.mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
+        }
+    }
 }

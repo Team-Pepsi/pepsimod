@@ -13,14 +13,13 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.util.colors;
+package net.daporkchop.pepsimod.util.module;
 
-import net.minecraft.client.gui.Gui;
+import java.io.Serializable;
 
-public abstract class ColorizedText {
-    public abstract int width();
-
-    public abstract void drawAtPos(Gui screen, int x, int y);
-
-    public abstract String getRawText();
+public class ElytraFlySettings implements Serializable {
+    public boolean easyStart = false;
+    public boolean stopInWater = true;
+    public boolean fly = false;
+    public ElytraFlyMode mode = ElytraFlyMode.NORMAL;
 }

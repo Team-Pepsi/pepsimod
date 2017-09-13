@@ -16,12 +16,19 @@
 package net.daporkchop.pepsimod.mixin.client.entity;
 
 import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
+import net.daporkchop.pepsimod.util.ImageUtils;
+import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import javax.security.auth.callback.Callback;
 
 @Mixin(AbstractClientPlayer.class)
 public abstract class MixinAbstractClientPlayer extends EntityPlayer {
@@ -35,5 +42,20 @@ public abstract class MixinAbstractClientPlayer extends EntityPlayer {
             callbackInfoReturnable.setReturnValue(true);
             callbackInfoReturnable.cancel();
         }
+    }
+
+    @Inject(method = "getLocationCape", at = @At("HEAD"), cancellable = true)
+    public void preGetLocationCape(CallbackInfoReturnable<ResourceLocation> callbackInfoReturnable) {
+        NetworkPlayerInfo info = this.getPlayerInfo();
+        if (info != null)  {
+            if (PepsiUtils.isPepsimodPlayer(info.getGameProfile().getId().toString()))  {
+                callbackInfoReturnable.setReturnValue(ImageUtils.imgs.get(3));
+            }
+        }
+    }
+
+    @Shadow
+    protected NetworkPlayerInfo getPlayerInfo() {
+        return null;
     }
 }

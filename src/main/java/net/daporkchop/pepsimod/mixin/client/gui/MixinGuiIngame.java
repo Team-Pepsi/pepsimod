@@ -15,6 +15,7 @@
 
 package net.daporkchop.pepsimod.mixin.client.gui;
 
+import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.impl.render.NoOverlayMod;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiIngame;
@@ -29,6 +30,13 @@ public abstract class MixinGuiIngame extends Gui {
     @Inject(method = "renderPumpkinOverlay", at = @At("HEAD"), cancellable = true)
     protected void preRenderPumpkinOverlay(ScaledResolution scaledRes, CallbackInfo callbackInfo) {
         if (NoOverlayMod.INSTANCE.isEnabled) {
+            callbackInfo.cancel();
+        }
+    }
+
+    @Inject(method = "renderPotionEffects", at = @At("HEAD"), cancellable = true)
+    public void prerenderPotionEffects(ScaledResolution resolution, CallbackInfo callbackInfo) {
+        if (!PepsiMod.INSTANCE.hudSettings.effects) {
             callbackInfo.cancel();
         }
     }

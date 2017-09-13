@@ -111,19 +111,19 @@ public abstract class Module extends Command {
     public final ModuleOption[] defaultOptions() {
         return ArrayUtils.addAll(new ModuleOption[]{new ModuleOption<>(false, "enabled", OptionCompletions.BOOLEAN,
                 (value) -> {
-                    PepsiMod.INSTANCE.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(false, false)).enabled = value;
+                    PepsiMod.INSTANCE.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(isEnabled, hide)).enabled = value;
                     return true;
                 },
                 () -> {
-                    return PepsiMod.INSTANCE.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(false, false)).enabled;
+                    return PepsiMod.INSTANCE.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(isEnabled, hide)).enabled;
                 }, "Enabled"),
                 new ModuleOption<>(false, "hidden", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(false, false)).hidden = value;
+                            PepsiMod.INSTANCE.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(isEnabled, hide)).hidden = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(false, false)).hidden;
+                            return PepsiMod.INSTANCE.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(isEnabled, hide)).hidden;
                         }, "Hidden")
         }, this.getDefaultOptions());
     }
@@ -246,7 +246,11 @@ public abstract class Module extends Command {
      */
     public void updateName() {
         if (PepsiMod.INSTANCE.isInitialized && hasModeInName()) {
-            text = new RainbowText(nameFull + PepsiUtils.COLOR_ESCAPE + "customa8a8a8 [" + getModeForName() + "]");
+            if (PepsiMod.INSTANCE.hudSettings.rainbow) {
+                text = new RainbowText(nameFull + PepsiUtils.COLOR_ESCAPE + "customa8a8a8 [" + getModeForName() + "]");
+            } else {
+                text = new RainbowText(nameFull + PepsiUtils.COLOR_ESCAPE + "7 [" + getModeForName() + "]");
+            }
             ModuleManager.sortModules(ModuleManager.sortType);
         }
     }

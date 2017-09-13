@@ -26,10 +26,13 @@ import net.daporkchop.pepsimod.util.module.TargetBone;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Vector3d;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.*;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -48,11 +51,46 @@ public class PepsiUtils {
     public static final String[] colorCodes = new String[]{"c", "9", "f", "1", "4"};
     public static final Timer timer = new Timer();
     public static final ServerData TOOBEETOOTEE_DATA = new ServerData("toobeetootee", "2b2t.org", false);
+    public static final String[] PEPSI_MEMBERS = new String[]{
+            "8f8cef60-1f3a-4778-849d-5dab58c46639",
+            "a4f77739-d15e-4dc2-b957-219a2f6f9244",
+            "2f8731ca-c2a7-454e-85b6-6d072ed199c1",
+            "4c8e844e-43ab-4d39-a62c-56fc02dda031",
+            "4f27dd06-b5e1-44ff-8edf-2c5135b74489",
+            "65f815b5-17b0-4c68-9aa3-91b68379fc6d",
+            "266cae9f-b230-4fa6-b4d3-66c17755e3e5",
+            "2d9d43d8-cb19-48a1-85c1-c7ccb2676d85",
+            "02a8e07d-ce7f-46e2-a7ab-e994a940ae73",
+            "8c7f2df9-48df-460c-853f-26b98bfd160f",
+            "d16acb1b-8fb2-46dd-a561-4e9b9b557523",
+            "95ddfd3a-d40e-4fc8-a408-d3ee6995706d",
+            "a3166d0a-bcfd-406c-9ca8-4693e771d7e2",
+            "26d7502f-fa48-4e0c-a3fd-637433f42f80",
+            "475b83d1-5189-4bb8-88d4-f2922c0c8d58",
+            "71832324-a62f-4ed4-a86e-4c4b8a3226dd",
+            "90c66ec2-d931-4f1f-b2da-328afc9fe854",
+            "69427358-99e6-4e4e-94ed-4a669ba6a8da",
+            "0c3959df-4667-4bc5-b47c-a756689764f4",
+            "a3b69979-9248-4a2e-979f-bc992b29a9f6",
+            "773e431a-cc3a-41d4-90db-e749f579fff8",
+            "b372c514-1d6a-4f86-b1c9-f06bac38690a",
+            "c88f6974-a324-4e85-bd54-975a6aa03e75",
+            "4b052543-9f20-4636-939e-d8dc05a53b3f",
+            "4fd69819-b260-4ff4-af8a-172073fa7d5f",
+            "fdee323e-7f0c-4c15-8d1c-0f277442342a",
+            "8c7f2df9-48df-460c-853f-26b98bfd160f",
+            "49f99d0a-cd48-4faa-a72e-d3b1552e95f1",
+            "8034d01d-bc3b-49e2-a6f6-29455d0a5f24",
+            "104f192a-0f3e-41e3-b574-919cc931559a",
+            "6a711553-4287-478b-9b84-9ec1e01715a2",
+            "4495eebb-7a4e-43aa-9784-02ea86f705ed",
+            "1e8c7d13-9118-41e2-b334-fdb213970135"
+    };
     private static final Random random = new Random(System.currentTimeMillis());
     public static String buttonPrefix = COLOR_ESCAPE + "c";
     public static RainbowCycle rainbowCycle = new RainbowCycle();
     public static Color RAINBOW_COLOR = new Color(0, 0, 0);
-    public static ColorizedText PEPSI_NAME = new RainbowText("PepsiMod " + PepsiMod.VERSION);
+    public static RainbowText PEPSI_NAME = new RainbowText("PepsiMod " + PepsiMod.VERSION);
     public static Field block_pepsimod_id = null;
 
     static {
@@ -415,5 +453,64 @@ public class PepsiUtils {
 
     public static String roundFloatForSlider(float f) {
         return String.format("%.2f", f);
+    }
+
+    public static String roundCoords(double d) {
+        return String.format("%.2f", d);
+    }
+
+    public static String getFacing() {
+        Entity entity = PepsiMod.INSTANCE.mc.getRenderViewEntity();
+        EnumFacing enumfacing = entity.getHorizontalFacing();
+        String s = "Invalid";
+
+        switch (enumfacing) {
+            case NORTH:
+                s = "-Z";
+                break;
+            case SOUTH:
+                s = "+Z";
+                break;
+            case WEST:
+                s = "-X";
+                break;
+            case EAST:
+                s = "+X";
+        }
+
+        return s;
+    }
+
+    public static boolean isPepsimodPlayer(String uuid) {
+        for (String s : PEPSI_MEMBERS) {
+            if (s.equals(uuid)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static void renderItem(int x, int y, float partialTicks, EntityPlayer player, ItemStack stack) {
+        if (!stack.isEmpty()) {
+            GlStateManager.pushMatrix();
+            RenderHelper.enableGUIStandardItemLighting();
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            try {
+                GlStateManager.translate(0.0F, 0.0F, 32.0F);
+                PepsiMod.INSTANCE.mc.getRenderItem().zLevel = 200F;
+                PepsiMod.INSTANCE.mc.getRenderItem().renderItemAndEffectIntoGUI(stack, x, y);
+                PepsiMod.INSTANCE.mc.getRenderItem().renderItemOverlayIntoGUI(PepsiMod.INSTANCE.mc.fontRenderer, stack, x, y, "");
+                PepsiMod.INSTANCE.mc.getRenderItem().zLevel = 0F;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            RenderHelper.disableStandardItemLighting();
+            GlStateManager.popMatrix();
+        }
+    }
+
+    public static ItemStack getWearingArmor(int armorType) {
+        return PepsiMod.INSTANCE.mc.player.inventoryContainer.getSlot(5 + armorType).getStack();
     }
 }
