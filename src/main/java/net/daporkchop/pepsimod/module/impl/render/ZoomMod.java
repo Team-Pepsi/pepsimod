@@ -18,6 +18,7 @@ package net.daporkchop.pepsimod.module.impl.render;
 import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
+import net.daporkchop.pepsimod.module.api.ModuleLaunchState;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 
 public class ZoomMod extends Module {
@@ -81,7 +82,7 @@ public class ZoomMod extends Module {
     }
 
     @Override
-    public Boolean forceState() {
-        return false;
+    public ModuleLaunchState getLaunchState() {
+        return ModuleLaunchState.DISABLED;
     }
 }

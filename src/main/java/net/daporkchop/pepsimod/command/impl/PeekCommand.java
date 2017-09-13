@@ -17,7 +17,6 @@ package net.daporkchop.pepsimod.command.impl;
 
 import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.api.Command;
-import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.init.Blocks;
@@ -27,8 +26,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
-
-import java.util.TimerTask;
 
 public class PeekCommand extends Command {
     public static Block[] SHULKERS;
@@ -102,19 +99,10 @@ public class PeekCommand extends Command {
                 if (isShulkerBox(block)) {
                     if (stack.hasTagCompound()) {
                         ItemStack wtf_java = stack;
-                        PepsiUtils.timer.schedule(new TimerTask() {
-                            @Override
-                            public void run() {
-                                PepsiMod.INSTANCE.mc.displayGuiScreen(new GuiChest(PepsiMod.INSTANCE.mc.player.inventory, getFromItemNBT(wtf_java.getTagCompound().getCompoundTag("BlockEntityTag"))));
-                            }
-                        }, 500);
+
+                        PepsiMod.INSTANCE.mc.displayGuiScreen(new GuiChest(PepsiMod.INSTANCE.mc.player.inventory, getFromItemNBT(wtf_java.getTagCompound().getCompoundTag("BlockEntityTag"))));
                     } else {
-                        PepsiUtils.timer.schedule(new TimerTask() {
-                            @Override
-                            public void run() {
-                                PepsiMod.INSTANCE.mc.displayGuiScreen(new GuiChest(new InventoryBasic("Shulker Box", true, 27), PepsiMod.INSTANCE.mc.player.inventory));
-                            }
-                        }, 500);
+                        PepsiMod.INSTANCE.mc.displayGuiScreen(new GuiChest(new InventoryBasic("Shulker Box", true, 27), PepsiMod.INSTANCE.mc.player.inventory));
                     }
                     return;
                 }

@@ -418,12 +418,4 @@ public abstract class Module extends Command {
     }
 
     public abstract ModuleCategory getCategory();
-
-    /**
-     * what the default state of the module should be
-     * null means it should take it's state from the last save
-     */
-    public Boolean forceState() {
-        return null;
-    }
 }

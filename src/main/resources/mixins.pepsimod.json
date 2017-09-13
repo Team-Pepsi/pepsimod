@@ -30,6 +30,8 @@
     "client.renderer.MixinItemRenderer",
     "world.MixinWorld",
     "client.network.MixinNetHandlerPlayClient",
-    "client.settings.MixinGameSettings"
+    "client.settings.MixinGameSettings",
+    "client.gui.MixinGuiDisconnected",
+    "client.gui.MixinGuiIngameMenu"
   ]
 }

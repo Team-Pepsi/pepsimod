@@ -17,12 +17,9 @@ package net.daporkchop.pepsimod.command.impl;
 
 import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.api.Command;
-import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.Entity;
-
-import java.util.TimerTask;
 
 public class InvSeeCommand extends Command {
     public InvSeeCommand() {
@@ -41,12 +38,7 @@ public class InvSeeCommand extends Command {
                 EntityOtherPlayerMP player = (EntityOtherPlayerMP) entity;
                 if (player.getName().equals(args[1])) {
                     clientMessage("Showing inventory of " + player.getName());
-                    PepsiUtils.timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            PepsiMod.INSTANCE.mc.displayGuiScreen(new GuiInventory(player));
-                        }
-                    }, 500);
+                    PepsiMod.INSTANCE.mc.displayGuiScreen(new GuiInventory(player));
                     return;
                 }
             }

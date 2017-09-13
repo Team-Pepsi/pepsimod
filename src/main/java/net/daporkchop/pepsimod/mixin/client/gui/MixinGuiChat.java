@@ -56,9 +56,9 @@ public abstract class MixinGuiChat extends GuiScreen {
     public void checkIfIsCommandAndProcess(char typedChar, int keyCode, CallbackInfo ci) {
         if (keyCode == 28 || keyCode == 156) {
             if (this.inputField.getText().startsWith(".")) {
-                CommandRegistry.runCommand(this.inputField.getText());
                 this.mc.ingameGUI.getChatGUI().addToSentMessages(this.inputField.getText());
                 this.mc.displayGuiScreen(null);
+                CommandRegistry.runCommand(this.inputField.getText());
                 ci.cancel();
             }
         }

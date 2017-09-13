@@ -271,11 +271,7 @@ public class PepsiMod {
                 }
             }
 
-            if (module.forceState() == null) {
                 module.getOptionByName("enabled").setValue(Module.shouldBeEnabled((boolean) module.getOptionByName("enabled").getValue(), module.getLaunchState()));
-            } else {
-                module.getOptionByName("enabled").setValue(module.forceState());
-            }
             if (((boolean) module.getOptionByName("enabled").getValue())) {
                 ModuleManager.enableModule(module);
             } else {
