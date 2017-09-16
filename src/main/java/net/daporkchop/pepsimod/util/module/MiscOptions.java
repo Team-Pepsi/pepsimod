@@ -19,8 +19,13 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 public class MiscOptions implements Serializable {
+    private static final long serialVersionUID = 6988070214567038785L;
+
     public HashMap<String, ModuleState> states = new HashMap<>();
     public boolean criticals_packet = true;
+    public float entitySpeed_speed = 1.0f;
+    public float crystalAura_speed = 1.0f;
+    public float crystalAura_range = 3.8f;
 
     public static class ModuleState implements Serializable {
         public boolean enabled;

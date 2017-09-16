@@ -15,22 +15,53 @@
 
 package net.daporkchop.pepsimod.mixin.client.network;
 
+import com.google.common.collect.Maps;
+import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.module.impl.misc.AnnouncerMod;
 import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
 import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraft.network.play.server.SPacketPlayerListItem;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Map;
+import java.util.UUID;
+
 @Mixin(NetHandlerPlayClient.class)
 public abstract class MixinNetHandlerPlayClient {
+    @Shadow
+    private final Map<UUID, NetworkPlayerInfo> playerInfoMap = Maps.newHashMap();
+
     @Inject(method = "sendPacket", at = @At("HEAD"), cancellable = true)
     public void preSendPacket(Packet<?> packet, CallbackInfo callbackInfo) {
         if (FreecamMod.INSTANCE.isEnabled) {
             if (packet instanceof CPacketPlayer) {
                 callbackInfo.cancel();
+            }
+        }
+    }
+
+    @Inject(method = "handlePlayerListItem", at = @At("HEAD"))
+    public void preHandlePlayerListItem(SPacketPlayerListItem listItem, CallbackInfo callbackInfo) {
+        if (PepsiMod.INSTANCE.mc.player != null && PepsiMod.INSTANCE.mc.player.getGameProfile() != null) {
+            if (listItem.getAction() == SPacketPlayerListItem.Action.ADD_PLAYER) {
+                for (SPacketPlayerListItem.AddPlayerData data : listItem.getEntries()) {
+                    if (!data.getProfile().getId().equals(PepsiMod.INSTANCE.mc.player.getGameProfile().getId())) {
+                        AnnouncerMod.INSTANCE.onPlayerJoin(data.getProfile().getName());
+                    }
+                }
+            } else if (listItem.getAction() == SPacketPlayerListItem.Action.REMOVE_PLAYER) {
+                for (SPacketPlayerListItem.AddPlayerData data : listItem.getEntries()) {
+                    if (!data.getProfile().getId().equals(PepsiMod.INSTANCE.mc.player.getGameProfile().getId())) {
+                        AnnouncerMod.INSTANCE.onPlayerLeave(playerInfoMap.get(data.getProfile().getId()).getGameProfile().getName());
+                    }
+                }
             }
         }
     }

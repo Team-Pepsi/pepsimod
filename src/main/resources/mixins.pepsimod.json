@@ -32,6 +32,9 @@
     "client.network.MixinNetHandlerPlayClient",
     "client.settings.MixinGameSettings",
     "client.gui.MixinGuiDisconnected",
-    "client.gui.MixinGuiIngameMenu"
+    "client.gui.MixinGuiIngameMenu",
+    "entity.living.player.MixinEntityPlayerSP",
+    "client.gui.inventory.MixinGuiContainer",
+    "item.MixinItemStack"
   ]
 }

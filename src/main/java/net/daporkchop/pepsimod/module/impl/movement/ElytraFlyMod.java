@@ -28,7 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketEntityAction;
 
 public class ElytraFlyMod extends TimeModule {
-    public static final String[] targetBoneStrings = new String[]{"normal"};
+    public static final String[] modes = new String[]{"normal"};
 
     public static ElytraFlyMod INSTANCE;
 
@@ -125,7 +125,7 @@ public class ElytraFlyMod extends TimeModule {
                         () -> {
                             return PepsiMod.INSTANCE.elytraFlySettings.fly;
                         }, "Fly"),
-                new ModuleOption<>(PepsiMod.INSTANCE.elytraFlySettings.mode, "mode", targetBoneStrings,
+                new ModuleOption<>(PepsiMod.INSTANCE.elytraFlySettings.mode, "mode", modes,
                         (value) -> {
                             PepsiMod.INSTANCE.elytraFlySettings.mode = value;
                             return true;

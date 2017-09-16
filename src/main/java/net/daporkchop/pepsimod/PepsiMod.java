@@ -33,10 +33,11 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.ModuleOptionSave;
 import net.daporkchop.pepsimod.module.api.ModuleSortType;
 import net.daporkchop.pepsimod.module.impl.combat.AuraMod;
+import net.daporkchop.pepsimod.module.impl.combat.AutoTotemMod;
 import net.daporkchop.pepsimod.module.impl.combat.CriticalsMod;
+import net.daporkchop.pepsimod.module.impl.combat.CrystalAuraMod;
 import net.daporkchop.pepsimod.module.impl.misc.*;
-import net.daporkchop.pepsimod.module.impl.movement.ElytraFlyMod;
-import net.daporkchop.pepsimod.module.impl.movement.VelocityMod;
+import net.daporkchop.pepsimod.module.impl.movement.*;
 import net.daporkchop.pepsimod.module.impl.render.*;
 import net.daporkchop.pepsimod.util.*;
 import net.daporkchop.pepsimod.util.datatag.DataTag;
@@ -76,6 +77,7 @@ public class PepsiMod {
     public boolean isInitialized = false;
     public HUDSettings hudSettings;
     public ElytraFlySettings elytraFlySettings;
+    public AnnouncerSettings announcerSettings;
 
     public static void registerModules(FMLStateEvent event) {
         ModuleManager.registerModule(new NoFallMod(false, -1, false));
@@ -101,6 +103,15 @@ public class PepsiMod {
         ModuleManager.registerModule(new HUDMod(true, -1, true));
         ModuleManager.registerModule(new ZoomMod(false, -1, true));
         ModuleManager.registerModule(new ElytraFlyMod(false, -1, false));
+        ModuleManager.registerModule(new AutoWalkMod(false, -1, false));
+        ModuleManager.registerModule(new EntitySpeedMod(false, -1, false));
+        ModuleManager.registerModule(new SafewalkMod(false, -1, false));
+        ModuleManager.registerModule(new InventoryMoveMod(false, -1, false)); //TODO: make this work
+        ModuleManager.registerModule(new HorseJumpPowerMod(false, -1, false));
+        ModuleManager.registerModule(new AutoTotemMod(false, -1, false));
+        ModuleManager.registerModule(new CrystalAuraMod(false, -1, false));
+        ModuleManager.registerModule(new AntiTotemAnimationMod(false, -1, false));
+        ModuleManager.registerModule(new AnnouncerMod(false, -1, false));
     }
 
     public static void registerCommands(FMLStateEvent event) {
@@ -216,6 +227,7 @@ public class PepsiMod {
         tracerSettings = (TracerSettings) dataTag.getSerializable("tracerSettings", new TracerSettings());
         hudSettings = (HUDSettings) dataTag.getSerializable("hudSettings", new HUDSettings());
         elytraFlySettings = (ElytraFlySettings) dataTag.getSerializable("elytraFlySettings", new ElytraFlySettings());
+        announcerSettings = (AnnouncerSettings) dataTag.getSerializable("announcerSettings", new AnnouncerSettings());
 
         miscOptions = (MiscOptions) dataTag.getSerializable("miscOptions", new MiscOptions());
     }
@@ -248,6 +260,7 @@ public class PepsiMod {
         dataTag.setSerializable("miscOptions", miscOptions);
         dataTag.setSerializable("hudSettings", hudSettings);
         dataTag.setSerializable("elytraFlySettings", elytraFlySettings);
+        dataTag.setSerializable("announcerSettings", announcerSettings);
         dataTag.save();
     }
 

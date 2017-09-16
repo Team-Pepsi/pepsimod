@@ -13,21 +13,29 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.event;
+package net.daporkchop.pepsimod.util.misc.announcer.impl;
 
 import net.daporkchop.pepsimod.PepsiMod;
-import net.daporkchop.pepsimod.module.impl.misc.HUDMod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
+import net.daporkchop.pepsimod.module.impl.misc.AnnouncerMod;
+import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.misc.announcer.MessagePrefixes;
+import net.daporkchop.pepsimod.util.misc.announcer.QueuedTask;
+import net.daporkchop.pepsimod.util.misc.announcer.TaskType;
 
-public class MiscEventHandler {
-    public static MiscEventHandler INSTANCE;
+public class TaskMove extends QueuedTask {
+    public double posX, posZ;
 
-    @SubscribeEvent
-    public void onDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event)  {
-        HUDMod.INSTANCE.serverBrand = "";
-        System.out.println("[PEPSIMOD] Saving config...");
-        PepsiMod.INSTANCE.saveConfig();
-        System.out.println("[PEPSIMOD] Saved.");
+    public TaskMove(TaskType type) {
+        super(type);
+        posX = PepsiMod.INSTANCE.mc.player.posX;
+        posZ = PepsiMod.INSTANCE.mc.player.posZ;
+    }
+
+    public String getMessage() {
+        if (!AnnouncerMod.INSTANCE.isEnabled || (PepsiMod.INSTANCE.mc.player.posX == posX && PepsiMod.INSTANCE.mc.player.posZ == posZ)) {
+            return null;
+        }
+
+        return MessagePrefixes.getMessage(TaskType.WALK, PepsiUtils.roundCoords(Math.abs(PepsiMod.INSTANCE.mc.player.posX - posX) + Math.abs(PepsiMod.INSTANCE.mc.player.posZ - posZ)));
     }
 }
