@@ -23,6 +23,7 @@ import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
+import net.daporkchop.pepsimod.util.event.MoveEvent;
 import net.daporkchop.pepsimod.util.module.MiscOptions;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.network.Packet;
@@ -418,4 +419,8 @@ public abstract class Module extends Command {
     }
 
     public abstract ModuleCategory getCategory();
+
+    public void onPlayerMove(MoveEvent e) {
+
+    }
 }

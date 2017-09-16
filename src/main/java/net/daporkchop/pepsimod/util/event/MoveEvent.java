@@ -13,21 +13,8 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.event;
+package net.daporkchop.pepsimod.util.event;
 
-import net.daporkchop.pepsimod.PepsiMod;
-import net.daporkchop.pepsimod.module.impl.misc.HUDMod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
-
-public class MiscEventHandler {
-    public static MiscEventHandler INSTANCE;
-
-    @SubscribeEvent
-    public void onDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event)  {
-        HUDMod.INSTANCE.serverBrand = "";
-        System.out.println("[PEPSIMOD] Saving config...");
-        PepsiMod.INSTANCE.saveConfig();
-        System.out.println("[PEPSIMOD] Saved.");
-    }
+public class MoveEvent {
+    public double x = 0, y = 0, z = 0;
 }

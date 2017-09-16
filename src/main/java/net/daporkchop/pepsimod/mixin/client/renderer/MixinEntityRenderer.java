@@ -24,6 +24,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.util.glu.Project;
 import org.spongepowered.asm.mixin.Final;
@@ -224,5 +225,19 @@ public abstract class MixinEntityRenderer {
     @Inject(method = "renderWorldPass", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/EntityRenderer;renderHand:Z", shift = At.Shift.BEFORE))
     public void renderLines(int pass, float partialTicks, long finishTimeNano, CallbackInfo ci) {
         TracersMod.INSTANCE.drawLines(partialTicks);
+    }
+
+    @Inject(method = "displayItemActivation", at = @At("HEAD"), cancellable = true)
+    public void preDisplayItemActivation(ItemStack stack, CallbackInfo callbackInfo) {
+        if (AntiTotemAnimationMod.INSTANCE.isEnabled) {
+            callbackInfo.cancel();
+        }
+    }
+
+    @Inject(method = "renderItemActivation", at = @At("HEAD"), cancellable = true)
+    public void preRenderItemActivation(int a, int b, float c, CallbackInfo callbackInfo) {
+        if (AntiTotemAnimationMod.INSTANCE.isEnabled) {
+            callbackInfo.cancel();
+        }
     }
 }

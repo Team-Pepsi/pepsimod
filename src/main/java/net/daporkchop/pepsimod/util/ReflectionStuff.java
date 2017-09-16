@@ -16,19 +16,24 @@
 package net.daporkchop.pepsimod.util;
 
 import net.daporkchop.pepsimod.PepsiMod;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.Timer;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.FMLLog;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 public class ReflectionStuff {
@@ -48,6 +53,11 @@ public class ReflectionStuff {
     public static Field boundingBox;
     public static Field debugFps;
     public static Field itemRenderer;
+    public static Field pressed;
+    public static Field ridingEntity;
+    public static Field horseJumpPower;
+
+    public static Method updateFallState;
 
     private static Field modifiersField;
 
@@ -77,6 +87,20 @@ public class ReflectionStuff {
         throw new IllegalStateException("Field with names: " + names + " not found!");
     }
 
+    public static Method getMethod(Class c, String[] names, Class<?>... args) {
+        for (String s : names) {
+            try {
+                Method m = c.getDeclaredMethod(s, args);
+                m.setAccessible(true);
+                return m;
+            } catch (NoSuchMethodException e) {
+                FMLLog.log.info("unable to find method: " + s);
+            }
+        }
+
+        throw new IllegalStateException("Method with names: " + names + " not found!");
+    }
+
     public static void init() {
         try {
             renderPosX = getField(RenderManager.class, "renderPosX", "field_78725_b", "o");
@@ -95,8 +119,49 @@ public class ReflectionStuff {
             boundingBox = getField(Entity.class, "boundingBox", "field_70121_D", "av");
             debugFps = getField(Minecraft.class, "debugFPS", "field_71470_ab", "ar");
             itemRenderer = getField(ItemRenderer.class, "itemRenderer", "field_178112_h", "k");
+            pressed = getField(KeyBinding.class, "pressed", "field_74513_e", "i");
+            ridingEntity = getField(Entity.class, "ridingEntity", "field_184239_as", "au");
+            horseJumpPower = getField(EntityPlayerSP.class, "horseJumpPower", "field_110321_bQ", "cq");
+
+            updateFallState = getMethod(Entity.class, new String[]{"updateFallState", "func_184231_a", "a"}, double.class, boolean.class, IBlockState.class, BlockPos.class);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void setHorseJumpPower(float value) {
+        try {
+            horseJumpPower.set(PepsiMod.INSTANCE.mc.player, value);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static void updateEntityFallState(Entity e, double d, boolean b, IBlockState state, BlockPos pos) {
+        try {
+            updateFallState.invoke(e, d, b, state, pos);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new IllegalStateException(exception);
+        }
+    }
+
+    public static Entity getRidingEntity(Entity toGetFrom) {
+        try {
+            return (Entity) ridingEntity.get(toGetFrom);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static void setPressed(KeyBinding keyBinding, boolean state) {
+        try {
+            pressed.set(keyBinding, state);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
         }
     }
 
@@ -105,9 +170,8 @@ public class ReflectionStuff {
             return (RenderItem) itemRenderer.get(PepsiMod.INSTANCE.mc.getItemRenderer());
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException(e);
         }
-
-        throw new IllegalStateException("wtf how");
     }
 
     public static int getDebugFps()   {
@@ -115,9 +179,8 @@ public class ReflectionStuff {
             return (int) debugFps.get(null);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException(e);
         }
-
-        throw new IllegalStateException("wtf how");
     }
 
     public static AxisAlignedBB getBoundingBox(Entity entity) {
@@ -125,9 +188,8 @@ public class ReflectionStuff {
             return (AxisAlignedBB) boundingBox.get(entity);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException(e);
         }
-
-        throw new IllegalStateException("wtf how");
     }
 
     public static Timer getTimer() {
@@ -135,9 +197,8 @@ public class ReflectionStuff {
             return (Timer) timer.get(PepsiMod.INSTANCE.mc);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException(e);
         }
-
-        throw new IllegalStateException("wtf how");
     }
 
     public static void setY_vec3d(Vec3d vec, double val) {
@@ -145,7 +206,7 @@ public class ReflectionStuff {
             y_vec3d.set(vec, val);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new IllegalStateException("wtf how");
+            throw new IllegalStateException(e);
         }
     }
 
@@ -154,9 +215,8 @@ public class ReflectionStuff {
             return (double) minX.get(bb);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException(e);
         }
-
-        throw new IllegalStateException("wtf how");
     }
 
     public static double getMinY(AxisAlignedBB bb) {
@@ -164,9 +224,8 @@ public class ReflectionStuff {
             return (double) minY.get(bb);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException(e);
         }
-
-        throw new IllegalStateException("wtf how");
     }
 
     public static double getMinZ(AxisAlignedBB bb) {
@@ -174,9 +233,8 @@ public class ReflectionStuff {
             return (double) minZ.get(bb);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException(e);
         }
-
-        throw new IllegalStateException("wtf how");
     }
 
     public static double getMaxX(AxisAlignedBB bb) {
@@ -184,9 +242,8 @@ public class ReflectionStuff {
             return (double) maxX.get(bb);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException(e);
         }
-
-        throw new IllegalStateException("wtf how");
     }
 
     public static double getMaxY(AxisAlignedBB bb) {
@@ -194,9 +251,8 @@ public class ReflectionStuff {
             return (double) maxY.get(bb);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException(e);
         }
-
-        throw new IllegalStateException("wtf how");
     }
 
     public static double getMaxZ(AxisAlignedBB bb) {
@@ -204,9 +260,8 @@ public class ReflectionStuff {
             return (double) maxZ.get(bb);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException(e);
         }
-
-        throw new IllegalStateException("wtf how");
     }
 
     public static void setMinX(AxisAlignedBB bb, double val) {
@@ -214,7 +269,7 @@ public class ReflectionStuff {
             minX.set(bb, val);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new IllegalStateException("wtf how");
+            throw new IllegalStateException(e);
         }
     }
 
@@ -223,7 +278,7 @@ public class ReflectionStuff {
             minY.set(bb, val);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new IllegalStateException("wtf how");
+            throw new IllegalStateException(e);
         }
     }
 
@@ -232,7 +287,7 @@ public class ReflectionStuff {
             minZ.set(bb, val);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new IllegalStateException("wtf how");
+            throw new IllegalStateException(e);
         }
     }
 
@@ -241,7 +296,7 @@ public class ReflectionStuff {
             maxX.set(bb, val);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new IllegalStateException("wtf how");
+            throw new IllegalStateException(e);
         }
     }
 
@@ -250,7 +305,7 @@ public class ReflectionStuff {
             maxY.set(bb, val);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new IllegalStateException("wtf how");
+            throw new IllegalStateException(e);
         }
     }
 
@@ -259,7 +314,7 @@ public class ReflectionStuff {
             maxZ.set(bb, val);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new IllegalStateException("wtf how");
+            throw new IllegalStateException(e);
         }
     }
 
@@ -268,9 +323,8 @@ public class ReflectionStuff {
             return (DataParameter<Byte>) PLAYER_MODEL_FLAG.get(null);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException(e);
         }
-
-        throw new IllegalStateException("wtf how");
     }
 
     public static double getRenderPosX(RenderManager mgr) {
@@ -278,9 +332,8 @@ public class ReflectionStuff {
             return (double) renderPosX.get(mgr);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException(e);
         }
-
-        throw new IllegalStateException("wtf how");
     }
 
     public static double getRenderPosY(RenderManager mgr) {
@@ -288,9 +341,8 @@ public class ReflectionStuff {
             return (double) renderPosY.get(mgr);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException(e);
         }
-
-        throw new IllegalStateException("wtf how");
     }
 
     public static double getRenderPosZ(RenderManager mgr) {
@@ -298,9 +350,8 @@ public class ReflectionStuff {
             return (double) renderPosZ.get(mgr);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException(e);
         }
-
-        throw new IllegalStateException("wtf how");
     }
 
     public static boolean getSleeping(EntityPlayer mgr) {
@@ -308,8 +359,7 @@ public class ReflectionStuff {
             return (boolean) sleeping.get(mgr);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalStateException(e);
         }
-
-        throw new IllegalStateException("wtf how");
     }
 }
