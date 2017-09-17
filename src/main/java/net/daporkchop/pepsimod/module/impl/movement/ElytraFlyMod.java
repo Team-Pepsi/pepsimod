@@ -20,12 +20,15 @@ import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.module.api.TimeModule;
+import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
+import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.module.ElytraFlyMode;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemElytra;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketEntityAction;
+import org.lwjgl.input.Keyboard;
 
 public class ElytraFlyMod extends TimeModule {
     public static final String[] modes = new String[]{"normal"};
@@ -66,20 +69,20 @@ public class ElytraFlyMod extends TimeModule {
             }
 
             if (PepsiMod.INSTANCE.elytraFlySettings.fly) {
-                if (PepsiMod.INSTANCE.mc.gameSettings.keyBindJump.isPressed()) {
+                if (Keyboard.isKeyDown(PepsiMod.INSTANCE.mc.gameSettings.keyBindJump.getKeyCode())) {
                     PepsiMod.INSTANCE.mc.player.motionY += 0.08;
-                } else if (PepsiMod.INSTANCE.mc.gameSettings.keyBindSneak.isPressed()) {
+                } else if (Keyboard.isKeyDown(PepsiMod.INSTANCE.mc.gameSettings.keyBindSneak.getKeyCode())) {
                     PepsiMod.INSTANCE.mc.player.motionY -= 0.04;
                 }
 
-                if (PepsiMod.INSTANCE.mc.gameSettings.keyBindForward.isPressed()) {
+                if (Keyboard.isKeyDown(PepsiMod.INSTANCE.mc.gameSettings.keyBindForward.getKeyCode())) {
                     double yaw = Math.toRadians(PepsiMod.INSTANCE.mc.player.rotationYaw);
-                    PepsiMod.INSTANCE.mc.player.motionX -= Math.sin(yaw) * 0.1f;
-                    PepsiMod.INSTANCE.mc.player.motionZ += Math.cos(yaw) * 0.1f;
-                } else if (PepsiMod.INSTANCE.mc.gameSettings.keyBindBack.isPressed()) {
+                    PepsiMod.INSTANCE.mc.player.motionX -= Math.sin(yaw) * PepsiMod.INSTANCE.elytraFlySettings.speed;
+                    PepsiMod.INSTANCE.mc.player.motionZ += Math.cos(yaw) * PepsiMod.INSTANCE.elytraFlySettings.speed;
+                } else if (Keyboard.isKeyDown(PepsiMod.INSTANCE.mc.gameSettings.keyBindBack.getKeyCode())) {
                     double yaw = Math.toRadians(PepsiMod.INSTANCE.mc.player.rotationYaw);
-                    PepsiMod.INSTANCE.mc.player.motionX += Math.sin(yaw) * 0.1f;
-                    PepsiMod.INSTANCE.mc.player.motionZ += Math.cos(yaw) * 0.1f;
+                    PepsiMod.INSTANCE.mc.player.motionX += Math.sin(yaw) * PepsiMod.INSTANCE.elytraFlySettings.speed;
+                    PepsiMod.INSTANCE.mc.player.motionZ += Math.cos(yaw) * PepsiMod.INSTANCE.elytraFlySettings.speed;
                 }
             }
         } else if (PepsiMod.INSTANCE.elytraFlySettings.easyStart && ItemElytra.isUsable(chestplate) && PepsiMod.INSTANCE.mc.gameSettings.keyBindJump.isPressed()) {
@@ -132,7 +135,15 @@ public class ElytraFlyMod extends TimeModule {
                         },
                         () -> {
                             return PepsiMod.INSTANCE.elytraFlySettings.mode;
-                        }, "Mode", false)
+                        }, "Mode", false),
+                new ModuleOption<>(PepsiMod.INSTANCE.elytraFlySettings.speed, "speed", OptionCompletions.FLOAT,
+                        (value) -> {
+                            PepsiMod.INSTANCE.elytraFlySettings.speed = Math.max(value, 0);
+                            return true;
+                        },
+                        () -> {
+                            return PepsiMod.INSTANCE.elytraFlySettings.speed;
+                        }, "Speed", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0f, 10f, 0.1f))
         };
     }
 

@@ -18,6 +18,8 @@ package net.daporkchop.pepsimod.util.module;
 import java.io.Serializable;
 
 public class TracerSettings implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public boolean sleeping = false;
     public boolean invisible = false;
     public boolean friendColors = true;

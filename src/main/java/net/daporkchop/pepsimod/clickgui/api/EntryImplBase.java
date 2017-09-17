@@ -22,7 +22,7 @@ public abstract class EntryImplBase implements IEntry {
     public final int height;
     public int x;
     public int y;
-    private boolean isHoveredCached = false;
+    protected boolean isHoveredCached = false;
 
     public EntryImplBase(int x, int y, int width, int height) {
         this.x = x;
@@ -32,7 +32,6 @@ public abstract class EntryImplBase implements IEntry {
     }
 
     public static void drawString(int x, int y, String text, int color) {
-        //FMLLog.log.info("Drawing string: " + text + " at " + x + "," + y + " with color " + color);
         PepsiMod.INSTANCE.mc.fontRenderer.drawString(text, x, y, color, false);
     }
 

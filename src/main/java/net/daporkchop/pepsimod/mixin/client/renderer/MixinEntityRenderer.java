@@ -224,7 +224,9 @@ public abstract class MixinEntityRenderer {
 
     @Inject(method = "renderWorldPass", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/EntityRenderer;renderHand:Z", shift = At.Shift.BEFORE))
     public void renderLines(int pass, float partialTicks, long finishTimeNano, CallbackInfo ci) {
-        TracersMod.INSTANCE.drawLines(partialTicks);
+        if (TracersMod.INSTANCE.isEnabled) {
+            TracersMod.INSTANCE.drawLines(partialTicks);
+        }
     }
 
     @Inject(method = "displayItemActivation", at = @At("HEAD"), cancellable = true)

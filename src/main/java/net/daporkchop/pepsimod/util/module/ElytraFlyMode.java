@@ -18,5 +18,7 @@ package net.daporkchop.pepsimod.util.module;
 import java.io.Serializable;
 
 public enum ElytraFlyMode implements Serializable {
-    NORMAL
+    NORMAL;
+
+    private static final long serialVersionUID = 1L;
 }

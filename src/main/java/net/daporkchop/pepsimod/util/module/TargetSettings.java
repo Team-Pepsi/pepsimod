@@ -18,6 +18,8 @@ package net.daporkchop.pepsimod.util.module;
 import java.io.Serializable;
 
 public class TargetSettings implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public boolean players = false;
     public boolean animals = false;
     public boolean monsters = false;

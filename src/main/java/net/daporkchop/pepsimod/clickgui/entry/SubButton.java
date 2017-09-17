@@ -31,7 +31,7 @@ public class SubButton extends EntryImplBase {
     public ModuleOption option;
 
     public SubButton(Button parent, ModuleOption option) {
-        super(parent.window.getX() + 4, parent.getY() + 4, parent.window.getWidth() - 6, 12);
+        super(parent.window.getX() + 4, parent.getY() + 4, parent.window.getWidth() - 8, 12);
         this.parent = parent;
         this.window = parent.window;
         this.option = option;

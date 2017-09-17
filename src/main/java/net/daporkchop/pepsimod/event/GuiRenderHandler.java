@@ -44,7 +44,7 @@ public class GuiRenderHandler {
 
     @SubscribeEvent
     public void onRenderGui(RenderGameOverlayEvent.Post event) {
-        if (event.getType() != RenderGameOverlayEvent.ElementType.EXPERIENCE) {
+        if (event.getType() != RenderGameOverlayEvent.ElementType.HOTBAR) {
             return;
         }
 
