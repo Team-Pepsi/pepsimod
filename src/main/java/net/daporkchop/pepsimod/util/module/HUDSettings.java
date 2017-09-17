@@ -20,6 +20,8 @@ import org.lwjgl.opengl.GL11;
 import java.io.Serializable;
 
 public class HUDSettings implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public boolean drawLogo = true;  //
     public boolean arrayList = true; //
     public boolean TPS = false;      //

@@ -18,8 +18,11 @@ package net.daporkchop.pepsimod.util.module;
 import java.io.Serializable;
 
 public class ElytraFlySettings implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public boolean easyStart = false;
     public boolean stopInWater = true;
     public boolean fly = false;
+    public float speed = 0.2f;
     public ElytraFlyMode mode = ElytraFlyMode.NORMAL;
 }

@@ -36,7 +36,7 @@ public class Button extends EntryImplBase {
     public Module module;
 
     public Button(Window window, Module module) {
-        super(window.getX() + 2, window.getY() + 2, window.getWidth() - 4, 12);
+        super(window.getX() + 2, window.getY() + 2, window.getWidth() - 6, 12);
         this.window = window;
         this.module = module;
     }
