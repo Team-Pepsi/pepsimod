@@ -22,7 +22,7 @@ public abstract class EntryImplBase implements IEntry {
     public final int height;
     public int x;
     public int y;
-    private boolean isHoveredCached = false;
+    protected boolean isHoveredCached = false;
 
     public EntryImplBase(int x, int y, int width, int height) {
         this.x = x;

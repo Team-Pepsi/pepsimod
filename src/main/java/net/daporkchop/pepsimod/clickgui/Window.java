@@ -26,6 +26,7 @@ import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 import net.daporkchop.pepsimod.totally.not.skidded.RenderUtilsXdolf;
+import net.daporkchop.pepsimod.util.BetterScaledResolution;
 import net.daporkchop.pepsimod.util.colors.ColorUtils;
 import org.lwjgl.opengl.GL11;
 
@@ -38,6 +39,8 @@ public class Window extends EntryImplBase {
     public final String text;
     public List<IEntry> entries = Collections.synchronizedList(new ArrayList<IEntry>());
     public boolean isOpen = false;
+    public int modulesCounted = 0;
+    public int scroll = 0;
     private int renderYButton = 0;
     private boolean isDragging = false;
     private int dragX = 0, dragY = 0;
@@ -91,15 +94,19 @@ public class Window extends EntryImplBase {
         GL11.glPushMatrix();
         GL11.glPushAttrib(8256);
 
+        scroll = Math.max(0, scroll);
+        scroll = Math.min(getDisplayableCount() - getModulesToDisplay(), scroll);
+
         updateIsMouseHovered(mouseX, mouseY);
         renderYButton = getY();
-        RenderUtilsXdolf.drawRect(getX(), getY(), getX() + getWidth(), getY() + getHeight(), getColor());
+        RenderUtilsXdolf.drawRect(getX(), getY(), getX() + getWidth(), getY() + getDisplayedHeight(), getColor());
         GL11.glColor3f(0f, 0f, 0f);
         drawString(getX() + 2, getY() + 2, text, Color.BLACK.getRGB());
-        for (IEntry entry : entries) {
-            if (entry.shouldRender()) {
-                entry.draw(mouseX, mouseY);
-            }
+        modulesCounted = 0;
+        for (int i = getScroll(); i < getModulesToDisplay() + getScroll(); i++) {
+            IEntry entry = getNextEntry();
+            modulesCounted++;
+            entry.draw(mouseX, mouseY);
         }
 
         GL11.glPopMatrix();
@@ -127,6 +134,16 @@ public class Window extends EntryImplBase {
         for (IEntry entry : entries) {
             if (entry.shouldRender()) {
                 i += 13;
+            }
+        }
+        return i;
+    }
+
+    public int getDisplayableCount() {
+        int i = 0;
+        for (IEntry entry : entries) {
+            if (entry.shouldRender()) {
+                i++;
             }
         }
         return i;
@@ -171,6 +188,14 @@ public class Window extends EntryImplBase {
         }
     }
 
+    public int getScroll() {
+        if (shouldScroll()) {
+            return scroll;
+        } else {
+            return 0;
+        }
+    }
+
     protected void init(ModuleCategory category) {
         for (Module module : ModuleManager.AVALIBLE_MODULES) {
             if (module.getCategory() != category) {
@@ -201,5 +226,70 @@ public class Window extends EntryImplBase {
 
     public void setOpen(boolean val) {
         isOpen = val;
+    }
+
+    public int maxDisplayHeight() {
+        int height = BetterScaledResolution.INSTANCE.scaledHeight;
+        height = Math.floorDiv(height, 13);
+        height -= 1;
+        height *= 13;
+        return height;
+    }
+
+    public int getScrollingModuleCount() {
+        int height = BetterScaledResolution.INSTANCE.scaledHeight;
+        height = Math.floorDiv(height, 13);
+        height -= 2;
+        return height;
+    }
+
+    public int getModulesToDisplay() {
+        if (shouldScroll()) {
+            return getScrollingModuleCount();
+        } else {
+            return getDisplayableCount();
+        }
+    }
+
+    public boolean shouldScroll() {
+        boolean val = getScrollingModuleCount() < getDisplayableCount();
+        return val;
+    }
+
+    public int getDisplayedHeight() {
+        int max = maxDisplayHeight();
+        int normal = getHeight();
+        int toReturn = Math.min(max, normal);
+        return toReturn;
+    }
+
+    public IEntry getNextEntry() {
+        int a = 0;
+        int i = scroll;
+        for (; ; i++) {
+            IEntry entry = entries.get(i);
+            if (entry.shouldRender()) {
+                if (modulesCounted != 0) {
+                    if (a < modulesCounted) {
+                        a++;
+                        continue;
+                    }
+                }
+                return entry;
+            }
+        }
+    }
+
+    public void handleScroll(int dWheel, int x, int y) {
+        updateIsMouseHoveredFull(x, y);
+        if (isMouseHovered() && shouldScroll()) {
+            scroll += dWheel;
+        }
+    }
+
+    protected void updateIsMouseHoveredFull(int mouseX, int mouseY) {
+        int x = getX(), y = getY();
+        int maxX = x + width, maxY = y + getDisplayedHeight();
+        isHoveredCached = (x <= mouseX && mouseX <= maxX && y <= mouseY && mouseY <= maxY);
     }
 }

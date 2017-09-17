@@ -18,6 +18,8 @@ package net.daporkchop.pepsimod.clickgui;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.impl.misc.ClickGuiMod;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.math.MathHelper;
+import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 
@@ -97,5 +99,19 @@ public class ClickGUI extends GuiScreen { //TODO: scrolling!
         }
 
         return false;
+    }
+
+    @Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+        int dWheel = MathHelper.clamp(Mouse.getEventDWheel(), -1, 1);
+        if (dWheel != 0) {
+            dWheel *= -1;
+            int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
+            int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+            for (Window window : windows) {
+                window.handleScroll(dWheel, x, y);
+            }
+        }
     }
 }
