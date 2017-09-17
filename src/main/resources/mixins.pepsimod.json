@@ -35,6 +35,7 @@
     "client.gui.MixinGuiIngameMenu",
     "entity.living.player.MixinEntityPlayerSP",
     "client.gui.inventory.MixinGuiContainer",
-    "item.MixinItemStack"
+    "item.MixinItemStack",
+    "scoreboard.MixinScoreboard"
   ]
 }
