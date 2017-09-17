@@ -18,6 +18,8 @@ package net.daporkchop.pepsimod.util.module;
 import java.io.Serializable;
 
 public class ESPSettings implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public boolean basic = false;
     public boolean trapped = false;
     public boolean ender = false;

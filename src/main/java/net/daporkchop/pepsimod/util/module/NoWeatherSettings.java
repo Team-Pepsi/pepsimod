@@ -18,6 +18,8 @@ package net.daporkchop.pepsimod.util.module;
 import java.io.Serializable;
 
 public class NoWeatherSettings implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     public boolean disableRain = false;
     public boolean changeTime = false;
     public int time = 0;

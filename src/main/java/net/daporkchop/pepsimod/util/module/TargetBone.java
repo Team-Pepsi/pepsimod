@@ -20,5 +20,7 @@ import java.io.Serializable;
 public enum TargetBone implements Serializable {
     HEAD,
     FEET,
-    MIDDLE
+    MIDDLE;
+
+    private static final long serialVersionUID = 1L;
 }

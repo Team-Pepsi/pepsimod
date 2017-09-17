@@ -241,6 +241,7 @@ public class PepsiMod {
                 options[i] = save;
             }
             dataTag.setSerializableArray("settings" + module.nameFull, options);
+            dataTag.setBoolean("enabled:" + module.name, module.isEnabled);
         }
         for (Window window : ClickGUI.INSTANCE.windows) {
             dataTag.setIntegerArray(window.text + "¦window", new int[]{window.getX(), window.getY(), window.isOpen ? 1 : 0});
@@ -284,7 +285,7 @@ public class PepsiMod {
                 }
             }
 
-                module.getOptionByName("enabled").setValue(Module.shouldBeEnabled((boolean) module.getOptionByName("enabled").getValue(), module.getLaunchState()));
+            module.getOptionByName("enabled").setValue(Module.shouldBeEnabled(dataTag.getBoolean("enabled:" + module.name), module.getLaunchState()));
             if (((boolean) module.getOptionByName("enabled").getValue())) {
                 ModuleManager.enableModule(module);
             } else {

@@ -40,7 +40,7 @@ public class SubSlider extends EntryImplBase {
     public boolean dragging = false;
 
     public SubSlider(Button parent, ModuleOption option) {
-        super(parent.window.getX() + 4, parent.getY() + 4, parent.window.getWidth() - 6, 12);
+        super(parent.window.getX() + 4, parent.getY() + 4, parent.window.getWidth() - 8, 12);
         this.parent = parent;
         this.window = parent.window;
         this.slider = (ExtensionSlider) option.extended;
@@ -74,8 +74,8 @@ public class SubSlider extends EntryImplBase {
             currentWidth = mouseX - getX();
             if (currentWidth < 0) {
                 currentWidth = 0;
-            } else if (currentWidth > 94) {
-                currentWidth = 94;
+            } else if (currentWidth > 92) {
+                currentWidth = 92;
             }
             updateValueFromWidth();
         }
@@ -89,7 +89,7 @@ public class SubSlider extends EntryImplBase {
     }
 
     public void updateValueFromWidth() {
-        float val = (currentWidth / 94f);
+        float val = (currentWidth / 92f);
         val *= (getMax() - getMin());
         val += getMin();
         val = PepsiUtils.round(val, getStep());
@@ -122,8 +122,8 @@ public class SubSlider extends EntryImplBase {
         float val = isFloat ? floatValue : intValue + 0.0f;
         val -= getMin();
         val /= (getMax() - getMin());
-        val *= 94;
-        return currentWidth = PepsiUtils.ensureRange((int) val, 0, 94);
+        val *= 92;
+        return currentWidth = PepsiUtils.ensureRange((int) val, 0, 92);
     }
 
     public int getX() {

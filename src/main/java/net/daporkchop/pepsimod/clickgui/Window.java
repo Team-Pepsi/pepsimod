@@ -15,6 +15,7 @@
 
 package net.daporkchop.pepsimod.clickgui;
 
+import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.clickgui.api.EntryImplBase;
 import net.daporkchop.pepsimod.clickgui.api.IEntry;
 import net.daporkchop.pepsimod.clickgui.entry.Button;
@@ -102,15 +103,40 @@ public class Window extends EntryImplBase {
         RenderUtilsXdolf.drawRect(getX(), getY(), getX() + getWidth(), getY() + getDisplayedHeight(), getColor());
         GL11.glColor3f(0f, 0f, 0f);
         drawString(getX() + 2, getY() + 2, text, Color.BLACK.getRGB());
-        modulesCounted = 0;
-        for (int i = getScroll(); i < getModulesToDisplay() + getScroll(); i++) {
-            IEntry entry = getNextEntry();
-            modulesCounted++;
-            entry.draw(mouseX, mouseY);
+        if (isOpen) {
+            if (shouldScroll()) {
+                int barHeight = getScrollbarHeight();
+                int barY = getScrollbarY();
+                barY = Math.min(barY, getScrollingModuleCount() * 13 - 1 - barHeight);
+                RenderUtilsXdolf.drawRect(getX() + 97, getY() + 13 + barY, getX() + 99, Math.min(getY() + 13 + barY + barHeight, getY() + getDisplayedHeight() - 1), PepsiMod.INSTANCE.hudSettings.getColor());
+            } else {
+                RenderUtilsXdolf.drawRect(getX() + 97, getY() + 13, getX() + 99, getDisplayedHeight() - 1, PepsiMod.INSTANCE.hudSettings.getColor());
+            }
+            modulesCounted = 0;
+            for (int i = getScroll(); i < getModulesToDisplay() + getScroll(); i++) {
+                IEntry entry = getNextEntry();
+                modulesCounted++;
+                entry.draw(mouseX, mouseY);
+            }
         }
 
         GL11.glPopMatrix();
         GL11.glPopAttrib();
+    }
+
+    public int getScrollbarHeight() {
+        double maxHeight = maxDisplayHeight();
+        double maxAllowedModules = getScrollingModuleCount();
+        double displayable = getDisplayableCount();
+        int result = (int) Math.floor(maxHeight * (maxAllowedModules / displayable));
+        return result;
+    }
+
+    public int getScrollbarY() {
+        int displayable = getDisplayableCount();
+        int rest = displayable - scroll;
+        int resultRaw = displayable - rest;
+        return resultRaw * 13;
     }
 
     public int getX() {
