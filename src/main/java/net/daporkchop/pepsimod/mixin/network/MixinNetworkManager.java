@@ -70,4 +70,9 @@ public abstract class MixinNetworkManager {
             ModuleManager.disableModule(FreecamMod.INSTANCE);
         }
     }
+
+    @Inject(method = "exceptionCaught", at = @At("RETURN"))
+    public void postExceptionCaught(ChannelHandlerContext p_exceptionCaught_1_, Throwable p_exceptionCaught_2_, CallbackInfo callbackInfo) {
+        p_exceptionCaught_2_.printStackTrace(System.out);
+    }
 }

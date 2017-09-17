@@ -225,14 +225,40 @@ public class AnnouncerMod extends TimeModule {
 
     public void onPlayerJoin(String name) {
         if (PepsiMod.INSTANCE.announcerSettings.join) {
-            toSend.add(new TaskBasic(TaskType.JOIN, MessagePrefixes.getMessage(TaskType.JOIN, name)));
+            QueuedTask task = new TaskBasic(TaskType.JOIN, MessagePrefixes.getMessage(TaskType.JOIN, name));
+            if (hasTimePassedM(2000))   {
+                updateLastMS();
+                String msg = task.getMessage();
+                if (msg != null) {
+                    if (PepsiMod.INSTANCE.announcerSettings.clientSide) {
+                        PepsiMod.INSTANCE.mc.player.sendMessage(new TextComponentString(PepsiUtils.COLOR_ESCAPE + "a" + msg));
+                    } else {
+                        PepsiMod.INSTANCE.mc.player.sendChatMessage(msg);
+                    }
+                    return;
+                }
+            }
+            toSend.add(task);
             tick();
         }
     }
 
     public void onPlayerLeave(String name) {
         if (PepsiMod.INSTANCE.announcerSettings.leave) {
-            toSend.add(new TaskBasic(TaskType.LEAVE, MessagePrefixes.getMessage(TaskType.LEAVE, name)));
+            QueuedTask task = new TaskBasic(TaskType.LEAVE, MessagePrefixes.getMessage(TaskType.LEAVE, name));
+            if (hasTimePassedM(2000))   {
+                updateLastMS();
+                String msg = task.getMessage();
+                if (msg != null) {
+                    if (PepsiMod.INSTANCE.announcerSettings.clientSide) {
+                        PepsiMod.INSTANCE.mc.player.sendMessage(new TextComponentString(PepsiUtils.COLOR_ESCAPE + "a" + msg));
+                    } else {
+                        PepsiMod.INSTANCE.mc.player.sendChatMessage(msg);
+                    }
+                    return;
+                }
+            }
+            toSend.add(task);
             tick();
         }
     }

@@ -49,20 +49,25 @@ public abstract class MixinNetHandlerPlayClient {
 
     @Inject(method = "handlePlayerListItem", at = @At("HEAD"))
     public void preHandlePlayerListItem(SPacketPlayerListItem listItem, CallbackInfo callbackInfo) {
-        if (PepsiMod.INSTANCE.mc.player != null && PepsiMod.INSTANCE.mc.player.getGameProfile() != null) {
-            if (listItem.getAction() == SPacketPlayerListItem.Action.ADD_PLAYER) {
-                for (SPacketPlayerListItem.AddPlayerData data : listItem.getEntries()) {
-                    if (!data.getProfile().getId().equals(PepsiMod.INSTANCE.mc.player.getGameProfile().getId())) {
-                        AnnouncerMod.INSTANCE.onPlayerJoin(data.getProfile().getName());
-                    }
-                }
-            } else if (listItem.getAction() == SPacketPlayerListItem.Action.REMOVE_PLAYER) {
-                for (SPacketPlayerListItem.AddPlayerData data : listItem.getEntries()) {
-                    if (!data.getProfile().getId().equals(PepsiMod.INSTANCE.mc.player.getGameProfile().getId())) {
-                        AnnouncerMod.INSTANCE.onPlayerLeave(playerInfoMap.get(data.getProfile().getId()).getGameProfile().getName());
-                    }
+        try {
+            if (listItem.getEntries().size() == 1) {
+                    if (listItem.getAction() == SPacketPlayerListItem.Action.ADD_PLAYER) {
+                        for (SPacketPlayerListItem.AddPlayerData data : listItem.getEntries()) {
+                            if (!data.getProfile().getId().equals(PepsiMod.INSTANCE.mc.player.getGameProfile().getId())) {
+                                AnnouncerMod.INSTANCE.onPlayerJoin(data.getProfile().getName());
+                            }
+                        }
+                    } else if (listItem.getAction() == SPacketPlayerListItem.Action.REMOVE_PLAYER) {
+                        for (SPacketPlayerListItem.AddPlayerData data : listItem.getEntries()) {
+                            if (!data.getProfile().getId().equals(PepsiMod.INSTANCE.mc.player.getGameProfile().getId())) {
+                                AnnouncerMod.INSTANCE.onPlayerLeave(playerInfoMap.get(data.getProfile().getId()).getGameProfile().getName());
+                            }
+                        }
+
                 }
             }
+        } catch (NullPointerException e)    {
+
         }
     }
 }
