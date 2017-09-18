@@ -143,7 +143,7 @@ public class ElytraFlyMod extends TimeModule {
                         },
                         () -> {
                             return PepsiMod.INSTANCE.elytraFlySettings.speed;
-                        }, "Speed", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0f, 10f, 0.1f))
+                        }, "Speed", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0f, 3f, 0.01f))
         };
     }
 

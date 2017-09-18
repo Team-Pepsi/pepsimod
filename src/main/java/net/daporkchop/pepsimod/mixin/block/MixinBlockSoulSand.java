@@ -13,34 +13,25 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.util.module;
+package net.daporkchop.pepsimod.mixin.block;
 
-import java.io.Serializable;
-import java.util.HashMap;
+import net.daporkchop.pepsimod.module.impl.movement.NoSlowdownMod;
+import net.minecraft.block.BlockSoulSand;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-public class MiscOptions implements Serializable {
-    private static final long serialVersionUID = 6988070214567038785L;
-
-    public HashMap<String, ModuleState> states = new HashMap<>();
-    public boolean criticals_packet = true;
-    public float entitySpeed_speed = 1.0f;
-    public float crystalAura_speed = 1.0f;
-    public float crystalAura_range = 3.8f;
-    public float entityStep_step = 1f;
-    public float flight_speed = 1.0f;
-    public float speedmine_speed = 0.4f;
-    public float autoEat_threshold = 7f;
-    public boolean step_legit = false;
-    public int step_height = 1;
-
-    public static class ModuleState implements Serializable {
-        public boolean enabled;
-        public boolean hidden;
-
-        public ModuleState(boolean a, boolean b) {
-            enabled = a;
-            hidden = b;
+@Mixin(BlockSoulSand.class)
+public abstract class MixinBlockSoulSand {
+    @Inject(method = "onEntityCollidedWithBlock", at = @At("HEAD"), cancellable = true)
+    public void preOnEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn, CallbackInfo callbackInfo) {
+        if (NoSlowdownMod.INSTANCE.isEnabled) {
+            callbackInfo.cancel();
         }
     }
 }
-

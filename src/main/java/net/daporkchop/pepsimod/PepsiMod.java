@@ -22,10 +22,7 @@ import net.daporkchop.pepsimod.command.CommandRegistry;
 import net.daporkchop.pepsimod.command.impl.*;
 import net.daporkchop.pepsimod.event.GuiRenderHandler;
 import net.daporkchop.pepsimod.event.MiscEventHandler;
-import net.daporkchop.pepsimod.gui.clickgui.WindowCombat;
-import net.daporkchop.pepsimod.gui.clickgui.WindowMisc;
-import net.daporkchop.pepsimod.gui.clickgui.WindowMovement;
-import net.daporkchop.pepsimod.gui.clickgui.WindowRender;
+import net.daporkchop.pepsimod.gui.clickgui.*;
 import net.daporkchop.pepsimod.key.KeyRegistry;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
@@ -38,6 +35,10 @@ import net.daporkchop.pepsimod.module.impl.combat.CriticalsMod;
 import net.daporkchop.pepsimod.module.impl.combat.CrystalAuraMod;
 import net.daporkchop.pepsimod.module.impl.misc.*;
 import net.daporkchop.pepsimod.module.impl.movement.*;
+import net.daporkchop.pepsimod.module.impl.player.AutoEatMod;
+import net.daporkchop.pepsimod.module.impl.player.FastPlaceMod;
+import net.daporkchop.pepsimod.module.impl.player.SpeedmineMod;
+import net.daporkchop.pepsimod.module.impl.player.SprintMod;
 import net.daporkchop.pepsimod.module.impl.render.*;
 import net.daporkchop.pepsimod.util.*;
 import net.daporkchop.pepsimod.util.datatag.DataTag;
@@ -112,6 +113,16 @@ public class PepsiMod {
         ModuleManager.registerModule(new CrystalAuraMod(false, -1, false));
         ModuleManager.registerModule(new AntiTotemAnimationMod(false, -1, false));
         ModuleManager.registerModule(new AnnouncerMod(false, -1, false));
+        ModuleManager.registerModule(new AutoRespawnMod(false, -1, false));
+        ModuleManager.registerModule(new EntityStepMod(false, -1, false)); //TODO: fix or remove
+        ModuleManager.registerModule(new JesusMod(false, -1, false)); //TODO: fix damage (skid from wurst)
+        ModuleManager.registerModule(new SprintMod(false, -1, false));
+        ModuleManager.registerModule(new NoSlowdownMod(false, -1, false));
+        ModuleManager.registerModule(new FlightMod(false, -1, false));
+        ModuleManager.registerModule(new FastPlaceMod(false, -1, false));
+        ModuleManager.registerModule(new SpeedmineMod(false, -1, false));
+        ModuleManager.registerModule(new AutoEatMod(false, -1, false));
+        ModuleManager.registerModule(new StepMod(false, -1, false));
     }
 
     public static void registerCommands(FMLStateEvent event) {
@@ -162,7 +173,13 @@ public class PepsiMod {
 
         initModules();
 
-        ClickGUI.INSTANCE.setWindows(new WindowRender(), new WindowCombat(), new WindowMisc(), new WindowMovement());
+        ClickGUI.INSTANCE.setWindows(
+                new WindowRender(),
+                new WindowCombat(),
+                new WindowMisc(),
+                new WindowMovement(),
+                new WindowPlayer()
+        );
 
         for (Window window : ClickGUI.INSTANCE.windows) {
             int[] data = dataTag.getIntegerArray(window.text + "¦window", new int[]{window.getX(), window.getY(), 0});

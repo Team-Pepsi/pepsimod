@@ -23,7 +23,7 @@ import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 
-public class ClickGUI extends GuiScreen { //TODO: scrolling!
+public class ClickGUI extends GuiScreen {
     public static ClickGUI INSTANCE;
     public Window[] windows;
 

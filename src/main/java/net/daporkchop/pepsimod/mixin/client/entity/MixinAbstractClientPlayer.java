@@ -28,8 +28,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import javax.security.auth.callback.Callback;
-
 @Mixin(AbstractClientPlayer.class)
 public abstract class MixinAbstractClientPlayer extends EntityPlayer {
     public MixinAbstractClientPlayer() {
@@ -38,9 +36,13 @@ public abstract class MixinAbstractClientPlayer extends EntityPlayer {
 
     @Inject(method = "isSpectator", at = @At("HEAD"), cancellable = true)
     public void preIsSpectator(CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (FreecamMod.INSTANCE.isEnabled) {
-            callbackInfoReturnable.setReturnValue(true);
-            callbackInfoReturnable.cancel();
+        if (FreecamMod.INSTANCE == null) {
+            System.out.println("Freecam instance was null!!!");
+        } else {
+            if (FreecamMod.INSTANCE.isEnabled) {
+                callbackInfoReturnable.setReturnValue(true);
+                callbackInfoReturnable.cancel();
+            }
         }
     }
 

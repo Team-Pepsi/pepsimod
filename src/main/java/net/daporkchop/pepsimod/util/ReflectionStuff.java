@@ -19,13 +19,16 @@ import net.daporkchop.pepsimod.PepsiMod;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.Timer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -56,6 +59,12 @@ public class ReflectionStuff {
     public static Field pressed;
     public static Field ridingEntity;
     public static Field horseJumpPower;
+    public static Field cPacketPlayer_y;
+    public static Field landMovementFactor;
+    public static Field inWater;
+    public static Field rightClickDelayTimer;
+    public static Field curBlockDamageMP;
+    public static Field blockHitDelay;
 
     public static Method updateFallState;
 
@@ -122,10 +131,97 @@ public class ReflectionStuff {
             pressed = getField(KeyBinding.class, "pressed", "field_74513_e", "i");
             ridingEntity = getField(Entity.class, "ridingEntity", "field_184239_as", "au");
             horseJumpPower = getField(EntityPlayerSP.class, "horseJumpPower", "field_110321_bQ", "cq");
+            cPacketPlayer_y = getField(CPacketPlayer.class, "y", "field_149477_b", "b");
+            inWater = getField(Entity.class, "inWater", "field_70171_ac", "U");
+            landMovementFactor = getField(EntityLivingBase.class, "landMovementFactor", "field_70746_aG", "bC");
+            rightClickDelayTimer = getField(Minecraft.class, "rightClickDelayTimer", "field_71467_ac", "as");
+            blockHitDelay = getField(PlayerControllerMP.class, "blockHitDelay", "field_78781_i", "g");
+            curBlockDamageMP = getField(PlayerControllerMP.class, "curBlockDamageMP", "field_78770_f", "e");
 
             updateFallState = getMethod(Entity.class, new String[]{"updateFallState", "func_184231_a", "a"}, double.class, boolean.class, IBlockState.class, BlockPos.class);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static float getCurBlockDamageMP() {
+        try {
+            return (float) curBlockDamageMP.get(PepsiMod.INSTANCE.mc.playerController);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static void setCurBlockDamageMP(float val) {
+        try {
+            curBlockDamageMP.set(PepsiMod.INSTANCE.mc.playerController, val);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static int getBlockHitDelay() {
+        try {
+            return (int) blockHitDelay.get(PepsiMod.INSTANCE.mc.playerController);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static void setBlockHitDelay(int val) {
+        try {
+            blockHitDelay.set(PepsiMod.INSTANCE.mc.playerController, val);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static void setRightClickDelayTimer(int val) {
+        try {
+            rightClickDelayTimer.set(PepsiMod.INSTANCE.mc, val);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static void setInWater(Entity entity, boolean y) {
+        try {
+            inWater.set(entity, y);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static void setLandMovementFactor(EntityLivingBase entity, float y) {
+        try {
+            landMovementFactor.set(entity, y);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static void setCPacketPlayer_y(CPacketPlayer packet, double y) {
+        try {
+            cPacketPlayer_y.set(packet, y);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static double getCPacketPlayer_y(CPacketPlayer packet) {
+        try {
+            return (double) cPacketPlayer_y.get(packet);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
         }
     }
 
