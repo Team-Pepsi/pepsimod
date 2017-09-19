@@ -25,4 +25,11 @@ public class ESPSettings implements Serializable {
     public boolean ender = false;
     public boolean hopper = false;
     public boolean furnace = false;
+
+    public boolean monsters = false;
+    public boolean animals = false;
+    public boolean players = false;
+    public boolean golems = false;
+    public boolean invisible = false;
+    public boolean friendColors = true;
 }

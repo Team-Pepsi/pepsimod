@@ -19,5 +19,8 @@ public enum ModuleCategory {
     RENDER,
     COMBAT,
     MISC,
-    MOVEMENT
+    MOVEMENT,
+    PLAYER,
+
+    PLACEHOLDER
 }

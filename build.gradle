@@ -1,3 +1,18 @@
+/*
+ * Adapted from the Wizardry License
+ *
+ * Copyright (c) 2017 Team Pepsi
+ *
+ * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
+ * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
+ *
+ * The persons and/or organizations are also disallowed from sub-licensing and/or trademarking this software without explicit permission from Team Pepsi.
+ *
+ * Any persons and/or organizations using this software must disclose their source code and have it publicly available, include this license, provide sufficient credit to the original authors of the project (IE: Team Pepsi), as well as provide a link to the original project.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 buildscript {
     repositories {
         jcenter()
@@ -31,9 +46,9 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.1-14.22.1.2478"
+    version = "1.12.2-14.23.0.2486"
     runDir = "run"
-    mappings = "snapshot_20170917"
+    mappings = "snapshot_20170919"
     makeObfSourceJar = false
     coreMod = "net.daporkchop.pepsimod.PepsiModMixinLoader"
 }
@@ -47,30 +62,21 @@ repositories {
 }
 
 dependencies {
-    compile("org.spongepowered:mixin:0.7-SNAPSHOT") {
+    compile("org.spongepowered:mixin:0.7.2-SNAPSHOT") {
         exclude module: "launchwrapper"
     }
 }
 
 processResources {
-    // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
-
-    // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include "mcmod.info"
-
-        // replace version and mcversion
         expand "version": project.version, "mcversion": project.minecraft.version
     }
-
-    // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude "mcmod.info"
     }
-
-    // move _at.cfg into META-INF
     rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
@@ -86,46 +92,7 @@ reobf {
     }
 }
 
-/*
- * Adapted from the Wizardry License
- *
- * Copyright (c) 2017 Team Pepsi
- *
- * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
- * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
- *
- * The persons and/or organizations are also disallowed from sub-licensing and/or trademarking this software without explicit permission from Team Pepsi.
- *
- * Any persons and/or organizations using this software must disclose their source code and have it publicly available, include this license, provide sufficient credit to the original authors of the project (IE: Team Pepsi), as well as provide a link to the original project.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
-task shadowDevJar(type: ShadowJar) {
-    classifier = 'dev-shaded'
-
-    from sourceSets.main.output
-    //from sourceSets.java8.output
-
-    // Default settings for shadow tasks
-    configurations = [project.configurations.runtime]
-    //manifest.inheritFrom tasks.jar.manifest
-    //exclude 'META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
-}
-
-//shadowDevJar shadowConfiguration
-
-// Upload shadowDevJar to Maven repository
-artifacts {
-    archives shadowDevJar
-}
-
-allprojects {
-    // Re-obfuscate only after creating the shadowDevJar
-    tasks.findByName('reobfJar')?.mustRunAfter rootProject.tasks.shadowDevJar
-}
 
 shadowJar {
     dependencies {

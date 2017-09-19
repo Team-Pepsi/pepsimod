@@ -52,11 +52,13 @@ public class AnnouncerMod extends TimeModule {
 
     @Override
     public void onEnable() {
-        for (Window window : ClickGUI.INSTANCE.windows) {
-            window.openGui();
-        }
+        if (PepsiMod.INSTANCE.hasInitializedModules) {
+            for (Window window : ClickGUI.INSTANCE.windows) {
+                window.openGui();
+            }
 
-        PepsiMod.INSTANCE.mc.displayGuiScreen(ClickGUI.INSTANCE);
+            PepsiMod.INSTANCE.mc.displayGuiScreen(ClickGUI.INSTANCE);
+        }
     }
 
     @Override
@@ -188,7 +190,7 @@ public class AnnouncerMod extends TimeModule {
     }
 
     public void onBreakBlock(IBlockState state) {
-        if (PepsiMod.INSTANCE.announcerSettings.mine) {
+        if (isEnabled && PepsiMod.INSTANCE.announcerSettings.mine) {
             Iterator<QueuedTask> iterator = toSend.iterator();
             while (iterator.hasNext()) {
                 QueuedTask task = iterator.next();
@@ -206,7 +208,7 @@ public class AnnouncerMod extends TimeModule {
     }
 
     public void onPlaceBlock(BlockEvent.PlaceEvent event) {
-        if (PepsiMod.INSTANCE.announcerSettings.place && event.getPlayer() == PepsiMod.INSTANCE.mc.player) {
+        if (isEnabled && PepsiMod.INSTANCE.announcerSettings.place && event.getPlayer() == PepsiMod.INSTANCE.mc.player) {
             Iterator<QueuedTask> iterator = toSend.iterator();
             while (iterator.hasNext()) {
                 QueuedTask task = iterator.next();
@@ -224,7 +226,7 @@ public class AnnouncerMod extends TimeModule {
     }
 
     public void onPlayerJoin(String name) {
-        if (PepsiMod.INSTANCE.announcerSettings.join) {
+        if (isEnabled && PepsiMod.INSTANCE.announcerSettings.join) {
             QueuedTask task = new TaskBasic(TaskType.JOIN, MessagePrefixes.getMessage(TaskType.JOIN, name));
             if (hasTimePassedM(2000))   {
                 updateLastMS();
@@ -238,13 +240,11 @@ public class AnnouncerMod extends TimeModule {
                     return;
                 }
             }
-            toSend.add(task);
-            tick();
         }
     }
 
     public void onPlayerLeave(String name) {
-        if (PepsiMod.INSTANCE.announcerSettings.leave) {
+        if (isEnabled && PepsiMod.INSTANCE.announcerSettings.leave) {
             QueuedTask task = new TaskBasic(TaskType.LEAVE, MessagePrefixes.getMessage(TaskType.LEAVE, name));
             if (hasTimePassedM(2000))   {
                 updateLastMS();
@@ -258,8 +258,6 @@ public class AnnouncerMod extends TimeModule {
                     return;
                 }
             }
-            toSend.add(task);
-            tick();
         }
     }
 

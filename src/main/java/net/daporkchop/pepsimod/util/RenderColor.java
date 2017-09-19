@@ -20,11 +20,23 @@ public class RenderColor {
     public byte g;
     public byte b;
     public byte a;
+    public int rOrig;
+    public int gOrig;
+    public int bOrig;
+    public int aOrig;
 
     public RenderColor(int r, int g, int b, int a) {
         this.r = (byte) Math.floorDiv(r, 2);
         this.g = (byte) Math.floorDiv(g, 2);
         this.b = (byte) Math.floorDiv(b, 2);
         this.a = (byte) Math.floorDiv(a, 2);
+        this.rOrig = r;
+        this.gOrig = g;
+        this.bOrig = b;
+        this.aOrig = a;
+    }
+
+    public int getIntColor() {
+        return (a & 255) << 24 | (r & 255) << 16 | (g & 255) << 8 | (b & 255) << 0;
     }
 }

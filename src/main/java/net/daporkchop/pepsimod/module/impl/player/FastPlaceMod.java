@@ -13,35 +13,46 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.util.module;
+package net.daporkchop.pepsimod.module.impl.player;
 
-import java.io.Serializable;
-import java.util.HashMap;
+import net.daporkchop.pepsimod.module.ModuleCategory;
+import net.daporkchop.pepsimod.module.api.Module;
+import net.daporkchop.pepsimod.module.api.ModuleOption;
+import net.daporkchop.pepsimod.util.ReflectionStuff;
 
-public class MiscOptions implements Serializable {
-    private static final long serialVersionUID = 6988070214567038785L;
+public class FastPlaceMod extends Module {
+    public static FastPlaceMod INSTANCE;
 
-    public HashMap<String, ModuleState> states = new HashMap<>();
-    public boolean criticals_packet = true;
-    public float entitySpeed_speed = 1.0f;
-    public float crystalAura_speed = 1.0f;
-    public float crystalAura_range = 3.8f;
-    public float entityStep_step = 1f;
-    public float flight_speed = 1.0f;
-    public float speedmine_speed = 0.4f;
-    public float autoEat_threshold = 7f;
-    public boolean step_legit = false;
-    public int step_height = 1;
-    public int cpu_framecap = 5;
+    public FastPlaceMod(boolean isEnabled, int key, boolean hide) {
+        super(isEnabled, "FastPlace", key, hide);
+    }
 
-    public static class ModuleState implements Serializable {
-        public boolean enabled;
-        public boolean hidden;
+    @Override
+    public void onEnable() {
 
-        public ModuleState(boolean a, boolean b) {
-            enabled = a;
-            hidden = b;
-        }
+    }
+
+    @Override
+    public void onDisable() {
+
+    }
+
+    @Override
+    public void tick() {
+        ReflectionStuff.setRightClickDelayTimer(0);
+    }
+
+    @Override
+    public void init() {
+        INSTANCE = this;
+    }
+
+    @Override
+    public ModuleOption[] getDefaultOptions() {
+        return new ModuleOption[0];
+    }
+
+    public ModuleCategory getCategory() {
+        return ModuleCategory.PLAYER;
     }
 }
-

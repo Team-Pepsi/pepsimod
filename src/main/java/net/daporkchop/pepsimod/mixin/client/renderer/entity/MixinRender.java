@@ -15,20 +15,29 @@
 
 package net.daporkchop.pepsimod.mixin.client.renderer.entity;
 
+import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.module.impl.render.ESPMod;
 import net.daporkchop.pepsimod.module.impl.render.HealthTagsMod;
 import net.daporkchop.pepsimod.util.Friends;
 import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.module.ESPSettings;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityGolem;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Render.class)
 public abstract class MixinRender<T extends Entity> {
@@ -75,6 +84,30 @@ public abstract class MixinRender<T extends Entity> {
             }
 
             EntityRenderer.drawNameplate(this.getFontRendererFromRenderManager(), str, (float) x, (float) y + f2, (float) z, i, f, f1, flag1, flag);
+        }
+    }
+
+    @Inject(method = "getTeamColor", at = @At("HEAD"), cancellable = true)
+    public void pregetTeamColor(T entity, CallbackInfoReturnable<Integer> callbackInfoReturnable) {
+        if (ESPMod.INSTANCE.isEnabled) {
+            ESPSettings settings = PepsiMod.INSTANCE.espSettings;
+            if (entity.isInvisible()) {
+                if (!settings.invisible) {
+                    return;
+                }
+            }
+            if (settings.animals && entity instanceof EntityAnimal) {
+                callbackInfoReturnable.setReturnValue(ESPMod.animalColor.getIntColor());
+            } else if (settings.monsters && entity instanceof EntityMob) {
+                callbackInfoReturnable.setReturnValue(ESPMod.monsterColor.getIntColor());
+            } else if (settings.players && entity instanceof EntityPlayer) {
+                if (settings.friendColors && Friends.isFriend(entity.getUniqueID().toString())) {
+                    callbackInfoReturnable.setReturnValue(ESPMod.friendColor.getIntColor());
+                }
+                callbackInfoReturnable.setReturnValue(ESPMod.playerColor.getIntColor());
+            } else if (settings.golems && entity instanceof EntityGolem) {
+                callbackInfoReturnable.setReturnValue(ESPMod.golemColor.getIntColor());
+            }
         }
     }
 }

@@ -18,6 +18,7 @@ package net.daporkchop.pepsimod.mixin.client;
 import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
+import net.daporkchop.pepsimod.module.impl.render.UnfocusedCPUMod;
 import net.daporkchop.pepsimod.module.impl.render.ZoomMod;
 import net.daporkchop.pepsimod.util.Friends;
 import net.minecraft.client.Minecraft;
@@ -35,6 +36,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -132,6 +134,17 @@ public abstract class MixinMinecraft {
         if (ZoomMod.INSTANCE.isEnabled) {
             ModuleManager.disableModule(ZoomMod.INSTANCE);
             PepsiMod.INSTANCE.mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
+        }
+    }
+
+    @Inject(method = "getLimitFramerate", at = @At("HEAD"), cancellable = true)
+    public void preGetLimitFramerate(CallbackInfoReturnable<Integer> callbackInfoReturnable) {
+        try {
+            if (UnfocusedCPUMod.INSTANCE.isEnabled && !Display.isActive()) {
+                callbackInfoReturnable.setReturnValue(PepsiMod.INSTANCE.miscOptions.cpu_framecap);
+            }
+        } catch (NullPointerException e) {
+
         }
     }
 }

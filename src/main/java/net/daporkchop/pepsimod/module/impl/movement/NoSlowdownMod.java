@@ -13,35 +13,56 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.util.module;
+package net.daporkchop.pepsimod.module.impl.movement;
 
-import java.io.Serializable;
-import java.util.HashMap;
+import net.daporkchop.pepsimod.module.ModuleCategory;
+import net.daporkchop.pepsimod.module.api.Module;
+import net.daporkchop.pepsimod.module.api.ModuleOption;
+import net.minecraft.init.Blocks;
 
-public class MiscOptions implements Serializable {
-    private static final long serialVersionUID = 6988070214567038785L;
+public class NoSlowdownMod extends Module {
+    public static NoSlowdownMod INSTANCE;
 
-    public HashMap<String, ModuleState> states = new HashMap<>();
-    public boolean criticals_packet = true;
-    public float entitySpeed_speed = 1.0f;
-    public float crystalAura_speed = 1.0f;
-    public float crystalAura_range = 3.8f;
-    public float entityStep_step = 1f;
-    public float flight_speed = 1.0f;
-    public float speedmine_speed = 0.4f;
-    public float autoEat_threshold = 7f;
-    public boolean step_legit = false;
-    public int step_height = 1;
-    public int cpu_framecap = 5;
+    public NoSlowdownMod(boolean isEnabled, int key, boolean hide) {
+        super(isEnabled, "NoSlowdown", key, hide);
+    }
 
-    public static class ModuleState implements Serializable {
-        public boolean enabled;
-        public boolean hidden;
+    @Override
+    public void onEnable() {
+        fastIce();
+    }
 
-        public ModuleState(boolean a, boolean b) {
-            enabled = a;
-            hidden = b;
-        }
+    @Override
+    public void onDisable() {
+        normalIce();
+    }
+
+    @Override
+    public void tick() {
+
+    }
+
+    @Override
+    public void init() {
+        INSTANCE = this;
+    }
+
+    @Override
+    public ModuleOption[] getDefaultOptions() {
+        return new ModuleOption[0];
+    }
+
+    public ModuleCategory getCategory() {
+        return ModuleCategory.MOVEMENT;
+    }
+
+    private void fastIce() {
+        Blocks.ICE.slipperiness = 0.39F;
+        Blocks.PACKED_ICE.slipperiness = 0.39F;
+    }
+
+    private void normalIce() {
+        Blocks.ICE.slipperiness = 0.98F;
+        Blocks.PACKED_ICE.slipperiness = 0.98F;
     }
 }
-

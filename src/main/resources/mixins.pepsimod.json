@@ -36,6 +36,8 @@
     "entity.living.player.MixinEntityPlayerSP",
     "client.gui.inventory.MixinGuiContainer",
     "item.MixinItemStack",
-    "scoreboard.MixinScoreboard"
+    "scoreboard.MixinScoreboard",
+    "block.MixinBlockSoulSand",
+    "client.entity.MixinEntityPlayerSP"
   ]
 }
