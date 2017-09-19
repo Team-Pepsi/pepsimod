@@ -120,8 +120,8 @@ public class PepsiMod {
         ModuleManager.registerModule(new SpeedmineMod(false, -1, false));
         ModuleManager.registerModule(new AutoEatMod(false, -1, false));
         ModuleManager.registerModule(new StepMod(false, -1, false));
-        ModuleManager.registerModule(new AutoMineMod(false, -1, false)); //test
-        ModuleManager.registerModule(new ScaffoldMod(false, -1, false)); //test
+        ModuleManager.registerModule(new AutoMineMod(false, -1, false));
+        ModuleManager.registerModule(new ScaffoldMod(false, -1, false));
         ModuleManager.registerModule(new UnfocusedCPUMod(false, -1, false));
         ModuleManager.registerModule(new ESPMod(false, -1, false));
     }

@@ -109,7 +109,7 @@ public abstract class MixinEntityLivingBase extends Entity {
                         this.motionZ *= 0.9900000095367432D;
                         this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 
-                        if (this.isCollidedHorizontally && !this.world.isRemote) {
+                        if (this.collidedHorizontally && !this.world.isRemote) {
                             double d11 = Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
                             double d3 = d8 - d11;
                             float f5 = (float) (d3 * 10.0D - 3.0D);
@@ -166,7 +166,7 @@ public abstract class MixinEntityLivingBase extends Entity {
 
                         this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 
-                        if (this.isCollidedHorizontally && this.isOnLadder()) {
+                        if (this.collidedHorizontally && this.isOnLadder()) {
                             this.motionY = 0.2D;
                         }
 
@@ -203,7 +203,7 @@ public abstract class MixinEntityLivingBase extends Entity {
                         this.motionY -= 0.02D;
                     }
 
-                    if (this.isCollidedHorizontally && this.isOffsetPositionInLiquid(this.motionX, this.motionY + 0.6000000238418579D - this.posY + d4, this.motionZ)) {
+                    if (this.collidedHorizontally && this.isOffsetPositionInLiquid(this.motionX, this.motionY + 0.6000000238418579D - this.posY + d4, this.motionZ)) {
                         this.motionY = 0.30000001192092896D;
                     }
                 }
@@ -236,7 +236,7 @@ public abstract class MixinEntityLivingBase extends Entity {
                     this.motionY -= 0.02D;
                 }
 
-                if (this.isCollidedHorizontally && this.isOffsetPositionInLiquid(this.motionX, this.motionY + 0.6000000238418579D - this.posY + d0, this.motionZ)) {
+                if (this.collidedHorizontally && this.isOffsetPositionInLiquid(this.motionX, this.motionY + 0.6000000238418579D - this.posY + d0, this.motionZ)) {
                     this.motionY = 0.30000001192092896D;
                 }
             }

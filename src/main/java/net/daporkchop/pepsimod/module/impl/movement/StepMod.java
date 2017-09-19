@@ -54,7 +54,7 @@ public class StepMod extends Module {
 
             player.stepHeight = 0.5f;
 
-            if (!player.isCollidedHorizontally) {
+            if (!player.collidedHorizontally) {
                 return;
             }
 
