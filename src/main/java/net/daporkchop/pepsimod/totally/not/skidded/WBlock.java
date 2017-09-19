@@ -13,35 +13,45 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.util.module;
+package net.daporkchop.pepsimod.totally.not.skidded;
 
-import java.io.Serializable;
-import java.util.HashMap;
+import net.daporkchop.pepsimod.PepsiMod;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 
-public class MiscOptions implements Serializable {
-    private static final long serialVersionUID = 6988070214567038785L;
+public final class WBlock {
+    public static IBlockState getState(BlockPos pos) {
+        return PepsiMod.INSTANCE.mc.world.getBlockState(pos);
+    }
 
-    public HashMap<String, ModuleState> states = new HashMap<>();
-    public boolean criticals_packet = true;
-    public float entitySpeed_speed = 1.0f;
-    public float crystalAura_speed = 1.0f;
-    public float crystalAura_range = 3.8f;
-    public float entityStep_step = 1f;
-    public float flight_speed = 1.0f;
-    public float speedmine_speed = 0.4f;
-    public float autoEat_threshold = 7f;
-    public boolean step_legit = false;
-    public int step_height = 1;
-    public int cpu_framecap = 5;
+    public static Block getBlock(BlockPos pos) {
+        return getState(pos).getBlock();
+    }
 
-    public static class ModuleState implements Serializable {
-        public boolean enabled;
-        public boolean hidden;
+    public static int getId(BlockPos pos) {
+        return Block.getIdFromBlock(getBlock(pos));
+    }
 
-        public ModuleState(boolean a, boolean b) {
-            enabled = a;
-            hidden = b;
-        }
+    public static String getName(Block block) {
+        return "" + Block.REGISTRY.getNameForObject(block);
+    }
+
+    public static Material getMaterial(BlockPos pos) {
+        return getState(pos).getMaterial();
+    }
+
+    public static AxisAlignedBB getBoundingBox(BlockPos pos) {
+        return getState(pos).getBoundingBox(PepsiMod.INSTANCE.mc.world, pos).offset(pos);
+    }
+
+    public static boolean canBeClicked(BlockPos pos) {
+        return getBlock(pos).canCollideCheck(getState(pos), false);
+    }
+
+    public static float getHardness(BlockPos pos) {
+        return getState(pos).getPlayerRelativeBlockHardness(PepsiMod.INSTANCE.mc.player, PepsiMod.INSTANCE.mc.world, pos);
     }
 }
-

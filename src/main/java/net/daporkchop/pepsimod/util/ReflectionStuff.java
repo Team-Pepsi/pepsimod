@@ -59,12 +59,15 @@ public class ReflectionStuff {
     public static Field pressed;
     public static Field ridingEntity;
     public static Field horseJumpPower;
+    public static Field cPacketPlayer_x;
     public static Field cPacketPlayer_y;
+    public static Field cPacketPlayer_z;
     public static Field landMovementFactor;
     public static Field inWater;
     public static Field rightClickDelayTimer;
     public static Field curBlockDamageMP;
     public static Field blockHitDelay;
+    public static Field cPacketPlayer_onGround;
 
     public static Method updateFallState;
 
@@ -131,16 +134,37 @@ public class ReflectionStuff {
             pressed = getField(KeyBinding.class, "pressed", "field_74513_e", "i");
             ridingEntity = getField(Entity.class, "ridingEntity", "field_184239_as", "au");
             horseJumpPower = getField(EntityPlayerSP.class, "horseJumpPower", "field_110321_bQ", "cq");
+            cPacketPlayer_x = getField(CPacketPlayer.class, "x", "field_149479_a", "a");
             cPacketPlayer_y = getField(CPacketPlayer.class, "y", "field_149477_b", "b");
+            cPacketPlayer_z = getField(CPacketPlayer.class, "z", "field_149478_c", "c");
             inWater = getField(Entity.class, "inWater", "field_70171_ac", "U");
             landMovementFactor = getField(EntityLivingBase.class, "landMovementFactor", "field_70746_aG", "bC");
             rightClickDelayTimer = getField(Minecraft.class, "rightClickDelayTimer", "field_71467_ac", "as");
             blockHitDelay = getField(PlayerControllerMP.class, "blockHitDelay", "field_78781_i", "g");
             curBlockDamageMP = getField(PlayerControllerMP.class, "curBlockDamageMP", "field_78770_f", "e");
+            cPacketPlayer_onGround = getField(CPacketPlayer.class, "onGround", "field_149474_g", "f");
 
             updateFallState = getMethod(Entity.class, new String[]{"updateFallState", "func_184231_a", "a"}, double.class, boolean.class, IBlockState.class, BlockPos.class);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void setcPacketPlayer_onGround(CPacketPlayer packet, boolean onGround) {
+        try {
+            cPacketPlayer_onGround.set(packet, onGround);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static boolean getPressed(KeyBinding binding) {
+        try {
+            return (boolean) pressed.get(binding);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
         }
     }
 
@@ -207,6 +231,15 @@ public class ReflectionStuff {
         }
     }
 
+    public static void setCPacketPlayer_x(CPacketPlayer packet, double x) {
+        try {
+            cPacketPlayer_x.set(packet, x);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+    }
+
     public static void setCPacketPlayer_y(CPacketPlayer packet, double y) {
         try {
             cPacketPlayer_y.set(packet, y);
@@ -216,9 +249,9 @@ public class ReflectionStuff {
         }
     }
 
-    public static double getCPacketPlayer_y(CPacketPlayer packet) {
+    public static void setCPacketPlayer_z(CPacketPlayer packet, double z) {
         try {
-            return (double) cPacketPlayer_y.get(packet);
+            cPacketPlayer_z.set(packet, z);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);

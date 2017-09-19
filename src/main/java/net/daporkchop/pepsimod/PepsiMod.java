@@ -35,10 +35,7 @@ import net.daporkchop.pepsimod.module.impl.combat.CriticalsMod;
 import net.daporkchop.pepsimod.module.impl.combat.CrystalAuraMod;
 import net.daporkchop.pepsimod.module.impl.misc.*;
 import net.daporkchop.pepsimod.module.impl.movement.*;
-import net.daporkchop.pepsimod.module.impl.player.AutoEatMod;
-import net.daporkchop.pepsimod.module.impl.player.FastPlaceMod;
-import net.daporkchop.pepsimod.module.impl.player.SpeedmineMod;
-import net.daporkchop.pepsimod.module.impl.player.SprintMod;
+import net.daporkchop.pepsimod.module.impl.player.*;
 import net.daporkchop.pepsimod.module.impl.render.*;
 import net.daporkchop.pepsimod.util.*;
 import net.daporkchop.pepsimod.util.datatag.DataTag;
@@ -114,8 +111,8 @@ public class PepsiMod {
         ModuleManager.registerModule(new AntiTotemAnimationMod(false, -1, false));
         ModuleManager.registerModule(new AnnouncerMod(false, -1, false));
         ModuleManager.registerModule(new AutoRespawnMod(false, -1, false));
-        ModuleManager.registerModule(new EntityStepMod(false, -1, false)); //TODO: fix or remove
-        ModuleManager.registerModule(new JesusMod(false, -1, false)); //TODO: fix damage (skid from wurst)
+        //ModuleManager.registerModule(new EntityStepMod(false, -1, false)); //TODO: fix or remove
+        ModuleManager.registerModule(new JesusMod(false, -1, false)); //test
         ModuleManager.registerModule(new SprintMod(false, -1, false));
         ModuleManager.registerModule(new NoSlowdownMod(false, -1, false));
         ModuleManager.registerModule(new FlightMod(false, -1, false));
@@ -123,6 +120,10 @@ public class PepsiMod {
         ModuleManager.registerModule(new SpeedmineMod(false, -1, false));
         ModuleManager.registerModule(new AutoEatMod(false, -1, false));
         ModuleManager.registerModule(new StepMod(false, -1, false));
+        ModuleManager.registerModule(new AutoMineMod(false, -1, false)); //test
+        ModuleManager.registerModule(new ScaffoldMod(false, -1, false)); //test
+        ModuleManager.registerModule(new UnfocusedCPUMod(false, -1, false));
+        ModuleManager.registerModule(new ESPMod(false, -1, false));
     }
 
     public static void registerCommands(FMLStateEvent event) {
@@ -225,7 +226,12 @@ public class PepsiMod {
         if (!file.exists()) {
             dataTag = new DataTag(file);
             for (Module module : ModuleManager.AVALIBLE_MODULES) {
-                dataTag.setSerializableArray("settings" + module.nameFull, module.defaultOptions());
+                ModuleOption[] options = module.defaultOptions();
+                ModuleOptionSave[] saved = new ModuleOptionSave[options.length];
+                for (int i = 0; i < options.length; i++) {
+                    saved[i] = new ModuleOptionSave(options[i]);
+                }
+                dataTag.setSerializableArray("settings" + module.nameFull, saved);
             }
             dataTag.setSerializable("friends", new HashMap<String, Friend>());
             dataTag.save();
@@ -302,10 +308,11 @@ public class PepsiMod {
                 }
             }
 
-            module.getOptionByName("enabled").setValue(Module.shouldBeEnabled(dataTag.getBoolean("enabled:" + module.name), module.getLaunchState()));
-            if (((boolean) module.getOptionByName("enabled").getValue())) {
+            if (Module.shouldBeEnabled(dataTag.getBoolean("enabled:" + module.name), module.getLaunchState())) {
+                System.out.println("Default state for module " + module.nameFull + ": enabled");
                 ModuleManager.enableModule(module);
             } else {
+                System.out.println("Default state for module " + module.nameFull + ": disabled");
                 ModuleManager.disableModule(module);
             }
             module.hide = ((boolean) module.getOptionByName("hidden").getValue());

@@ -19,6 +19,9 @@ import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
+import net.daporkchop.pepsimod.module.api.OptionCompletions;
+import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
+import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -67,8 +70,8 @@ public class StepMod extends Module {
                 return;
             }
 
-            AxisAlignedBB bb = player.getEntityBoundingBox().offset(0, 0.05d, 0).expand(0.05, 0.05, 0.05);
-            if (PepsiMod.INSTANCE.mc.world.getCollisionBoxes(player, bb.offset(0, 1, 0)).isEmpty()) {
+            AxisAlignedBB bb = player.getEntityBoundingBox().offset(0, 0.05d, 0).expand(0.05, 0.05, 0.05).expand(-0.05, -0.05, -0.05);
+            if (!PepsiMod.INSTANCE.mc.world.getCollisionBoxes(player, bb.offset(0, 1, 0)).isEmpty()) {
                 return;
             }
 
@@ -101,7 +104,24 @@ public class StepMod extends Module {
 
     @Override
     public ModuleOption[] getDefaultOptions() {
-        return new ModuleOption[0];
+        return new ModuleOption[]{
+                new ModuleOption<>(PepsiMod.INSTANCE.miscOptions.step_height, "height", OptionCompletions.INTEGER,
+                        (value) -> {
+                            PepsiMod.INSTANCE.miscOptions.step_height = Math.max(0, value);
+                            return true;
+                        },
+                        () -> {
+                            return PepsiMod.INSTANCE.miscOptions.step_height;
+                        }, "Height", new ExtensionSlider(ExtensionType.VALUE_INT, 1, 64, 1)),
+                new ModuleOption<>(PepsiMod.INSTANCE.miscOptions.step_legit, "legit", OptionCompletions.BOOLEAN,
+                        (value) -> {
+                            PepsiMod.INSTANCE.miscOptions.step_legit = value;
+                            return true;
+                        },
+                        () -> {
+                            return PepsiMod.INSTANCE.miscOptions.step_legit;
+                        }, "Legit")
+        };
     }
 
     public ModuleCategory getCategory() {

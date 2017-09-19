@@ -19,8 +19,13 @@ import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
 import net.daporkchop.pepsimod.module.impl.movement.VelocityMod;
 import net.daporkchop.pepsimod.module.impl.render.AntiInvisibleMod;
+import net.daporkchop.pepsimod.module.impl.render.ESPMod;
+import net.daporkchop.pepsimod.util.module.ESPSettings;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.monster.EntityGolem;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import org.spongepowered.asm.mixin.Mixin;
@@ -86,6 +91,28 @@ public abstract class MixinEntity {
         if (AntiInvisibleMod.INSTANCE.isEnabled) {
             callbackInfoReturnable.setReturnValue(true);
             callbackInfoReturnable.cancel();
+        }
+    }
+
+    @Inject(method = "isGlowing", at = @At("HEAD"), cancellable = true)
+    public void preisGlowing(CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
+        if (ESPMod.INSTANCE.isEnabled) {
+            Entity this_ = Entity.class.cast(this);
+            ESPSettings settings = PepsiMod.INSTANCE.espSettings;
+            if (this_.isInvisible()) {
+                if (!settings.invisible) {
+                    return;
+                }
+            }
+            if (settings.animals && this_ instanceof EntityAnimal) {
+                callbackInfoReturnable.setReturnValue(true);
+            } else if (settings.monsters && this_ instanceof EntityMob) {
+                callbackInfoReturnable.setReturnValue(true);
+            } else if (settings.players && this_ instanceof EntityPlayer) {
+                callbackInfoReturnable.setReturnValue(true);
+            } else if (settings.golems && this_ instanceof EntityGolem) {
+                callbackInfoReturnable.setReturnValue(true);
+            }
         }
     }
 }

@@ -17,11 +17,10 @@ package net.daporkchop.pepsimod.module.api;
 
 import net.daporkchop.pepsimod.module.api.option.OptionExtended;
 
-import java.io.Serializable;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class ModuleOption<T> implements Serializable {
+public class ModuleOption<T> {
     public final Function<T, Boolean> SET;
     public final Supplier<T> GET;
     private final String[] DEFAULT_COMPLETIONS;
