@@ -36,7 +36,6 @@ apply plugin: "net.minecraftforge.gradle.forge"
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'com.github.johnrengelman.shadow'
 
-version = "11.1"
 group = "net.daporkchop"
 archivesBaseName = "pepsimod"
 
@@ -52,6 +51,8 @@ minecraft {
     makeObfSourceJar = false
     coreMod = "net.daporkchop.pepsimod.PepsiModMixinLoader"
 }
+
+version = project.minecraft.version
 
 repositories {
     maven {
@@ -91,8 +92,6 @@ reobf {
         classpath = sourceSets.main.compileClasspath
     }
 }
-
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 shadowJar {
     dependencies {
