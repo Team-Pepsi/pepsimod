@@ -15,9 +15,8 @@
 
 package net.daporkchop.pepsimod.util.misc.waypoints.pathfind;
 
-import net.daporkchop.pepsimod.PepsiMod;
-import net.daporkchop.pepsimod.command.impl.GoToCommand;
 import net.daporkchop.pepsimod.totally.not.skidded.RotationUtils;
+import net.daporkchop.pepsimod.totally.not.skidded.WMinecraft;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.GameSettings;
@@ -25,14 +24,25 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.ArrayList;
+
 public abstract class PathProcessor {
     protected final Minecraft mc = Minecraft.getMinecraft();
 
+    protected final ArrayList<PathPos> path;
     private final KeyBinding[] controls = new KeyBinding[]{
             mc.gameSettings.keyBindForward, mc.gameSettings.keyBindBack,
             mc.gameSettings.keyBindRight, mc.gameSettings.keyBindLeft,
             mc.gameSettings.keyBindJump, mc.gameSettings.keyBindSneak};
+    protected int index;
     protected boolean done;
+
+    public PathProcessor(ArrayList<PathPos> path) {
+        if (path.isEmpty())
+            throw new IllegalStateException("There is no path!");
+
+        this.path = path;
+    }
 
     public abstract void process();
 
@@ -46,20 +56,26 @@ public abstract class PathProcessor {
             ReflectionStuff.setPressed(key, false);
 
         // face next position
-        facePosition(GoToCommand.INSTANCE.pathFinder.currentTarget);
+        if (index < path.size())
+            facePosition(path.get(index));
 
         // disable sprinting
-        PepsiMod.INSTANCE.mc.player.setSprinting(false);
+        WMinecraft.getPlayer().setSprinting(false);
     }
 
     protected void facePosition(BlockPos pos) {
-        RotationUtils.faceVectorForWalking(new Vec3d(pos).addVector(0.5, 0.5, 0.5));
+        RotationUtils
+                .faceVectorForWalking(new Vec3d(pos).addVector(0.5, 0.5, 0.5));
     }
 
     public final void releaseControls() {
         // reset keys
         for (KeyBinding key : controls)
             ReflectionStuff.setPressed(key, GameSettings.isKeyDown(key));
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     public final boolean isDone() {

@@ -15,12 +15,12 @@
 
 package net.daporkchop.pepsimod.util.misc.waypoints.pathfind;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.impl.misc.NoFallMod;
 import net.daporkchop.pepsimod.module.impl.movement.FlightMod;
 import net.daporkchop.pepsimod.module.impl.movement.JesusMod;
 import net.daporkchop.pepsimod.module.impl.movement.NoSlowdownMod;
 import net.daporkchop.pepsimod.totally.not.skidded.WBlock;
+import net.daporkchop.pepsimod.totally.not.skidded.WMinecraft;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -35,32 +35,36 @@ import java.util.Map.Entry;
 
 public class PathFinder {
     public final HashMap<PathPos, PathPos> prevPosMap = new HashMap<>();
-    public final boolean invulnerable = PepsiMod.INSTANCE.mc.player.capabilities.isCreativeMode;
-    public final boolean creativeFlying = PepsiMod.INSTANCE.mc.player.capabilities.isFlying;
-    public final boolean flying = creativeFlying || FlightMod.INSTANCE.isEnabled;
-    public final boolean immuneToFallDamage = invulnerable || NoFallMod.INSTANCE.isEnabled;
-    public final boolean noWaterSlowdown = NoSlowdownMod.INSTANCE.isEnabled;
+    public final boolean invulnerable =
+            WMinecraft.getPlayer().capabilities.isCreativeMode;
+    public final boolean creativeFlying =
+            WMinecraft.getPlayer().capabilities.isFlying;
+    public final boolean flying =
+            creativeFlying || FlightMod.INSTANCE.isEnabled;
+    public final boolean immuneToFallDamage =
+            invulnerable || NoFallMod.INSTANCE.isEnabled;
+    public final boolean noWaterSlowdown =
+            NoSlowdownMod.INSTANCE.isEnabled;
     public final boolean jesus = JesusMod.INSTANCE.isEnabled;
-    //public final boolean spider = wurst.mods.spiderMod.isActive();
-    public final PathPos start;
+    //TODO: public final boolean spider = wurst.mods.spiderMod.isActive();
+    public PathPos start;
     public final BlockPos goal;
     public final HashMap<PathPos, Float> costMap = new HashMap<>();
     public final PathQueue queue = new PathQueue();
+    public final ArrayList<PathPos> path = new ArrayList<>();
     public boolean fallingAllowed = true;
     public boolean divingAllowed = true;
     public PathPos current;
-    public int thinkSpeed = 1024;
-    public int thinkTime = 200;
+    public boolean done, actuallyDone = false;
     public boolean failed;
-    public PathPos currentTarget = null;
 
     public PathFinder(BlockPos goal) {
-        if (PepsiMod.INSTANCE.mc.player.onGround)
-            start = new PathPos(new BlockPos(PepsiMod.INSTANCE.mc.player.posX,
-                    PepsiMod.INSTANCE.mc.player.posY + 0.5,
-                    PepsiMod.INSTANCE.mc.player.posZ));
+        if (WMinecraft.getPlayer().onGround)
+            start = new PathPos(new BlockPos(WMinecraft.getPlayer().posX,
+                    WMinecraft.getPlayer().posY + 0.5,
+                    WMinecraft.getPlayer().posZ));
         else
-            start = new PathPos(new BlockPos(PepsiMod.INSTANCE.mc.player));
+            start = new PathPos(new BlockPos(WMinecraft.getPlayer()));
         this.goal = goal;
 
         costMap.put(start, 0F);
@@ -69,59 +73,44 @@ public class PathFinder {
 
     public PathFinder(PathFinder pathFinder) {
         this(pathFinder.goal);
-        thinkSpeed = pathFinder.thinkSpeed;
-        thinkTime = pathFinder.thinkTime;
-    }
-
-    public PathPos updateTarget() {
-        if (queue.size() < 25) {
-            think();
-        }
-        if (currentTarget == null) {
-            currentTarget = queue.get(0);
-        } else {
-            currentTarget = prevPosMap.getOrDefault(currentTarget, null);
-        }
-        return currentTarget;
     }
 
     public void think() {
-        int i = 0;
-        for (; ; ) {
-            // get next position from queue
-            current = queue.poll();
+        //if (done)
+        //    return;
 
-            // check if path is found
-            if (checkDone()) {
-                return;
-            }
+        try {
+            int i = 0;
+            for (; ; ) {
+                // get next position from queue
+                current = queue.poll();
 
-            // add neighbors to queue
-            for (PathPos next : getNeighbors(current)) {
-                // check cost
-                float newCost = costMap.get(current) + getCost(current, next);
-                if (costMap.containsKey(next) && costMap.get(next) <= newCost)
-                    continue;
-
-                // add to queue
-                costMap.put(next, newCost);
-                prevPosMap.put(next, current);
-                queue.add(next, newCost + getHeuristic(next));
-                if (queue.size() >= 25) {
+                // check if path is found
+                if (goal.equals(current))
                     return;
+
+                // add neighbors to queue
+                for (PathPos next : getNeighbors(current)) {
+                    // check cost
+                    float newCost = costMap.get(current) + getCost(current, next);
+                    if (costMap.containsKey(next) && costMap.get(next) <= newCost)
+                        continue;
+
+                    // add to queue
+                    costMap.put(next, newCost);
+                    prevPosMap.put(next, current);
+                    queue.add(next, newCost + getHeuristic(next));
                 }
             }
+        } catch (OutOfWorldException e) {
+            done = true;
+            queue.cancelledPositions.add(current);
         }
-        //iterations += i;
     }
 
-    public boolean checkDone() {
-        return goal.equals(current);
-    }
-
-    public boolean checkFailed() {
-        return failed = queue.isEmpty();
-    }
+    /*public boolean checkDone() {
+        return done;
+    }*/
 
     public ArrayList<PathPos> getNeighbors(PathPos pos) {
         ArrayList<PathPos> neighbors = new ArrayList<>();
@@ -207,6 +196,9 @@ public class PathFinder {
     }
 
     public boolean checkHorizontalMovement(BlockPos current, BlockPos next) {
+        if (!WMinecraft.getWorld().isBlockLoaded(next, false)) {
+            throw new OutOfWorldException();
+        }
         return isPassable(next) && (canFlyAt(current) || canGoThrough(next.down())
                 || canSafelyStandOn(next.down()));
 
@@ -214,6 +206,9 @@ public class PathFinder {
 
     public boolean checkDiagonalMovement(BlockPos current,
                                          EnumFacing direction1, EnumFacing direction2) {
+        if (!WMinecraft.getWorld().isBlockLoaded(current.offset(direction1).offset(direction2), false)) {
+            throw new OutOfWorldException();
+        }
         BlockPos horizontal1 = current.offset(direction1);
         BlockPos horizontal2 = current.offset(direction2);
         BlockPos next = horizontal1.offset(direction2);
@@ -239,7 +234,7 @@ public class PathFinder {
 
     public boolean canGoThrough(BlockPos pos) {
         // check if loaded
-        if (!PepsiMod.INSTANCE.mc.world.isBlockLoaded(pos, false))
+        if (!WMinecraft.getWorld().isBlockLoaded(pos, false))
             return false;
 
         // check if solid
@@ -263,6 +258,17 @@ public class PathFinder {
         Block block = WBlock.getBlock(pos);
         return !(block instanceof BlockFence || block instanceof BlockWall
                 || block instanceof BlockFenceGate);
+    }
+
+    public boolean canSafelyStandOn(BlockPos pos) {
+        // check if solid
+        Material material = WBlock.getMaterial(pos);
+        if (!canBeSolid(pos))
+            return false;
+
+        // check if safe
+        return !(!invulnerable
+                && (material == Material.CACTUS || material == Material.LAVA));
     }
 
     public boolean canSafelyStandOn(BlockPos pos) {
@@ -330,10 +336,9 @@ public class PathFinder {
     public boolean canClimbUpAt(BlockPos pos) {
         // check if this block works for climbing
         Block block = WBlock.getBlock(pos);
-        if (//!spider &&
-                !(block instanceof BlockLadder) && !(block instanceof BlockVine)) {
+        if (!(block instanceof BlockLadder)
+                && !(block instanceof BlockVine))
             return false;
-        }
 
         // check if any adjacent block is solid
         BlockPos up = pos.up();
@@ -411,8 +416,48 @@ public class PathFinder {
         return costMap.get(pos);
     }
 
+    public boolean isDone() {
+        return done;
+    }
+
     public boolean isFailed() {
         return failed;
+    }
+
+    public PathPos currentTarget = null;
+
+    public ArrayList<PathPos> formatPath() {
+        if (currentTarget == null) {
+            PathPos next = prevPosMap.get(current);
+            currentTarget = next;
+        }
+        /*if (!done && !failed)
+            throw new IllegalStateException("No path found!");
+        if (!path.isEmpty())
+            path.clear();
+
+        // get last position
+        PathPos pos = start = current;
+        if (!failed)
+            pos = current;
+        else {
+            pos = start;
+            for (PathPos next : prevPosMap.keySet())
+                if (getHeuristic(next) < getHeuristic(pos)
+                        && (canFlyAt(next) || canBeSolid(next.down())))
+                    pos = next;
+        }
+
+        // get positions
+        while (pos != null) {
+            path.add(pos);
+            pos = prevPosMap.get(pos);
+        }
+
+        // reverse path
+        Collections.reverse(path);*/
+
+        return path;
     }
 
     public void renderPath(boolean debugMode, boolean depthTest) {
@@ -427,10 +472,11 @@ public class PathFinder {
         GL11.glDepthMask(false);
 
         GL11.glPushMatrix();
-        GL11.glTranslated(-ReflectionStuff.getRenderPosX(Minecraft.getMinecraft().getRenderManager()), -ReflectionStuff.getRenderPosY(Minecraft.getMinecraft().getRenderManager()), -ReflectionStuff.getRenderPosZ(Minecraft.getMinecraft().getRenderManager()));
+        GL11.glTranslated(
+                -ReflectionStuff.getRenderPosX(Minecraft.getMinecraft().getRenderManager()),
+                -ReflectionStuff.getRenderPosY(Minecraft.getMinecraft().getRenderManager()),
+                -ReflectionStuff.getRenderPosZ(Minecraft.getMinecraft().getRenderManager()));
         GL11.glTranslated(0.5, 0.5, 0.5);
-
-        debugMode = true; //TODO: remove
 
         if (debugMode) {
             int renderedThings = 0;
@@ -468,12 +514,10 @@ public class PathFinder {
             GL11.glColor4f(0, 0, 1, 0.75F);
         } else {
             GL11.glLineWidth(2);
-            GL11.glColor4f(0, 1, 0, 0.5F);
+            GL11.glColor4f(0, 1, 0, 0.75F);
         }
-        PathPos[] path = queue.toArray();
-        for (int i = 0; i < path.length - 1; i++) {
-            PathRenderer.renderArrow(path[i], path[i + 1]);
-        }
+        for (int i = 0; i < path.size() - 1; i++)
+            PathRenderer.renderArrow(path.get(i), path.get(i + 1));
 
         GL11.glPopMatrix();
 
@@ -485,43 +529,30 @@ public class PathFinder {
         GL11.glDepthMask(true);
     }
 
-    public boolean isPathStillValid(PathPos pos) {
-        if (queue.isEmpty()) {
-            throw new IllegalStateException("Path queue is empty xd");
-        }
+    public boolean isPathStillValid(int index) {
+        if (path.isEmpty())
+            throw new IllegalStateException("Path is not formatted!");
 
         // check player abilities
-        if (invulnerable != PepsiMod.INSTANCE.mc.player.capabilities.isCreativeMode
+        if (invulnerable != WMinecraft.getPlayer().capabilities.isCreativeMode
                 || flying != (creativeFlying || FlightMod.INSTANCE.isEnabled)
                 || immuneToFallDamage != (invulnerable
                 || NoFallMod.INSTANCE.isEnabled)
                 || noWaterSlowdown != NoSlowdownMod.INSTANCE.isEnabled
-                || jesus != JesusMod.INSTANCE.isEnabled) {
-            //|| spider != wurst.mods.spiderMod.isActive())
+                || jesus != JesusMod.INSTANCE.isEnabled)
+            //TODO: || spider != wurst.mods.spiderMod.isActive())
             return false;
-        }
 
         // check path
-        PathPos[] path = queue.toArray();
-        for (int i = 1; i < path.length; i++) {
-            if (!getNeighbors(path[i - 1]).contains(path[i])) {
+        for (int i = Math.max(1, index); i < path.size(); i++)
+            if (!getNeighbors(path.get(i - 1)).contains(path.get(i)))
                 return false;
-            }
-        }
 
         return true;
     }
 
     public PathProcessor getProcessor() {
-        return new WalkPathProcessor();
-    }
-
-    public void setThinkSpeed(int thinkSpeed) {
-        this.thinkSpeed = thinkSpeed;
-    }
-
-    public void setThinkTime(int thinkTime) {
-        this.thinkTime = thinkTime;
+        return new WalkPathProcessor(path);
     }
 
     public void setFallingAllowed(boolean fallingAllowed) {

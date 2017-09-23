@@ -81,7 +81,6 @@ public class GoToCommand extends Command {
             return;
         }
         enabled = true;
-        PathFindTickListener.INSTANCE.preCalculate();
         PepsiUtils.tickListeners.add(PathFindTickListener.INSTANCE);
         PepsiUtils.wurstRenderListeners.add(PathFindTickListener.INSTANCE);
     }

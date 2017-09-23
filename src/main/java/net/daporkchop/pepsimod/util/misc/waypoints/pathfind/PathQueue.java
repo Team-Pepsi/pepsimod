@@ -17,6 +17,7 @@ package net.daporkchop.pepsimod.util.misc.waypoints.pathfind;
 
 import net.minecraft.util.math.BlockPos;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.PriorityQueue;
 
@@ -25,6 +26,7 @@ public class PathQueue {
             new PriorityQueue<>((e1, e2) -> {
                 return Float.compare(e1.priority, e2.priority);
             });
+    public ArrayList<PathPos> cancelledPositions = new ArrayList<>();
 
     public boolean isEmpty() {
         return queue.isEmpty();
@@ -53,6 +55,9 @@ public class PathQueue {
     }
 
     public PathPos poll() {
+        if (cancelledPositions.size() > 0) {
+            return cancelledPositions.remove(0);
+        }
         return queue.poll().pos;
     }
 

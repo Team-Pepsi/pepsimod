@@ -15,12 +15,11 @@
 
 package net.daporkchop.pepsimod.util.misc.waypoints.pathfind;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.impl.GoToCommand;
 import net.daporkchop.pepsimod.module.impl.movement.JesusMod;
-import net.daporkchop.pepsimod.module.impl.movement.StepMod;
 import net.daporkchop.pepsimod.totally.not.skidded.RotationUtils;
 import net.daporkchop.pepsimod.totally.not.skidded.WBlock;
+import net.daporkchop.pepsimod.totally.not.skidded.WMinecraft;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLadder;
@@ -28,30 +27,36 @@ import net.minecraft.block.BlockVine;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.ArrayList;
+
 public class WalkPathProcessor extends PathProcessor {
+    public WalkPathProcessor(ArrayList<PathPos> path) {
+        super(path);
+    }
+
     @Override
     public void process() {
         // get positions
         BlockPos pos;
-        if (PepsiMod.INSTANCE.mc.player.onGround)
-            pos = new BlockPos(PepsiMod.INSTANCE.mc.player.posX,
-                    PepsiMod.INSTANCE.mc.player.posY + 0.5, PepsiMod.INSTANCE.mc.player.posZ);
+        if (WMinecraft.getPlayer().onGround)
+            pos = new BlockPos(WMinecraft.getPlayer().posX,
+                    WMinecraft.getPlayer().posY + 0.5, WMinecraft.getPlayer().posZ);
         else
-            pos = new BlockPos(PepsiMod.INSTANCE.mc.player);
-        PathPos nextPos = GoToCommand.INSTANCE.pathFinder.currentTarget;
-        int posIndex = GoToCommand.INSTANCE.pathFinder.queue.indexOf(pos);
+            pos = new BlockPos(WMinecraft.getPlayer());
+        if (path.size() - 1 < index) {
+            index = 0;
+        }
+        PathPos nextPos = path.get(index);
+        int posIndex = path.indexOf(pos);
 
         // update index
         if (pos.equals(nextPos)) {
-            // disable when done
-            if (GoToCommand.INSTANCE.pathFinder.goal.equals(GoToCommand.INSTANCE.pathFinder.currentTarget))
-                done = true;
+            //index++;
+            GoToCommand.INSTANCE.pathFinder.prevPosMap.remove(nextPos);
+            GoToCommand.INSTANCE.pathFinder.costMap.remove(nextPos);
             return;
-        } else if (posIndex > GoToCommand.INSTANCE.pathFinder.queue.indexOf(GoToCommand.INSTANCE.pathFinder.currentTarget)) {
-            // disable when done
-            if (GoToCommand.INSTANCE.pathFinder.updateTarget() == null) {
-                done = true;
-            }
+        } else if (posIndex > index) {
+            //index = posIndex + 1;
             return;
         }
 
@@ -66,15 +71,15 @@ public class WalkPathProcessor extends PathProcessor {
 
         if (JesusMod.INSTANCE.isEnabled) {
             // wait for Jesus to swim up
-            if (PepsiMod.INSTANCE.mc.player.posY < nextPos.getY()
-                    && (PepsiMod.INSTANCE.mc.player.isInWater()
-                    || PepsiMod.INSTANCE.mc.player.isInLava()))
+            if (WMinecraft.getPlayer().posY < nextPos.getY()
+                    && (WMinecraft.getPlayer().isInWater()
+                    || WMinecraft.getPlayer().isInLava()))
                 return;
 
             // manually swim down if using Jesus
-            if (PepsiMod.INSTANCE.mc.player.posY - nextPos.getY() > 0.5
-                    && (PepsiMod.INSTANCE.mc.player.isInWater()
-                    || PepsiMod.INSTANCE.mc.player.isInLava()
+            if (WMinecraft.getPlayer().posY - nextPos.getY() > 0.5
+                    && (WMinecraft.getPlayer().isInWater()
+                    || WMinecraft.getPlayer().isInLava()
                     || JesusMod.INSTANCE.isOverLiquid()))
                 ReflectionStuff.setPressed(mc.gameSettings.keyBindSneak, true);
         }
@@ -83,11 +88,9 @@ public class WalkPathProcessor extends PathProcessor {
         if (pos.getX() != nextPos.getX() || pos.getZ() != nextPos.getZ()) {
             ReflectionStuff.setPressed(mc.gameSettings.keyBindForward, true);
 
-            if (nextPos.isJumping() || pos.getY() < nextPos.getY()) { //TODO: fix swimming
-                if (!(StepMod.INSTANCE.isEnabled && (PepsiMod.INSTANCE.miscOptions.step_legit || PepsiMod.INSTANCE.miscOptions.step_height == 1))) {
-                    ReflectionStuff.setPressed(mc.gameSettings.keyBindJump, true);
-                }
-            }
+            if (index > 0 && path.get(index - 1).isJumping()
+                    || pos.getY() < nextPos.getY())
+                ReflectionStuff.setPressed(mc.gameSettings.keyBindJump, true);
 
             // vertical movement
         } else if (pos.getY() != nextPos.getY())
@@ -104,25 +107,23 @@ public class WalkPathProcessor extends PathProcessor {
 
                 } else {
                     // directional jump
-                    if (GoToCommand.INSTANCE.pathFinder.queue.indexOf(nextPos) < GoToCommand.INSTANCE.pathFinder.queue.size() - 1
-                            && !nextPos.up().equals(GoToCommand.INSTANCE.pathFinder.prevPosMap.get(nextPos)))
-                        GoToCommand.INSTANCE.pathFinder.updateTarget();
+                    if (index < path.size() - 1
+                            && !nextPos.up().equals(path.get(index + 1)))
+                        //index++;
 
                     // jump up
-                    if (!(StepMod.INSTANCE.isEnabled && (PepsiMod.INSTANCE.miscOptions.step_legit || PepsiMod.INSTANCE.miscOptions.step_height == 1))) {
                         ReflectionStuff.setPressed(mc.gameSettings.keyBindJump, true);
-                    }
                 }
 
                 // go down
             } else {
                 // skip mid-air nodes and go straight to the bottom
-                while (GoToCommand.INSTANCE.pathFinder.queue.indexOf(nextPos) < GoToCommand.INSTANCE.pathFinder.queue.size() - 1
-                        && GoToCommand.INSTANCE.pathFinder.currentTarget.down().equals(GoToCommand.INSTANCE.pathFinder.prevPosMap.get(GoToCommand.INSTANCE.pathFinder.currentTarget)))
-                    GoToCommand.INSTANCE.pathFinder.updateTarget();
+                while (index < path.size() - 1
+                        && path.get(index).down().equals(path.get(index + 1)))
+                    //index++;
 
                 // walk off the edge
-                if (PepsiMod.INSTANCE.mc.player.onGround)
+                    if (WMinecraft.getPlayer().onGround)
                     ReflectionStuff.setPressed(mc.gameSettings.keyBindForward, true);
             }
     }
@@ -130,7 +131,6 @@ public class WalkPathProcessor extends PathProcessor {
     @Override
     public void lockControls() {
         super.lockControls();
-        PepsiMod.INSTANCE.mc.player.capabilities.isFlying = false;
+        WMinecraft.getPlayer().capabilities.isFlying = false;
     }
 }
-

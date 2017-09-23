@@ -27,46 +27,37 @@ public class PathFindTickListener implements ITickListener, IWurstRenderListener
         INSTANCE = this;
     }
 
-    public void preCalculate() {
-        GoToCommand.INSTANCE.pathFinder.updateTarget();
-    }
-
     @Override
     public void tick() {
         // find path
+        if (GoToCommand.INSTANCE.processor != null) {
+            GoToCommand.INSTANCE.processor.lockControls();
+        }
+
+        GoToCommand.INSTANCE.pathFinder.think();
+
         /*if (!GoToCommand.INSTANCE.pathFinder.checkDone()) {
-            if (GoToCommand.INSTANCE.processor != null) {
-                GoToCommand.INSTANCE.processor.lockControls();
+            if (GoToCommand.INSTANCE.pathFinder.isFailed()) {
+                Command.clientMessage("Could not find a path.");
+                disable();
             }
 
-            GoToCommand.INSTANCE.pathFinder.think();
-
-            if (!GoToCommand.INSTANCE.pathFinder.checkDone()) {
-                if (GoToCommand.INSTANCE.pathFinder.isFailed()) {
-                    Command.clientMessage("Could not find a path.");
-                    disable();
-                }
-
-                return;
-            }
-
-            GoToCommand.INSTANCE.pathFinder.formatPath();
-
-            // set processor
-            GoToCommand.INSTANCE.processor = GoToCommand.INSTANCE.pathFinder.getProcessor();
-
-            System.out.println("Done");
+            return;
         }*/
 
+        GoToCommand.INSTANCE.pathFinder.formatPath();
+
+        // set processor
+        if (GoToCommand.INSTANCE.processor == null) {
+            GoToCommand.INSTANCE.processor = GoToCommand.INSTANCE.pathFinder.getProcessor();
+        }
+
+
         // check path
-        if (GoToCommand.INSTANCE.processor != null && !GoToCommand.INSTANCE.pathFinder.isPathStillValid(GoToCommand.INSTANCE.pathFinder.currentTarget)) {
+        if (!GoToCommand.INSTANCE.pathFinder.isPathStillValid(GoToCommand.INSTANCE.processor.index)) {
             System.out.println("Updating path...");
             GoToCommand.INSTANCE.pathFinder = new PathFinder(GoToCommand.INSTANCE.pathFinder.getGoal());
             return;
-        }
-
-        if (GoToCommand.INSTANCE.processor == null) {
-            GoToCommand.INSTANCE.processor = GoToCommand.INSTANCE.pathFinder.getProcessor();
         }
 
         // process path
