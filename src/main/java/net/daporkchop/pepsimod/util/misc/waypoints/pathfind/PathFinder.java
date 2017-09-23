@@ -52,7 +52,7 @@ public class PathFinder {
     public int thinkSpeed = 1024;
     public int thinkTime = 200;
     public boolean failed;
-    public PathPos currentTarget;
+    public PathPos currentTarget = null;
 
     public PathFinder(BlockPos goal) {
         if (PepsiMod.INSTANCE.mc.player.onGround)
@@ -77,7 +77,12 @@ public class PathFinder {
         if (queue.size() < 25) {
             think();
         }
-        currentTarget = queue.poll();
+        if (currentTarget == null) {
+            currentTarget = queue.get(0);
+        } else {
+            currentTarget = prevPosMap.getOrDefault(currentTarget, null);
+        }
+        return currentTarget;
     }
 
     public void think() {
@@ -87,8 +92,9 @@ public class PathFinder {
             current = queue.poll();
 
             // check if path is found
-            if (checkDone())
+            if (checkDone()) {
                 return;
+            }
 
             // add neighbors to queue
             for (PathPos next : getNeighbors(current)) {

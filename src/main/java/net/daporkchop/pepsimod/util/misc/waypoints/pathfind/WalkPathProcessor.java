@@ -44,15 +44,14 @@ public class WalkPathProcessor extends PathProcessor {
         // update index
         if (pos.equals(nextPos)) {
             // disable when done
-            if (index >= GoToCommand.INSTANCE.pathFinder.queue.size())
+            if (GoToCommand.INSTANCE.pathFinder.goal.equals(GoToCommand.INSTANCE.pathFinder.currentTarget))
                 done = true;
             return;
-        } else if (posIndex > index) {
-            index = posIndex + 1;
-
+        } else if (posIndex > GoToCommand.INSTANCE.pathFinder.queue.indexOf(GoToCommand.INSTANCE.pathFinder.currentTarget)) {
             // disable when done
-            if (index >= GoToCommand.INSTANCE.pathFinder.queue.size())
+            if (GoToCommand.INSTANCE.pathFinder.updateTarget() == null) {
                 done = true;
+            }
             return;
         }
 
@@ -84,7 +83,7 @@ public class WalkPathProcessor extends PathProcessor {
         if (pos.getX() != nextPos.getX() || pos.getZ() != nextPos.getZ()) {
             ReflectionStuff.setPressed(mc.gameSettings.keyBindForward, true);
 
-            if (index > 0 && GoToCommand.INSTANCE.pathFinder.queue.get(index - 1).isJumping() || pos.getY() < nextPos.getY()) { //TODO: fix swimming
+            if (nextPos.isJumping() || pos.getY() < nextPos.getY()) { //TODO: fix swimming
                 if (!(StepMod.INSTANCE.isEnabled && (PepsiMod.INSTANCE.miscOptions.step_legit || PepsiMod.INSTANCE.miscOptions.step_height == 1))) {
                     ReflectionStuff.setPressed(mc.gameSettings.keyBindJump, true);
                 }
@@ -105,9 +104,9 @@ public class WalkPathProcessor extends PathProcessor {
 
                 } else {
                     // directional jump
-                    if (index < GoToCommand.INSTANCE.pathFinder.queue.size() - 1
-                            && !nextPos.up().equals(GoToCommand.INSTANCE.pathFinder.queue.get(index + 1)))
-                        index++;
+                    if (GoToCommand.INSTANCE.pathFinder.queue.indexOf(nextPos) < GoToCommand.INSTANCE.pathFinder.queue.size() - 1
+                            && !nextPos.up().equals(GoToCommand.INSTANCE.pathFinder.prevPosMap.get(nextPos)))
+                        GoToCommand.INSTANCE.pathFinder.updateTarget();
 
                     // jump up
                     if (!(StepMod.INSTANCE.isEnabled && (PepsiMod.INSTANCE.miscOptions.step_legit || PepsiMod.INSTANCE.miscOptions.step_height == 1))) {
@@ -118,9 +117,9 @@ public class WalkPathProcessor extends PathProcessor {
                 // go down
             } else {
                 // skip mid-air nodes and go straight to the bottom
-                while (index < GoToCommand.INSTANCE.pathFinder.queue.size() - 1
-                        && GoToCommand.INSTANCE.pathFinder.queue.get(index).down().equals(GoToCommand.INSTANCE.pathFinder.queue.get(index + 1)))
-                    index++;
+                while (GoToCommand.INSTANCE.pathFinder.queue.indexOf(nextPos) < GoToCommand.INSTANCE.pathFinder.queue.size() - 1
+                        && GoToCommand.INSTANCE.pathFinder.currentTarget.down().equals(GoToCommand.INSTANCE.pathFinder.prevPosMap.get(GoToCommand.INSTANCE.pathFinder.currentTarget)))
+                    GoToCommand.INSTANCE.pathFinder.updateTarget();
 
                 // walk off the edge
                 if (PepsiMod.INSTANCE.mc.player.onGround)

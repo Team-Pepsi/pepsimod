@@ -28,7 +28,7 @@ public class PathFindTickListener implements ITickListener, IWurstRenderListener
     }
 
     public void preCalculate() {
-        GoToCommand.INSTANCE.pathFinder.think();
+        GoToCommand.INSTANCE.pathFinder.updateTarget();
     }
 
     @Override
