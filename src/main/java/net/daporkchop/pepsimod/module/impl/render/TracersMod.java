@@ -173,7 +173,6 @@ public class TracersMod extends Module {
         GL11.glBegin(GL11.GL_LINES);
 
         RenderColor color = null;
-        Vec3d end = null;
         for (Entity entity : PepsiMod.INSTANCE.mc.world.getLoadedEntityList()) {
             if (Math.abs(entity.posY - PepsiMod.INSTANCE.mc.player.posY) > 1e6) {
                 continue;

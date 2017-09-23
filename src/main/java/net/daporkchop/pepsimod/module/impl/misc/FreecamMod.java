@@ -88,7 +88,6 @@ public class FreecamMod extends Module {
                                 return false;
                             }
                             FreecamMod.SPEED = value;
-                            updateName();
                             return true;
                         },
                         () -> {

@@ -162,10 +162,10 @@ public class GuiRenderHandler {
                     if (PepsiMod.INSTANCE.hudSettings.netherCoords) {
                         toRender += " " + PepsiUtils.COLOR_ESCAPE + "f(" + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(PepsiMod.INSTANCE.mc.player.posX / 8) + "" + PepsiUtils.COLOR_ESCAPE + "f, " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(PepsiMod.INSTANCE.mc.player.posY) + "" + PepsiUtils.COLOR_ESCAPE + "f, " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(PepsiMod.INSTANCE.mc.player.posZ / 8) + "" + PepsiUtils.COLOR_ESCAPE + "f)";
                     }
-                    PepsiMod.INSTANCE.mc.fontRenderer.drawString(toRender, 2, height - ++i * 10, Color.white.getRGB());
+                    PepsiMod.INSTANCE.mc.fontRenderer.drawString(toRender, 2, height - ++i * 10, Color.white.getRGB(), true);
                 }
                 if (PepsiMod.INSTANCE.hudSettings.direction) {
-                    PepsiMod.INSTANCE.mc.fontRenderer.drawString(PepsiUtils.COLOR_ESCAPE + "f[" + PepsiUtils.COLOR_ESCAPE + "f" + PepsiUtils.getFacing() + PepsiUtils.COLOR_ESCAPE + "7]", 2, height - ++i * 10, Color.white.getRGB());
+                    PepsiMod.INSTANCE.mc.fontRenderer.drawString(PepsiUtils.COLOR_ESCAPE + "f[" + PepsiUtils.COLOR_ESCAPE + "f" + PepsiUtils.getFacing() + PepsiUtils.COLOR_ESCAPE + "7]", 2, height - ++i * 10, Color.white.getRGB(), true);
                 }
             }
 

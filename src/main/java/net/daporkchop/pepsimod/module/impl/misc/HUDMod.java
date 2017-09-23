@@ -46,7 +46,11 @@ public class HUDMod extends Module {
 
     @Override
     public void tick() {
+        for (Module module : ModuleManager.ENABLED_MODULES) {
+            module.updateName();
+        }
 
+        ModuleManager.sortModules(ModuleManager.sortType);
     }
 
     @Override

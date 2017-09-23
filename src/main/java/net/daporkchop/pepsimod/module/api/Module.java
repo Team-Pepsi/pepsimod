@@ -24,6 +24,7 @@ import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
 import net.daporkchop.pepsimod.util.event.MoveEvent;
+import net.daporkchop.pepsimod.util.misc.ITickListener;
 import net.daporkchop.pepsimod.util.module.MiscOptions;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.network.Packet;
@@ -38,7 +39,7 @@ import java.util.ArrayList;
  * but it's a module
  * gl understanding my overly complicated class heirachy
  */
-public abstract class Module extends Command {
+public abstract class Module extends Command implements ITickListener {
     public boolean isEnabled;
     public KeyBinding keybind;
     public boolean hide;
@@ -164,10 +165,9 @@ public abstract class Module extends Command {
         return null;
     }
 
-    /**
-     * Called on all enabled modules once per client tick
-     */
-    public abstract void tick();
+    public boolean shouldTick() {
+        return isEnabled;
+    }
 
     /**
      * Called when the Module is enabled
@@ -252,7 +252,6 @@ public abstract class Module extends Command {
             } else {
                 text = new RainbowText(nameFull + PepsiUtils.COLOR_ESCAPE + "7 [" + getModeForName() + "]");
             }
-            ModuleManager.sortModules(ModuleManager.sortType);
         }
     }
 
@@ -407,10 +406,6 @@ public abstract class Module extends Command {
 
     public ModuleLaunchState getLaunchState() {
         return ModuleLaunchState.AUTO;
-    }
-
-    public boolean shouldTick() {
-        return this.isEnabled;
     }
 
     public void registerKeybind(String name, int key) {

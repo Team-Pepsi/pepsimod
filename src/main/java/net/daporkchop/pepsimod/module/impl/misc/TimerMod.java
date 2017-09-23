@@ -22,9 +22,6 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
-import net.daporkchop.pepsimod.util.PepsiUtils;
-
-import java.util.TimerTask;
 
 public class TimerMod extends Module {
     public static float PROCENT = 1.0f;
@@ -58,21 +55,6 @@ public class TimerMod extends Module {
     public void init() {
         PROCENT = (float) getOptionByName("multiplier").getValue();
         INSTANCE = this; //adding this a bunch because it always seems to be null idk y
-        PepsiUtils.timer.schedule(new TimerTask() {
-            float lasttps = TickRate.TPS;
-
-            @Override
-            public void run() {
-                try {
-                    if (TickRate.TPS != lasttps) {
-                        updateName();
-                    }
-                    lasttps = TickRate.TPS;
-                } catch (NullPointerException e) {
-                    //meh, minecraft isn't initialized yet
-                }
-            }
-        }, 0, 1000);
     }
 
     @Override
@@ -85,7 +67,6 @@ public class TimerMod extends Module {
                                 return false;
                             }
                             TimerMod.PROCENT = value;
-                            updateName();
                             return true;
                         },
                         () -> {

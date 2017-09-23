@@ -34,11 +34,13 @@ public class ClickGuiMod extends Module {
 
     @Override
     public void onEnable() {
-        for (Window window : ClickGUI.INSTANCE.windows) {
-            window.openGui();
-        }
+        if (PepsiMod.INSTANCE.isInitialized) {
+            for (Window window : ClickGUI.INSTANCE.windows) {
+                window.openGui();
+            }
 
-        PepsiMod.INSTANCE.mc.displayGuiScreen(ClickGUI.INSTANCE);
+            PepsiMod.INSTANCE.mc.displayGuiScreen(ClickGUI.INSTANCE);
+        }
     }
 
     @Override

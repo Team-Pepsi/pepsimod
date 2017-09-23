@@ -65,7 +65,6 @@ public class ModuleManager {
                 throw new IllegalStateException("Attempted to enable an unregistered Module!");
             }
         }
-        sortModules(sortType);
         return toEnable;
     }
 
@@ -84,7 +83,6 @@ public class ModuleManager {
                 throw new IllegalStateException("Attempted to disable an unregistered Module!");
             }
         }
-        sortModules(sortType);
         return toDisable;
     }
 

@@ -60,7 +60,6 @@ public class VelocityMod extends Module {
                 new ModuleOption<>(1.0f, "strength", new String[]{"1.0", "0.0"},
                         (value) -> {
                             VelocityMod.PROCENT = value;
-                            updateName();
                             return true;
                         },
                         () -> {

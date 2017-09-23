@@ -13,28 +13,32 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.command.api;
+package net.daporkchop.pepsimod.command.impl.waypoint;
 
 import net.daporkchop.pepsimod.PepsiMod;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.TextComponentString;
+import net.daporkchop.pepsimod.command.api.Command;
 
-public abstract class Command {
-    public String name;
-
-    public Command(String name) {
-        this.name = name;
+public class WaypointClearCommand extends Command {
+    public WaypointClearCommand() {
+        super("waypointclear");
     }
 
-    public static void clientMessage(String toSend) {
-        Minecraft.getMinecraft().player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + toSend));
+    @Override
+    public void execute(String cmd, String[] args) {
+        PepsiMod.INSTANCE.waypoints.clearWaypoints();
+        clientMessage("Deleted all waypoints for this server!");
     }
 
-    public abstract void execute(String cmd, String[] args);
+    @Override
+    public String getSuggestion(String cmd, String[] args) {
+        return cmd;
+    }
 
-    public abstract String getSuggestion(String cmd, String[] args);
-
+    @Override
     public String[] aliases() {
-        return new String[]{name};
+        return new String[]{
+                "waypointclear",
+                "wclear"
+        };
     }
 }

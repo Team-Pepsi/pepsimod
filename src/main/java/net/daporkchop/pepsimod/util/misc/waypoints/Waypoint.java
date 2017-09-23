@@ -13,28 +13,42 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.command.api;
+package net.daporkchop.pepsimod.util.misc.waypoints;
 
-import net.daporkchop.pepsimod.PepsiMod;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.math.Vec3d;
 
-public abstract class Command {
-    public String name;
+import java.io.Serializable;
 
-    public Command(String name) {
+public class Waypoint implements Serializable {
+    public final String name;
+    public final int x;
+    public final int y;
+    public final int z;
+    public final int dim;
+    public boolean shown;
+
+    public Waypoint(String name, double x, double y, double z, int dim) {
+        this(name, x, y, z, true, dim);
+    }
+
+    public Waypoint(String name, double x, double y, double z, boolean shown, int dim) {
+        this(name, (int) Math.floor(x), (int) Math.floor(y), (int) Math.floor(z), shown, dim);
+    }
+
+    public Waypoint(String name, int x, int y, int z, int dim) {
+        this(name, x, y, z, true, dim);
+    }
+
+    public Waypoint(String name, int x, int y, int z, boolean shown, int dim) {
         this.name = name;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.shown = shown;
+        this.dim = dim;
     }
 
-    public static void clientMessage(String toSend) {
-        Minecraft.getMinecraft().player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + toSend));
-    }
-
-    public abstract void execute(String cmd, String[] args);
-
-    public abstract String getSuggestion(String cmd, String[] args);
-
-    public String[] aliases() {
-        return new String[]{name};
+    public Vec3d getPosition() {
+        return new Vec3d(x, y, z);
     }
 }

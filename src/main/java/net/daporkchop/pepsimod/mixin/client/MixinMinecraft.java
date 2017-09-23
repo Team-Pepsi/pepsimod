@@ -21,6 +21,8 @@ import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.impl.render.UnfocusedCPUMod;
 import net.daporkchop.pepsimod.module.impl.render.ZoomMod;
 import net.daporkchop.pepsimod.util.Friends;
+import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.misc.ITickListener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
@@ -68,6 +70,13 @@ public abstract class MixinMinecraft {
                 if (module.shouldTick()) {
                     module.tick();
                 }
+            }
+            for (ITickListener listener : PepsiUtils.toRemoveTickListeners) {
+                PepsiUtils.tickListeners.remove(listener);
+            }
+            PepsiUtils.toRemoveTickListeners.clear();
+            for (ITickListener listener : PepsiUtils.tickListeners) {
+                listener.tick();
             }
         }
     }

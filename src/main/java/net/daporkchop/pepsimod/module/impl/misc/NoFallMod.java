@@ -21,6 +21,7 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 
 public class NoFallMod extends Module {
     public static boolean NO_FALL = false;
+    public static NoFallMod INSTANCE;
 
     public NoFallMod(boolean isEnabled, int key, boolean hide) {
         super(isEnabled, "NoFall", key, hide);
@@ -43,7 +44,7 @@ public class NoFallMod extends Module {
 
     @Override
     public void init() {
-
+        INSTANCE = this;
     }
 
     @Override

@@ -13,28 +13,41 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.command.api;
+package net.daporkchop.pepsimod.util.misc.waypoints.pathfind;
 
-import net.daporkchop.pepsimod.PepsiMod;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.math.BlockPos;
 
-public abstract class Command {
-    public String name;
+public class PathPos extends BlockPos {
+    private final boolean jumping;
 
-    public Command(String name) {
-        this.name = name;
+    public PathPos(BlockPos pos) {
+        this(pos, false);
     }
 
-    public static void clientMessage(String toSend) {
-        Minecraft.getMinecraft().player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + toSend));
+    public PathPos(BlockPos pos, boolean jumping) {
+        super(pos);
+        this.jumping = jumping;
     }
 
-    public abstract void execute(String cmd, String[] args);
+    public boolean isJumping() {
+        return jumping;
+    }
 
-    public abstract String getSuggestion(String cmd, String[] args);
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
 
-    public String[] aliases() {
-        return new String[]{name};
+        if (!(obj instanceof PathPos))
+            return false;
+
+        PathPos node = (PathPos) obj;
+        return getX() == node.getX() && getY() == node.getY()
+                && getZ() == node.getZ() && isJumping() == node.isJumping();
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode() * 2 + (isJumping() ? 1 : 0);
     }
 }

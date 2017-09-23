@@ -20,6 +20,7 @@ import net.daporkchop.pepsimod.clickgui.Window;
 import net.daporkchop.pepsimod.clickgui.api.IEntry;
 import net.daporkchop.pepsimod.command.CommandRegistry;
 import net.daporkchop.pepsimod.command.impl.*;
+import net.daporkchop.pepsimod.command.impl.waypoint.*;
 import net.daporkchop.pepsimod.event.GuiRenderHandler;
 import net.daporkchop.pepsimod.event.MiscEventHandler;
 import net.daporkchop.pepsimod.gui.clickgui.*;
@@ -39,6 +40,7 @@ import net.daporkchop.pepsimod.module.impl.player.*;
 import net.daporkchop.pepsimod.module.impl.render.*;
 import net.daporkchop.pepsimod.util.*;
 import net.daporkchop.pepsimod.util.datatag.DataTag;
+import net.daporkchop.pepsimod.util.misc.waypoints.Waypoints;
 import net.daporkchop.pepsimod.util.module.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -76,6 +78,7 @@ public class PepsiMod {
     public HUDSettings hudSettings;
     public ElytraFlySettings elytraFlySettings;
     public AnnouncerSettings announcerSettings;
+    public Waypoints waypoints;
 
     public static void registerModules(FMLStateEvent event) {
         ModuleManager.registerModule(new NoFallMod(false, -1, false));
@@ -124,6 +127,7 @@ public class PepsiMod {
         ModuleManager.registerModule(new ScaffoldMod(false, -1, false));
         ModuleManager.registerModule(new UnfocusedCPUMod(false, -1, false));
         ModuleManager.registerModule(new ESPMod(false, -1, false));
+        ModuleManager.registerModule(new WaypointsMod(false, -1, false));
     }
 
     public static void registerCommands(FMLStateEvent event) {
@@ -135,6 +139,14 @@ public class PepsiMod {
         CommandRegistry.registerCommand(new ListCommand());
         CommandRegistry.registerCommand(new InvSeeCommand());
         CommandRegistry.registerCommand(new PeekCommand());
+        CommandRegistry.registerCommand(new WaypointAddCommand());
+        CommandRegistry.registerCommand(new WaypointClearCommand());
+        CommandRegistry.registerCommand(new WaypointHardClearCommand());
+        CommandRegistry.registerCommand(new WaypointHideCommand());
+        CommandRegistry.registerCommand(new WaypointListCommand());
+        CommandRegistry.registerCommand(new WaypointRemoveCommand());
+        CommandRegistry.registerCommand(new WaypointShowCommand());
+        CommandRegistry.registerCommand(new GoToCommand());
     }
 
     /**
@@ -244,13 +256,13 @@ public class PepsiMod {
         targetSettings = (TargetSettings) dataTag.getSerializable("targetSettings", new TargetSettings());
         XrayUtils.target_blocks = (ArrayList<Integer>) dataTag.getSerializable("xrayBlocks", new ArrayList<Integer>());
         espSettings = (ESPSettings) dataTag.getSerializable("espSettings", new ESPSettings());
-        NameTagsMod.scale = dataTag.getFloat("NameTags_scale", 1.0f);
         FreecamMod.SPEED = dataTag.getFloat("Freecam_speed", 1.0f);
         noWeatherSettings = (NoWeatherSettings) dataTag.getSerializable("noweatherSettings", new NoWeatherSettings());
         tracerSettings = (TracerSettings) dataTag.getSerializable("tracerSettings", new TracerSettings());
         hudSettings = (HUDSettings) dataTag.getSerializable("hudSettings", new HUDSettings());
         elytraFlySettings = (ElytraFlySettings) dataTag.getSerializable("elytraFlySettings", new ElytraFlySettings());
         announcerSettings = (AnnouncerSettings) dataTag.getSerializable("announcerSettings", new AnnouncerSettings());
+        waypoints = (Waypoints) dataTag.getSerializable("waypoints", new Waypoints());
 
         miscOptions = (MiscOptions) dataTag.getSerializable("miscOptions", new MiscOptions());
     }
@@ -278,13 +290,13 @@ public class PepsiMod {
         dataTag.setSerializable("xrayBlocks", XrayUtils.target_blocks);
         dataTag.setSerializable("espSettings", espSettings);
         dataTag.setFloat("Freecam_speed", FreecamMod.SPEED);
-        dataTag.setFloat("NameTags_scale", NameTagsMod.scale);
         dataTag.setSerializable("noweatherSettings", noWeatherSettings);
         dataTag.setSerializable("tracerSettings", tracerSettings);
         dataTag.setSerializable("miscOptions", miscOptions);
         dataTag.setSerializable("hudSettings", hudSettings);
         dataTag.setSerializable("elytraFlySettings", elytraFlySettings);
         dataTag.setSerializable("announcerSettings", announcerSettings);
+        dataTag.setSerializable("waypoints", waypoints);
         dataTag.save();
     }
 

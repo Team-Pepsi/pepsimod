@@ -13,28 +13,40 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.command.api;
+package net.daporkchop.pepsimod.command.impl.waypoint;
 
 import net.daporkchop.pepsimod.PepsiMod;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.TextComponentString;
+import net.daporkchop.pepsimod.command.api.Command;
+import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
 
-public abstract class Command {
-    public String name;
+import java.util.Collection;
 
-    public Command(String name) {
-        this.name = name;
+public class WaypointListCommand extends Command {
+    public WaypointListCommand() {
+        super("waypointlist");
     }
 
-    public static void clientMessage(String toSend) {
-        Minecraft.getMinecraft().player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + toSend));
+    @Override
+    public void execute(String cmd, String[] args) {
+        String s = "";
+        Collection<Waypoint> waypoints = PepsiMod.INSTANCE.waypoints.getWaypoints();
+        for (Waypoint waypoint : waypoints) {
+            s += waypoint.name + ", ";
+        }
+        s = s.substring(0, s.length() - 2);
+        clientMessage(s);
     }
 
-    public abstract void execute(String cmd, String[] args);
+    @Override
+    public String getSuggestion(String cmd, String[] args) {
+        return cmd;
+    }
 
-    public abstract String getSuggestion(String cmd, String[] args);
-
+    @Override
     public String[] aliases() {
-        return new String[]{name};
+        return new String[]{
+                "waypointlist",
+                "wlist"
+        };
     }
 }

@@ -217,7 +217,6 @@ public class AuraMod extends Module {
                 new ModuleOption<>(PepsiMod.INSTANCE.targetSettings.silent, "silent", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.silent = value;
-                            updateName();
                             return true;
                         },
                         () -> {
@@ -226,7 +225,6 @@ public class AuraMod extends Module {
                 new ModuleOption<>(PepsiMod.INSTANCE.targetSettings.rotate, "rotate", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.rotate = value;
-                            updateName();
                             return true;
                         },
                         () -> {
