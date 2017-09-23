@@ -30,13 +30,9 @@ import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-/**
- * tfw another wurst skid xd
- */
 public class PathFinder {
     public final HashMap<PathPos, PathPos> prevPosMap = new HashMap<>();
     public final boolean invulnerable = PepsiMod.INSTANCE.mc.player.capabilities.isCreativeMode;
@@ -50,15 +46,13 @@ public class PathFinder {
     public final BlockPos goal;
     public final HashMap<PathPos, Float> costMap = new HashMap<>();
     public final PathQueue queue = new PathQueue();
-    public final ArrayList<PathPos> path = new ArrayList<>();
     public boolean fallingAllowed = true;
     public boolean divingAllowed = true;
     public PathPos current;
     public int thinkSpeed = 1024;
     public int thinkTime = 200;
     public boolean failed;
-    public int iterations;
-    public boolean preCalculating = true;
+    public PathPos currentTarget;
 
     public PathFinder(BlockPos goal) {
         if (PepsiMod.INSTANCE.mc.player.onGround)
@@ -79,9 +73,16 @@ public class PathFinder {
         thinkTime = pathFinder.thinkTime;
     }
 
+    public PathPos updateTarget() {
+        if (queue.size() < 25) {
+            think();
+        }
+        currentTarget = queue.poll();
+    }
+
     public void think() {
         int i = 0;
-        for (; i < thinkSpeed && !checkFailed(); i++) {
+        for (; ; ) {
             // get next position from queue
             current = queue.poll();
 
@@ -100,12 +101,7 @@ public class PathFinder {
                 costMap.put(next, newCost);
                 prevPosMap.put(next, current);
                 queue.add(next, newCost + getHeuristic(next));
-                if (preCalculating) {
-                    if (queue.size() >= 25) {
-                        preCalculating = false;
-                        return;
-                    }
-                } else {
+                if (queue.size() >= 25) {
                     return;
                 }
             }
@@ -413,34 +409,6 @@ public class PathFinder {
         return failed;
     }
 
-    public ArrayList<PathPos> formatPath() {
-        if (!path.isEmpty())
-            throw new IllegalStateException("Path was already formatted!");
-
-        // get last position
-        PathPos pos;
-        if (!failed)
-            pos = current;
-        else {
-            pos = start;
-            for (PathPos next : prevPosMap.keySet())
-                if (getHeuristic(next) < getHeuristic(pos)
-                        && (canFlyAt(next) || canBeSolid(next.down())))
-                    pos = next;
-        }
-
-        // get positions
-        while (pos != null) {
-            path.add(pos);
-            pos = prevPosMap.get(pos);
-        }
-
-        // reverse path
-        Collections.reverse(path);
-
-        return path;
-    }
-
     public void renderPath(boolean debugMode, boolean depthTest) {
         // GL settings
         GL11.glEnable(GL11.GL_BLEND);
@@ -455,6 +423,8 @@ public class PathFinder {
         GL11.glPushMatrix();
         GL11.glTranslated(-ReflectionStuff.getRenderPosX(Minecraft.getMinecraft().getRenderManager()), -ReflectionStuff.getRenderPosY(Minecraft.getMinecraft().getRenderManager()), -ReflectionStuff.getRenderPosZ(Minecraft.getMinecraft().getRenderManager()));
         GL11.glTranslated(0.5, 0.5, 0.5);
+
+        debugMode = true; //TODO: remove
 
         if (debugMode) {
             int renderedThings = 0;
@@ -492,10 +462,12 @@ public class PathFinder {
             GL11.glColor4f(0, 0, 1, 0.75F);
         } else {
             GL11.glLineWidth(2);
-            GL11.glColor4f(0, 1, 0, 0.75F);
+            GL11.glColor4f(0, 1, 0, 0.5F);
         }
-        for (int i = 0; i < path.size() - 1; i++)
-            PathRenderer.renderArrow(path.get(i), path.get(i + 1));
+        PathPos[] path = queue.toArray();
+        for (int i = 0; i < path.length - 1; i++) {
+            PathRenderer.renderArrow(path[i], path[i + 1]);
+        }
 
         GL11.glPopMatrix();
 
@@ -507,9 +479,10 @@ public class PathFinder {
         GL11.glDepthMask(true);
     }
 
-    public boolean isPathStillValid(int index) {
-        if (path.isEmpty())
-            throw new IllegalStateException("Path is not formatted!");
+    public boolean isPathStillValid(PathPos pos) {
+        if (queue.isEmpty()) {
+            throw new IllegalStateException("Path queue is empty xd");
+        }
 
         // check player abilities
         if (invulnerable != PepsiMod.INSTANCE.mc.player.capabilities.isCreativeMode
@@ -517,14 +490,18 @@ public class PathFinder {
                 || immuneToFallDamage != (invulnerable
                 || NoFallMod.INSTANCE.isEnabled)
                 || noWaterSlowdown != NoSlowdownMod.INSTANCE.isEnabled
-                || jesus != JesusMod.INSTANCE.isEnabled)
+                || jesus != JesusMod.INSTANCE.isEnabled) {
             //|| spider != wurst.mods.spiderMod.isActive())
             return false;
+        }
 
         // check path
-        for (int i = Math.max(1, index); i < path.size(); i++)
-            if (!getNeighbors(path.get(i - 1)).contains(path.get(i)))
+        PathPos[] path = queue.toArray();
+        for (int i = 1; i < path.length; i++) {
+            if (!getNeighbors(path[i - 1]).contains(path[i])) {
                 return false;
+            }
+        }
 
         return true;
     }

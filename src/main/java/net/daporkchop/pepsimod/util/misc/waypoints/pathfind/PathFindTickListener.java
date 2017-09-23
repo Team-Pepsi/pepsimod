@@ -28,9 +28,7 @@ public class PathFindTickListener implements ITickListener, IWurstRenderListener
     }
 
     public void preCalculate() {
-        while (GoToCommand.INSTANCE.pathFinder.preCalculating) {
-            GoToCommand.INSTANCE.pathFinder.think();
-        }
+        GoToCommand.INSTANCE.pathFinder.think();
     }
 
     @Override
@@ -61,7 +59,7 @@ public class PathFindTickListener implements ITickListener, IWurstRenderListener
         }*/
 
         // check path
-        if (GoToCommand.INSTANCE.processor != null && !GoToCommand.INSTANCE.pathFinder.isPathStillValid(GoToCommand.INSTANCE.processor.getIndex())) {
+        if (GoToCommand.INSTANCE.processor != null && !GoToCommand.INSTANCE.pathFinder.isPathStillValid(GoToCommand.INSTANCE.pathFinder.currentTarget)) {
             System.out.println("Updating path...");
             GoToCommand.INSTANCE.pathFinder = new PathFinder(GoToCommand.INSTANCE.pathFinder.getGoal());
             return;

@@ -32,7 +32,6 @@ public abstract class PathProcessor {
             mc.gameSettings.keyBindForward, mc.gameSettings.keyBindBack,
             mc.gameSettings.keyBindRight, mc.gameSettings.keyBindLeft,
             mc.gameSettings.keyBindJump, mc.gameSettings.keyBindSneak};
-    protected int index;
     protected boolean done;
 
     public abstract void process();
@@ -47,8 +46,7 @@ public abstract class PathProcessor {
             ReflectionStuff.setPressed(key, false);
 
         // face next position
-        if (index < GoToCommand.INSTANCE.pathFinder.path.size())
-            facePosition(GoToCommand.INSTANCE.pathFinder.path.get(index));
+        facePosition(GoToCommand.INSTANCE.pathFinder.currentTarget);
 
         // disable sprinting
         PepsiMod.INSTANCE.mc.player.setSprinting(false);
@@ -62,10 +60,6 @@ public abstract class PathProcessor {
         // reset keys
         for (KeyBinding key : controls)
             ReflectionStuff.setPressed(key, GameSettings.isKeyDown(key));
-    }
-
-    public int getIndex() {
-        return index;
     }
 
     public final boolean isDone() {
