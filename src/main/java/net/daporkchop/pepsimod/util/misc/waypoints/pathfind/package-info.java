@@ -16,5 +16,5 @@
 package net.daporkchop.pepsimod.util.misc.waypoints.pathfind;
 
 /**
- * nearly everything in this package is skidded 1:1 from wurst, i'll optimize it later
+ * this package is a highly modified version of the wurst ai
  */

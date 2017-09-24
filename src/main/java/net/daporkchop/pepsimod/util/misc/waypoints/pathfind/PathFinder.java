@@ -15,6 +15,7 @@
 
 package net.daporkchop.pepsimod.util.misc.waypoints.pathfind;
 
+import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.impl.misc.NoFallMod;
 import net.daporkchop.pepsimod.module.impl.movement.FlightMod;
 import net.daporkchop.pepsimod.module.impl.movement.JesusMod;
@@ -32,6 +33,7 @@ import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map.Entry;
 
 public class PathFinder {
@@ -59,6 +61,7 @@ public class PathFinder {
     public boolean done, actuallyDone = false;
     public boolean failed;
     public PathPos currentTarget = null;
+    public ArrayList<PathPos> toRemove = new ArrayList<>();
 
     public PathFinder(BlockPos goal) {
         if (WMinecraft.getPlayer().onGround)
@@ -104,7 +107,7 @@ public class PathFinder {
                     queue.add(next, newCost + getHeuristic(next));
                 }
             }
-        } catch (OutOfWorldException e) {
+        } catch (OutOfWorldException | NullPointerException e) {
             done = true;
             queue.cancelledPositions.add(current);
         }
@@ -413,6 +416,26 @@ public class PathFinder {
 
     public ArrayList<PathPos> formatPath() {
         path.clear();
+        PathPos playerPos = new PathPos(new BlockPos(PepsiMod.INSTANCE.mc.player));
+        for (Iterator<PathPos> iterator = prevPosMap.keySet().iterator(); iterator.hasNext(); ) {
+            PathPos pos = iterator.next();
+            if (pos.roughEquals(playerPos)) {
+                toRemove.add(pos);
+            }
+            if (!WMinecraft.getWorld().isBlockLoaded(pos)) {
+                toRemove.add(pos);
+            }
+        }
+        for (PathPos pos : toRemove) {
+            prevPosMap.remove(pos);
+            costMap.remove(pos);
+            queue.removePoint(pos);
+            ArrayList<PathPos> list = getNeighbors(pos);
+            for (PathPos a : list) {
+                queue.removePoint(a);
+            }
+        }
+        toRemove.clear();
 
         // get last position
         PathPos pos = start = current;
@@ -430,6 +453,14 @@ public class PathFinder {
         while (pos != null) {
             path.add(pos);
             pos = prevPosMap.get(pos);
+        }
+        if (path.size() < 2) {
+            pos = prevPosMap.values().iterator().next();
+            while (pos != null) {
+                path.add(pos);
+                pos = prevPosMap.get(pos);
+            }
+            //System.out.println("k so we had to do a thing xd, path size is now " + path.size());
         }
 
         // reverse path

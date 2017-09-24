@@ -83,6 +83,16 @@ public class PathQueue {
         return -1;
     }
 
+    public void removePoint(PathPos pos) {
+        Iterator<Entry> itr = queue.iterator();
+        while (itr.hasNext()) {
+            if (pos.equals(itr.next())) {
+                itr.remove();
+                return;
+            }
+        }
+    }
+
     private class Entry {
         private PathPos pos;
         private float priority;

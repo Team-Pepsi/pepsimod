@@ -54,11 +54,11 @@ public class PathFindTickListener implements ITickListener, IWurstRenderListener
 
 
         // check path
-        if (!GoToCommand.INSTANCE.pathFinder.isPathStillValid(GoToCommand.INSTANCE.processor.index)) {
+/*        if (!GoToCommand.INSTANCE.pathFinder.isPathStillValid(GoToCommand.INSTANCE.processor.index)) {
             System.out.println("Updating path...");
             GoToCommand.INSTANCE.pathFinder = new PathFinder(GoToCommand.INSTANCE.pathFinder.getGoal());
             return;
-        }
+        }*/
 
         // process path
         GoToCommand.INSTANCE.processor.process();

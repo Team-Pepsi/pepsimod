@@ -43,22 +43,22 @@ public class WalkPathProcessor extends PathProcessor {
                     WMinecraft.getPlayer().posY + 0.5, WMinecraft.getPlayer().posZ);
         else
             pos = new BlockPos(WMinecraft.getPlayer());
-        if (path.size() - 1 < index) {
-            index = 0;
-        }
+        //if (path.size() - 1 < index) {
+        index = 1;
+        //}
         PathPos nextPos = path.get(index);
         int posIndex = path.indexOf(pos);
 
         // update index
         if (pos.equals(nextPos)) {
-            index++;
-            GoToCommand.INSTANCE.pathFinder.prevPosMap.remove(nextPos);
-            GoToCommand.INSTANCE.pathFinder.costMap.remove(nextPos);
+            //index++;
+            GoToCommand.INSTANCE.pathFinder.toRemove.add(nextPos);
             return;
-        } else if (posIndex > index) {
-            index = posIndex + 1;
+        }/* else if (posIndex > index) {
+            //index = posIndex + 1;
+            GoToCommand.INSTANCE.pathFinder.toRemove.add(nextPos);
             return;
-        }
+        }*/
 
         lockControls();
 
@@ -109,22 +109,23 @@ public class WalkPathProcessor extends PathProcessor {
                     // directional jump
                     if (index < path.size() - 1
                             && !nextPos.up().equals(path.get(index + 1)))
-                        index++;
+                        //index++;
 
-                    // jump up
+                        // jump up
                         ReflectionStuff.setPressed(mc.gameSettings.keyBindJump, true);
                 }
 
                 // go down
             } else {
                 // skip mid-air nodes and go straight to the bottom
-                while (index < path.size() - 1
-                        && path.get(index).down().equals(path.get(index + 1)))
-                    index++;
+                int i = index;
+                while (i < path.size() - 1 && path.get(i).down().equals(path.get(i + 1)))
+                    i++;
+                GoToCommand.INSTANCE.pathFinder.toRemove.add(path.get(i));
 
                 // walk off the edge
                     if (WMinecraft.getPlayer().onGround)
-                    ReflectionStuff.setPressed(mc.gameSettings.keyBindForward, true);
+                        ReflectionStuff.setPressed(mc.gameSettings.keyBindForward, true);
             }
     }
 
