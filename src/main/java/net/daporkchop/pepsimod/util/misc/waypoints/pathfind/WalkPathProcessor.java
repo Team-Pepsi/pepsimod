@@ -51,12 +51,12 @@ public class WalkPathProcessor extends PathProcessor {
 
         // update index
         if (pos.equals(nextPos)) {
-            //index++;
+            index++;
             GoToCommand.INSTANCE.pathFinder.prevPosMap.remove(nextPos);
             GoToCommand.INSTANCE.pathFinder.costMap.remove(nextPos);
             return;
         } else if (posIndex > index) {
-            //index = posIndex + 1;
+            index = posIndex + 1;
             return;
         }
 
@@ -109,7 +109,7 @@ public class WalkPathProcessor extends PathProcessor {
                     // directional jump
                     if (index < path.size() - 1
                             && !nextPos.up().equals(path.get(index + 1)))
-                        //index++;
+                        index++;
 
                     // jump up
                         ReflectionStuff.setPressed(mc.gameSettings.keyBindJump, true);
@@ -120,7 +120,7 @@ public class WalkPathProcessor extends PathProcessor {
                 // skip mid-air nodes and go straight to the bottom
                 while (index < path.size() - 1
                         && path.get(index).down().equals(path.get(index + 1)))
-                    //index++;
+                    index++;
 
                 // walk off the edge
                     if (WMinecraft.getPlayer().onGround)

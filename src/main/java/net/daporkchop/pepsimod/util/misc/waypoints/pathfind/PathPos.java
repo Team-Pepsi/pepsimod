@@ -50,4 +50,10 @@ public class PathPos extends BlockPos {
     public int hashCode() {
         return super.hashCode() * 2 + (isJumping() ? 1 : 0);
     }
+
+    public boolean roughEquals(BlockPos otherPos) {
+        return Math.abs(otherPos.getX() - getX()) <= 1
+                && Math.abs(otherPos.getY() - getY()) <= 1
+                && Math.abs(otherPos.getZ() - getZ()) <= 1;
+    }
 }

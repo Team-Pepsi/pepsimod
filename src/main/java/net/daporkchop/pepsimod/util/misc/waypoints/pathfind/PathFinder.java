@@ -30,6 +30,7 @@ import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -46,17 +47,18 @@ public class PathFinder {
     public final boolean noWaterSlowdown =
             NoSlowdownMod.INSTANCE.isEnabled;
     public final boolean jesus = JesusMod.INSTANCE.isEnabled;
-    //TODO: public final boolean spider = wurst.mods.spiderMod.isActive();
-    public PathPos start;
     public final BlockPos goal;
     public final HashMap<PathPos, Float> costMap = new HashMap<>();
     public final PathQueue queue = new PathQueue();
     public final ArrayList<PathPos> path = new ArrayList<>();
+    //TODO: public final boolean spider = wurst.mods.spiderMod.isActive();
+    public PathPos start;
     public boolean fallingAllowed = true;
     public boolean divingAllowed = true;
     public PathPos current;
     public boolean done, actuallyDone = false;
     public boolean failed;
+    public PathPos currentTarget = null;
 
     public PathFinder(BlockPos goal) {
         if (WMinecraft.getPlayer().onGround)
@@ -107,10 +109,6 @@ public class PathFinder {
             queue.cancelledPositions.add(current);
         }
     }
-
-    /*public boolean checkDone() {
-        return done;
-    }*/
 
     public ArrayList<PathPos> getNeighbors(PathPos pos) {
         ArrayList<PathPos> neighbors = new ArrayList<>();
@@ -271,17 +269,6 @@ public class PathFinder {
                 && (material == Material.CACTUS || material == Material.LAVA));
     }
 
-    public boolean canSafelyStandOn(BlockPos pos) {
-        // check if solid
-        Material material = WBlock.getMaterial(pos);
-        if (!canBeSolid(pos))
-            return false;
-
-        // check if safe
-        return !(!invulnerable
-                && (material == Material.CACTUS || material == Material.LAVA));
-    }
-
     public boolean canFallBelow(PathPos pos) {
         // check if player can keep falling
         BlockPos down2 = pos.down(2);
@@ -424,17 +411,8 @@ public class PathFinder {
         return failed;
     }
 
-    public PathPos currentTarget = null;
-
     public ArrayList<PathPos> formatPath() {
-        if (currentTarget == null) {
-            PathPos next = prevPosMap.get(current);
-            currentTarget = next;
-        }
-        /*if (!done && !failed)
-            throw new IllegalStateException("No path found!");
-        if (!path.isEmpty())
-            path.clear();
+        path.clear();
 
         // get last position
         PathPos pos = start = current;
@@ -455,7 +433,7 @@ public class PathFinder {
         }
 
         // reverse path
-        Collections.reverse(path);*/
+        Collections.reverse(path);
 
         return path;
     }
