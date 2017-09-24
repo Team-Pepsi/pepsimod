@@ -21,16 +21,19 @@ import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
 import net.daporkchop.pepsimod.util.misc.waypoints.pathfind.PathFindTickListener;
 import net.daporkchop.pepsimod.util.misc.waypoints.pathfind.PathFinder;
+import net.daporkchop.pepsimod.util.misc.waypoints.pathfind.PathPos;
 import net.daporkchop.pepsimod.util.misc.waypoints.pathfind.PathProcessor;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.ArrayList;
+
 public class GoToCommand extends Command {
     public static GoToCommand INSTANCE;
+    public final ArrayList<PathPos> path = new ArrayList<>();
     public PathFinder pathFinder;
     public PathProcessor processor;
     public boolean enabled;
-    public BlockPos endGoal, currentGoal;
-    public int maxTravelDist = 50; //TODO: use loaded chunk radius
+    public BlockPos endGoal;
 
     public GoToCommand() {
         super("goto");

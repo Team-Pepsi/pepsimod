@@ -16,7 +16,6 @@
 package net.daporkchop.pepsimod.util.misc.waypoints.pathfind;
 
 import net.daporkchop.pepsimod.command.impl.GoToCommand;
-import net.daporkchop.pepsimod.module.impl.movement.JesusMod;
 import net.daporkchop.pepsimod.totally.not.skidded.RotationUtils;
 import net.daporkchop.pepsimod.totally.not.skidded.WBlock;
 import net.daporkchop.pepsimod.totally.not.skidded.WMinecraft;
@@ -58,7 +57,10 @@ public class WalkPathProcessor extends PathProcessor {
             //index = posIndex + 1;
             GoToCommand.INSTANCE.pathFinder.toRemove.add(nextPos);
             return;
-        }*/
+        }*/ else if (WMinecraft.getPlayer().getDistanceSq(nextPos) >= 25) {
+            GoToCommand.INSTANCE.pathFinder = new PathFinder(GoToCommand.INSTANCE.pathFinder.goal);
+            return;
+        }
 
         lockControls();
 
@@ -69,27 +71,11 @@ public class WalkPathProcessor extends PathProcessor {
                 new Vec3d(nextPos).addVector(0.5, 0.5, 0.5))) > 90)
             return;
 
-        if (JesusMod.INSTANCE.isEnabled) {
-            // wait for Jesus to swim up
-            if (WMinecraft.getPlayer().posY < nextPos.getY()
-                    && (WMinecraft.getPlayer().isInWater()
-                    || WMinecraft.getPlayer().isInLava()))
-                return;
-
-            // manually swim down if using Jesus
-            if (WMinecraft.getPlayer().posY - nextPos.getY() > 0.5
-                    && (WMinecraft.getPlayer().isInWater()
-                    || WMinecraft.getPlayer().isInLava()
-                    || JesusMod.INSTANCE.isOverLiquid()))
-                ReflectionStuff.setPressed(mc.gameSettings.keyBindSneak, true);
-        }
-
         // horizontal movement
         if (pos.getX() != nextPos.getX() || pos.getZ() != nextPos.getZ()) {
             ReflectionStuff.setPressed(mc.gameSettings.keyBindForward, true);
 
-            if (index > 0 && path.get(index - 1).isJumping()
-                    || pos.getY() < nextPos.getY())
+            if (index > 0 && path.get(index - 1).isJumping() || pos.getY() < nextPos.getY())
                 ReflectionStuff.setPressed(mc.gameSettings.keyBindJump, true);
 
             // vertical movement
@@ -104,11 +90,9 @@ public class WalkPathProcessor extends PathProcessor {
                             WBlock.getBoundingBox(pos).getCenter());
 
                     ReflectionStuff.setPressed(mc.gameSettings.keyBindForward, true);
-
                 } else {
                     // directional jump
-                    if (index < path.size() - 1
-                            && !nextPos.up().equals(path.get(index + 1)))
+                    if (index < path.size() - 1 && !nextPos.up().equals(path.get(index + 1)))
                         //index++;
 
                         // jump up

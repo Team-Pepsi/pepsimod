@@ -16,6 +16,7 @@
 package net.daporkchop.pepsimod.util.misc.waypoints.pathfind;
 
 import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.command.impl.GoToCommand;
 import net.daporkchop.pepsimod.module.impl.misc.NoFallMod;
 import net.daporkchop.pepsimod.module.impl.movement.FlightMod;
 import net.daporkchop.pepsimod.module.impl.movement.JesusMod;
@@ -52,7 +53,6 @@ public class PathFinder {
     public final BlockPos goal;
     public final HashMap<PathPos, Float> costMap = new HashMap<>();
     public final PathQueue queue = new PathQueue();
-    public final ArrayList<PathPos> path = new ArrayList<>();
     //TODO: public final boolean spider = wurst.mods.spiderMod.isActive();
     public PathPos start;
     public boolean fallingAllowed = true;
@@ -415,7 +415,7 @@ public class PathFinder {
     }
 
     public ArrayList<PathPos> formatPath() {
-        path.clear();
+        GoToCommand.INSTANCE.path.clear();
         PathPos playerPos = new PathPos(new BlockPos(PepsiMod.INSTANCE.mc.player));
         for (Iterator<PathPos> iterator = prevPosMap.keySet().iterator(); iterator.hasNext(); ) {
             PathPos pos = iterator.next();
@@ -451,22 +451,22 @@ public class PathFinder {
 
         // get positions
         while (pos != null) {
-            path.add(pos);
+            GoToCommand.INSTANCE.path.add(pos);
             pos = prevPosMap.get(pos);
         }
-        if (path.size() < 2) {
+        if (GoToCommand.INSTANCE.path.size() < 2) {
             pos = prevPosMap.values().iterator().next();
             while (pos != null) {
-                path.add(pos);
+                GoToCommand.INSTANCE.path.add(pos);
                 pos = prevPosMap.get(pos);
             }
             //System.out.println("k so we had to do a thing xd, path size is now " + path.size());
         }
 
         // reverse path
-        Collections.reverse(path);
+        Collections.reverse(GoToCommand.INSTANCE.path);
 
-        return path;
+        return GoToCommand.INSTANCE.path;
     }
 
     public void renderPath(boolean debugMode, boolean depthTest) {
@@ -525,8 +525,8 @@ public class PathFinder {
             GL11.glLineWidth(2);
             GL11.glColor4f(0, 1, 0, 0.75F);
         }
-        for (int i = 0; i < path.size() - 1; i++)
-            PathRenderer.renderArrow(path.get(i), path.get(i + 1));
+        for (int i = 0; i < GoToCommand.INSTANCE.path.size() - 1; i++)
+            PathRenderer.renderArrow(GoToCommand.INSTANCE.path.get(i), GoToCommand.INSTANCE.path.get(i + 1));
 
         GL11.glPopMatrix();
 
@@ -539,7 +539,7 @@ public class PathFinder {
     }
 
     public boolean isPathStillValid(int index) {
-        if (path.isEmpty())
+        if (GoToCommand.INSTANCE.path.isEmpty())
             throw new IllegalStateException("Path is not formatted!");
 
         // check player abilities
@@ -553,15 +553,15 @@ public class PathFinder {
             return false;
 
         // check path
-        for (int i = Math.max(1, index); i < path.size(); i++)
-            if (!getNeighbors(path.get(i - 1)).contains(path.get(i)))
+        for (int i = Math.max(1, index); i < GoToCommand.INSTANCE.path.size(); i++)
+            if (!getNeighbors(GoToCommand.INSTANCE.path.get(i - 1)).contains(GoToCommand.INSTANCE.path.get(i)))
                 return false;
 
         return true;
     }
 
     public PathProcessor getProcessor() {
-        return new WalkPathProcessor(path);
+        return new WalkPathProcessor(GoToCommand.INSTANCE.path);
     }
 
     public void setFallingAllowed(boolean fallingAllowed) {

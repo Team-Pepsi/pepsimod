@@ -34,7 +34,9 @@ public class PathFindTickListener implements ITickListener, IWurstRenderListener
             GoToCommand.INSTANCE.processor.lockControls();
         }
 
-        GoToCommand.INSTANCE.pathFinder.think();
+        if (!GoToCommand.INSTANCE.pathFinder.done) {
+            GoToCommand.INSTANCE.pathFinder.think();
+        }
 
         /*if (!GoToCommand.INSTANCE.pathFinder.checkDone()) {
             if (GoToCommand.INSTANCE.pathFinder.isFailed()) {
