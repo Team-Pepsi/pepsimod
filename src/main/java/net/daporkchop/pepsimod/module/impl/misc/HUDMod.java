@@ -45,6 +45,11 @@ public class HUDMod extends Module {
     }
 
     @Override
+    public boolean shouldTick() {
+        return true;
+    }
+
+    @Override
     public void tick() {
         for (Module module : ModuleManager.ENABLED_MODULES) {
             module.updateName();

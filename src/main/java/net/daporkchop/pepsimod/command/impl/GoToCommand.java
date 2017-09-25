@@ -99,11 +99,9 @@ public class GoToCommand extends Command {
 
     public boolean hasReachedFinalGoal() {
         if (endGoal == null) {
-            return false;
+            return true;
         }
-        return Math.abs(Math.abs(PepsiMod.INSTANCE.mc.player.posX) - Math.abs(endGoal.getX())) <= 1
-                && Math.abs(Math.abs(PepsiMod.INSTANCE.mc.player.posY) - Math.abs(endGoal.getY())) <= 1
-                && Math.abs(Math.abs(PepsiMod.INSTANCE.mc.player.posZ) - Math.abs(endGoal.getZ())) <= 1;
+        return PepsiMod.INSTANCE.mc.player.getDistanceSq(endGoal) <= 64;
     }
 
     @Override

@@ -62,6 +62,7 @@ public class PathFinder {
     public boolean failed;
     public PathPos currentTarget = null;
     public ArrayList<PathPos> toRemove = new ArrayList<>();
+    public boolean goesToGoal = true;
 
     public PathFinder(BlockPos goal) {
         if (WMinecraft.getPlayer().onGround)
@@ -86,7 +87,7 @@ public class PathFinder {
 
         try {
             int i = 0;
-            for (; ; ) {
+            for (; !goal.equals(current); ) {
                 // get next position from queue
                 current = queue.poll();
 
@@ -109,6 +110,7 @@ public class PathFinder {
             }
         } catch (OutOfWorldException | NullPointerException e) {
             done = true;
+            goesToGoal = false;
             queue.cancelledPositions.add(current);
         }
     }
@@ -454,14 +456,14 @@ public class PathFinder {
             GoToCommand.INSTANCE.path.add(pos);
             pos = prevPosMap.get(pos);
         }
-        if (GoToCommand.INSTANCE.path.size() < 2) {
+        /*if (GoToCommand.INSTANCE.path.size() < 2) {
             pos = prevPosMap.values().iterator().next();
             while (pos != null) {
                 GoToCommand.INSTANCE.path.add(pos);
                 pos = prevPosMap.get(pos);
             }
             //System.out.println("k so we had to do a thing xd, path size is now " + path.size());
-        }
+        }*/
 
         // reverse path
         Collections.reverse(GoToCommand.INSTANCE.path);

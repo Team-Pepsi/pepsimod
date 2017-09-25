@@ -40,6 +40,7 @@ public class MiscOptions implements Serializable {
     public boolean waypoints_nametag = false;
     public boolean waypoints_dist = true;
     public boolean waypoints_coords = false;
+    public float timer_multiplier = 1.0f;
 
     public static class ModuleState implements Serializable {
         public boolean enabled;

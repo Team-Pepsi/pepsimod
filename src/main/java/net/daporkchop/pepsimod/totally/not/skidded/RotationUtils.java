@@ -166,7 +166,6 @@ public class RotationUtils {
 
         PepsiMod.INSTANCE.mc.player.rotationYaw =
                 limitAngleChange(oldYaw, rotations[0], 30);
-        PepsiMod.INSTANCE.mc.player.rotationPitch = 0;
 
         return Math.abs(oldYaw - rotations[0]) < 1F;
     }

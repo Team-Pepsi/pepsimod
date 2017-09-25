@@ -38,6 +38,8 @@ public class PathFindTickListener implements ITickListener, IWurstRenderListener
             GoToCommand.INSTANCE.pathFinder.think();
         }
 
+        GoToCommand.INSTANCE.pathFinder.formatPath();
+
         /*if (!GoToCommand.INSTANCE.pathFinder.checkDone()) {
             if (GoToCommand.INSTANCE.pathFinder.isFailed()) {
                 Command.clientMessage("Could not find a path.");
@@ -47,13 +49,10 @@ public class PathFindTickListener implements ITickListener, IWurstRenderListener
             return;
         }*/
 
-        GoToCommand.INSTANCE.pathFinder.formatPath();
-
         // set processor
         if (GoToCommand.INSTANCE.processor == null) {
             GoToCommand.INSTANCE.processor = GoToCommand.INSTANCE.pathFinder.getProcessor();
         }
-
 
         // check path
 /*        if (!GoToCommand.INSTANCE.pathFinder.isPathStillValid(GoToCommand.INSTANCE.processor.index)) {

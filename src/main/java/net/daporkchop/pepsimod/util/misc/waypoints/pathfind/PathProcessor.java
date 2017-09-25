@@ -64,8 +64,7 @@ public abstract class PathProcessor {
     }
 
     protected void facePosition(BlockPos pos) {
-        RotationUtils
-                .faceVectorForWalking(new Vec3d(pos).addVector(0.5, 0.5, 0.5));
+        RotationUtils.faceVectorForWalking(new Vec3d(pos).addVector(0.5, 0.5, 0.5));
     }
 
     public final void releaseControls() {

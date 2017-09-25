@@ -19,6 +19,8 @@ import net.minecraft.util.math.BlockPos;
 
 public class PathPos extends BlockPos {
     private final boolean jumping;
+    public boolean mining;
+    public boolean placing;
 
     public PathPos(BlockPos pos) {
         this(pos, false);
