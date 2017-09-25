@@ -15,22 +15,23 @@
 
 package net.daporkchop.pepsimod.util.module;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 
+import static net.daporkchop.pepsimod.util.misc.Default.mc;
+
 public class EntityFakePlayer extends EntityOtherPlayerMP {
     public EntityFakePlayer() {
-        super(PepsiMod.INSTANCE.mc.world, PepsiMod.INSTANCE.mc.player.getGameProfile());
-        copyLocationAndAnglesFrom(PepsiMod.INSTANCE.mc.player);
+        super(mc.world, mc.player.getGameProfile());
+        copyLocationAndAnglesFrom(mc.player);
 
         // fix inventory
-        inventory.copyInventory(PepsiMod.INSTANCE.mc.player.inventory);
-        PepsiUtils.copyPlayerModel(PepsiMod.INSTANCE.mc.player, this);
+        inventory.copyInventory(mc.player.inventory);
+        PepsiUtils.copyPlayerModel(mc.player, this);
 
         // fix rotation
-        rotationYawHead = PepsiMod.INSTANCE.mc.player.rotationYawHead;
-        renderYawOffset = PepsiMod.INSTANCE.mc.player.renderYawOffset;
+        rotationYawHead = mc.player.rotationYawHead;
+        renderYawOffset = mc.player.renderYawOffset;
 
         // fix cape movement
         chasingPosX = posX;
@@ -38,14 +39,14 @@ public class EntityFakePlayer extends EntityOtherPlayerMP {
         chasingPosZ = posZ;
 
         // spawn
-        PepsiMod.INSTANCE.mc.world.addEntityToWorld(getEntityId(), this);
+        mc.world.addEntityToWorld(getEntityId(), this);
     }
 
     public void resetPlayerPosition() {
-        PepsiMod.INSTANCE.mc.player.setPositionAndRotation(posX, posY, posZ, rotationYaw, rotationPitch);
+        mc.player.setPositionAndRotation(posX, posY, posZ, rotationYaw, rotationPitch);
     }
 
     public void despawn() {
-        PepsiMod.INSTANCE.mc.world.removeEntityFromWorld(getEntityId());
+        mc.world.removeEntityFromWorld(getEntityId());
     }
 }

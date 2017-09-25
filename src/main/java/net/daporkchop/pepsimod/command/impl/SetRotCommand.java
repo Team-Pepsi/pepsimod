@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.command.impl;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.api.Command;
 
 public class SetRotCommand extends Command {
@@ -33,7 +32,7 @@ public class SetRotCommand extends Command {
         try {
             float yaw = Float.parseFloat(args[1]);
             float pitch = Float.parseFloat(args[2]);
-            PepsiMod.INSTANCE.mc.player.setPositionAndRotation(PepsiMod.INSTANCE.mc.player.posX, PepsiMod.INSTANCE.mc.player.posY, PepsiMod.INSTANCE.mc.player.posZ, yaw, pitch);
+            mc.player.setPositionAndRotation(mc.player.posX, mc.player.posY, mc.player.posZ, yaw, pitch);
             clientMessage("Set rotation to yaw: " + yaw + " pitch: " + pitch);
         } catch (NumberFormatException e) {
             clientMessage("Invalid arguemnts!");

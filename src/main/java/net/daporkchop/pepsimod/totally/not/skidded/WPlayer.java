@@ -15,7 +15,7 @@
 
 package net.daporkchop.pepsimod.totally.not.skidded;
 
-import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.util.misc.Default;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.play.client.CPacketAnimation;
@@ -24,34 +24,34 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumHand;
 
-public final class WPlayer {
+public final class WPlayer extends Default {
     public static void swingArmClient() {
-        PepsiMod.INSTANCE.mc.player.swingArm(EnumHand.MAIN_HAND);
+        mc.player.swingArm(EnumHand.MAIN_HAND);
     }
 
     public static void swingArmPacket() {
-        PepsiMod.INSTANCE.mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
+        mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
     }
 
     public static void attackEntity(Entity entity) {
-        Minecraft.getMinecraft().playerController.attackEntity(PepsiMod.INSTANCE.mc.player, entity);
+        Minecraft.getMinecraft().playerController.attackEntity(mc.player, entity);
         swingArmClient();
     }
 
     public static void sendAttackPacket(Entity entity) {
-        PepsiMod.INSTANCE.mc.player.connection.sendPacket(new CPacketUseEntity(entity, EnumHand.MAIN_HAND));
+        mc.player.connection.sendPacket(new CPacketUseEntity(entity, EnumHand.MAIN_HAND));
     }
 
     public static float getCooldown() {
-        return PepsiMod.INSTANCE.mc.player.getCooledAttackStrength(0);
+        return mc.player.getCooledAttackStrength(0);
     }
 
     public static void addPotionEffect(Potion potion) {
-        PepsiMod.INSTANCE.mc.player
+        mc.player
                 .addPotionEffect(new PotionEffect(potion, 10801220));
     }
 
     public static void removePotionEffect(Potion potion) {
-        PepsiMod.INSTANCE.mc.player.removePotionEffect(potion);
+        mc.player.removePotionEffect(potion);
     }
 }

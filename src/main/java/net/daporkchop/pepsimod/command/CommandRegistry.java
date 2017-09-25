@@ -18,12 +18,13 @@ package net.daporkchop.pepsimod.command;
 import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.api.Command;
 import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.misc.Default;
 import net.minecraft.util.text.TextComponentString;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class CommandRegistry {
+public class CommandRegistry extends Default {
     /**
      * All registered commands are here :P
      */
@@ -85,7 +86,7 @@ public class CommandRegistry {
                 }
             }
 
-            PepsiMod.INSTANCE.mc.player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + PepsiUtils.COLOR_ESCAPE + "cUnknown command! Use .help for a list of commands!"));
+            mc.player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + PepsiUtils.COLOR_ESCAPE + "cUnknown command! Use .help for a list of commands!"));
         } catch (ArrayIndexOutOfBoundsException | StringIndexOutOfBoundsException e) {
         }
     }

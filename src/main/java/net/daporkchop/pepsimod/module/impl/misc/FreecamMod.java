@@ -58,17 +58,17 @@ public class FreecamMod extends Module {
 
     @Override
     public void tick() {
-        PepsiMod.INSTANCE.mc.player.motionX = 0;
-        PepsiMod.INSTANCE.mc.player.motionZ = 0;
+        mc.player.motionX = 0;
+        mc.player.motionZ = 0;
 
-        PepsiMod.INSTANCE.mc.player.jumpMovementFactor = SPEED / 10;
+        mc.player.jumpMovementFactor = SPEED / 10;
 
-        if (PepsiMod.INSTANCE.mc.gameSettings.keyBindJump.isKeyDown()) {
-            PepsiMod.INSTANCE.mc.player.motionY = SPEED;
-        } else if (PepsiMod.INSTANCE.mc.gameSettings.keyBindSneak.isKeyDown()) {
-            PepsiMod.INSTANCE.mc.player.motionY = -SPEED;
+        if (mc.gameSettings.keyBindJump.isKeyDown()) {
+            mc.player.motionY = SPEED;
+        } else if (mc.gameSettings.keyBindSneak.isKeyDown()) {
+            mc.player.motionY = -SPEED;
         } else {
-            PepsiMod.INSTANCE.mc.player.motionY = 0;
+            mc.player.motionY = 0;
         }
     }
 

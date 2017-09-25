@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.util.misc.waypoints.pathfind;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.impl.GoToCommand;
 import net.daporkchop.pepsimod.module.impl.misc.NoFallMod;
 import net.daporkchop.pepsimod.module.impl.movement.FlightMod;
@@ -24,6 +23,7 @@ import net.daporkchop.pepsimod.module.impl.movement.NoSlowdownMod;
 import net.daporkchop.pepsimod.totally.not.skidded.WBlock;
 import net.daporkchop.pepsimod.totally.not.skidded.WMinecraft;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
+import net.daporkchop.pepsimod.util.misc.Default;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -37,7 +37,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-public class PathFinder {
+public class PathFinder extends Default {
     public final HashMap<PathPos, PathPos> prevPosMap = new HashMap<>();
     public final boolean invulnerable =
             WMinecraft.getPlayer().capabilities.isCreativeMode;
@@ -53,7 +53,6 @@ public class PathFinder {
     public final BlockPos goal;
     public final HashMap<PathPos, Float> costMap = new HashMap<>();
     public final PathQueue queue = new PathQueue();
-    //TODO: public final boolean spider = wurst.mods.spiderMod.isActive();
     public PathPos start;
     public boolean fallingAllowed = true;
     public boolean divingAllowed = true;
@@ -82,9 +81,6 @@ public class PathFinder {
     }
 
     public void think() {
-        //if (done)
-        //    return;
-
         try {
             int i = 0;
             for (; !goal.equals(current); ) {
@@ -418,7 +414,7 @@ public class PathFinder {
 
     public ArrayList<PathPos> formatPath() {
         GoToCommand.INSTANCE.path.clear();
-        PathPos playerPos = new PathPos(new BlockPos(PepsiMod.INSTANCE.mc.player));
+        PathPos playerPos = new PathPos(new BlockPos(mc.player));
         for (Iterator<PathPos> iterator = prevPosMap.keySet().iterator(); iterator.hasNext(); ) {
             PathPos pos = iterator.next();
             if (pos.roughEquals(playerPos)) {

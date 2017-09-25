@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.render;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -68,7 +67,7 @@ public class TrajectoriesMod extends Module {
 
     @Override
     public void onRender(float partialTicks) {
-        EntityPlayerSP player = PepsiMod.INSTANCE.mc.player;
+        EntityPlayerSP player = mc.player;
 
         ItemStack stack = player.inventory.getCurrentItem();
         if (stack == null) {
@@ -125,7 +124,7 @@ public class TrajectoriesMod extends Module {
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
         GL11.glLineWidth(2);
 
-        RenderManager renderManager = PepsiMod.INSTANCE.mc.getRenderManager();
+        RenderManager renderManager = mc.getRenderManager();
 
         // draw trajectory line
         double gravity = usingBow ? 0.05D : stack.getItem() instanceof ItemPotion ? 0.4D : stack.getItem() instanceof ItemFishingRod ? 0.15D : 0.03D;
@@ -143,7 +142,7 @@ public class TrajectoriesMod extends Module {
             arrowMotionZ *= 0.999D;
             arrowMotionY -= gravity * 0.1;
 
-            if (PepsiMod.INSTANCE.mc.world.rayTraceBlocks(playerVector, new Vec3d(arrowPosX, arrowPosY, arrowPosZ)) != null) {
+            if (mc.world.rayTraceBlocks(playerVector, new Vec3d(arrowPosX, arrowPosY, arrowPosZ)) != null) {
                 break;
             }
         }

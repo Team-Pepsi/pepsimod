@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.render;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleLaunchState;
@@ -35,8 +34,8 @@ public class ZoomMod extends Module {
 
     @Override
     public void onEnable() {
-        if (fov == -1f || PepsiMod.INSTANCE.mc.gameSettings.fovSetting == fov) {
-            fov = PepsiMod.INSTANCE.mc.gameSettings.fovSetting;
+        if (fov == -1f || mc.gameSettings.fovSetting == fov) {
+            fov = mc.gameSettings.fovSetting;
         }
     }
 
@@ -48,16 +47,16 @@ public class ZoomMod extends Module {
     @Override
     public void tick() {
         if (this.isEnabled) {
-            if (PepsiMod.INSTANCE.mc.gameSettings.fovSetting > 12f) {
+            if (mc.gameSettings.fovSetting > 12f) {
                 for (int i = 0; i < 100; i++) {
-                    if (PepsiMod.INSTANCE.mc.gameSettings.fovSetting > 12f) {
-                        PepsiMod.INSTANCE.mc.gameSettings.fovSetting -= 0.1f;
+                    if (mc.gameSettings.fovSetting > 12f) {
+                        mc.gameSettings.fovSetting -= 0.1f;
                     }
                 }
             }
-        } else if (PepsiMod.INSTANCE.mc.gameSettings.fovSetting < fov) {
+        } else if (mc.gameSettings.fovSetting < fov) {
             for (int i = 0; i < 100; i++) {
-                PepsiMod.INSTANCE.mc.gameSettings.fovSetting += 0.1F;
+                mc.gameSettings.fovSetting += 0.1F;
             }
         }
     }

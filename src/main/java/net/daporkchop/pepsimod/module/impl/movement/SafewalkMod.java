@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.movement;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -66,7 +65,7 @@ public class SafewalkMod extends Module {
         double y = event.y;
         double z = event.z;
 
-        if (PepsiMod.INSTANCE.mc.player.onGround) {
+        if (mc.player.onGround) {
             double increment;
             for (increment = 0.05D; x != 0.0D && isOffsetBBEmpty(x, -1.0D, 0.0D); ) {
                 if (x < increment && x >= -increment) {
@@ -110,10 +109,10 @@ public class SafewalkMod extends Module {
     }
 
     public boolean isOffsetBBEmpty(double offsetX, double offsetY, double offsetZ) {
-        EntityPlayerSP playerSP = PepsiMod.INSTANCE.mc.player;
+        EntityPlayerSP playerSP = mc.player;
         vec.x = offsetX;
         vec.y = offsetY;
         vec.z = offsetZ;
-        return PepsiMod.INSTANCE.mc.world.getCollisionBoxes(playerSP, playerSP.getEntityBoundingBox().offset(vec.x, vec.y, vec.z)).isEmpty();
+        return mc.world.getCollisionBoxes(playerSP, playerSP.getEntityBoundingBox().offset(vec.x, vec.y, vec.z)).isEmpty();
     }
 }

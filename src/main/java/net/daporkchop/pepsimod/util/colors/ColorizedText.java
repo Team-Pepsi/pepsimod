@@ -15,9 +15,10 @@
 
 package net.daporkchop.pepsimod.util.colors;
 
+import net.daporkchop.pepsimod.util.misc.Default;
 import net.minecraft.client.gui.Gui;
 
-public abstract class ColorizedText {
+public abstract class ColorizedText extends Default {
     public abstract int width();
 
     public abstract void drawAtPos(Gui screen, int x, int y);

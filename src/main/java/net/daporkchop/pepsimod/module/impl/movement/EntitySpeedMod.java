@@ -45,12 +45,12 @@ public class EntitySpeedMod extends Module {
 
     @Override
     public void tick() {
-        Entity ridingEntity = ReflectionStuff.getRidingEntity(PepsiMod.INSTANCE.mc.player);
+        Entity ridingEntity = ReflectionStuff.getRidingEntity(mc.player);
         if (ridingEntity != null) {
-            MovementInput movementInput = PepsiMod.INSTANCE.mc.player.movementInput;
+            MovementInput movementInput = mc.player.movementInput;
             double forward = movementInput.moveForward;
             double strafe = movementInput.moveStrafe;
-            float yaw = PepsiMod.INSTANCE.mc.player.rotationYaw;
+            float yaw = mc.player.rotationYaw;
             if ((forward == 0.0D) && (strafe == 0.0D)) {
                 ridingEntity.motionX = 0.0D;
                 ridingEntity.motionZ = 0.0D;

@@ -57,7 +57,6 @@ public class WalkPathProcessor extends PathProcessor {
 
         // update index
         if (forceNext || pos.equals(nextPos)) {
-            //index++;
             GoToCommand.INSTANCE.pathFinder.toRemove.add(nextPos);
             return;
         } else if (WMinecraft.getPlayer().getDistanceSq(nextPos) >= 16 || (!GoToCommand.INSTANCE.pathFinder.goesToGoal && path.size() <= 15)) {

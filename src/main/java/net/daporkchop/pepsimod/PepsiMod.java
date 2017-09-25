@@ -40,6 +40,7 @@ import net.daporkchop.pepsimod.module.impl.player.*;
 import net.daporkchop.pepsimod.module.impl.render.*;
 import net.daporkchop.pepsimod.util.*;
 import net.daporkchop.pepsimod.util.datatag.DataTag;
+import net.daporkchop.pepsimod.util.misc.Default;
 import net.daporkchop.pepsimod.util.misc.waypoints.Waypoints;
 import net.daporkchop.pepsimod.util.module.*;
 import net.minecraft.client.Minecraft;
@@ -66,7 +67,6 @@ public class PepsiMod {
     public static PepsiMod INSTANCE;
     public boolean isMcLeaksAccount = false;
     public Session originalSession = null;
-    public Minecraft mc;
     public DataTag dataTag = null;
     public boolean hasInitializedModules = false;
     public TargetSettings targetSettings;
@@ -79,6 +79,7 @@ public class PepsiMod {
     public ElytraFlySettings elytraFlySettings;
     public AnnouncerSettings announcerSettings;
     public Waypoints waypoints;
+    private Minecraft mc;
 
     public static void registerModules(FMLStateEvent event) {
         ModuleManager.registerModule(new NoFallMod(false, -1, false));
@@ -171,11 +172,10 @@ public class PepsiMod {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        event.getModLog().info("launching preInit");
         INSTANCE = this;
         MinecraftForge.EVENT_BUS.register(new KeyRegistry());
-        event.getModLog().info("setting MC instance!");
-        this.mc = Minecraft.getMinecraft();
+        mc = Minecraft.getMinecraft();
+        Default.mc = mc;
     }
 
     @Mod.EventHandler

@@ -22,6 +22,7 @@ import net.daporkchop.pepsimod.util.colors.GradientText;
 import net.daporkchop.pepsimod.util.colors.rainbow.ColorChangeType;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowCycle;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
+import net.daporkchop.pepsimod.util.misc.Default;
 import net.daporkchop.pepsimod.util.misc.ITickListener;
 import net.daporkchop.pepsimod.util.misc.IWurstRenderListener;
 import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
@@ -55,7 +56,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class PepsiUtils {
+public class PepsiUtils extends Default {
     public static final char COLOR_ESCAPE = '\u00A7';
     public static final String[] colorCodes = new String[]{"c", "9", "f", "1", "4"};
     public static final Timer timer = new Timer();
@@ -474,7 +475,7 @@ public class PepsiUtils {
     }
 
     public static String getFacing() {
-        Entity entity = PepsiMod.INSTANCE.mc.getRenderViewEntity();
+        Entity entity = mc.getRenderViewEntity();
         EnumFacing enumfacing = entity.getHorizontalFacing();
         String s = "Invalid";
 
@@ -512,10 +513,10 @@ public class PepsiUtils {
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             try {
                 GlStateManager.translate(0.0F, 0.0F, 32.0F);
-                PepsiMod.INSTANCE.mc.getRenderItem().zLevel = 200F;
-                PepsiMod.INSTANCE.mc.getRenderItem().renderItemAndEffectIntoGUI(stack, x, y);
-                PepsiMod.INSTANCE.mc.getRenderItem().renderItemOverlayIntoGUI(PepsiMod.INSTANCE.mc.fontRenderer, stack, x, y, "");
-                PepsiMod.INSTANCE.mc.getRenderItem().zLevel = 0F;
+                mc.getRenderItem().zLevel = 200F;
+                mc.getRenderItem().renderItemAndEffectIntoGUI(stack, x, y);
+                mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRenderer, stack, x, y, "");
+                mc.getRenderItem().zLevel = 0F;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -525,7 +526,7 @@ public class PepsiUtils {
     }
 
     public static ItemStack getWearingArmor(int armorType) {
-        return PepsiMod.INSTANCE.mc.player.inventoryContainer.getSlot(5 + armorType).getStack();
+        return mc.player.inventoryContainer.getSlot(5 + armorType).getStack();
     }
 
     public static void drawNameplateNoScale(FontRenderer fontRendererIn, String str, float x, float y, float z, int verticalShift, float viewerYaw, float viewerPitch, boolean isThirdPersonFrontal, boolean isSneaking) {
@@ -591,15 +592,16 @@ public class PepsiUtils {
         //Thanks to Electric-Expansion mod for the majority of this code
         //https://github.com/Alex-hawks/Electric-Expansion/blob/master/src/electricexpansion/client/render/RenderFloatingText.java
 
-        RenderManager renderManager = PepsiMod.INSTANCE.mc.getRenderManager();
+        RenderManager renderManager = mc.getRenderManager();
 
-        float playerX = (float) (PepsiMod.INSTANCE.mc.player.lastTickPosX + (PepsiMod.INSTANCE.mc.player.posX - PepsiMod.INSTANCE.mc.player.lastTickPosX) * partialTickTime);
-        float playerY = (float) (PepsiMod.INSTANCE.mc.player.lastTickPosY + (PepsiMod.INSTANCE.mc.player.posY - PepsiMod.INSTANCE.mc.player.lastTickPosY) * partialTickTime);
-        float playerZ = (float) (PepsiMod.INSTANCE.mc.player.lastTickPosZ + (PepsiMod.INSTANCE.mc.player.posZ - PepsiMod.INSTANCE.mc.player.lastTickPosZ) * partialTickTime);
+        float playerX = (float) (mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * partialTickTime);
+        float playerY = (float) (mc.player.lastTickPosY + (mc.player.posY - mc.player.lastTickPosY) * partialTickTime);
+        float playerZ = (float) (mc.player.lastTickPosZ + (mc.player.posZ - mc.player.lastTickPosZ) * partialTickTime);
 
         float dx = x - playerX;
         float dy = y - playerY;
         float dz = z - playerZ;
+        float distFactor = 5 / dx;
         float distance = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
         float scale = 0.03f;
 
@@ -620,7 +622,7 @@ public class PepsiUtils {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        int textWidth = PepsiMod.INSTANCE.mc.fontRenderer.getStringWidth(text);
+        int textWidth = mc.fontRenderer.getStringWidth(text);
 
         int lineHeight = 10;
 
@@ -642,7 +644,7 @@ public class PepsiUtils {
             GlStateManager.enableTexture2D();
         }
 
-        PepsiMod.INSTANCE.mc.fontRenderer.drawString(text, -textWidth / 2, 0, color);
+        mc.fontRenderer.drawString(text, -textWidth / 2, 0, color);
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glDepthMask(true);
@@ -660,11 +662,11 @@ public class PepsiUtils {
      * @param partialTickTime
      */
     public static void renderFloatingItemIcon(float x, float y, float z, Item item, float partialTickTime) {
-        RenderManager renderManager = PepsiMod.INSTANCE.mc.getRenderManager();
+        RenderManager renderManager = mc.getRenderManager();
 
-        float playerX = (float) (PepsiMod.INSTANCE.mc.player.lastTickPosX + (PepsiMod.INSTANCE.mc.player.posX - PepsiMod.INSTANCE.mc.player.lastTickPosX) * partialTickTime);
-        float playerY = (float) (PepsiMod.INSTANCE.mc.player.lastTickPosY + (PepsiMod.INSTANCE.mc.player.posY - PepsiMod.INSTANCE.mc.player.lastTickPosY) * partialTickTime);
-        float playerZ = (float) (PepsiMod.INSTANCE.mc.player.lastTickPosZ + (PepsiMod.INSTANCE.mc.player.posZ - PepsiMod.INSTANCE.mc.player.lastTickPosZ) * partialTickTime);
+        float playerX = (float) (mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * partialTickTime);
+        float playerY = (float) (mc.player.lastTickPosY + (mc.player.posY - mc.player.lastTickPosY) * partialTickTime);
+        float playerZ = (float) (mc.player.lastTickPosZ + (mc.player.posZ - mc.player.lastTickPosZ) * partialTickTime);
 
         float dx = x - playerX;
         float dy = y - playerY;
@@ -692,9 +694,9 @@ public class PepsiUtils {
     }
 
     public static void renderItemTexture(int x, int y, Item item, int width, int height) {
-        IBakedModel iBakedModel = PepsiMod.INSTANCE.mc.getRenderItem().getItemModelMesher().getItemModel(new ItemStack(item));
-        TextureAtlasSprite textureAtlasSprite = PepsiMod.INSTANCE.mc.getTextureMapBlocks().getAtlasSprite(iBakedModel.getParticleTexture().getIconName());
-        PepsiMod.INSTANCE.mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        IBakedModel iBakedModel = mc.getRenderItem().getItemModelMesher().getItemModel(new ItemStack(item));
+        TextureAtlasSprite textureAtlasSprite = mc.getTextureMapBlocks().getAtlasSprite(iBakedModel.getParticleTexture().getIconName());
+        mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
         renderTexture(x, y, textureAtlasSprite, width, height, 0);
     }
@@ -724,7 +726,6 @@ public class PepsiUtils {
     }
 
     public static void renderWaypoint(Waypoint waypoint) {
-        Minecraft mc = PepsiMod.INSTANCE.mc;
         RenderManager renderManager = mc.getRenderManager();
         if (renderManager.renderViewEntity == null) {
             return;
@@ -737,6 +738,7 @@ public class PepsiUtils {
 
             double viewDistance = playerVec.distanceTo(waypointVec);
             double maxRenderDistance = mc.gameSettings.renderDistanceChunks * 16;
+            double scale = 0.5;
             if (viewDistance > maxRenderDistance) {
                 Vec3d delta = waypointVec.subtract(playerVec).normalize();
                 waypointVec = playerVec.addVector(delta.x * maxRenderDistance, delta.y * maxRenderDistance, delta.z * maxRenderDistance);
@@ -747,7 +749,6 @@ public class PepsiUtils {
             double shiftZ = waypointVec.z - renderManager.viewerPosZ;
 
             String label = waypoint.name;
-            double scale = 1;
 
             boolean showDistance = PepsiMod.INSTANCE.miscOptions.waypoints_dist;
             boolean showCoords = PepsiMod.INSTANCE.miscOptions.waypoints_coords;
@@ -758,7 +759,7 @@ public class PepsiUtils {
                 sb.append(" x\u00A7b" + waypoint.x + "\u00A7r y\u00A7b" + waypoint.y + "\u00A7r z\u00A7b" + waypoint.z + "\u00A7r");
             }
             if (showDistance) {
-                sb.append(" \u00A77(\u00A79" + PepsiUtils.roundCoords(PepsiMod.INSTANCE.mc.player.getDistance(waypoint.x, waypoint.y, waypoint.z)) + "\u00A7rm\u00A77)");
+                sb.append(" \u00A77(\u00A79" + PepsiUtils.roundCoords(mc.player.getDistance(waypoint.x, waypoint.y, waypoint.z)) + "\u00A7rm\u00A77)");
             }
             if (sb.length() > 0) {
                 label = sb.toString();
@@ -772,7 +773,7 @@ public class PepsiUtils {
                 GlStateManager.rotate(renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
                 GlStateManager.scale(-scale, -scale, scale);
 
-                GlStateManager.depthMask(true);
+                GlStateManager.depthMask(false);
                 //GlStateManager.depthMask(true);
                 GlStateManager.enableDepth();
 

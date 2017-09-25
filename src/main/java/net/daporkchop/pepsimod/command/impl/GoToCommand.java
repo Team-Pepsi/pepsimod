@@ -86,6 +86,10 @@ public class GoToCommand extends Command {
         enabled = true;
         PepsiUtils.tickListeners.add(PathFindTickListener.INSTANCE);
         PepsiUtils.wurstRenderListeners.add(PathFindTickListener.INSTANCE);
+        clientMessage("Going to position: " + endGoal.getX() + ", " + endGoal.getY() + ", " + endGoal.getZ());
+        clientMessage("Run \u00A7o.goto\u00A7r to stop.");
+        clientMessage("\u00A7cWARNING! The pathfinder is currently VERY experimental.");
+        clientMessage("\u00A7cUse at your own risk.");
     }
 
     public void setGoal(BlockPos goal) {
@@ -101,7 +105,7 @@ public class GoToCommand extends Command {
         if (endGoal == null) {
             return true;
         }
-        return PepsiMod.INSTANCE.mc.player.getDistanceSq(endGoal) <= 64;
+        return mc.player.getDistanceSq(endGoal) <= 64;
     }
 
     @Override

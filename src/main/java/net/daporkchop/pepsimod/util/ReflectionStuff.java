@@ -15,7 +15,7 @@
 
 package net.daporkchop.pepsimod.util;
 
-import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.util.misc.Default;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -39,7 +39,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-public class ReflectionStuff {
+public class ReflectionStuff extends Default {
     public static Field renderPosX;
     public static Field renderPosY;
     public static Field renderPosZ;
@@ -170,7 +170,7 @@ public class ReflectionStuff {
 
     public static float getCurBlockDamageMP() {
         try {
-            return (float) curBlockDamageMP.get(PepsiMod.INSTANCE.mc.playerController);
+            return (float) curBlockDamageMP.get(mc.playerController);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -179,7 +179,7 @@ public class ReflectionStuff {
 
     public static void setCurBlockDamageMP(float val) {
         try {
-            curBlockDamageMP.set(PepsiMod.INSTANCE.mc.playerController, val);
+            curBlockDamageMP.set(mc.playerController, val);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -188,7 +188,7 @@ public class ReflectionStuff {
 
     public static int getBlockHitDelay() {
         try {
-            return (int) blockHitDelay.get(PepsiMod.INSTANCE.mc.playerController);
+            return (int) blockHitDelay.get(mc.playerController);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -197,7 +197,7 @@ public class ReflectionStuff {
 
     public static void setBlockHitDelay(int val) {
         try {
-            blockHitDelay.set(PepsiMod.INSTANCE.mc.playerController, val);
+            blockHitDelay.set(mc.playerController, val);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -206,7 +206,7 @@ public class ReflectionStuff {
 
     public static void setRightClickDelayTimer(int val) {
         try {
-            rightClickDelayTimer.set(PepsiMod.INSTANCE.mc, val);
+            rightClickDelayTimer.set(mc, val);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -260,7 +260,7 @@ public class ReflectionStuff {
 
     public static void setHorseJumpPower(float value) {
         try {
-            horseJumpPower.set(PepsiMod.INSTANCE.mc.player, value);
+            horseJumpPower.set(mc.player, value);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -296,7 +296,7 @@ public class ReflectionStuff {
 
     public static RenderItem getItemRenderer() {
         try {
-            return (RenderItem) itemRenderer.get(PepsiMod.INSTANCE.mc.getItemRenderer());
+            return (RenderItem) itemRenderer.get(mc.getItemRenderer());
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -323,7 +323,7 @@ public class ReflectionStuff {
 
     public static Timer getTimer() {
         try {
-            return (Timer) timer.get(PepsiMod.INSTANCE.mc);
+            return (Timer) timer.get(mc);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);

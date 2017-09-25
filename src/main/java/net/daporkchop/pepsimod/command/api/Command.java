@@ -16,10 +16,10 @@
 package net.daporkchop.pepsimod.command.api;
 
 import net.daporkchop.pepsimod.PepsiMod;
-import net.minecraft.client.Minecraft;
+import net.daporkchop.pepsimod.util.misc.Default;
 import net.minecraft.util.text.TextComponentString;
 
-public abstract class Command {
+public abstract class Command extends Default {
     public String name;
 
     public Command(String name) {
@@ -27,7 +27,7 @@ public abstract class Command {
     }
 
     public static void clientMessage(String toSend) {
-        Minecraft.getMinecraft().player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + toSend));
+        mc.player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + toSend));
     }
 
     public abstract void execute(String cmd, String[] args);

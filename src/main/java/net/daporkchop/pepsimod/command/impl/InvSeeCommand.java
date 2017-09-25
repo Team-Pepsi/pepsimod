@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.command.impl;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.api.Command;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.gui.inventory.GuiInventory;
@@ -33,12 +32,12 @@ public class InvSeeCommand extends Command {
             return;
         }
 
-        for (Entity entity : PepsiMod.INSTANCE.mc.world.getLoadedEntityList()) {
+        for (Entity entity : mc.world.getLoadedEntityList()) {
             if (entity instanceof EntityOtherPlayerMP) {
                 EntityOtherPlayerMP player = (EntityOtherPlayerMP) entity;
                 if (player.getName().equals(args[1])) {
                     clientMessage("Showing inventory of " + player.getName());
-                    PepsiMod.INSTANCE.mc.displayGuiScreen(new GuiInventory(player));
+                    mc.displayGuiScreen(new GuiInventory(player));
                     return;
                 }
             }
@@ -70,7 +69,7 @@ public class InvSeeCommand extends Command {
     }
 
     public String getPlayerName(String in) {
-        for (Entity e : PepsiMod.INSTANCE.mc.world.loadedEntityList) {
+        for (Entity e : mc.world.loadedEntityList) {
             if (e instanceof EntityOtherPlayerMP) {
                 EntityOtherPlayerMP player = (EntityOtherPlayerMP) e;
                 if (player.getName().startsWith(in)) {

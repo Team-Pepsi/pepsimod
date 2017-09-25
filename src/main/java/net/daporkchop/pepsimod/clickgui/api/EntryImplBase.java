@@ -15,9 +15,9 @@
 
 package net.daporkchop.pepsimod.clickgui.api;
 
-import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.util.misc.Default;
 
-public abstract class EntryImplBase implements IEntry {
+public abstract class EntryImplBase extends Default implements IEntry {
     public final int width;
     public final int height;
     public int x;
@@ -32,7 +32,7 @@ public abstract class EntryImplBase implements IEntry {
     }
 
     public static void drawString(int x, int y, String text, int color) {
-        PepsiMod.INSTANCE.mc.fontRenderer.drawString(text, x, y, color, false);
+        mc.fontRenderer.drawString(text, x, y, color, false);
     }
 
     public boolean isMouseHovered() {

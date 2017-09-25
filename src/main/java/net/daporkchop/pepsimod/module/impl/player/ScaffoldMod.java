@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.player;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -45,11 +44,11 @@ public class ScaffoldMod extends Module {
 
     @Override
     public void tick() {
-        BlockPos belowPlayer = new BlockPos(PepsiMod.INSTANCE.mc.player).down();
+        BlockPos belowPlayer = new BlockPos(mc.player).down();
 
         // check if block is already placed
-        IBlockState state = PepsiMod.INSTANCE.mc.world.getBlockState(belowPlayer);
-        if (!state.getBlock().isReplaceable(PepsiMod.INSTANCE.mc.world, belowPlayer)) {
+        IBlockState state = mc.world.getBlockState(belowPlayer);
+        if (!state.getBlock().isReplaceable(mc.world, belowPlayer)) {
             return;
         }
 
@@ -57,7 +56,7 @@ public class ScaffoldMod extends Module {
         int newSlot = -1;
         for (int i = 0; i < 9; i++) {
             // filter out non-block items
-            ItemStack stack = PepsiMod.INSTANCE.mc.player.inventory.getStackInSlot(i);
+            ItemStack stack = mc.player.inventory.getStackInSlot(i);
             if (stack == null || stack.isEmpty() || !(stack.getItem() instanceof ItemBlock)) {
                 continue;
             }
@@ -76,14 +75,14 @@ public class ScaffoldMod extends Module {
             return;
 
         // set slot
-        int oldSlot = PepsiMod.INSTANCE.mc.player.inventory.currentItem;
-        PepsiMod.INSTANCE.mc.player.inventory.currentItem = newSlot;
+        int oldSlot = mc.player.inventory.currentItem;
+        mc.player.inventory.currentItem = newSlot;
 
         // place block
         BlockUtils.placeBlockScaffold(belowPlayer);
 
         // reset slot
-        PepsiMod.INSTANCE.mc.player.inventory.currentItem = oldSlot;
+        mc.player.inventory.currentItem = oldSlot;
     }
 
     @Override

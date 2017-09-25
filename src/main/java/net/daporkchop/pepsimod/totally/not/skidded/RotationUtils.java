@@ -15,33 +15,33 @@
 
 package net.daporkchop.pepsimod.totally.not.skidded;
 
-import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.util.misc.Default;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
-public class RotationUtils {
+public class RotationUtils extends Default {
     private static boolean fakeRotation;
     private static float serverYaw;
     private static float serverPitch;
 
     public static Vec3d getEyesPos() {
-        return new Vec3d(PepsiMod.INSTANCE.mc.player.posX,
-                PepsiMod.INSTANCE.mc.player.posY + PepsiMod.INSTANCE.mc.player.getEyeHeight(),
-                PepsiMod.INSTANCE.mc.player.posZ);
+        return new Vec3d(mc.player.posX,
+                mc.player.posY + mc.player.getEyeHeight(),
+                mc.player.posZ);
     }
 
     public static Vec3d getClientLookVec() {
-        float f = MathHelper.cos(-PepsiMod.INSTANCE.mc.player.rotationYaw * 0.017453292F
+        float f = MathHelper.cos(-mc.player.rotationYaw * 0.017453292F
                 - (float) Math.PI);
-        float f1 = MathHelper.sin(-PepsiMod.INSTANCE.mc.player.rotationYaw * 0.017453292F
+        float f1 = MathHelper.sin(-mc.player.rotationYaw * 0.017453292F
                 - (float) Math.PI);
         float f2 =
-                -MathHelper.cos(-PepsiMod.INSTANCE.mc.player.rotationPitch * 0.017453292F);
+                -MathHelper.cos(-mc.player.rotationPitch * 0.017453292F);
         float f3 =
-                MathHelper.sin(-PepsiMod.INSTANCE.mc.player.rotationPitch * 0.017453292F);
+                MathHelper.sin(-mc.player.rotationPitch * 0.017453292F);
         return new Vec3d(f1 * f2, f3, f * f2);
     }
 
@@ -81,10 +81,10 @@ public class RotationUtils {
         float pitch = (float) -Math.toDegrees(Math.atan2(diffY, diffXZ));
 
         return new float[]{
-                PepsiMod.INSTANCE.mc.player.rotationYaw
-                        + MathHelper.wrapDegrees(yaw - PepsiMod.INSTANCE.mc.player.rotationYaw),
-                PepsiMod.INSTANCE.mc.player.rotationPitch + MathHelper
-                        .wrapDegrees(pitch - PepsiMod.INSTANCE.mc.player.rotationPitch)};
+                mc.player.rotationYaw
+                        + MathHelper.wrapDegrees(yaw - mc.player.rotationYaw),
+                mc.player.rotationPitch + MathHelper
+                        .wrapDegrees(pitch - mc.player.rotationPitch)};
     }
 
     public static float limitAngleChange(float current, float intended,
@@ -111,19 +111,19 @@ public class RotationUtils {
     public static void faceVectorPacketInstant(Vec3d vec) {
         float[] rotations = getNeededRotations2(vec);
 
-        PepsiMod.INSTANCE.mc.getConnection().sendPacket(new CPacketPlayer.Rotation(rotations[0],
-                rotations[1], PepsiMod.INSTANCE.mc.player.onGround));
+        mc.getConnection().sendPacket(new CPacketPlayer.Rotation(rotations[0],
+                rotations[1], mc.player.onGround));
     }
 
     public static boolean faceVectorClient(Vec3d vec) {
         float[] rotations = getNeededRotations(vec);
 
-        float oldYaw = PepsiMod.INSTANCE.mc.player.prevRotationYaw;
-        float oldPitch = PepsiMod.INSTANCE.mc.player.prevRotationPitch;
+        float oldYaw = mc.player.prevRotationYaw;
+        float oldPitch = mc.player.prevRotationPitch;
 
-        PepsiMod.INSTANCE.mc.player.rotationYaw =
+        mc.player.rotationYaw =
                 limitAngleChange(oldYaw, rotations[0], 30);
-        PepsiMod.INSTANCE.mc.player.rotationPitch = rotations[1];
+        mc.player.rotationPitch = rotations[1];
 
         return Math.abs(oldYaw - rotations[0])
                 + Math.abs(oldPitch - rotations[1]) < 1F;
@@ -162,9 +162,9 @@ public class RotationUtils {
     public static boolean faceVectorForWalking(Vec3d vec) {
         float[] rotations = getNeededRotations(vec);
 
-        float oldYaw = PepsiMod.INSTANCE.mc.player.prevRotationYaw;
+        float oldYaw = mc.player.prevRotationYaw;
 
-        PepsiMod.INSTANCE.mc.player.rotationYaw =
+        mc.player.rotationYaw =
                 limitAngleChange(oldYaw, rotations[0], 30);
 
         return Math.abs(oldYaw - rotations[0]) < 1F;
@@ -174,9 +174,9 @@ public class RotationUtils {
         float[] needed = getNeededRotations(vec);
 
         float diffYaw =
-                MathHelper.wrapDegrees(PepsiMod.INSTANCE.mc.player.rotationYaw) - needed[0];
+                MathHelper.wrapDegrees(mc.player.rotationYaw) - needed[0];
         float diffPitch =
-                MathHelper.wrapDegrees(PepsiMod.INSTANCE.mc.player.rotationPitch) - needed[1];
+                MathHelper.wrapDegrees(mc.player.rotationPitch) - needed[1];
 
         float angle =
                 (float) Math.sqrt(diffYaw * diffYaw + diffPitch * diffPitch);
@@ -188,7 +188,7 @@ public class RotationUtils {
         float[] needed = getNeededRotations(vec);
 
         float angle =
-                MathHelper.wrapDegrees(PepsiMod.INSTANCE.mc.player.rotationYaw) - needed[0];
+                MathHelper.wrapDegrees(mc.player.rotationYaw) - needed[0];
 
         return angle;
     }
@@ -214,8 +214,8 @@ public class RotationUtils {
 
         // slowly synchronize server rotation with client
         serverYaw =
-                limitAngleChange(serverYaw, PepsiMod.INSTANCE.mc.player.rotationYaw, 30);
-        serverPitch = PepsiMod.INSTANCE.mc.player.rotationPitch;
+                limitAngleChange(serverYaw, mc.player.rotationYaw, 30);
+        serverPitch = mc.player.rotationPitch;
     }
 
     public static float getServerYaw() {

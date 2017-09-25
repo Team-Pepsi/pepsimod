@@ -43,14 +43,14 @@ public class StepMod extends Module {
     @Override
     public void onDisable() {
         if (PepsiMod.INSTANCE.hasInitializedModules) {
-            PepsiMod.INSTANCE.mc.player.stepHeight = 0.5F;
+            mc.player.stepHeight = 0.5F;
         }
     }
 
     @Override
     public void tick() {
         if (PepsiMod.INSTANCE.miscOptions.step_legit) {
-            EntityPlayerSP player = PepsiMod.INSTANCE.mc.player;
+            EntityPlayerSP player = mc.player;
 
             player.stepHeight = 0.5f;
 
@@ -71,12 +71,12 @@ public class StepMod extends Module {
             }
 
             AxisAlignedBB bb = player.getEntityBoundingBox().offset(0, 0.05d, 0).expand(0.05, 0.05, 0.05).expand(-0.05, -0.05, -0.05);
-            if (!PepsiMod.INSTANCE.mc.world.getCollisionBoxes(player, bb.offset(0, 1, 0)).isEmpty()) {
+            if (!mc.world.getCollisionBoxes(player, bb.offset(0, 1, 0)).isEmpty()) {
                 return;
             }
 
             double stepHeight = -1;
-            List<AxisAlignedBB> bbs = PepsiMod.INSTANCE.mc.world.getCollisionBoxes(player, bb);
+            List<AxisAlignedBB> bbs = mc.world.getCollisionBoxes(player, bb);
             for (AxisAlignedBB box : bbs) {
                 if (box.maxY > stepHeight) {
                     stepHeight = box.maxY;
@@ -89,11 +89,11 @@ public class StepMod extends Module {
                 return;
             }
 
-            PepsiMod.INSTANCE.mc.player.connection.sendPacket(new CPacketPlayer.Position(player.posX, player.posY + 0.42 * stepHeight, player.posZ, player.onGround));
-            PepsiMod.INSTANCE.mc.player.connection.sendPacket(new CPacketPlayer.Position(player.posX, player.posY + 0.753 * stepHeight, player.posZ, player.onGround));
+            mc.player.connection.sendPacket(new CPacketPlayer.Position(player.posX, player.posY + 0.42 * stepHeight, player.posZ, player.onGround));
+            mc.player.connection.sendPacket(new CPacketPlayer.Position(player.posX, player.posY + 0.753 * stepHeight, player.posZ, player.onGround));
             player.setPosition(player.posX, player.posY + 1 * stepHeight, player.posZ);
         } else {
-            PepsiMod.INSTANCE.mc.player.stepHeight = PepsiMod.INSTANCE.miscOptions.step_height;
+            mc.player.stepHeight = PepsiMod.INSTANCE.miscOptions.step_height;
         }
     }
 

@@ -15,16 +15,16 @@
 
 package net.daporkchop.pepsimod.totally.not.skidded;
 
-import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.util.misc.Default;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
-public final class WBlock {
+public final class WBlock extends Default {
     public static IBlockState getState(BlockPos pos) {
-        return PepsiMod.INSTANCE.mc.world.getBlockState(pos);
+        return mc.world.getBlockState(pos);
     }
 
     public static Block getBlock(BlockPos pos) {
@@ -44,7 +44,7 @@ public final class WBlock {
     }
 
     public static AxisAlignedBB getBoundingBox(BlockPos pos) {
-        return getState(pos).getBoundingBox(PepsiMod.INSTANCE.mc.world, pos).offset(pos);
+        return getState(pos).getBoundingBox(mc.world, pos).offset(pos);
     }
 
     public static boolean canBeClicked(BlockPos pos) {
@@ -52,6 +52,6 @@ public final class WBlock {
     }
 
     public static float getHardness(BlockPos pos) {
-        return getState(pos).getPlayerRelativeBlockHardness(PepsiMod.INSTANCE.mc.player, PepsiMod.INSTANCE.mc.world, pos);
+        return getState(pos).getPlayerRelativeBlockHardness(mc.player, mc.world, pos);
     }
 }

@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.player;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -39,9 +38,9 @@ public class SprintMod extends Module {
 
     @Override
     public void tick() {
-        boolean shouldSprint = PepsiMod.INSTANCE.mc.player.movementInput.moveForward > 0.0F && !PepsiMod.INSTANCE.mc.player.isSneaking();
+        boolean shouldSprint = mc.player.movementInput.moveForward > 0.0F && !mc.player.isSneaking();
         if (shouldSprint) {
-            PepsiMod.INSTANCE.mc.player.setSprinting(true);
+            mc.player.setSprinting(true);
         }
     }
 

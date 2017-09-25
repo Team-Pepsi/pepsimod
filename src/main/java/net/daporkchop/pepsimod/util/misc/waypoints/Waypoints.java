@@ -15,21 +15,21 @@
 
 package net.daporkchop.pepsimod.util.misc.waypoints;
 
-import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.util.misc.Default;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.UUID;
 
-public class Waypoints implements Serializable {
+public class Waypoints extends Default implements Serializable {
     public Hashtable<String, ServerWaypoints> identifiersToServerWaypoints = new Hashtable<>();
 
     public static String getCurrentServerIdentifier() {
-        if (PepsiMod.INSTANCE.mc.isIntegratedServerRunning()) {
-            return PepsiMod.INSTANCE.mc.getIntegratedServer().getFolderName();
+        if (mc.isIntegratedServerRunning()) {
+            return mc.getIntegratedServer().getFolderName();
         } else {
-            return PepsiMod.INSTANCE.mc.getCurrentServerData().serverIP;
+            return mc.getCurrentServerData().serverIP;
         }
     }
 
@@ -39,10 +39,10 @@ public class Waypoints implements Serializable {
             serverWaypoints = new ServerWaypoints();
             identifiersToServerWaypoints.put(getCurrentServerIdentifier(), serverWaypoints);
         }
-        DimensionWaypoints dimensionWaypoints = serverWaypoints.waypoints.get(PepsiMod.INSTANCE.mc.player.dimension);
+        DimensionWaypoints dimensionWaypoints = serverWaypoints.waypoints.get(mc.player.dimension);
         if (dimensionWaypoints == null) {
             dimensionWaypoints = new DimensionWaypoints();
-            serverWaypoints.waypoints.put(PepsiMod.INSTANCE.mc.player.dimension, dimensionWaypoints);
+            serverWaypoints.waypoints.put(mc.player.dimension, dimensionWaypoints);
         }
         return dimensionWaypoints.waypoints.values();
     }
@@ -53,10 +53,10 @@ public class Waypoints implements Serializable {
             serverWaypoints = new ServerWaypoints();
             identifiersToServerWaypoints.put(getCurrentServerIdentifier(), serverWaypoints);
         }
-        DimensionWaypoints dimensionWaypoints = serverWaypoints.waypoints.get(PepsiMod.INSTANCE.mc.player.dimension);
+        DimensionWaypoints dimensionWaypoints = serverWaypoints.waypoints.get(mc.player.dimension);
         if (dimensionWaypoints == null) {
             dimensionWaypoints = new DimensionWaypoints();
-            serverWaypoints.waypoints.put(PepsiMod.INSTANCE.mc.player.dimension, dimensionWaypoints);
+            serverWaypoints.waypoints.put(mc.player.dimension, dimensionWaypoints);
         }
         return dimensionWaypoints.waypoints.get(name);
     }
@@ -67,17 +67,17 @@ public class Waypoints implements Serializable {
             serverWaypoints = new ServerWaypoints();
             identifiersToServerWaypoints.put(getCurrentServerIdentifier(), serverWaypoints);
         }
-        DimensionWaypoints dimensionWaypoints = serverWaypoints.waypoints.get(PepsiMod.INSTANCE.mc.player.dimension);
+        DimensionWaypoints dimensionWaypoints = serverWaypoints.waypoints.get(mc.player.dimension);
         if (dimensionWaypoints == null) {
             dimensionWaypoints = new DimensionWaypoints();
-            serverWaypoints.waypoints.put(PepsiMod.INSTANCE.mc.player.dimension, dimensionWaypoints);
+            serverWaypoints.waypoints.put(mc.player.dimension, dimensionWaypoints);
         }
         dimensionWaypoints.waypoints.put(waypoint.name, waypoint);
         return waypoint;
     }
 
     public Waypoint addWaypoint(String name) {
-        return addWaypoint(new Waypoint(name, PepsiMod.INSTANCE.mc.player.posX, PepsiMod.INSTANCE.mc.player.posY, PepsiMod.INSTANCE.mc.player.posZ, PepsiMod.INSTANCE.mc.player.dimension));
+        return addWaypoint(new Waypoint(name, mc.player.posX, mc.player.posY, mc.player.posZ, mc.player.dimension));
     }
 
     public Waypoint addWaypoint() {
@@ -90,10 +90,10 @@ public class Waypoints implements Serializable {
             serverWaypoints = new ServerWaypoints();
             identifiersToServerWaypoints.put(getCurrentServerIdentifier(), serverWaypoints);
         }
-        DimensionWaypoints dimensionWaypoints = serverWaypoints.waypoints.get(PepsiMod.INSTANCE.mc.player.dimension);
+        DimensionWaypoints dimensionWaypoints = serverWaypoints.waypoints.get(mc.player.dimension);
         if (dimensionWaypoints == null) {
             dimensionWaypoints = new DimensionWaypoints();
-            serverWaypoints.waypoints.put(PepsiMod.INSTANCE.mc.player.dimension, dimensionWaypoints);
+            serverWaypoints.waypoints.put(mc.player.dimension, dimensionWaypoints);
         }
         return dimensionWaypoints.waypoints.remove(name);
     }

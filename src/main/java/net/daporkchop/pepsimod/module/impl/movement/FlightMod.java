@@ -45,7 +45,7 @@ public class FlightMod extends Module {
 
     @Override
     public void tick() {
-        EntityPlayer player = PepsiMod.INSTANCE.mc.player;
+        EntityPlayer player = mc.player;
 
         player.motionX = 0;
         player.motionY = 0;
@@ -54,11 +54,11 @@ public class FlightMod extends Module {
         player.jumpMovementFactor = PepsiMod.INSTANCE.miscOptions.flight_speed;
         ReflectionStuff.setInWater(player, false);
 
-        if (PepsiMod.INSTANCE.mc.inGameHasFocus) {
-            if (Keyboard.isKeyDown(PepsiMod.INSTANCE.mc.gameSettings.keyBindJump.getKeyCode())) {
+        if (mc.inGameHasFocus) {
+            if (Keyboard.isKeyDown(mc.gameSettings.keyBindJump.getKeyCode())) {
                 player.motionY += PepsiMod.INSTANCE.miscOptions.flight_speed / 2 + 0.2F;
             }
-            if (Keyboard.isKeyDown(PepsiMod.INSTANCE.mc.gameSettings.keyBindSneak.getKeyCode())) {
+            if (Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode())) {
                 player.motionY -= PepsiMod.INSTANCE.miscOptions.flight_speed / 2 + 0.2F;
             }
         }

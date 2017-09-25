@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.mixin.client.gui;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.impl.render.ZoomMod;
 import net.minecraft.client.gui.GuiDisconnected;
@@ -24,13 +23,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static net.daporkchop.pepsimod.util.misc.Default.mc;
+
 @Mixin(GuiDisconnected.class)
 public abstract class MixinGuiDisconnected {
     @Inject(method = "drawScreen", at = @At("HEAD"))
     public void preDrawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo callbackInfo) {
         if (ZoomMod.INSTANCE.isEnabled) {
             ModuleManager.disableModule(ZoomMod.INSTANCE);
-            PepsiMod.INSTANCE.mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
+            mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
         }
     }
 }

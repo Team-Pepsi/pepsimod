@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.util.misc.announcer.impl;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.impl.misc.AnnouncerMod;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.misc.announcer.MessagePrefixes;
@@ -27,15 +26,15 @@ public class TaskMove extends QueuedTask {
 
     public TaskMove(TaskType type) {
         super(type);
-        posX = PepsiMod.INSTANCE.mc.player.posX;
-        posZ = PepsiMod.INSTANCE.mc.player.posZ;
+        posX = mc.player.posX;
+        posZ = mc.player.posZ;
     }
 
     public String getMessage() {
-        if (!AnnouncerMod.INSTANCE.isEnabled || (PepsiMod.INSTANCE.mc.player.posX == posX && PepsiMod.INSTANCE.mc.player.posZ == posZ)) {
+        if (!AnnouncerMod.INSTANCE.isEnabled || (mc.player.posX == posX && mc.player.posZ == posZ)) {
             return null;
         }
 
-        return MessagePrefixes.getMessage(TaskType.WALK, PepsiUtils.roundCoords(Math.abs(PepsiMod.INSTANCE.mc.player.posX - posX) + Math.abs(PepsiMod.INSTANCE.mc.player.posZ - posZ)));
+        return MessagePrefixes.getMessage(TaskType.WALK, PepsiUtils.roundCoords(Math.abs(mc.player.posX - posX) + Math.abs(mc.player.posZ - posZ)));
     }
 }

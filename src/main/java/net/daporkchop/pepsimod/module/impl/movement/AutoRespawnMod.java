@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.movement;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -35,8 +34,8 @@ public class AutoRespawnMod extends Module {
 
     @Override
     public void tick() {
-        if (PepsiMod.INSTANCE.mc.player != null && PepsiMod.INSTANCE.mc.player.getHealth() <= 0) {
-            PepsiMod.INSTANCE.mc.player.respawnPlayer();
+        if (mc.player != null && mc.player.getHealth() <= 0) {
+            mc.player.respawnPlayer();
         }
     }
 

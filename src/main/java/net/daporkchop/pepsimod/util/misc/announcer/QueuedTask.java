@@ -15,7 +15,9 @@
 
 package net.daporkchop.pepsimod.util.misc.announcer;
 
-public abstract class QueuedTask {
+import net.daporkchop.pepsimod.util.misc.Default;
+
+public abstract class QueuedTask extends Default {
     public final TaskType type;
 
     public QueuedTask(TaskType type) {

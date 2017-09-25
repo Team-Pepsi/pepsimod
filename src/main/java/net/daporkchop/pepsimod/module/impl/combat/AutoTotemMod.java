@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.combat;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -50,7 +49,7 @@ public class AutoTotemMod extends Module {
 
     @Override
     public void tick() {
-        EntityPlayerSP player = PepsiMod.INSTANCE.mc.player;
+        EntityPlayerSP player = mc.player;
 
         if (timer > 0) {
             timer--;
@@ -92,10 +91,10 @@ public class AutoTotemMod extends Module {
     }
 
     public void replaceTotem(int inventoryIndex) {
-        if (PepsiMod.INSTANCE.mc.player.openContainer instanceof ContainerPlayer) {
-            PepsiMod.INSTANCE.mc.playerController.windowClick(0, inventoryIndex < 9 ? inventoryIndex + 36 : inventoryIndex, 0, ClickType.PICKUP, PepsiMod.INSTANCE.mc.player);
-            PepsiMod.INSTANCE.mc.playerController.windowClick(0, 45, 0, ClickType.PICKUP, PepsiMod.INSTANCE.mc.player);
-            PepsiMod.INSTANCE.mc.playerController.windowClick(0, inventoryIndex < 9 ? inventoryIndex + 36 : inventoryIndex, 0, ClickType.PICKUP, PepsiMod.INSTANCE.mc.player);
+        if (mc.player.openContainer instanceof ContainerPlayer) {
+            mc.playerController.windowClick(0, inventoryIndex < 9 ? inventoryIndex + 36 : inventoryIndex, 0, ClickType.PICKUP, mc.player);
+            mc.playerController.windowClick(0, 45, 0, ClickType.PICKUP, mc.player);
+            mc.playerController.windowClick(0, inventoryIndex < 9 ? inventoryIndex + 36 : inventoryIndex, 0, ClickType.PICKUP, mc.player);
         }
     }
 }

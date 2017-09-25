@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.render;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -34,7 +33,7 @@ public class XrayMod extends Module {
     @Override
     public void onEnable() {
         try {
-            PepsiMod.INSTANCE.mc.renderGlobal.loadRenderers();
+            mc.renderGlobal.loadRenderers();
         } catch (NullPointerException e) {
             //we don't care, mc isn't initialized yet
         }
@@ -43,7 +42,7 @@ public class XrayMod extends Module {
     @Override
     public void onDisable() {
         try {
-            PepsiMod.INSTANCE.mc.renderGlobal.loadRenderers();
+            mc.renderGlobal.loadRenderers();
         } catch (NullPointerException e) {
             //we don't care, mc isn't initialized yet
         }
@@ -131,7 +130,7 @@ public class XrayMod extends Module {
                     XrayUtils.target_blocks.add(id);
                     clientMessage("Added " + PepsiUtils.COLOR_ESCAPE + "o" + block.getRegistryName().toString() + PepsiUtils.COLOR_ESCAPE + "r to the Xray list");
                     if (this.isEnabled) {
-                        PepsiMod.INSTANCE.mc.renderGlobal.loadRenderers();
+                        mc.renderGlobal.loadRenderers();
                     }
                 }
             } catch (NumberFormatException e) {
@@ -144,7 +143,7 @@ public class XrayMod extends Module {
                         XrayUtils.target_blocks.add(PepsiUtils.getBlockId(block));
                         clientMessage("Added " + PepsiUtils.COLOR_ESCAPE + "o" + block.getRegistryName().toString() + PepsiUtils.COLOR_ESCAPE + "r to the Xray list");
                         if (this.isEnabled) {
-                            PepsiMod.INSTANCE.mc.renderGlobal.loadRenderers();
+                            mc.renderGlobal.loadRenderers();
                         }
                     }
                 } else {
@@ -160,7 +159,7 @@ public class XrayMod extends Module {
                     XrayUtils.target_blocks.remove((Integer) id);
                     clientMessage("Removed " + PepsiUtils.COLOR_ESCAPE + "o" + id + PepsiUtils.COLOR_ESCAPE + "r from the Xray list");
                     if (this.isEnabled) {
-                        PepsiMod.INSTANCE.mc.renderGlobal.loadRenderers();
+                        mc.renderGlobal.loadRenderers();
                     }
                 } else {
                     clientMessage("Block ID " + PepsiUtils.COLOR_ESCAPE + "o" + args[2] + PepsiUtils.COLOR_ESCAPE + "r is not on the Xray list!");
@@ -177,7 +176,7 @@ public class XrayMod extends Module {
                             XrayUtils.target_blocks.remove((Integer) id);
                             clientMessage("Removed " + PepsiUtils.COLOR_ESCAPE + "o" + s + PepsiUtils.COLOR_ESCAPE + "r from the Xray list");
                             if (this.isEnabled) {
-                                PepsiMod.INSTANCE.mc.renderGlobal.loadRenderers();
+                                mc.renderGlobal.loadRenderers();
                             }
                         } else {
                             clientMessage("Block ID " + PepsiUtils.COLOR_ESCAPE + "o" + s + PepsiUtils.COLOR_ESCAPE + "r is not on the Xray list!");

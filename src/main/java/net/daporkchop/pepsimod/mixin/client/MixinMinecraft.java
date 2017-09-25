@@ -46,6 +46,8 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Base64;
 
+import static net.daporkchop.pepsimod.util.misc.Default.mc;
+
 @Mixin(Minecraft.class)
 public abstract class MixinMinecraft {
     @Shadow
@@ -59,13 +61,13 @@ public abstract class MixinMinecraft {
 
         if (ZoomMod.INSTANCE.isEnabled) {
             ModuleManager.disableModule(ZoomMod.INSTANCE);
-            PepsiMod.INSTANCE.mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
+            mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
         }
     }
 
     @Inject(method = "runGameLoop", at = @At("RETURN"))
     public void postOnClientPreTick(CallbackInfo callbackInfo) {
-        if (PepsiMod.INSTANCE.mc.player != null) { // is ingame
+        if (mc.player != null) { // is ingame
             for (Module module : ModuleManager.AVALIBLE_MODULES) {
                 if (module.shouldTick()) {
                     module.tick();
@@ -142,7 +144,7 @@ public abstract class MixinMinecraft {
     public void preDisplayGuiScreen(GuiScreen guiScreen, CallbackInfo callbackInfo) {
         if (ZoomMod.INSTANCE.isEnabled) {
             ModuleManager.disableModule(ZoomMod.INSTANCE);
-            PepsiMod.INSTANCE.mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
+            mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
         }
     }
 

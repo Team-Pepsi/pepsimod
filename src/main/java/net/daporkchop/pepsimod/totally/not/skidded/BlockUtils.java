@@ -16,7 +16,6 @@
 package net.daporkchop.pepsimod.totally.not.skidded;
 
 import com.google.common.collect.AbstractIterator;
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -57,7 +56,7 @@ public final class BlockUtils {
                 continue;
 
             // check line of sight
-            if (PepsiMod.INSTANCE.mc.world.rayTraceBlocks(eyesPos, hitVec, false,
+            if (mc.world.rayTraceBlocks(eyesPos, hitVec, false,
                     true, false) != null)
                 continue;
 
@@ -76,7 +75,7 @@ public final class BlockUtils {
     }
 
     public static boolean placeBlockScaffold(BlockPos pos) {
-        Vec3d eyesPos = new Vec3d(PepsiMod.INSTANCE.mc.player.posX, PepsiMod.INSTANCE.mc.player.posY + PepsiMod.INSTANCE.mc.player.getEyeHeight(), PepsiMod.INSTANCE.mc.player.posZ);
+        Vec3d eyesPos = new Vec3d(mc.player.posX, mc.player.posY + mc.player.getEyeHeight(), mc.player.posZ);
 
         for (EnumFacing side : EnumFacing.values()) {
             BlockPos neighbor = pos.offset(side);
@@ -159,7 +158,7 @@ public final class BlockUtils {
                 continue;
 
             // check line of sight
-            if (PepsiMod.INSTANCE.mc.world.rayTraceBlocks(eyesPos, hitVec, false,
+            if (mc.world.rayTraceBlocks(eyesPos, hitVec, false,
                     true, false) != null)
                 continue;
 
@@ -192,7 +191,7 @@ public final class BlockUtils {
                 continue;
 
             // check line of sight
-            if (PepsiMod.INSTANCE.mc.world.rayTraceBlocks(eyesPos, hitVec, false,
+            if (mc.world.rayTraceBlocks(eyesPos, hitVec, false,
                     true, false) != null)
                 continue;
 
@@ -228,7 +227,7 @@ public final class BlockUtils {
                 continue;
 
             // check line of sight
-            if (PepsiMod.INSTANCE.mc.world.rayTraceBlocks(eyesPos, hitVec, false,
+            if (mc.world.rayTraceBlocks(eyesPos, hitVec, false,
                     true, false) != null)
                 continue;
 
@@ -301,9 +300,9 @@ public final class BlockUtils {
                 continue;
 
             // break block
-            PepsiMod.INSTANCE.mc.player.connection.sendPacket(new CPacketPlayerDigging(
+            mc.player.connection.sendPacket(new CPacketPlayerDigging(
                     Action.START_DESTROY_BLOCK, pos, side));
-            PepsiMod.INSTANCE.mc.player.connection.sendPacket(
+            mc.player.connection.sendPacket(
                     new CPacketPlayerDigging(Action.STOP_DESTROY_BLOCK, pos, side));
 
             return;
@@ -329,7 +328,7 @@ public final class BlockUtils {
                 continue;
 
             // check line of sight
-            if (PepsiMod.INSTANCE.mc.world.rayTraceBlocks(eyesPos, hitVec, false,
+            if (mc.world.rayTraceBlocks(eyesPos, hitVec, false,
                     true, false) != null)
                 continue;
 
