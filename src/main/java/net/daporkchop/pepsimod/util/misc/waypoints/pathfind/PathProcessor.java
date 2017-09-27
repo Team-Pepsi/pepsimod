@@ -17,8 +17,9 @@ package net.daporkchop.pepsimod.util.misc.waypoints.pathfind;
 
 import net.daporkchop.pepsimod.totally.not.skidded.RotationUtils;
 import net.daporkchop.pepsimod.totally.not.skidded.WMinecraft;
+import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
-import net.minecraft.client.Minecraft;
+import net.daporkchop.pepsimod.util.misc.Default;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.math.BlockPos;
@@ -26,14 +27,10 @@ import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
 
-public abstract class PathProcessor {
-    protected final Minecraft mc = Minecraft.getMinecraft();
+public abstract class PathProcessor extends Default {
 
     protected final ArrayList<PathPos> path;
-    private final KeyBinding[] controls = new KeyBinding[]{
-            mc.gameSettings.keyBindForward, mc.gameSettings.keyBindBack,
-            mc.gameSettings.keyBindRight, mc.gameSettings.keyBindLeft,
-            mc.gameSettings.keyBindJump, mc.gameSettings.keyBindSneak};
+    public boolean lookedLastTick = false;
     protected int index;
     protected boolean done;
 
@@ -52,7 +49,7 @@ public abstract class PathProcessor {
 
     public void lockControls() {
         // disable keys
-        for (KeyBinding key : controls)
+        for (KeyBinding key : PepsiUtils.controls)
             ReflectionStuff.setPressed(key, false);
 
         // face next position
@@ -64,13 +61,18 @@ public abstract class PathProcessor {
     }
 
     protected void facePosition(BlockPos pos) {
-        RotationUtils.faceVectorForWalking(new Vec3d(pos).addVector(0.5, 0.5, 0.5));
+        if (lookedLastTick) {
+            lookedLastTick = false;
+        } else {
+            lookedLastTick = RotationUtils.faceVectorForWalking(new Vec3d(pos).addVector(0.5, 0.5, 0.5));
+        }
     }
 
     public final void releaseControls() {
         // reset keys
-        for (KeyBinding key : controls)
+        for (KeyBinding key : PepsiUtils.controls) {
             ReflectionStuff.setPressed(key, GameSettings.isKeyDown(key));
+        }
     }
 
     public int getIndex() {

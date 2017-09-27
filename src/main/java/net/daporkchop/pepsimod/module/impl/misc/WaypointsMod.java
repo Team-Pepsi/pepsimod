@@ -30,6 +30,7 @@ import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
 import java.util.Collection;
 
 public class WaypointsMod extends Module {
@@ -93,7 +94,17 @@ public class WaypointsMod extends Module {
 
         if (PepsiMod.INSTANCE.miscOptions.waypoints_nametag) {
             for (Waypoint waypoint : toRender) {
-                PepsiUtils.renderWaypoint(waypoint);
+                String text = waypoint.name;
+                if (PepsiMod.INSTANCE.miscOptions.waypoints_coords) {
+                    text += " \u00A77" + waypoint.x + "\u00A7f, \u00A77" + waypoint.y + "\u00A7f, \u00A77" + waypoint.z;
+                }
+                if (PepsiMod.INSTANCE.miscOptions.waypoints_dist) {
+                    text += " \u00A7f (\u00A7b" + PepsiUtils.roundFloatForSlider((float) mc.player.getDistance(waypoint.x, waypoint.y, waypoint.z)) + "\u00A7f)";
+                }
+                PepsiUtils.renderFloatingText(text,
+                        waypoint.x, waypoint.y + 1, waypoint.z,
+                        Color.white.getRGB(),
+                        true, partialTicks);
             }
         }
     }

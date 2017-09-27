@@ -24,6 +24,7 @@ public class InventoryMoveMod extends Module {
 
     public InventoryMoveMod(boolean isEnabled, int key, boolean hide) {
         super(isEnabled, "InventoryMove", key, hide);
+        INSTANCE = this;
     }
 
     @Override
@@ -43,7 +44,7 @@ public class InventoryMoveMod extends Module {
 
     @Override
     public void init() {
-        INSTANCE = this;
+
     }
 
     @Override

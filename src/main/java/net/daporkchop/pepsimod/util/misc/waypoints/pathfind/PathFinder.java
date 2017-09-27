@@ -358,9 +358,9 @@ public class PathFinder extends Default {
 
             // liquids
             if (material == Material.WATER && !noWaterSlowdown)
-                costs[i] *= 1.3164437838225804F;
+                costs[i] *= 1.5F;
             else if (material == Material.LAVA)
-                costs[i] *= 4.539515393656079F;
+                costs[i] *= 100F;
 
             // soul sand
             if (!canFlyAt(positions[i]) && WBlock

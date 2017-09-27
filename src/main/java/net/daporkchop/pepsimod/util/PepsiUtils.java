@@ -25,7 +25,6 @@ import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
 import net.daporkchop.pepsimod.util.misc.Default;
 import net.daporkchop.pepsimod.util.misc.ITickListener;
 import net.daporkchop.pepsimod.util.misc.IWurstRenderListener;
-import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
 import net.daporkchop.pepsimod.util.module.TargetBone;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -37,6 +36,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.*;
@@ -44,7 +44,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.opengl.GL11;
 
@@ -96,6 +95,10 @@ public class PepsiUtils extends Default {
             "4495eebb-7a4e-43aa-9784-02ea86f705ed",
             "1e8c7d13-9118-41e2-b334-fdb213970135"
     };
+    public static final KeyBinding[] controls = new KeyBinding[]{
+            mc.gameSettings.keyBindForward, mc.gameSettings.keyBindBack,
+            mc.gameSettings.keyBindRight, mc.gameSettings.keyBindLeft,
+            mc.gameSettings.keyBindJump, mc.gameSettings.keyBindSneak};
     private static final Random random = new Random(System.currentTimeMillis());
     public static String buttonPrefix = COLOR_ESCAPE + "c";
     public static RainbowCycle rainbowCycle = new RainbowCycle();
@@ -589,9 +592,6 @@ public class PepsiUtils extends Default {
      * @param partialTickTime       Usually taken from RenderWorldLastEvent.partialTicks variable
      */
     public static void renderFloatingText(String text, float x, float y, float z, int color, boolean renderBlackBackground, float partialTickTime) {
-        //Thanks to Electric-Expansion mod for the majority of this code
-        //https://github.com/Alex-hawks/Electric-Expansion/blob/master/src/electricexpansion/client/render/RenderFloatingText.java
-
         RenderManager renderManager = mc.getRenderManager();
 
         float playerX = (float) (mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * partialTickTime);
@@ -601,8 +601,10 @@ public class PepsiUtils extends Default {
         float dx = x - playerX;
         float dy = y - playerY;
         float dz = z - playerZ;
-        float distFactor = 5 / dx;
-        float distance = (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
+        float distanceRatio = (float) (5 / mc.player.getDistance(x, y, z));
+        dx *= distanceRatio;
+        dy *= distanceRatio;
+        dz *= distanceRatio;
         float scale = 0.03f;
 
         GL11.glColor4f(1f, 1f, 1f, 0.5f);
@@ -610,10 +612,6 @@ public class PepsiUtils extends Default {
         GL11.glTranslatef(dx, dy, dz);
         GL11.glRotatef(-renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-
-        if (distance > 10) {
-            scale *= distance / 10;
-        }
 
         GL11.glScalef(-scale, -scale, scale);
         GL11.glDisable(GL11.GL_LIGHTING);
@@ -630,15 +628,14 @@ public class PepsiUtils extends Default {
             int stringMiddle = textWidth / 2;
 
             Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder worldrenderer = tessellator.getBuffer();
+            BufferBuilder buffer = tessellator.getBuffer();
 
             GlStateManager.disableTexture2D();
-            //This code taken from 1.8.8 net.minecraft.client.renderer.entity.Render.renderLivingLabel()
-            worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-            worldrenderer.pos(-stringMiddle - 1, -1 + 0, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-            worldrenderer.pos(-stringMiddle - 1, 8 + lineHeight * 1 - lineHeight, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-            worldrenderer.pos(stringMiddle + 1, 8 + lineHeight * 1 - lineHeight, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-            worldrenderer.pos(stringMiddle + 1, -1 + 0, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+            buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+            buffer.pos(-stringMiddle - 1, -1, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+            buffer.pos(-stringMiddle - 1, 8 + lineHeight - lineHeight, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+            buffer.pos(stringMiddle + 1, 8 + lineHeight - lineHeight, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+            buffer.pos(stringMiddle + 1, -1, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
 
             tessellator.draw();
             GlStateManager.enableTexture2D();
@@ -725,7 +722,7 @@ public class PepsiUtils extends Default {
         tessellator.draw();
     }
 
-    public static void renderWaypoint(Waypoint waypoint) {
+    /*public static void renderWaypoint(Waypoint waypoint) {
         RenderManager renderManager = mc.getRenderManager();
         if (renderManager.renderViewEntity == null) {
             return;
@@ -893,5 +890,5 @@ public class PepsiUtils extends Default {
             bgHeight = getLabelHeight(fontRenderer, fontShadow);
         }
         drawLabel(text, x, y, bgColor, bgAlpha, bgWidth, bgHeight, color, alpha, fontScale, fontShadow, rotation);
-    }
+    }*/
 }
