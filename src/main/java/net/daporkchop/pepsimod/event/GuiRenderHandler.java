@@ -25,6 +25,7 @@ import net.daporkchop.pepsimod.util.BetterScaledResolution;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
+import net.daporkchop.pepsimod.util.misc.Default;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.item.ItemStack;
@@ -34,7 +35,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.*;
 
-public class GuiRenderHandler {
+public class GuiRenderHandler extends Default {
     public static GuiRenderHandler INSTANCE;
 
     {
@@ -48,8 +49,8 @@ public class GuiRenderHandler {
             return;
         }
 
-        if (PepsiMod.INSTANCE.mc.currentScreen == null || PepsiMod.INSTANCE.mc.currentScreen instanceof GuiChat || PepsiMod.INSTANCE.mc.currentScreen instanceof ClickGUI) {
-            GuiIngame gui = PepsiMod.INSTANCE.mc.ingameGUI;
+        if (mc.currentScreen == null || mc.currentScreen instanceof GuiChat || mc.currentScreen instanceof ClickGUI) {
+            GuiIngame gui = mc.ingameGUI;
 
             BetterScaledResolution.INSTANCE.update();
             int width = BetterScaledResolution.INSTANCE.scaledWidth;
@@ -60,7 +61,7 @@ public class GuiRenderHandler {
                     PepsiUtils.PEPSI_NAME.drawAtPos(gui, 2, 2, 0);
                 } else {
                     PepsiMod.INSTANCE.hudSettings.bindColor();
-                    PepsiMod.INSTANCE.mc.fontRenderer.drawString(PepsiUtils.PEPSI_NAME.text, 2, 2, PepsiMod.INSTANCE.hudSettings.getColor(), true);
+                    mc.fontRenderer.drawString(PepsiUtils.PEPSI_NAME.text, 2, 2, PepsiMod.INSTANCE.hudSettings.getColor(), true);
                 }
             }
 
@@ -80,12 +81,12 @@ public class GuiRenderHandler {
                             }
                         } else {
                             PepsiMod.INSTANCE.hudSettings.bindColor();
-                            PepsiMod.INSTANCE.mc.fontRenderer.drawString(module.text.getRawText(), width - 2 - module.text.width(), 2 + j * 10, PepsiMod.INSTANCE.hudSettings.getColor());
+                            mc.fontRenderer.drawString(module.text.getRawText(), width - 2 - module.text.width(), 2 + j * 10, PepsiMod.INSTANCE.hudSettings.getColor());
                             j++;
                         }
                     }
                 } else {
-                    if (!(PepsiMod.INSTANCE.mc.currentScreen instanceof GuiChat)) {
+                    if (!(mc.currentScreen instanceof GuiChat)) {
                         for (int i = 0, j = 0; i < ModuleManager.ENABLED_MODULES.size(); i++) {
                             Module module = ModuleManager.ENABLED_MODULES.get(i);
                             if (module.hide) {
@@ -100,7 +101,7 @@ public class GuiRenderHandler {
                                 }
                             } else {
                                 PepsiMod.INSTANCE.hudSettings.bindColor();
-                                PepsiMod.INSTANCE.mc.fontRenderer.drawString(module.text.getRawText(), width - 2 - module.text.width(), height - 12 - j * 10, PepsiMod.INSTANCE.hudSettings.getColor());
+                                mc.fontRenderer.drawString(module.text.getRawText(), width - 2 - module.text.width(), height - 12 - j * 10, PepsiMod.INSTANCE.hudSettings.getColor());
                                 j++;
                             }
                         }
@@ -110,62 +111,62 @@ public class GuiRenderHandler {
 
             int i = 0;
             if (PepsiMod.INSTANCE.hudSettings.arrayListTop) {
-                if (!(PepsiMod.INSTANCE.mc.currentScreen instanceof GuiChat)) {
+                if (!(mc.currentScreen instanceof GuiChat)) {
                     if (PepsiMod.INSTANCE.hudSettings.serverBrand) {
                         String text = PepsiUtils.COLOR_ESCAPE + "7Server brand: " + PepsiUtils.COLOR_ESCAPE + "r" + HUDMod.INSTANCE.serverBrand;
-                        gui.drawString(PepsiMod.INSTANCE.mc.fontRenderer, text, width - (PepsiMod.INSTANCE.mc.fontRenderer.getStringWidth("Server brand: " + HUDMod.INSTANCE.serverBrand) + 2), height - 2 - ++i * 10, Color.white.getRGB());
+                        gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("Server brand: " + HUDMod.INSTANCE.serverBrand) + 2), height - 2 - ++i * 10, Color.white.getRGB());
                     }
                     if (PepsiMod.INSTANCE.hudSettings.ping) {
                         try {
-                            int ping = PepsiMod.INSTANCE.mc.getConnection().getPlayerInfo(PepsiMod.INSTANCE.mc.getConnection().getGameProfile().getId()).getResponseTime();
+                            int ping = mc.getConnection().getPlayerInfo(mc.getConnection().getGameProfile().getId()).getResponseTime();
                             String text = PepsiUtils.COLOR_ESCAPE + "7Ping: " + PepsiUtils.COLOR_ESCAPE + "r" + ping;
-                            gui.drawString(PepsiMod.INSTANCE.mc.fontRenderer, text, width - (PepsiMod.INSTANCE.mc.fontRenderer.getStringWidth("Ping: " + ping) + 2), height - 2 - ++i * 10, Color.white.getRGB());
+                            gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("Ping: " + ping) + 2), height - 2 - ++i * 10, Color.white.getRGB());
                         } catch (NullPointerException e) {
                         }
                     }
                     if (PepsiMod.INSTANCE.hudSettings.TPS) {
                         String text = PepsiUtils.COLOR_ESCAPE + "7TPS: " + PepsiUtils.COLOR_ESCAPE + "r" + TickRate.TPS;
-                        gui.drawString(PepsiMod.INSTANCE.mc.fontRenderer, text, width - (PepsiMod.INSTANCE.mc.fontRenderer.getStringWidth("TPS: " + TickRate.TPS) + 2), height - 2 - ++i * 10, Color.white.getRGB());
+                        gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("TPS: " + TickRate.TPS) + 2), height - 2 - ++i * 10, Color.white.getRGB());
                     }
                     if (PepsiMod.INSTANCE.hudSettings.fps) {
                         String text = PepsiUtils.COLOR_ESCAPE + "7FPS: " + PepsiUtils.COLOR_ESCAPE + "r" + ReflectionStuff.getDebugFps();
-                        gui.drawString(PepsiMod.INSTANCE.mc.fontRenderer, text, width - (PepsiMod.INSTANCE.mc.fontRenderer.getStringWidth("FPS: " + ReflectionStuff.getDebugFps()) + 2), height - 2 - ++i * 10, Color.white.getRGB());
+                        gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("FPS: " + ReflectionStuff.getDebugFps()) + 2), height - 2 - ++i * 10, Color.white.getRGB());
                     }
                 }
             } else {
                 if (PepsiMod.INSTANCE.hudSettings.serverBrand) {
                     String text = PepsiUtils.COLOR_ESCAPE + "7Server brand: " + PepsiUtils.COLOR_ESCAPE + "r" + HUDMod.INSTANCE.serverBrand;
-                    gui.drawString(PepsiMod.INSTANCE.mc.fontRenderer, text, width - (PepsiMod.INSTANCE.mc.fontRenderer.getStringWidth("Server brand: " + HUDMod.INSTANCE.serverBrand) + 2), 2 + i++ * 10, Color.white.getRGB());
+                    gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("Server brand: " + HUDMod.INSTANCE.serverBrand) + 2), 2 + i++ * 10, Color.white.getRGB());
                 }
                 if (PepsiMod.INSTANCE.hudSettings.ping) {
                     try {
-                        int ping = PepsiMod.INSTANCE.mc.getConnection().getPlayerInfo(PepsiMod.INSTANCE.mc.getConnection().getGameProfile().getId()).getResponseTime();
+                        int ping = mc.getConnection().getPlayerInfo(mc.getConnection().getGameProfile().getId()).getResponseTime();
                         String text = PepsiUtils.COLOR_ESCAPE + "7Ping: " + PepsiUtils.COLOR_ESCAPE + "r" + ping;
-                        gui.drawString(PepsiMod.INSTANCE.mc.fontRenderer, text, width - (PepsiMod.INSTANCE.mc.fontRenderer.getStringWidth("Ping: " + ping) + 2), 2 + i++ * 10, Color.white.getRGB());
+                        gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("Ping: " + ping) + 2), 2 + i++ * 10, Color.white.getRGB());
                     } catch (NullPointerException e) {
                     }
                 }
                 if (PepsiMod.INSTANCE.hudSettings.TPS) {
                     String text = PepsiUtils.COLOR_ESCAPE + "7TPS: " + PepsiUtils.COLOR_ESCAPE + "r" + TickRate.TPS;
-                    gui.drawString(PepsiMod.INSTANCE.mc.fontRenderer, text, width - (PepsiMod.INSTANCE.mc.fontRenderer.getStringWidth("TPS: " + TickRate.TPS) + 2), 2 + i++ * 10, Color.white.getRGB());
+                    gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("TPS: " + TickRate.TPS) + 2), 2 + i++ * 10, Color.white.getRGB());
                 }
                 if (PepsiMod.INSTANCE.hudSettings.fps) {
                     String text = PepsiUtils.COLOR_ESCAPE + "7FPS: " + PepsiUtils.COLOR_ESCAPE + "r" + ReflectionStuff.getDebugFps();
-                    gui.drawString(PepsiMod.INSTANCE.mc.fontRenderer, text, width - (PepsiMod.INSTANCE.mc.fontRenderer.getStringWidth("FPS: " + ReflectionStuff.getDebugFps()) + 2), 2 + i++ * 10, Color.white.getRGB());
+                    gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("FPS: " + ReflectionStuff.getDebugFps()) + 2), 2 + i++ * 10, Color.white.getRGB());
                 }
             }
 
             i = 0;
-            if (!(PepsiMod.INSTANCE.mc.currentScreen instanceof GuiChat)) {
+            if (!(mc.currentScreen instanceof GuiChat)) {
                 if (PepsiMod.INSTANCE.hudSettings.coords) {
-                    String toRender = PepsiUtils.COLOR_ESCAPE + "7XYZ" + PepsiUtils.COLOR_ESCAPE + "f: " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(PepsiMod.INSTANCE.mc.player.posX) + "" + PepsiUtils.COLOR_ESCAPE + "f, " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(PepsiMod.INSTANCE.mc.player.posY) + "" + PepsiUtils.COLOR_ESCAPE + "f, " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(PepsiMod.INSTANCE.mc.player.posZ);
+                    String toRender = PepsiUtils.COLOR_ESCAPE + "7XYZ" + PepsiUtils.COLOR_ESCAPE + "f: " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(mc.player.posX) + "" + PepsiUtils.COLOR_ESCAPE + "f, " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(mc.player.posY) + "" + PepsiUtils.COLOR_ESCAPE + "f, " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(mc.player.posZ);
                     if (PepsiMod.INSTANCE.hudSettings.netherCoords) {
-                        toRender += " " + PepsiUtils.COLOR_ESCAPE + "f(" + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(PepsiMod.INSTANCE.mc.player.posX / 8) + "" + PepsiUtils.COLOR_ESCAPE + "f, " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(PepsiMod.INSTANCE.mc.player.posY) + "" + PepsiUtils.COLOR_ESCAPE + "f, " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(PepsiMod.INSTANCE.mc.player.posZ / 8) + "" + PepsiUtils.COLOR_ESCAPE + "f)";
+                        toRender += " " + PepsiUtils.COLOR_ESCAPE + "f(" + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(mc.player.posX / 8) + "" + PepsiUtils.COLOR_ESCAPE + "f, " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(mc.player.posY) + "" + PepsiUtils.COLOR_ESCAPE + "f, " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(mc.player.posZ / 8) + "" + PepsiUtils.COLOR_ESCAPE + "f)";
                     }
-                    PepsiMod.INSTANCE.mc.fontRenderer.drawString(toRender, 2, height - ++i * 10, Color.white.getRGB());
+                    mc.fontRenderer.drawString(toRender, 2, height - ++i * 10, Color.white.getRGB(), true);
                 }
                 if (PepsiMod.INSTANCE.hudSettings.direction) {
-                    PepsiMod.INSTANCE.mc.fontRenderer.drawString(PepsiUtils.COLOR_ESCAPE + "f[" + PepsiUtils.COLOR_ESCAPE + "f" + PepsiUtils.getFacing() + PepsiUtils.COLOR_ESCAPE + "7]", 2, height - ++i * 10, Color.white.getRGB());
+                    mc.fontRenderer.drawString(PepsiUtils.COLOR_ESCAPE + "7[" + PepsiUtils.COLOR_ESCAPE + "f" + PepsiUtils.getFacing() + PepsiUtils.COLOR_ESCAPE + "7]", 2, height - ++i * 10, Color.white.getRGB(), true);
                 }
             }
 
@@ -175,7 +176,7 @@ public class GuiRenderHandler {
                 xPos -= 103;
                 for (int j = 0; j < 4; j++) {
                     ItemStack stack = PepsiUtils.getWearingArmor(j);
-                    PepsiUtils.renderItem(xPos + 20 * i++, height - 40, event.getPartialTicks(), PepsiMod.INSTANCE.mc.player, stack);
+                    PepsiUtils.renderItem(xPos + 20 * i++, height - 40, event.getPartialTicks(), mc.player, stack);
                 }
             }
         }

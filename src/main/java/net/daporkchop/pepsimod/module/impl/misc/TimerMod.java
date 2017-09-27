@@ -15,6 +15,7 @@
 
 package net.daporkchop.pepsimod.module.impl.misc;
 
+import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.misc.TickRate;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
@@ -22,12 +23,8 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
-import net.daporkchop.pepsimod.util.PepsiUtils;
-
-import java.util.TimerTask;
 
 public class TimerMod extends Module {
-    public static float PROCENT = 1.0f;
     public static TimerMod INSTANCE;
     public boolean tps_sync = false;
 
@@ -56,23 +53,7 @@ public class TimerMod extends Module {
 
     @Override
     public void init() {
-        PROCENT = (float) getOptionByName("multiplier").getValue();
         INSTANCE = this; //adding this a bunch because it always seems to be null idk y
-        PepsiUtils.timer.schedule(new TimerTask() {
-            float lasttps = TickRate.TPS;
-
-            @Override
-            public void run() {
-                try {
-                    if (TickRate.TPS != lasttps) {
-                        updateName();
-                    }
-                    lasttps = TickRate.TPS;
-                } catch (NullPointerException e) {
-                    //meh, minecraft isn't initialized yet
-                }
-            }
-        }, 0, 1000);
     }
 
     @Override
@@ -84,12 +65,11 @@ public class TimerMod extends Module {
                                 clientMessage("Multiplier cannot be negative or 0!");
                                 return false;
                             }
-                            TimerMod.PROCENT = value;
-                            updateName();
+                            PepsiMod.INSTANCE.miscOptions.timer_multiplier = value;
                             return true;
                         },
                         () -> {
-                            return TimerMod.PROCENT;
+                            return PepsiMod.INSTANCE.miscOptions.timer_multiplier;
                         }, "Multiplier", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.0f, 1.0f, 0.01f)),
                 new ModuleOption<>(false, "tps_sync", OptionCompletions.BOOLEAN,
                         (value) -> {
@@ -115,9 +95,9 @@ public class TimerMod extends Module {
     public float getMultiplier() {
         if (this.isEnabled) {
             if (tps_sync) {
-                return TickRate.TPS / 20;
+                return TickRate.TPS / 20 * PepsiMod.INSTANCE.miscOptions.timer_multiplier;
             } else {
-                return PROCENT;
+                return PepsiMod.INSTANCE.miscOptions.timer_multiplier;
             }
         } else {
             return 1.0f;

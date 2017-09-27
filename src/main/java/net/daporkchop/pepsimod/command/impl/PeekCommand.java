@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.command.impl;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.api.Command;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.inventory.GuiChest;
@@ -87,11 +86,11 @@ public class PeekCommand extends Command {
     @Override
     public void execute(String cmd, String[] args) {
         ItemStack stack = null;
-        if (!PepsiMod.INSTANCE.mc.player.getHeldItemOffhand().isEmpty()) {
-            stack = PepsiMod.INSTANCE.mc.player.getHeldItemOffhand();
+        if (!mc.player.getHeldItemOffhand().isEmpty()) {
+            stack = mc.player.getHeldItemOffhand();
         }
-        if (!PepsiMod.INSTANCE.mc.player.getHeldItemMainhand().isEmpty()) {
-            stack = PepsiMod.INSTANCE.mc.player.getHeldItemMainhand();
+        if (!mc.player.getHeldItemMainhand().isEmpty()) {
+            stack = mc.player.getHeldItemMainhand();
         }
         if (stack != null && !stack.isEmpty()) {
             if (stack.getItem() instanceof ItemBlock) {
@@ -100,9 +99,9 @@ public class PeekCommand extends Command {
                     if (stack.hasTagCompound()) {
                         ItemStack wtf_java = stack;
 
-                        PepsiMod.INSTANCE.mc.displayGuiScreen(new GuiChest(PepsiMod.INSTANCE.mc.player.inventory, getFromItemNBT(wtf_java.getTagCompound().getCompoundTag("BlockEntityTag"))));
+                        mc.displayGuiScreen(new GuiChest(mc.player.inventory, getFromItemNBT(wtf_java.getTagCompound().getCompoundTag("BlockEntityTag"))));
                     } else {
-                        PepsiMod.INSTANCE.mc.displayGuiScreen(new GuiChest(new InventoryBasic("Shulker Box", true, 27), PepsiMod.INSTANCE.mc.player.inventory));
+                        mc.displayGuiScreen(new GuiChest(new InventoryBasic("Shulker Box", true, 27), mc.player.inventory));
                     }
                     return;
                 }

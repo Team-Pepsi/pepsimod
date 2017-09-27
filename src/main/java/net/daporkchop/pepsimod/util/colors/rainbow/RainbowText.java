@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.util.colors.rainbow;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.colors.ColorizedElement;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
@@ -39,7 +38,7 @@ public class RainbowText extends ColorizedText {
     }
 
     public RainbowText(String text, int offset) {
-        this.fontRenderer = PepsiMod.INSTANCE.mc.fontRenderer;
+        this.fontRenderer = mc.fontRenderer;
         this.offset = offset;
         String[] split = text.split(PepsiUtils.COLOR_ESCAPE + "custom");
         String[] split2 = split[0].split("");

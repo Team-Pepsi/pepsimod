@@ -57,20 +57,20 @@ public class AnnouncerMod extends TimeModule {
                 window.openGui();
             }
 
-            PepsiMod.INSTANCE.mc.displayGuiScreen(ClickGUI.INSTANCE);
+            mc.displayGuiScreen(ClickGUI.INSTANCE);
         }
     }
 
     @Override
     public void onDisable() {
-        if (PepsiMod.INSTANCE.mc.currentScreen instanceof ClickGUI) {
-            PepsiMod.INSTANCE.mc.displayGuiScreen(null);
+        if (mc.currentScreen instanceof ClickGUI) {
+            mc.displayGuiScreen(null);
         }
     }
 
     @Override
     public void tick() {
-        if (PepsiMod.INSTANCE.mc.world != null && PepsiMod.INSTANCE.mc.world.isRemote) {
+        if (mc.world != null && mc.world.isRemote) {
             updateMS();
             if (hasTimePassedM(PepsiMod.INSTANCE.announcerSettings.delay)) {
                 updateLastMS();
@@ -81,9 +81,9 @@ public class AnnouncerMod extends TimeModule {
                         String msg = task.getMessage();
                         if (msg != null) {
                             if (PepsiMod.INSTANCE.announcerSettings.clientSide) {
-                                PepsiMod.INSTANCE.mc.player.sendMessage(new TextComponentString(PepsiUtils.COLOR_ESCAPE + "a" + msg));
+                                mc.player.sendMessage(new TextComponentString(PepsiUtils.COLOR_ESCAPE + "a" + msg));
                             } else {
-                                PepsiMod.INSTANCE.mc.player.sendChatMessage(msg);
+                                mc.player.sendChatMessage(msg);
                             }
                             break MAINLOOP;
                         } else {
@@ -208,7 +208,7 @@ public class AnnouncerMod extends TimeModule {
     }
 
     public void onPlaceBlock(BlockEvent.PlaceEvent event) {
-        if (isEnabled && PepsiMod.INSTANCE.announcerSettings.place && event.getPlayer() == PepsiMod.INSTANCE.mc.player) {
+        if (isEnabled && PepsiMod.INSTANCE.announcerSettings.place && event.getPlayer() == mc.player) {
             Iterator<QueuedTask> iterator = toSend.iterator();
             while (iterator.hasNext()) {
                 QueuedTask task = iterator.next();
@@ -233,9 +233,9 @@ public class AnnouncerMod extends TimeModule {
                 String msg = task.getMessage();
                 if (msg != null) {
                     if (PepsiMod.INSTANCE.announcerSettings.clientSide) {
-                        PepsiMod.INSTANCE.mc.player.sendMessage(new TextComponentString(PepsiUtils.COLOR_ESCAPE + "a" + msg));
+                        mc.player.sendMessage(new TextComponentString(PepsiUtils.COLOR_ESCAPE + "a" + msg));
                     } else {
-                        PepsiMod.INSTANCE.mc.player.sendChatMessage(msg);
+                        mc.player.sendChatMessage(msg);
                     }
                     return;
                 }
@@ -251,9 +251,9 @@ public class AnnouncerMod extends TimeModule {
                 String msg = task.getMessage();
                 if (msg != null) {
                     if (PepsiMod.INSTANCE.announcerSettings.clientSide) {
-                        PepsiMod.INSTANCE.mc.player.sendMessage(new TextComponentString(PepsiUtils.COLOR_ESCAPE + "a" + msg));
+                        mc.player.sendMessage(new TextComponentString(PepsiUtils.COLOR_ESCAPE + "a" + msg));
                     } else {
-                        PepsiMod.INSTANCE.mc.player.sendChatMessage(msg);
+                        mc.player.sendChatMessage(msg);
                     }
                     return;
                 }

@@ -43,7 +43,7 @@ public class SpeedmineMod extends Module {
 
     @Override
     public void tick() {
-        if (PepsiMod.INSTANCE.mc.world != null) {
+        if (mc.world != null) {
             if (ReflectionStuff.getCurBlockDamageMP() < PepsiMod.INSTANCE.miscOptions.speedmine_speed) {
                 ReflectionStuff.setCurBlockDamageMP(PepsiMod.INSTANCE.miscOptions.speedmine_speed);
             }

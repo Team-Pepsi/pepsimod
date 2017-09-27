@@ -33,6 +33,14 @@ public class MiscOptions implements Serializable {
     public boolean step_legit = false;
     public int step_height = 1;
     public int cpu_framecap = 5;
+    public boolean waypoints_tracers = false;
+    public int waypoints_r = 0;
+    public int waypoints_g = 0;
+    public int waypoints_b = 0;
+    public boolean waypoints_nametag = false;
+    public boolean waypoints_dist = true;
+    public boolean waypoints_coords = false;
+    public float timer_multiplier = 1.0f;
 
     public static class ModuleState implements Serializable {
         public boolean enabled;

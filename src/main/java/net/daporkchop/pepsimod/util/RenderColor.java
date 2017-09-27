@@ -15,6 +15,8 @@
 
 package net.daporkchop.pepsimod.util;
 
+import org.lwjgl.opengl.GL11;
+
 public class RenderColor {
     public byte r;
     public byte g;
@@ -34,6 +36,14 @@ public class RenderColor {
         this.gOrig = g;
         this.bOrig = b;
         this.aOrig = a;
+    }
+
+    public static void glColor(int r, int g, int b) {
+        glColor(r, g, b, 255);
+    }
+
+    public static void glColor(int r, int g, int b, int a) {
+        GL11.glColor4b((byte) Math.floorDiv(r, 2), (byte) Math.floorDiv(g, 2), (byte) Math.floorDiv(b, 2), (byte) Math.floorDiv(a, 2));
     }
 
     public int getIntColor() {

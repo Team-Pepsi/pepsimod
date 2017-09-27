@@ -15,10 +15,10 @@
 
 package net.daporkchop.pepsimod.util;
 
-import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.util.misc.Default;
 import net.minecraft.util.math.MathHelper;
 
-public class BetterScaledResolution {
+public class BetterScaledResolution extends Default {
     public static BetterScaledResolution INSTANCE;
 
     public int scaledWidth, scaledHeight, scaleFactor;
@@ -29,11 +29,11 @@ public class BetterScaledResolution {
     }
 
     public void update() {
-        this.scaledWidth = PepsiMod.INSTANCE.mc.displayWidth;
-        this.scaledHeight = PepsiMod.INSTANCE.mc.displayHeight;
+        this.scaledWidth = mc.displayWidth;
+        this.scaledHeight = mc.displayHeight;
         this.scaleFactor = 1;
-        boolean flag = PepsiMod.INSTANCE.mc.isUnicode();
-        int i = PepsiMod.INSTANCE.mc.gameSettings.guiScale;
+        boolean flag = mc.isUnicode();
+        int i = mc.gameSettings.guiScale;
 
         if (i == 0) {
             i = 1000;

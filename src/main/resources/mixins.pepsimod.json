@@ -34,10 +34,10 @@
     "client.gui.MixinGuiDisconnected",
     "client.gui.MixinGuiIngameMenu",
     "entity.living.player.MixinEntityPlayerSP",
-    "client.gui.inventory.MixinGuiContainer",
     "item.MixinItemStack",
     "scoreboard.MixinScoreboard",
     "block.MixinBlockSoulSand",
-    "client.entity.MixinEntityPlayerSP"
+    "client.entity.MixinEntityPlayerSP",
+    "util.MixinMovementInputFromOptions"
   ]
 }

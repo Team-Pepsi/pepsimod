@@ -51,14 +51,14 @@ public class CrystalAuraMod extends Module {
 
     @Override
     public void tick() {
-        EntityPlayerSP player = PepsiMod.INSTANCE.mc.player;
+        EntityPlayerSP player = mc.player;
 
         currentMS = System.nanoTime() / 1000000;
         if (hasDelayRun((long) (1000 / PepsiMod.INSTANCE.miscOptions.crystalAura_speed))) {
-            for (Entity e : PepsiMod.INSTANCE.mc.world.loadedEntityList) {
+            for (Entity e : mc.world.loadedEntityList) {
                 if (player.getDistanceToEntity(e) < PepsiMod.INSTANCE.miscOptions.crystalAura_range) {
                     if (e instanceof EntityEnderCrystal) {
-                        PepsiMod.INSTANCE.mc.playerController.attackEntity(player, e);
+                        mc.playerController.attackEntity(player, e);
                         player.swingArm(EnumHand.MAIN_HAND);
                         lastMS = System.nanoTime() / 1000000;
                         break;

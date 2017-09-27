@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.movement;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -42,9 +41,9 @@ public class JesusMod extends Module {
         boolean foundSolid = false;
 
         // check collision boxes below player
-        for (AxisAlignedBB bb : PepsiMod.INSTANCE.mc.world.getCollisionBoxes(PepsiMod.INSTANCE.mc.player, PepsiMod.INSTANCE.mc.player.getEntityBoundingBox().offset(0, -0.5, 0))) {
+        for (AxisAlignedBB bb : mc.world.getCollisionBoxes(mc.player, mc.player.getEntityBoundingBox().offset(0, -0.5, 0))) {
             BlockPos pos = new BlockPos(bb.getCenter());
-            IBlockState state = PepsiMod.INSTANCE.mc.world.getBlockState(pos);
+            IBlockState state = mc.world.getBlockState(pos);
             Material material = state.getBlock().getMaterial(state);
 
             if (material == Material.WATER || material == Material.LAVA) {
@@ -58,7 +57,7 @@ public class JesusMod extends Module {
     }
 
     public boolean shouldBeSolid() {
-        return isEnabled && PepsiMod.INSTANCE.mc.player != null && PepsiMod.INSTANCE.mc.player.fallDistance <= 3 && !PepsiMod.INSTANCE.mc.gameSettings.keyBindSneak.isPressed() && !PepsiMod.INSTANCE.mc.player.isInWater();
+        return isEnabled && mc.player != null && mc.player.fallDistance <= 3 && !mc.gameSettings.keyBindSneak.isPressed() && !mc.player.isInWater();
     }
 
     @Override
@@ -74,22 +73,22 @@ public class JesusMod extends Module {
     @Override
     public void tick() {
         // check if sneaking
-        if (PepsiMod.INSTANCE.mc.gameSettings.keyBindSneak.isPressed()) {
+        if (mc.gameSettings.keyBindSneak.isPressed()) {
             return;
         }
 
         // move up in water
-        if (PepsiMod.INSTANCE.mc.player.isInWater()) {
-            PepsiMod.INSTANCE.mc.player.motionY = 0.11;
+        if (mc.player.isInWater()) {
+            mc.player.motionY = 0.11;
             tickTimer = 0;
             return;
         }
 
         // simulate jumping out of water
         if (tickTimer == 0) {
-            PepsiMod.INSTANCE.mc.player.motionY = 0.30;
+            mc.player.motionY = 0.30;
         } else if (tickTimer == 1) {
-            PepsiMod.INSTANCE.mc.player.motionY = 0;
+            mc.player.motionY = 0;
         }
 
         // update timer
@@ -106,12 +105,12 @@ public class JesusMod extends Module {
             }
 
             // check inWater
-            if (PepsiMod.INSTANCE.mc.player.isInWater()) {
+            if (mc.player.isInWater()) {
                 break RETURN;
             }
 
             // check fall distance
-            if (PepsiMod.INSTANCE.mc.player.fallDistance > 3F) {
+            if (mc.player.fallDistance > 3F) {
                 break RETURN;
             }
 
@@ -120,7 +119,7 @@ public class JesusMod extends Module {
             }
 
             // if not actually moving, cancel packet
-            if (PepsiMod.INSTANCE.mc.player.movementInput == null) {
+            if (mc.player.movementInput == null) {
                 return true;
             }
 
@@ -136,7 +135,7 @@ public class JesusMod extends Module {
             double y = pck.getY(0);
 
             // offset y
-            if (PepsiMod.INSTANCE.mc.player.ticksExisted % 2 == 0) {
+            if (mc.player.ticksExisted % 2 == 0) {
                 y -= 0.05;
             } else {
                 y += 0.05;

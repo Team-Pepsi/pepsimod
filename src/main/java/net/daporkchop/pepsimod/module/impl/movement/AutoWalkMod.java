@@ -37,13 +37,13 @@ public class AutoWalkMod extends Module {
     @Override
     public void onDisable() {
         if (PepsiMod.INSTANCE.isInitialized) {
-            ReflectionStuff.setPressed(PepsiMod.INSTANCE.mc.gameSettings.keyBindForward, Keyboard.isKeyDown(PepsiMod.INSTANCE.mc.gameSettings.keyBindForward.getKeyCode()));
+            ReflectionStuff.setPressed(mc.gameSettings.keyBindForward, Keyboard.isKeyDown(mc.gameSettings.keyBindForward.getKeyCode()));
         }
     }
 
     @Override
     public void tick() {
-        ReflectionStuff.setPressed(PepsiMod.INSTANCE.mc.gameSettings.keyBindForward, true);
+        ReflectionStuff.setPressed(mc.gameSettings.keyBindForward, true);
     }
 
     @Override

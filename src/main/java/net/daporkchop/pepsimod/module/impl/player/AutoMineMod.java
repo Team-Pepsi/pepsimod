@@ -38,24 +38,24 @@ public class AutoMineMod extends Module {
     @Override
     public void onDisable() {
         if (PepsiMod.INSTANCE.hasInitializedModules) {
-            ReflectionStuff.setPressed(PepsiMod.INSTANCE.mc.gameSettings.keyBindAttack, false);
+            ReflectionStuff.setPressed(mc.gameSettings.keyBindAttack, false);
         }
     }
 
     @Override
     public void tick() {
-        if (PepsiMod.INSTANCE.mc.objectMouseOver == null || PepsiMod.INSTANCE.mc.objectMouseOver.getBlockPos() == null) {
+        if (mc.objectMouseOver == null || mc.objectMouseOver.getBlockPos() == null) {
             return;
         }
 
-        if (PepsiMod.INSTANCE.mc.gameSettings.keyBindAttack.isPressed() && !PepsiMod.INSTANCE.mc.playerController.getIsHittingBlock()) {
-            ReflectionStuff.setPressed(PepsiMod.INSTANCE.mc.gameSettings.keyBindAttack, false);
+        if (mc.gameSettings.keyBindAttack.isPressed() && !mc.playerController.getIsHittingBlock()) {
+            ReflectionStuff.setPressed(mc.gameSettings.keyBindAttack, false);
             return;
         }
 
         // press attack key if looking at block
-        IBlockState state = PepsiMod.INSTANCE.mc.world.getBlockState(PepsiMod.INSTANCE.mc.objectMouseOver.getBlockPos());
-        ReflectionStuff.setPressed(PepsiMod.INSTANCE.mc.gameSettings.keyBindAttack, state.getBlock().getMaterial(state) != Material.AIR);
+        IBlockState state = mc.world.getBlockState(mc.objectMouseOver.getBlockPos());
+        ReflectionStuff.setPressed(mc.gameSettings.keyBindAttack, state.getBlock().getMaterial(state) != Material.AIR);
     }
 
     @Override

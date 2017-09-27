@@ -35,6 +35,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import static net.daporkchop.pepsimod.util.misc.Default.mc;
+
 @Mixin(Entity.class)
 public abstract class MixinEntity {
     @Shadow
@@ -49,7 +51,7 @@ public abstract class MixinEntity {
     @Inject(method = "setVelocity", at = @At("HEAD"), cancellable = true)
     public void preSetVelocity(double x, double y, double z, CallbackInfo callbackInfo) {
         float strength = 1.0f;
-        if (Entity.class.cast(this) == PepsiMod.INSTANCE.mc.player) {
+        if (Entity.class.cast(this) == mc.player) {
             strength = VelocityMod.INSTANCE.getVelocity();
         }
         this.motionX = x * strength;
@@ -62,7 +64,7 @@ public abstract class MixinEntity {
     public void move(MoverType type, double x, double y, double z, CallbackInfo callbackInfo) {
         Entity thisAsEntity = Entity.class.cast(this);
         if (FreecamMod.INSTANCE.isEnabled && thisAsEntity instanceof EntityPlayer) {
-            if (thisAsEntity == PepsiMod.INSTANCE.mc.player) {
+            if (thisAsEntity == mc.player) {
                 this.setEntityBoundingBox(this.getEntityBoundingBox().offset(x * 10, y, z * 10));
             } else {
                 this.setEntityBoundingBox(this.getEntityBoundingBox().offset(x, y, z));

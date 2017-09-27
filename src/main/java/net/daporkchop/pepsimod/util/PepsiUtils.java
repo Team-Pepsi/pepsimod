@@ -22,13 +22,21 @@ import net.daporkchop.pepsimod.util.colors.GradientText;
 import net.daporkchop.pepsimod.util.colors.rainbow.ColorChangeType;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowCycle;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
+import net.daporkchop.pepsimod.util.misc.Default;
+import net.daporkchop.pepsimod.util.misc.ITickListener;
+import net.daporkchop.pepsimod.util.misc.IWurstRenderListener;
 import net.daporkchop.pepsimod.util.module.TargetBone;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.multiplayer.ServerData;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Vector3d;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.*;
@@ -42,11 +50,12 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class PepsiUtils {
+public class PepsiUtils extends Default {
     public static final char COLOR_ESCAPE = '\u00A7';
     public static final String[] colorCodes = new String[]{"c", "9", "f", "1", "4"};
     public static final Timer timer = new Timer();
@@ -86,12 +95,21 @@ public class PepsiUtils {
             "4495eebb-7a4e-43aa-9784-02ea86f705ed",
             "1e8c7d13-9118-41e2-b334-fdb213970135"
     };
+    public static final KeyBinding[] controls = new KeyBinding[]{
+            mc.gameSettings.keyBindForward, mc.gameSettings.keyBindBack,
+            mc.gameSettings.keyBindRight, mc.gameSettings.keyBindLeft,
+            mc.gameSettings.keyBindJump, mc.gameSettings.keyBindSneak};
     private static final Random random = new Random(System.currentTimeMillis());
     public static String buttonPrefix = COLOR_ESCAPE + "c";
     public static RainbowCycle rainbowCycle = new RainbowCycle();
     public static Color RAINBOW_COLOR = new Color(0, 0, 0);
     public static RainbowText PEPSI_NAME = new RainbowText("PepsiMod " + PepsiMod.VERSION);
     public static Field block_pepsimod_id = null;
+    public static BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+    public static ArrayList<ITickListener> tickListeners = new ArrayList<>();
+    public static ArrayList<ITickListener> toRemoveTickListeners = new ArrayList<>();
+    public static ArrayList<IWurstRenderListener> wurstRenderListeners = new ArrayList<>();
+    public static ArrayList<IWurstRenderListener> toRemoveWurstRenderListeners = new ArrayList<>();
 
     static {
         TOOBEETOOTEE_DATA.setResourceMode(ServerData.ServerResourceMode.PROMPT);
@@ -460,7 +478,7 @@ public class PepsiUtils {
     }
 
     public static String getFacing() {
-        Entity entity = PepsiMod.INSTANCE.mc.getRenderViewEntity();
+        Entity entity = mc.getRenderViewEntity();
         EnumFacing enumfacing = entity.getHorizontalFacing();
         String s = "Invalid";
 
@@ -498,10 +516,10 @@ public class PepsiUtils {
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             try {
                 GlStateManager.translate(0.0F, 0.0F, 32.0F);
-                PepsiMod.INSTANCE.mc.getRenderItem().zLevel = 200F;
-                PepsiMod.INSTANCE.mc.getRenderItem().renderItemAndEffectIntoGUI(stack, x, y);
-                PepsiMod.INSTANCE.mc.getRenderItem().renderItemOverlayIntoGUI(PepsiMod.INSTANCE.mc.fontRenderer, stack, x, y, "");
-                PepsiMod.INSTANCE.mc.getRenderItem().zLevel = 0F;
+                mc.getRenderItem().zLevel = 200F;
+                mc.getRenderItem().renderItemAndEffectIntoGUI(stack, x, y);
+                mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRenderer, stack, x, y, "");
+                mc.getRenderItem().zLevel = 0F;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -511,6 +529,366 @@ public class PepsiUtils {
     }
 
     public static ItemStack getWearingArmor(int armorType) {
-        return PepsiMod.INSTANCE.mc.player.inventoryContainer.getSlot(5 + armorType).getStack();
+        return mc.player.inventoryContainer.getSlot(5 + armorType).getStack();
     }
+
+    public static void drawNameplateNoScale(FontRenderer fontRendererIn, String str, float x, float y, float z, int verticalShift, float viewerYaw, float viewerPitch, boolean isThirdPersonFrontal, boolean isSneaking) {
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x, y, z);
+        GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(-viewerYaw, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate((float) (isThirdPersonFrontal ? -1 : 1) * viewerPitch, 1.0F, 0.0F, 0.0F);
+
+        float scale = 0.025f;
+        isSneaking = false;
+        double distance = Math.sqrt(x * x + y * y + z * z);
+        if (distance > 10) {
+            scale *= distance / 10;
+        }
+
+        GlStateManager.scale(-scale, -scale, scale);
+
+        GlStateManager.scale(-0.025F, -0.025F, 0.025F);
+        GlStateManager.disableLighting();
+        GlStateManager.depthMask(false);
+
+        GlStateManager.disableDepth();
+
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        int i = fontRendererIn.getStringWidth(str) / 2;
+        GlStateManager.disableTexture2D();
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        bufferbuilder.pos((double) (-i - 1), (double) (-1 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        bufferbuilder.pos((double) (-i - 1), (double) (8 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        bufferbuilder.pos((double) (i + 1), (double) (8 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        bufferbuilder.pos((double) (i + 1), (double) (-1 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        tessellator.draw();
+        GlStateManager.enableTexture2D();
+
+        fontRendererIn.drawString(str, -fontRendererIn.getStringWidth(str) / 2, verticalShift, 553648127);
+        GlStateManager.enableDepth();
+
+        GlStateManager.depthMask(true);
+        fontRendererIn.drawString(str, -fontRendererIn.getStringWidth(str) / 2, verticalShift, isSneaking ? 553648127 : -1);
+        GlStateManager.enableLighting();
+        GlStateManager.disableBlend();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.popMatrix();
+        //TODO: draw items in name tag
+    }
+
+    /**
+     * Renders floating lines of text in the 3D world at a specific position.
+     *
+     * @param text                  The string array of text to render
+     * @param x                     X coordinate in the game world
+     * @param y                     Y coordinate in the game world
+     * @param z                     Z coordinate in the game world
+     * @param color                 0xRRGGBB text color
+     * @param renderBlackBackground render a pretty black border behind the text?
+     * @param partialTickTime       Usually taken from RenderWorldLastEvent.partialTicks variable
+     */
+    public static void renderFloatingText(String text, float x, float y, float z, int color, boolean renderBlackBackground, float partialTickTime) {
+        RenderManager renderManager = mc.getRenderManager();
+
+        float playerX = (float) (mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * partialTickTime);
+        float playerY = (float) (mc.player.lastTickPosY + (mc.player.posY - mc.player.lastTickPosY) * partialTickTime);
+        float playerZ = (float) (mc.player.lastTickPosZ + (mc.player.posZ - mc.player.lastTickPosZ) * partialTickTime);
+
+        float dx = x - playerX;
+        float dy = y - playerY;
+        float dz = z - playerZ;
+        float distanceRatio = (float) (5 / mc.player.getDistance(x, y, z));
+        dx *= distanceRatio;
+        dy *= distanceRatio;
+        dz *= distanceRatio;
+        float scale = 0.03f;
+
+        GL11.glColor4f(1f, 1f, 1f, 0.5f);
+        GL11.glPushMatrix();
+        GL11.glTranslatef(dx, dy, dz);
+        GL11.glRotatef(-renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+
+        GL11.glScalef(-scale, -scale, scale);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDepthMask(false);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+        int textWidth = mc.fontRenderer.getStringWidth(text);
+
+        int lineHeight = 10;
+
+        if (renderBlackBackground) {
+            int stringMiddle = textWidth / 2;
+
+            Tessellator tessellator = Tessellator.getInstance();
+            BufferBuilder buffer = tessellator.getBuffer();
+
+            GlStateManager.disableTexture2D();
+            buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+            buffer.pos(-stringMiddle - 1, -1, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+            buffer.pos(-stringMiddle - 1, 8 + lineHeight - lineHeight, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+            buffer.pos(stringMiddle + 1, 8 + lineHeight - lineHeight, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+            buffer.pos(stringMiddle + 1, -1, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+
+            tessellator.draw();
+            GlStateManager.enableTexture2D();
+        }
+
+        mc.fontRenderer.drawString(text, -textWidth / 2, 0, color);
+
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glDepthMask(true);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glPopMatrix();
+    }
+
+    /**
+     * Renders an Item icon in the 3D world at the specified coordinates
+     *
+     * @param item
+     * @param x
+     * @param y
+     * @param z
+     * @param partialTickTime
+     */
+    public static void renderFloatingItemIcon(float x, float y, float z, Item item, float partialTickTime) {
+        RenderManager renderManager = mc.getRenderManager();
+
+        float playerX = (float) (mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * partialTickTime);
+        float playerY = (float) (mc.player.lastTickPosY + (mc.player.posY - mc.player.lastTickPosY) * partialTickTime);
+        float playerZ = (float) (mc.player.lastTickPosZ + (mc.player.posZ - mc.player.lastTickPosZ) * partialTickTime);
+
+        float dx = x - playerX;
+        float dy = y - playerY;
+        float dz = z - playerZ;
+        float scale = 0.025f;
+
+        GL11.glColor4f(1f, 1f, 1f, 0.75f);
+        GL11.glPushMatrix();
+        GL11.glTranslatef(dx, dy, dz);
+        GL11.glRotatef(-renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+        GL11.glScalef(-scale, -scale, scale);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDepthMask(false);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+        renderItemTexture(-8, -8, item, 16, 16);
+
+        GL11.glColor4f(1f, 1f, 1f, 1f);
+        GL11.glDepthMask(true);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glPopMatrix();
+    }
+
+    public static void renderItemTexture(int x, int y, Item item, int width, int height) {
+        IBakedModel iBakedModel = mc.getRenderItem().getItemModelMesher().getItemModel(new ItemStack(item));
+        TextureAtlasSprite textureAtlasSprite = mc.getTextureMapBlocks().getAtlasSprite(iBakedModel.getParticleTexture().getIconName());
+        mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+
+        renderTexture(x, y, textureAtlasSprite, width, height, 0);
+    }
+
+    /**
+     * Renders a previously bound texture (with mc.getTextureManager().bindTexture())
+     *
+     * @param x
+     * @param y
+     * @param textureAtlasSprite
+     * @param width
+     * @param height
+     * @param zLevel
+     */
+    private static void renderTexture(int x, int y, TextureAtlasSprite textureAtlasSprite, int width, int height, double zLevel) {
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder worldrenderer = tessellator.getBuffer();
+
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+
+        worldrenderer.pos((double) (x), (double) (y + height), zLevel).tex((double) textureAtlasSprite.getMaxU(), (double) textureAtlasSprite.getMaxV()).endVertex();
+        worldrenderer.pos((double) (x + width), (double) (y + height), zLevel).tex((double) textureAtlasSprite.getMinU(), (double) textureAtlasSprite.getMaxV()).endVertex();
+        worldrenderer.pos((double) (x + width), (double) (y), zLevel).tex((double) textureAtlasSprite.getMinU(), (double) textureAtlasSprite.getMinV()).endVertex();
+        worldrenderer.pos((double) (x), (double) (y), zLevel).tex((double) textureAtlasSprite.getMaxU(), (double) textureAtlasSprite.getMinV()).endVertex();
+
+        tessellator.draw();
+    }
+
+    /*public static void renderWaypoint(Waypoint waypoint) {
+        RenderManager renderManager = mc.getRenderManager();
+        if (renderManager.renderViewEntity == null) {
+            return;
+        }
+        RenderHelper.enableStandardItemLighting();
+        try {
+            Vec3d playerVec = renderManager.renderViewEntity.getPositionVector();
+
+            Vec3d waypointVec = waypoint.getPosition().addVector(0.0D, 0.118D, 0.0D);
+
+            double viewDistance = playerVec.distanceTo(waypointVec);
+            double maxRenderDistance = mc.gameSettings.renderDistanceChunks * 16;
+            double scale = 0.5;
+            if (viewDistance > maxRenderDistance) {
+                Vec3d delta = waypointVec.subtract(playerVec).normalize();
+                waypointVec = playerVec.addVector(delta.x * maxRenderDistance, delta.y * maxRenderDistance, delta.z * maxRenderDistance);
+                viewDistance = maxRenderDistance;
+            }
+            double shiftX = waypointVec.x - renderManager.viewerPosX;
+            double shiftY = waypointVec.y - renderManager.viewerPosY;
+            double shiftZ = waypointVec.z - renderManager.viewerPosZ;
+
+            String label = waypoint.name;
+
+            boolean showDistance = PepsiMod.INSTANCE.miscOptions.waypoints_dist;
+            boolean showCoords = PepsiMod.INSTANCE.miscOptions.waypoints_coords;
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(label);
+            if (showCoords) {
+                sb.append(" x\u00A7b" + waypoint.x + "\u00A7r y\u00A7b" + waypoint.y + "\u00A7r z\u00A7b" + waypoint.z + "\u00A7r");
+            }
+            if (showDistance) {
+                sb.append(" \u00A77(\u00A79" + PepsiUtils.roundCoords(mc.player.getDistance(waypoint.x, waypoint.y, waypoint.z)) + "\u00A7rm\u00A77)");
+            }
+            if (sb.length() > 0) {
+                label = sb.toString();
+
+                GlStateManager.pushMatrix();
+                GlStateManager.disableLighting();
+                GL11.glNormal3d(0.0D, 0.0D, -1.0D * scale);
+
+                GlStateManager.translate(shiftX, shiftY, shiftZ);
+                GlStateManager.rotate(-renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+                GlStateManager.rotate(renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+                GlStateManager.scale(-scale, -scale, scale);
+
+                GlStateManager.depthMask(false);
+                //GlStateManager.depthMask(true);
+                GlStateManager.enableDepth();
+
+                drawLabel(label, 1.0D, -8, 0, 0.6F, Color.white.getRGB(), 1, 1, true);
+
+                GlStateManager.disableDepth();
+                GlStateManager.depthMask(false);
+
+                //drawLabel(label, 1.0D, -8, 0, 0.4F, Color.white.getRGB(), 1, 1, false);
+
+                GlStateManager.popMatrix();
+            }
+
+        } finally {
+            GlStateManager.depthMask(true);
+            GlStateManager.enableDepth();
+            GlStateManager.enableLighting();
+            GlStateManager.depthMask(true);
+            GlStateManager.enableCull();
+            GlStateManager.disableBlend();
+            GlStateManager.disableFog();
+
+            RenderHelper.disableStandardItemLighting();
+        }
+    }
+
+    public static void drawLabel(String text, double x, double y, Integer bgColor, float bgAlpha, double bgWidth, double bgHeight, int color, float alpha, double fontScale, boolean fontShadow, double rotation) {
+        if ((text == null) || (text.length() == 0)) {
+            return;
+        }
+        FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
+        boolean drawRect = (bgColor != null) && (bgAlpha > 0.0F);
+        int height = drawRect ? getLabelHeight(fontRenderer, fontShadow) : fontRenderer.FONT_HEIGHT;
+        double width = fontRenderer.getStringWidth(text);
+        GlStateManager.pushMatrix();
+        try {
+            if (fontScale != 1.0D) {
+                x /= fontScale;
+                y /= fontScale;
+                GlStateManager.scale(fontScale, fontScale, 0.0D);
+            }
+            float textX = (float) x;
+            float textY = (float) y;
+            double rectX = x;
+            double rectY = y;
+            textX = (float) (x - width / 2.0D + (fontScale > 1.0D ? 0.5D : 0.0D));
+            rectX = (float) (x - Math.max(1.0D, bgWidth) / 2.0D + (fontScale > 1.0D ? 0.5D : 0.0D));
+
+            double vpad = drawRect ? (height - fontRenderer.FONT_HEIGHT) / 2.0D : 0.0D;
+
+            rectY = y - height / 2 + (fontScale > 1.0D ? 0.5D : 0.0D);
+            textY = (float) (rectY + vpad);
+
+
+            if (rotation != 0.0D) {
+                GlStateManager.translate(x, y, 0.0D);
+                GlStateManager.rotate((float) -rotation, 0.0F, 0.0F, 1.0F);
+                GlStateManager.translate(-x, -y, 0.0D);
+            }
+            GlStateManager.translate(textX - Math.floor(textX), textY - Math.floor(textY), 0.0D);
+            fontRenderer.drawString(text, textX, textY, color, fontShadow);
+        } finally {
+            GlStateManager.popMatrix();
+        }
+    }
+
+    public static int getLabelHeight(FontRenderer fr, boolean fontShadow) {
+        int vpad = fontShadow ? 6 : fr.getUnicodeFlag() ? 0 : 4;
+        return fr.FONT_HEIGHT + vpad;
+    }
+
+    public static void addVertex(double x, double y, double z) {
+        bufferBuilder.pos(x, y, z).tex(1.0D, 1.0D).endVertex();
+    }
+
+    public static void drawRectangle(double x, double y, double width, double height, int color, float alpha) {
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableAlpha();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+
+        startDrawingQuads(true);
+        addVertex(x, height + y, 0);
+        addVertex(x + width, height + y, 0);
+        addVertex(x + width, y, 0);
+        addVertex(x, y, 0);
+        Tessellator.getInstance().draw();
+
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableAlpha();
+        GlStateManager.disableBlend();
+    }
+
+    public static void startDrawingQuads(boolean useColor) {
+        if (useColor) {
+            bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+        } else {
+            bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        }
+    }
+
+    public static void addVertexWithUV(double x, double y, double z, double u, double v) {
+        bufferBuilder.pos(x, y, z).tex(u, v).endVertex();
+    }
+
+    public static void drawLabel(String text, double x, double y, int bgColor, float bgAlpha, int color, float alpha, double fontScale, boolean fontShadow) {
+        drawLabel(text, x, y, bgColor, bgAlpha, color, alpha, fontScale, fontShadow, 0.0D);
+    }
+
+    public static void drawLabel(String text, double x, double y, Integer bgColor, float bgAlpha, Integer color, float alpha, double fontScale, boolean fontShadow, double rotation) {
+        double bgWidth = 0.0D;
+        double bgHeight = 0.0D;
+        if ((bgColor != null) && (bgAlpha > 0.0F)) {
+            FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
+            bgWidth = fontRenderer.getStringWidth(text);
+            bgHeight = getLabelHeight(fontRenderer, fontShadow);
+        }
+        drawLabel(text, x, y, bgColor, bgAlpha, bgWidth, bgHeight, color, alpha, fontScale, fontShadow, rotation);
+    }*/
 }

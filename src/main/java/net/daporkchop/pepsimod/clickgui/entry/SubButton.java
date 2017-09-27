@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.clickgui.entry;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.clickgui.Window;
 import net.daporkchop.pepsimod.clickgui.api.EntryImplBase;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -56,7 +55,7 @@ public class SubButton extends EntryImplBase {
         updateIsMouseHovered(mouseX, mouseY);
         RenderUtilsXdolf.drawRect(getX(), getY(), getX() + getWidth(), getY() + height, getColor());
         GL11.glColor3f(0f, 0f, 0f);
-        PepsiMod.INSTANCE.mc.fontRenderer.drawString(option.displayName, getX() + 2, getY() + 2, Color.BLACK.getRGB());
+        mc.fontRenderer.drawString(option.displayName, getX() + 2, getY() + 2, Color.BLACK.getRGB());
     }
 
     public int getX() {

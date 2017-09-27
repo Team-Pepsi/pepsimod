@@ -39,14 +39,14 @@ public class AuraMod extends Module {
 
     @Override
     public void onEnable() {
-        if (PepsiMod.INSTANCE.mc.player == null) {
+        if (mc.player == null) {
             return;
         }
     }
 
     @Override
     public void onDisable() {
-        if (PepsiMod.INSTANCE.mc.player == null) {
+        if (mc.player == null) {
             return;
         }
     }
@@ -54,7 +54,7 @@ public class AuraMod extends Module {
     @Override
     public void tick() {
         if (PepsiMod.INSTANCE.targetSettings.use_cooldown) {
-            if (PepsiMod.INSTANCE.mc.player.getCooledAttackStrength(0) == 1) {
+            if (mc.player.getCooledAttackStrength(0) == 1) {
                 Entity entity = EntityUtils.getBestEntityToAttack(EntityUtils.DEFAULT_SETTINGS);
                 if (entity == null) {
                     return;
@@ -69,9 +69,9 @@ public class AuraMod extends Module {
                     }
                 }
 
-                PepsiMod.INSTANCE.mc.playerController.attackEntity(PepsiMod.INSTANCE.mc.player, entity);
+                mc.playerController.attackEntity(mc.player, entity);
                 if (!PepsiMod.INSTANCE.targetSettings.silent) {
-                    PepsiMod.INSTANCE.mc.player.swingArm(EnumHand.MAIN_HAND);
+                    mc.player.swingArm(EnumHand.MAIN_HAND);
                 }
             }
         } else {
@@ -94,9 +94,9 @@ public class AuraMod extends Module {
                     }
                 }
 
-                PepsiMod.INSTANCE.mc.playerController.attackEntity(PepsiMod.INSTANCE.mc.player, entity);
+                mc.playerController.attackEntity(mc.player, entity);
                 if (!PepsiMod.INSTANCE.targetSettings.silent) {
-                    PepsiMod.INSTANCE.mc.player.swingArm(EnumHand.MAIN_HAND);
+                    mc.player.swingArm(EnumHand.MAIN_HAND);
                 }
             }
         }
@@ -217,7 +217,6 @@ public class AuraMod extends Module {
                 new ModuleOption<>(PepsiMod.INSTANCE.targetSettings.silent, "silent", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.silent = value;
-                            updateName();
                             return true;
                         },
                         () -> {
@@ -226,7 +225,6 @@ public class AuraMod extends Module {
                 new ModuleOption<>(PepsiMod.INSTANCE.targetSettings.rotate, "rotate", OptionCompletions.BOOLEAN,
                         (value) -> {
                             PepsiMod.INSTANCE.targetSettings.rotate = value;
-                            updateName();
                             return true;
                         },
                         () -> {

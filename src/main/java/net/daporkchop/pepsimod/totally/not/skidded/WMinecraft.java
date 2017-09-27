@@ -13,33 +13,18 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.mixin.client.gui.inventory;
+package net.daporkchop.pepsimod.totally.not.skidded;
 
-import net.daporkchop.pepsimod.module.impl.movement.InventoryMoveMod;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.spongepowered.asm.mixin.Mixin;
+import net.daporkchop.pepsimod.util.misc.Default;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.multiplayer.WorldClient;
 
-import java.io.IOException;
+public class WMinecraft extends Default {
+    public static EntityPlayerSP getPlayer() {
+        return mc.player;
+    }
 
-@Mixin(GuiContainer.class)
-public abstract class MixinGuiContainer extends GuiScreen {
-    @Override
-    public void handleInput() throws IOException {
-        if (Mouse.isCreated()) {
-            while (Mouse.next()) {
-                handleMouseInput();
-            }
-        }
-
-        if (!InventoryMoveMod.INSTANCE.isEnabled) {
-            if (Keyboard.isCreated()) {
-                while (Keyboard.next()) {
-                    handleKeyboardInput();
-                }
-            }
-        }
+    public static WorldClient getWorld() {
+        return mc.world;
     }
 }

@@ -26,8 +26,8 @@ public class HelpCommand extends Command {
     @Override
     public void execute(String cmd, String[] args) {
         String toSend = "";
-        for (Command command : CommandRegistry.COMMANDS) {
-            toSend += command.name + ", ";
+        for (String command : CommandRegistry.commandNames.keySet()) {
+            toSend += command + ", ";
         }
         toSend = toSend.substring(0, toSend.length() - 2);
         clientMessage(toSend);

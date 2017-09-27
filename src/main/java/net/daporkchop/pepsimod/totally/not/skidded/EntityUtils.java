@@ -18,6 +18,7 @@ package net.daporkchop.pepsimod.totally.not.skidded;
 import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.util.Friends;
 import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.misc.Default;
 import net.daporkchop.pepsimod.util.module.TargetBone;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.EntityGolem;
@@ -29,7 +30,7 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.ArrayList;
 
-public class EntityUtils {
+public class EntityUtils extends Default {
     public static final TargetSettings DEFAULT_SETTINGS = new TargetSettings();
     public static final String[] colors = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
 
@@ -45,7 +46,7 @@ public class EntityUtils {
         }
 
         // entities outside the range
-        if (PepsiMod.INSTANCE.mc.player.getDistanceToEntity(en) > settings.getRange()) {
+        if (mc.player.getDistanceToEntity(en) > settings.getRange()) {
             return false;
         }
 
@@ -55,7 +56,7 @@ public class EntityUtils {
         }
 
         // entities behind walls
-        if (!settings.targetBehindWalls() && !PepsiUtils.canEntityBeSeen(en, PepsiMod.INSTANCE.mc.player, settings.getTargetBone())) {
+        if (!settings.targetBehindWalls() && !PepsiUtils.canEntityBeSeen(en, mc.player, settings.getTargetBone())) {
             return false;
         }
 
@@ -92,13 +93,13 @@ public class EntityUtils {
             }
 
             // the user
-            if (en == PepsiMod.INSTANCE.mc.player) {
+            if (en == mc.player) {
                 return false;
             }
 
             // Freecam entity
             if (en.getName()
-                    .equals(PepsiMod.INSTANCE.mc.player.getName())) {
+                    .equals(mc.player.getName())) {
                 return false;
             }
 
@@ -169,7 +170,7 @@ public class EntityUtils {
     public static ArrayList<Entity> getValidEntities(TargetSettings settings) {
         ArrayList<Entity> validEntities = new ArrayList<>();
 
-        for (Entity entity : PepsiMod.INSTANCE.mc.world.loadedEntityList) {
+        for (Entity entity : mc.world.loadedEntityList) {
             if (isCorrectEntity(entity, settings))
                 validEntities.add(entity);
 
@@ -183,10 +184,10 @@ public class EntityUtils {
     public static Entity getClosestEntity(TargetSettings settings) {
         Entity closestEntity = null;
 
-        for (Entity entity : PepsiMod.INSTANCE.mc.world.loadedEntityList)
+        for (Entity entity : mc.world.loadedEntityList)
             if (isCorrectEntity(entity, settings)
-                    && (closestEntity == null || PepsiMod.INSTANCE.mc.player
-                    .getDistanceToEntity(entity) < PepsiMod.INSTANCE.mc.player
+                    && (closestEntity == null || mc.player
+                    .getDistanceToEntity(entity) < mc.player
                     .getDistanceToEntity(closestEntity)))
                 closestEntity = entity;
 
@@ -197,7 +198,7 @@ public class EntityUtils {
         Entity bestEntity = null;
         float bestAngle = Float.POSITIVE_INFINITY;
 
-        for (Entity entity : PepsiMod.INSTANCE.mc.world.loadedEntityList) {
+        for (Entity entity : mc.world.loadedEntityList) {
             if (!isCorrectEntity(entity, settings))
                 continue;
 
@@ -216,10 +217,10 @@ public class EntityUtils {
                                                    TargetSettings settings) {
         Entity closestEnemy = null;
 
-        for (Entity entity : PepsiMod.INSTANCE.mc.world.loadedEntityList)
+        for (Entity entity : mc.world.loadedEntityList)
             if (isCorrectEntity(entity, settings) && entity != otherEntity
-                    && (closestEnemy == null || PepsiMod.INSTANCE.mc.player
-                    .getDistanceToEntity(entity) < PepsiMod.INSTANCE.mc.player
+                    && (closestEnemy == null || mc.player
+                    .getDistanceToEntity(entity) < mc.player
                     .getDistanceToEntity(closestEnemy)))
                 closestEnemy = entity;
 
@@ -230,14 +231,14 @@ public class EntityUtils {
                                                   TargetSettings settings) {
         Entity closestEntity = null;
 
-        for (Entity entity : PepsiMod.INSTANCE.mc.world.loadedEntityList) {
+        for (Entity entity : mc.world.loadedEntityList) {
             if (!isCorrectEntity(entity, settings))
                 continue;
             if (!entity.getName().equalsIgnoreCase(name))
                 continue;
 
-            if (closestEntity == null || PepsiMod.INSTANCE.mc.player
-                    .getDistanceSqToEntity(entity) < PepsiMod.INSTANCE.mc.player
+            if (closestEntity == null || mc.player
+                    .getDistanceSqToEntity(entity) < mc.player
                     .getDistanceSqToEntity(closestEntity))
                 closestEntity = entity;
         }

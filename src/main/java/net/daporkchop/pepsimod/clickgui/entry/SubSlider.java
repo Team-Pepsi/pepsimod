@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.clickgui.entry;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.clickgui.Window;
 import net.daporkchop.pepsimod.clickgui.api.EntryImplBase;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -85,7 +84,7 @@ public class SubSlider extends EntryImplBase {
         RenderUtilsXdolf.drawRect(getX(), getY(), getX() + getWidth(), getY() + height, ColorUtils.BACKGROUND);
         RenderUtilsXdolf.drawRect(getX(), getY(), getX() + currentWidth, getY() + height, getColor());
         GL11.glColor3f(0f, 0f, 0f);
-        PepsiMod.INSTANCE.mc.fontRenderer.drawString(option.displayName + ": " + (isFloat ? PepsiUtils.roundFloatForSlider(floatValue) : intValue), getX() + 2, getY() + 2, Color.BLACK.getRGB());
+        mc.fontRenderer.drawString(option.displayName + ": " + (isFloat ? PepsiUtils.roundFloatForSlider(floatValue) : intValue), getX() + 2, getY() + 2, Color.BLACK.getRGB());
     }
 
     public void updateValueFromWidth() {

@@ -62,37 +62,37 @@ public class ElytraFlyMod extends TimeModule {
             return;
         }
 
-        if (PepsiMod.INSTANCE.mc.player.isElytraFlying()) {
-            if (PepsiMod.INSTANCE.elytraFlySettings.stopInWater && PepsiMod.INSTANCE.mc.player.isInWater()) {
-                PepsiMod.INSTANCE.mc.getConnection().sendPacket(new CPacketEntityAction(PepsiMod.INSTANCE.mc.player, CPacketEntityAction.Action.START_FALL_FLYING));
+        if (mc.player.isElytraFlying()) {
+            if (PepsiMod.INSTANCE.elytraFlySettings.stopInWater && mc.player.isInWater()) {
+                mc.getConnection().sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_FALL_FLYING));
                 return;
             }
 
             if (PepsiMod.INSTANCE.elytraFlySettings.fly) {
-                if (Keyboard.isKeyDown(PepsiMod.INSTANCE.mc.gameSettings.keyBindJump.getKeyCode())) {
-                    PepsiMod.INSTANCE.mc.player.motionY += 0.08;
-                } else if (Keyboard.isKeyDown(PepsiMod.INSTANCE.mc.gameSettings.keyBindSneak.getKeyCode())) {
-                    PepsiMod.INSTANCE.mc.player.motionY -= 0.04;
+                if (Keyboard.isKeyDown(mc.gameSettings.keyBindJump.getKeyCode())) {
+                    mc.player.motionY += 0.08;
+                } else if (Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode())) {
+                    mc.player.motionY -= 0.04;
                 }
 
-                if (Keyboard.isKeyDown(PepsiMod.INSTANCE.mc.gameSettings.keyBindForward.getKeyCode())) {
-                    double yaw = Math.toRadians(PepsiMod.INSTANCE.mc.player.rotationYaw);
-                    PepsiMod.INSTANCE.mc.player.motionX -= Math.sin(yaw) * PepsiMod.INSTANCE.elytraFlySettings.speed;
-                    PepsiMod.INSTANCE.mc.player.motionZ += Math.cos(yaw) * PepsiMod.INSTANCE.elytraFlySettings.speed;
-                } else if (Keyboard.isKeyDown(PepsiMod.INSTANCE.mc.gameSettings.keyBindBack.getKeyCode())) {
-                    double yaw = Math.toRadians(PepsiMod.INSTANCE.mc.player.rotationYaw);
-                    PepsiMod.INSTANCE.mc.player.motionX += Math.sin(yaw) * PepsiMod.INSTANCE.elytraFlySettings.speed;
-                    PepsiMod.INSTANCE.mc.player.motionZ += Math.cos(yaw) * PepsiMod.INSTANCE.elytraFlySettings.speed;
+                if (Keyboard.isKeyDown(mc.gameSettings.keyBindForward.getKeyCode())) {
+                    double yaw = Math.toRadians(mc.player.rotationYaw);
+                    mc.player.motionX -= Math.sin(yaw) * PepsiMod.INSTANCE.elytraFlySettings.speed;
+                    mc.player.motionZ += Math.cos(yaw) * PepsiMod.INSTANCE.elytraFlySettings.speed;
+                } else if (Keyboard.isKeyDown(mc.gameSettings.keyBindBack.getKeyCode())) {
+                    double yaw = Math.toRadians(mc.player.rotationYaw);
+                    mc.player.motionX += Math.sin(yaw) * PepsiMod.INSTANCE.elytraFlySettings.speed;
+                    mc.player.motionZ += Math.cos(yaw) * PepsiMod.INSTANCE.elytraFlySettings.speed;
                 }
             }
-        } else if (PepsiMod.INSTANCE.elytraFlySettings.easyStart && ItemElytra.isUsable(chestplate) && PepsiMod.INSTANCE.mc.gameSettings.keyBindJump.isPressed()) {
+        } else if (PepsiMod.INSTANCE.elytraFlySettings.easyStart && ItemElytra.isUsable(chestplate) && mc.gameSettings.keyBindJump.isPressed()) {
             if (hasTimePassedM(1000)) {
                 updateLastMS();
-                PepsiMod.INSTANCE.mc.player.setJumping(false);
-                PepsiMod.INSTANCE.mc.player.setSprinting(true);
-                PepsiMod.INSTANCE.mc.player.jump();
+                mc.player.setJumping(false);
+                mc.player.setSprinting(true);
+                mc.player.jump();
             }
-            PepsiMod.INSTANCE.mc.getConnection().sendPacket(new CPacketEntityAction(PepsiMod.INSTANCE.mc.player, CPacketEntityAction.Action.START_FALL_FLYING));
+            mc.getConnection().sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_FALL_FLYING));
         }
     }
 

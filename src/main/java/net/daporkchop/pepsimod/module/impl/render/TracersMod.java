@@ -165,17 +165,16 @@ public class TracersMod extends Module {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
         GL11.glPushMatrix();
-        GL11.glTranslated(-ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager()), -ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager()), -ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager()));
+        GL11.glTranslated(-ReflectionStuff.getRenderPosX(mc.getRenderManager()), -ReflectionStuff.getRenderPosY(mc.getRenderManager()), -ReflectionStuff.getRenderPosZ(mc.getRenderManager()));
 
         // set start position
-        Vec3d start = RotationUtils.getClientLookVec().addVector(0, PepsiMod.INSTANCE.mc.player.getEyeHeight(), 0).addVector(ReflectionStuff.getRenderPosX(PepsiMod.INSTANCE.mc.getRenderManager()), ReflectionStuff.getRenderPosY(PepsiMod.INSTANCE.mc.getRenderManager()), ReflectionStuff.getRenderPosZ(PepsiMod.INSTANCE.mc.getRenderManager()));
+        Vec3d start = RotationUtils.getClientLookVec().addVector(0, mc.player.getEyeHeight(), 0).addVector(ReflectionStuff.getRenderPosX(mc.getRenderManager()), ReflectionStuff.getRenderPosY(mc.getRenderManager()), ReflectionStuff.getRenderPosZ(mc.getRenderManager()));
 
         GL11.glBegin(GL11.GL_LINES);
 
         RenderColor color = null;
-        Vec3d end = null;
-        for (Entity entity : PepsiMod.INSTANCE.mc.world.getLoadedEntityList()) {
-            if (Math.abs(entity.posY - PepsiMod.INSTANCE.mc.player.posY) > 1e6) {
+        for (Entity entity : mc.world.getLoadedEntityList()) {
+            if (Math.abs(entity.posY - mc.player.posY) > 1e6) {
                 continue;
             }
 
@@ -184,7 +183,7 @@ public class TracersMod extends Module {
             }
 
             if ((PepsiMod.INSTANCE.tracerSettings.players || PepsiMod.INSTANCE.tracerSettings.everything) && entity instanceof EntityPlayer) {
-                if (entity == PepsiMod.INSTANCE.mc.player || entity instanceof EntityFakePlayer) {
+                if (entity == mc.player || entity instanceof EntityFakePlayer) {
                     continue;
                 }
 
@@ -195,7 +194,7 @@ public class TracersMod extends Module {
                 if (PepsiMod.INSTANCE.tracerSettings.friendColors && Friends.isFriend(entity.getUniqueID().toString())) {
                     color = friendColor;
                 } else if (PepsiMod.INSTANCE.tracerSettings.distanceColor) {
-                    double dist = PepsiMod.INSTANCE.mc.player.getDistanceSqToEntity(entity);
+                    double dist = mc.player.getDistanceSqToEntity(entity);
                     if (dist >= 625) {
                         color = distSafe;
                     } else if (dist >= 400) {
@@ -210,7 +209,7 @@ public class TracersMod extends Module {
                 }
             } else if ((PepsiMod.INSTANCE.tracerSettings.monsters || PepsiMod.INSTANCE.tracerSettings.everything) && entity instanceof EntityMob) {
                 if (PepsiMod.INSTANCE.tracerSettings.distanceColor) {
-                    double dist = PepsiMod.INSTANCE.mc.player.getDistanceSqToEntity(entity);
+                    double dist = mc.player.getDistanceSqToEntity(entity);
                     if (dist >= 625) {
                         color = distSafe;
                     } else if (dist >= 400) {

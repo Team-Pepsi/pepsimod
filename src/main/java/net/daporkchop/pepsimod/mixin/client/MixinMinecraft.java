@@ -21,6 +21,8 @@ import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.impl.render.UnfocusedCPUMod;
 import net.daporkchop.pepsimod.module.impl.render.ZoomMod;
 import net.daporkchop.pepsimod.util.Friends;
+import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.misc.ITickListener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
@@ -44,6 +46,8 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Base64;
 
+import static net.daporkchop.pepsimod.util.misc.Default.mc;
+
 @Mixin(Minecraft.class)
 public abstract class MixinMinecraft {
     @Shadow
@@ -57,17 +61,24 @@ public abstract class MixinMinecraft {
 
         if (ZoomMod.INSTANCE.isEnabled) {
             ModuleManager.disableModule(ZoomMod.INSTANCE);
-            PepsiMod.INSTANCE.mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
+            mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
         }
     }
 
     @Inject(method = "runGameLoop", at = @At("RETURN"))
     public void postOnClientPreTick(CallbackInfo callbackInfo) {
-        if (PepsiMod.INSTANCE.mc.player != null) { // is ingame
+        if (mc.player != null) { // is ingame
             for (Module module : ModuleManager.AVALIBLE_MODULES) {
                 if (module.shouldTick()) {
                     module.tick();
                 }
+            }
+            for (ITickListener listener : PepsiUtils.toRemoveTickListeners) {
+                PepsiUtils.tickListeners.remove(listener);
+            }
+            PepsiUtils.toRemoveTickListeners.clear();
+            for (ITickListener listener : PepsiUtils.tickListeners) {
+                listener.tick();
             }
         }
     }
@@ -133,7 +144,7 @@ public abstract class MixinMinecraft {
     public void preDisplayGuiScreen(GuiScreen guiScreen, CallbackInfo callbackInfo) {
         if (ZoomMod.INSTANCE.isEnabled) {
             ModuleManager.disableModule(ZoomMod.INSTANCE);
-            PepsiMod.INSTANCE.mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
+            mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
         }
     }
 

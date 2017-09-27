@@ -15,7 +15,7 @@
 
 package net.daporkchop.pepsimod.totally.not.skidded;
 
-import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.util.misc.Default;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.inventory.ClickType;
@@ -25,32 +25,32 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-public final class WPlayerController {
+public final class WPlayerController extends Default {
     private static PlayerControllerMP getPlayerController() {
         return Minecraft.getMinecraft().playerController;
     }
 
     public static ItemStack windowClick_PICKUP(int slot) {
-        return getPlayerController().windowClick(0, slot, 0, ClickType.PICKUP, PepsiMod.INSTANCE.mc.player);
+        return getPlayerController().windowClick(0, slot, 0, ClickType.PICKUP, mc.player);
     }
 
     public static ItemStack windowClick_QUICK_MOVE(int slot) {
-        return getPlayerController().windowClick(0, slot, 0, ClickType.QUICK_MOVE, PepsiMod.INSTANCE.mc.player);
+        return getPlayerController().windowClick(0, slot, 0, ClickType.QUICK_MOVE, mc.player);
     }
 
     public static ItemStack windowClick_THROW(int slot) {
         return getPlayerController().windowClick(0, slot, 1, ClickType.THROW,
-                PepsiMod.INSTANCE.mc.player);
+                mc.player);
     }
 
     public static void processRightClick() {
-        getPlayerController().processRightClick(PepsiMod.INSTANCE.mc.player,
-                PepsiMod.INSTANCE.mc.world, EnumHand.MAIN_HAND);
+        getPlayerController().processRightClick(mc.player,
+                mc.world, EnumHand.MAIN_HAND);
     }
 
     public static void processRightClickBlock(BlockPos pos, EnumFacing side, Vec3d hitVec) {
-        getPlayerController().processRightClickBlock(PepsiMod.INSTANCE.mc.player,
-                PepsiMod.INSTANCE.mc.world, pos, side, hitVec, EnumHand.MAIN_HAND);
+        getPlayerController().processRightClickBlock(mc.player,
+                mc.world, pos, side, hitVec, EnumHand.MAIN_HAND);
     }
 }
 

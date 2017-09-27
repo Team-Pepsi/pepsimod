@@ -15,11 +15,11 @@
 
 package net.daporkchop.pepsimod.util.colors;
 
-import net.daporkchop.pepsimod.PepsiMod;
+import static net.daporkchop.pepsimod.util.misc.Default.mc;
 
 public class PlainColorElement extends ColorizedElement {
     public PlainColorElement(String text) {
         this.text = text;
-        this.width = PepsiMod.INSTANCE.mc.fontRenderer.getStringWidth(text);
+        this.width = mc.fontRenderer.getStringWidth(text);
     }
 }

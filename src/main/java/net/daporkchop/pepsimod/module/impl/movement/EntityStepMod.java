@@ -37,15 +37,15 @@ public class EntityStepMod extends Module {
 
     @Override
     public void onDisable() {
-        if (PepsiMod.INSTANCE.hasInitializedModules && PepsiMod.INSTANCE.mc.player.getRidingEntity() != null) {
-            PepsiMod.INSTANCE.mc.player.getRidingEntity().stepHeight = 1f;
+        if (PepsiMod.INSTANCE.hasInitializedModules && mc.player.getRidingEntity() != null) {
+            mc.player.getRidingEntity().stepHeight = 1f;
         }
     }
 
     @Override
     public void tick() {
-        if (PepsiMod.INSTANCE.mc.player.getRidingEntity() != null) {
-            PepsiMod.INSTANCE.mc.player.getRidingEntity().stepHeight = PepsiMod.INSTANCE.miscOptions.entityStep_step;
+        if (mc.player.getRidingEntity() != null) {
+            mc.player.getRidingEntity().stepHeight = PepsiMod.INSTANCE.miscOptions.entityStep_step;
         }
     }
 

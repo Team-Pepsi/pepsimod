@@ -48,21 +48,21 @@ public class AutoEatMod extends Module {
 
     @Override
     public void onDisable() {
-        if (PepsiMod.INSTANCE.mc.world != null) {
-            ReflectionStuff.setPressed(PepsiMod.INSTANCE.mc.gameSettings.keyBindUseItem, false);
+        if (mc.world != null) {
+            ReflectionStuff.setPressed(mc.gameSettings.keyBindUseItem, false);
         }
     }
 
     @Override
     public void tick() {
-        ItemStack curStack = PepsiMod.INSTANCE.mc.player.inventory.getCurrentItem();
+        ItemStack curStack = mc.player.inventory.getCurrentItem();
 
         if (!shouldEat()) {
-            ReflectionStuff.setPressed(PepsiMod.INSTANCE.mc.gameSettings.keyBindUseItem, false);
+            ReflectionStuff.setPressed(mc.gameSettings.keyBindUseItem, false);
             return;
         }
 
-        FoodStats foodStats = PepsiMod.INSTANCE.mc.player.getFoodStats();
+        FoodStats foodStats = mc.player.getFoodStats();
         if (foodStats.getFoodLevel() <= PepsiMod.INSTANCE.miscOptions.autoEat_threshold && shouldEat()) {
             eatFood();
         }
@@ -95,24 +95,24 @@ public class AutoEatMod extends Module {
     private void eatFood() {
 
         for (int slot = 44; slot >= 9; slot--) {
-            ItemStack stack = PepsiMod.INSTANCE.mc.player.inventoryContainer.getSlot(slot).getStack();
+            ItemStack stack = mc.player.inventoryContainer.getSlot(slot).getStack();
 
 
             if (stack != null) {
                 if (slot >= 36 && slot <= 44) {
                     if (stack.getItem() instanceof ItemFood
                             && !(stack.getItem() instanceof ItemAppleGold)) {
-                        PepsiMod.INSTANCE.mc.player.inventory.currentItem = slot - 36;
-                        ReflectionStuff.setPressed(PepsiMod.INSTANCE.mc.gameSettings.keyBindUseItem, true);
+                        mc.player.inventory.currentItem = slot - 36;
+                        ReflectionStuff.setPressed(mc.gameSettings.keyBindUseItem, true);
                         return;
                     }
                 } else if (stack.getItem() instanceof ItemFood
                         && !(stack.getItem() instanceof ItemAppleGold)) {
                     int itemSlot = slot;
-                    int currentSlot = PepsiMod.INSTANCE.mc.player.inventory.currentItem + 36;
-                    PepsiMod.INSTANCE.mc.playerController.windowClick(0, slot, 0, ClickType.PICKUP, PepsiMod.INSTANCE.mc.player);
-                    PepsiMod.INSTANCE.mc.playerController.windowClick(0, currentSlot, 0, ClickType.PICKUP, PepsiMod.INSTANCE.mc.player);
-                    PepsiMod.INSTANCE.mc.playerController.windowClick(0, slot, 0, ClickType.PICKUP, PepsiMod.INSTANCE.mc.player);
+                    int currentSlot = mc.player.inventory.currentItem + 36;
+                    mc.playerController.windowClick(0, slot, 0, ClickType.PICKUP, mc.player);
+                    mc.playerController.windowClick(0, currentSlot, 0, ClickType.PICKUP, mc.player);
+                    mc.playerController.windowClick(0, slot, 0, ClickType.PICKUP, mc.player);
                     return;
                 }
             }
@@ -120,21 +120,21 @@ public class AutoEatMod extends Module {
     }
 
     private boolean shouldEat() {
-        if (!PepsiMod.INSTANCE.mc.player.canEat(false)) {
+        if (!mc.player.canEat(false)) {
             return false;
         }
 
-        if (PepsiMod.INSTANCE.mc.currentScreen != null) {
+        if (mc.currentScreen != null) {
             return false;
         }
 
-        if (PepsiMod.INSTANCE.mc.currentScreen == null && PepsiMod.INSTANCE.mc.objectMouseOver != null) {
-            Entity entity = PepsiMod.INSTANCE.mc.objectMouseOver.entityHit;
+        if (mc.currentScreen == null && mc.objectMouseOver != null) {
+            Entity entity = mc.objectMouseOver.entityHit;
             if (entity instanceof EntityVillager || entity instanceof EntityTameable) {
                 return false;
             }
 
-            if (PepsiMod.INSTANCE.mc.objectMouseOver.getBlockPos() != null && PepsiMod.INSTANCE.mc.world.getBlockState(PepsiMod.INSTANCE.mc.objectMouseOver.getBlockPos()).getBlock() instanceof BlockContainer) {
+            if (mc.objectMouseOver.getBlockPos() != null && mc.world.getBlockState(mc.objectMouseOver.getBlockPos()).getBlock() instanceof BlockContainer) {
                 return false;
             }
         }
