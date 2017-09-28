@@ -63,10 +63,6 @@ public class PathFinder extends Default {
         queue.add(start, getHeuristic(start));
     }
 
-    public PathFinder(PathFinder pathFinder) {
-        this(pathFinder.goal);
-    }
-
     public void think() {
         try {
             int i = 0;
@@ -379,12 +375,14 @@ public class PathFinder extends Default {
             }
         }
         for (PathPos pos : toRemove) {
-            prevPosMap.remove(pos);
-            costMap.remove(pos);
-            queue.removePoint(pos);
-            ArrayList<PathPos> list = getNeighbors(pos);
-            for (PathPos a : list) {
-                queue.removePoint(a);
+            if (pos != null) {
+                prevPosMap.remove(pos);
+                costMap.remove(pos);
+                queue.removePoint(pos);
+                ArrayList<PathPos> list = getNeighbors(pos);
+                for (PathPos a : list) {
+                    queue.removePoint(a);
+                }
             }
         }
         toRemove.clear();
