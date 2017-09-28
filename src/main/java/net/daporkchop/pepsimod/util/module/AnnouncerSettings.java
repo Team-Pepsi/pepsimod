@@ -23,7 +23,7 @@ public class AnnouncerSettings implements Serializable {
     public boolean clientSide = false;
     public boolean join = false;
     public boolean leave = false;
-    public boolean eat = false; //TODO: implement this
+    public boolean eat = false;
     public boolean walk = false;
     public boolean mine = false;
     public boolean place = false;

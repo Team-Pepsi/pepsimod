@@ -52,8 +52,8 @@ public class TracersMod extends Module {
         INSTANCE = this;
     }
 
-    public TracersMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "Tracers", key, hide);
+    public TracersMod() {
+        super("Tracers");
     }
 
     @Override

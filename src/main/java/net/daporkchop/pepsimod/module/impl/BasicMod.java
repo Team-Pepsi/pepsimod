@@ -22,8 +22,8 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 public class BasicMod extends Module {
     public static BasicMod INSTANCE;
 
-    public BasicMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "delet_this", key, hide);
+    public BasicMod() {
+        super("delet_this");
     }
 
     @Override

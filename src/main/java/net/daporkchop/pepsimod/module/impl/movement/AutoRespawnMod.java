@@ -20,8 +20,8 @@ import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 
 public class AutoRespawnMod extends Module {
-    public AutoRespawnMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "AutoRespawn", key, hide);
+    public AutoRespawnMod() {
+        super("AutoRespawn");
     }
 
     @Override

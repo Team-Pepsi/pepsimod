@@ -37,8 +37,8 @@ public class AutoEatMod extends Module {
     public static AutoEatMod INSTANCE;
     public boolean doneEating;
 
-    public AutoEatMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "AutoEat", key, hide);
+    public AutoEatMod() {
+        super("AutoEat");
     }
 
     @Override

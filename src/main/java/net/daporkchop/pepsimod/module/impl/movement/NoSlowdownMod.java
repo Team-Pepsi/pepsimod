@@ -23,8 +23,8 @@ import net.minecraft.init.Blocks;
 public class NoSlowdownMod extends Module {
     public static NoSlowdownMod INSTANCE;
 
-    public NoSlowdownMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "NoSlowdown", key, hide);
+    public NoSlowdownMod() {
+        super("NoSlowdown");
     }
 
     @Override

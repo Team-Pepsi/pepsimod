@@ -26,8 +26,8 @@ import net.minecraft.block.state.IBlockState;
 public class AutoMineMod extends Module {
     public static AutoMineMod INSTANCE;
 
-    public AutoMineMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "AutoMine", key, hide);
+    public AutoMineMod() {
+        super("AutoMine");
     }
 
     @Override

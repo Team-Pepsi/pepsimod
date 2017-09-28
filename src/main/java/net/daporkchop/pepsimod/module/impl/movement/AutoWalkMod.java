@@ -25,8 +25,8 @@ import org.lwjgl.input.Keyboard;
 public class AutoWalkMod extends Module {
     public static AutoWalkMod INSTANCE;
 
-    public AutoWalkMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "AutoWalk", key, hide);
+    public AutoWalkMod() {
+        super("AutoWalk");
     }
 
     @Override

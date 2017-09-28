@@ -13,44 +13,58 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.module.impl.render;
+package net.daporkchop.pepsimod.module.impl.movement;
 
+import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
+import net.daporkchop.pepsimod.util.ReflectionStuff;
 
-public class FullbrightMod extends Module {
+public class NoClipMod extends Module {
+    public static NoClipMod INSTANCE;
 
-    public FullbrightMod() {
-        super("Fullbright");
+    public NoClipMod() {
+        super("NoClip");
     }
 
     @Override
     public void onEnable() {
+
     }
 
     @Override
     public void onDisable() {
+        if (PepsiMod.INSTANCE.isInitialized) {
+            mc.player.noClip = false;
+        }
     }
 
     @Override
     public void tick() {
-        if (this.isEnabled || XrayMod.INSTANCE.isEnabled) {
-            if (mc.gameSettings.gammaSetting < 16f) {
-                mc.gameSettings.gammaSetting += 0.5f;
-            }
-        } else if (mc.gameSettings.gammaSetting > 0.5f) {
-            if (mc.gameSettings.gammaSetting < 1F) {
-                mc.gameSettings.gammaSetting = 0.5F;
-            } else {
-                mc.gameSettings.gammaSetting -= 0.5F;
-            }
+        mc.player.noClip = true;
+        mc.player.fallDistance = 0;
+        mc.player.onGround = false;
+
+        mc.player.capabilities.isFlying = false;
+        mc.player.motionX = 0;
+        mc.player.motionY = 0;
+        mc.player.motionZ = 0;
+
+        float speed = 0.2F;
+        mc.player.jumpMovementFactor = speed;
+        if (ReflectionStuff.getPressed(mc.gameSettings.keyBindJump)) {
+            mc.player.motionY += speed;
+        }
+
+        if (ReflectionStuff.getPressed(mc.gameSettings.keyBindSneak)) {
+            mc.player.motionY -= speed;
         }
     }
 
     @Override
     public void init() {
-
+        INSTANCE = this;
     }
 
     @Override
@@ -58,12 +72,7 @@ public class FullbrightMod extends Module {
         return new ModuleOption[0];
     }
 
-    @Override
-    public boolean shouldTick() {
-        return true;
-    }
-
     public ModuleCategory getCategory() {
-        return ModuleCategory.RENDER;
+        return ModuleCategory.MOVEMENT;
     }
 }

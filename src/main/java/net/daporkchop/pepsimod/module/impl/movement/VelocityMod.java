@@ -30,8 +30,8 @@ public class VelocityMod extends Module {
         INSTANCE = this;
     }
 
-    public VelocityMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "Velocity", key, hide);
+    public VelocityMod() {
+        super("Velocity");
     }
 
     @Override

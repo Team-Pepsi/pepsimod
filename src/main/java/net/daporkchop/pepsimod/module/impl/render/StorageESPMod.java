@@ -46,8 +46,8 @@ public class StorageESPMod extends Module {
     public final ArrayList<AxisAlignedBB> hopper = new ArrayList<>();
     public final ArrayList<AxisAlignedBB> furnace = new ArrayList<>();
 
-    public StorageESPMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "StorageESP", key, hide);
+    public StorageESPMod() {
+        super("StorageESP");
     }
 
     public static AxisAlignedBB getBoundingBox(World world, BlockPos pos) {

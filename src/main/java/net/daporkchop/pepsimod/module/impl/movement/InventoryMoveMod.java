@@ -22,8 +22,8 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 public class InventoryMoveMod extends Module {
     public static InventoryMoveMod INSTANCE;
 
-    public InventoryMoveMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "InventoryMove", key, hide);
+    public InventoryMoveMod() {
+        super("InventoryMove");
         INSTANCE = this;
     }
 

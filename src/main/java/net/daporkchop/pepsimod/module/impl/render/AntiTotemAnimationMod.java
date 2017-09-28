@@ -22,8 +22,8 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 public class AntiTotemAnimationMod extends Module {
     public static AntiTotemAnimationMod INSTANCE;
 
-    public AntiTotemAnimationMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "AntiTotemAnimation", key, hide);
+    public AntiTotemAnimationMod() {
+        super("AntiTotemAnimation");
     }
 
     @Override

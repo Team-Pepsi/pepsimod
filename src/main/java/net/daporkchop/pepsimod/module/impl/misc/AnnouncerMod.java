@@ -46,8 +46,8 @@ public class AnnouncerMod extends TimeModule {
     public static AnnouncerMod INSTANCE;
     public Queue<QueuedTask> toSend = new ConcurrentLinkedQueue<>();
 
-    public AnnouncerMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "Announcer", key, false);
+    public AnnouncerMod() {
+        super("Announcer");
     }
 
     @Override

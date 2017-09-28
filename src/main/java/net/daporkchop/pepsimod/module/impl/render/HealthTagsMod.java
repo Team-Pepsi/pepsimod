@@ -22,8 +22,8 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 public class HealthTagsMod extends Module {
     public static HealthTagsMod INSTANCE;
 
-    public HealthTagsMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "HealthTags", key, hide);
+    public HealthTagsMod() {
+        super("HealthTags");
     }
 
     @Override

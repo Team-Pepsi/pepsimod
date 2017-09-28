@@ -22,8 +22,8 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 public class AntiHungerMod extends Module {
     public static boolean ANTI_HUNGER = false;
 
-    public AntiHungerMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "AntiHunger", key, hide);
+    public AntiHungerMod() {
+        super("AntiHunger");
     }
 
     @Override

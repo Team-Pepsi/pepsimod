@@ -22,8 +22,8 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 public class SprintMod extends Module {
     public static SprintMod INSTANCE;
 
-    public SprintMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "Sprint", key, hide);
+    public SprintMod() {
+        super("Sprint");
     }
 
     @Override

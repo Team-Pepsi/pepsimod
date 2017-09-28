@@ -331,7 +331,7 @@ public abstract class MixinEntityRenderer {
 
         float f1 = this.mc.player.prevTimeInPortal + (this.mc.player.timeInPortal - this.mc.player.prevTimeInPortal) * partialTicks;
 
-        if (f1 > 0.0F && !AntiBlindMod.INSTANCE.isEnabled) { //TODO: find way to inject this
+        if (f1 > 0.0F && !AntiBlindMod.INSTANCE.isEnabled) { //code xd
             int i = 20;
 
             if (this.mc.player.isPotionActive(MobEffects.NAUSEA)) {

@@ -31,8 +31,8 @@ import java.util.List;
 public class StepMod extends Module {
     public static StepMod INSTANCE;
 
-    public StepMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "Step", key, hide);
+    public StepMod() {
+        super("Step");
     }
 
     @Override

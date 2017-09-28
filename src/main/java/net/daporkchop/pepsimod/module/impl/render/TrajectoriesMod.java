@@ -34,8 +34,8 @@ import org.lwjgl.opengl.GL11;
 public class TrajectoriesMod extends Module {
     public static final RenderColor lineColor = new RenderColor(51, 196, 191, 128);
 
-    public TrajectoriesMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "Trajectories", key, hide);
+    public TrajectoriesMod() {
+        super("Trajectories");
     }
 
     @Override

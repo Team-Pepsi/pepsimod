@@ -49,6 +49,10 @@ public abstract class Module extends Command implements ITickListener {
     public String[] completionOptions;
     public ModuleOptionSave[] tempOptionLoading;
 
+    public Module(String name) {
+        this(false, name, -1, false);
+    }
+
     public Module(boolean def, String name, int keybind, boolean hide) {
         super(name.toLowerCase());
         nameFull = name;

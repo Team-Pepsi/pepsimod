@@ -22,8 +22,8 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 public class NameTagsMod extends Module {
     public static NameTagsMod INSTANCE;
 
-    public NameTagsMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "NameTags", key, hide);
+    public NameTagsMod() {
+        super("NameTags");
     }
 
     @Override

@@ -22,8 +22,8 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 public class NoHurtCamMod extends Module {
     public static NoHurtCamMod INSTANCE;
 
-    public NoHurtCamMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "NoHurtCam", key, hide);
+    public NoHurtCamMod() {
+        super("NoHurtCam");
     }
 
     @Override

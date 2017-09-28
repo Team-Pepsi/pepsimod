@@ -29,8 +29,8 @@ import net.minecraft.util.MovementInput;
 public class EntitySpeedMod extends Module {
     public static EntitySpeedMod INSTANCE;
 
-    public EntitySpeedMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "EntitySpeed", key, hide);
+    public EntitySpeedMod() {
+        super("EntitySpeed");
     }
 
     @Override

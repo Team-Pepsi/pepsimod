@@ -23,8 +23,8 @@ import net.daporkchop.pepsimod.util.ReflectionStuff;
 public class FastPlaceMod extends Module {
     public static FastPlaceMod INSTANCE;
 
-    public FastPlaceMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "FastPlace", key, hide);
+    public FastPlaceMod() {
+        super("FastPlace");
     }
 
     @Override

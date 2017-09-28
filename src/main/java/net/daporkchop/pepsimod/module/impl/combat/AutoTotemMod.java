@@ -33,8 +33,8 @@ public class AutoTotemMod extends Module {
     public static AutoTotemMod INSTANCE;
     private int timer;
 
-    public AutoTotemMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "AutoTotem", key, hide);
+    public AutoTotemMod() {
+        super("AutoTotem");
     }
 
     @Override

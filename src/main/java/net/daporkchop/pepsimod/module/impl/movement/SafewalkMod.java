@@ -26,8 +26,8 @@ public class SafewalkMod extends Module {
     public static SafewalkMod INSTANCE;
     private Vector3d vec = new Vector3d();
 
-    public SafewalkMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "Safewalk", key, hide);
+    public SafewalkMod() {
+        super("Safewalk");
     }
 
     @Override

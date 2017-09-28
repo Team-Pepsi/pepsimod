@@ -23,8 +23,8 @@ import net.daporkchop.pepsimod.util.ReflectionStuff;
 public class HorseJumpPowerMod extends Module {
     public static HorseJumpPowerMod INSTANCE;
 
-    public HorseJumpPowerMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "HorseJumpPower", key, hide);
+    public HorseJumpPowerMod() {
+        super("HorseJumpPower");
     }
 
     @Override

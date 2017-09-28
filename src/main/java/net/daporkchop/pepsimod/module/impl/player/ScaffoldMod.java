@@ -28,8 +28,8 @@ import net.minecraft.util.math.BlockPos;
 public class ScaffoldMod extends Module {
     public static ScaffoldMod INSTANCE;
 
-    public ScaffoldMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "Scaffold", key, hide);
+    public ScaffoldMod() {
+        super("Scaffold");
     }
 
     @Override
