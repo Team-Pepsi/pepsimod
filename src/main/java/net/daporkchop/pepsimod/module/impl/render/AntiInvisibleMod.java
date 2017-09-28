@@ -22,8 +22,8 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 public class AntiInvisibleMod extends Module {
     public static AntiInvisibleMod INSTANCE;
 
-    public AntiInvisibleMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "AntiInvisible", key, hide);
+    public AntiInvisibleMod() {
+        super("AntiInvisible");
     }
 
     @Override

@@ -39,8 +39,8 @@ public class ElytraFlyMod extends TimeModule {
         INSTANCE = this;
     }
 
-    public ElytraFlyMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "Elytra+", key, hide);
+    public ElytraFlyMod() {
+        super("Elytra+");
     }
 
     @Override

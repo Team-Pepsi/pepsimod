@@ -21,8 +21,8 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 
 public class FullbrightMod extends Module {
 
-    public FullbrightMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "Fullbright", key, hide);
+    public FullbrightMod() {
+        super("Fullbright");
     }
 
     @Override

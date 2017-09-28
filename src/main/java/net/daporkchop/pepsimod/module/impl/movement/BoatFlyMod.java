@@ -23,8 +23,8 @@ import net.daporkchop.pepsimod.util.ReflectionStuff;
 public class BoatFlyMod extends Module {
     public static BoatFlyMod INSTANCE;
 
-    public BoatFlyMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "BoatFly", key, hide);
+    public BoatFlyMod() {
+        super("BoatFly");
     }
 
     @Override

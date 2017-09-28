@@ -26,8 +26,8 @@ import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 public class UnfocusedCPUMod extends Module {
     public static UnfocusedCPUMod INSTANCE;
 
-    public UnfocusedCPUMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "UnfocusedCPU", key, hide);
+    public UnfocusedCPUMod() {
+        super("UnfocusedCPU");
         INSTANCE = this;
     }
 

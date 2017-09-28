@@ -32,8 +32,8 @@ public class JesusMod extends Module {
     private int tickTimer = 10;
     private int packetTimer = 0;
 
-    public JesusMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "Jesus", key, hide);
+    public JesusMod() {
+        super("Jesus");
     }
 
     public boolean isOverLiquid() {

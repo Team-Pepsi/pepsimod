@@ -26,8 +26,8 @@ import net.minecraft.util.ResourceLocation;
 public class XrayMod extends Module {
     public static XrayMod INSTANCE;
 
-    public XrayMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "Xray", key, hide);
+    public XrayMod() {
+        super("Xray");
     }
 
     @Override

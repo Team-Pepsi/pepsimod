@@ -29,8 +29,8 @@ import net.minecraft.network.play.client.CPacketUseEntity;
 
 public class CriticalsMod extends Module {
 
-    public CriticalsMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "Criticals", key, hide);
+    public CriticalsMod() {
+        super("Criticals");
     }
 
     @Override

@@ -31,8 +31,8 @@ public class ESPMod extends Module {
 
     public static ESPMod INSTANCE;
 
-    public ESPMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "ESP", key, hide);
+    public ESPMod() {
+        super("ESP");
     }
 
     @Override

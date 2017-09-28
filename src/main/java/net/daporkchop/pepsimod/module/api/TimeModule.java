@@ -19,8 +19,8 @@ public abstract class TimeModule extends Module {
     public long currentMS = 0L;
     public long lastMS = -1L;
 
-    public TimeModule(boolean enabled, String name, int key, boolean hide) {
-        super(enabled, name, key, hide);
+    public TimeModule(String name) {
+        super(name);
     }
 
     public final void updateMS() {

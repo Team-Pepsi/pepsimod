@@ -29,8 +29,8 @@ import org.lwjgl.input.Keyboard;
 public class FlightMod extends Module {
     public static FlightMod INSTANCE;
 
-    public FlightMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "Flight", key, hide);
+    public FlightMod() {
+        super("Flight");
     }
 
     @Override

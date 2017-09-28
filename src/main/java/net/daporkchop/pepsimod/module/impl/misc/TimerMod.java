@@ -32,8 +32,8 @@ public class TimerMod extends Module {
         INSTANCE = this;
     }
 
-    public TimerMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "Timer", key, hide);
+    public TimerMod() {
+        super("Timer");
     }
 
     @Override

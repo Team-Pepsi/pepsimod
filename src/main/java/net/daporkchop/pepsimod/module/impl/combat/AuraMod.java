@@ -33,8 +33,8 @@ public class AuraMod extends Module {
     public static final String[] targetBoneStrings = new String[]{"head", "feet", "middle"};
     public int lastTick = 0;
 
-    public AuraMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "Aura", key, hide);
+    public AuraMod() {
+        super("Aura");
     }
 
     @Override

@@ -28,7 +28,7 @@ public class ZoomMod extends Module {
         INSTANCE = this;
     }
 
-    public ZoomMod(boolean isEnabled, int key, boolean hide) {
+    public ZoomMod(int key) {
         super(false, "Zoom", key, true);
     }
 

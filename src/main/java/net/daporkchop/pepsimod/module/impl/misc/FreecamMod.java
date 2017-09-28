@@ -33,8 +33,8 @@ public class FreecamMod extends Module {
         INSTANCE = this;
     }
 
-    public FreecamMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "Freecam", key, hide);
+    public FreecamMod() {
+        super("Freecam");
     }
 
     @Override

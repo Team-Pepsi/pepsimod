@@ -27,8 +27,8 @@ import net.daporkchop.pepsimod.util.ReflectionStuff;
 public class SpeedmineMod extends Module {
     public static SpeedmineMod INSTANCE;
 
-    public SpeedmineMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "Speedmine", key, hide);
+    public SpeedmineMod() {
+        super("Speedmine");
     }
 
     @Override

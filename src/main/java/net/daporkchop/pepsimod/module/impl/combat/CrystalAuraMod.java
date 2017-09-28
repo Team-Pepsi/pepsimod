@@ -35,8 +35,8 @@ public class CrystalAuraMod extends Module {
     private long currentMS = 0L;
     private long lastMS = -1L;
 
-    public CrystalAuraMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "CrystalAura", key, hide);
+    public CrystalAuraMod() {
+        super("CrystalAura");
     }
 
     @Override

@@ -26,8 +26,8 @@ import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 public class NoWeatherMod extends Module {
     public static NoWeatherMod INSTANCE;
 
-    public NoWeatherMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "NoWeather", key, hide);
+    public NoWeatherMod() {
+        super("NoWeather");
     }
 
     @Override

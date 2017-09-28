@@ -30,7 +30,7 @@ public class HUDMod extends Module {
     public static HUDMod INSTANCE;
     public String serverBrand = "";
 
-    public HUDMod(boolean isEnabled, int key, boolean hide) {
+    public HUDMod(boolean isEnabled, int key) {
         super(isEnabled, "HUD", key, true);
     }
 

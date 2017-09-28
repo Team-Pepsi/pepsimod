@@ -25,8 +25,9 @@ public class NoOverlayMod extends Module {
     {
         INSTANCE = this;
     }
-    public NoOverlayMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "NoOverlay", key, hide);
+
+    public NoOverlayMod() {
+        super("NoOverlay");
     }
 
     @Override

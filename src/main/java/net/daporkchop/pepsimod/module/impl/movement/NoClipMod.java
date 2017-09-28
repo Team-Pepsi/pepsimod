@@ -24,8 +24,8 @@ import net.daporkchop.pepsimod.util.ReflectionStuff;
 public class NoClipMod extends Module {
     public static NoClipMod INSTANCE;
 
-    public NoClipMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "NoClip", key, hide);
+    public NoClipMod() {
+        super("NoClip");
     }
 
     @Override

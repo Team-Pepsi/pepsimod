@@ -36,8 +36,8 @@ import java.util.Collection;
 public class WaypointsMod extends Module {
     public static WaypointsMod INSTANCE;
 
-    public WaypointsMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "Waypoints", key, hide);
+    public WaypointsMod() {
+        super("Waypoints");
     }
 
     @Override
