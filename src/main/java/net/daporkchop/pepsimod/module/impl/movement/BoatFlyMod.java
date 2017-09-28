@@ -13,19 +13,49 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.util.module;
+package net.daporkchop.pepsimod.module.impl.movement;
 
-import java.io.Serializable;
+import net.daporkchop.pepsimod.module.ModuleCategory;
+import net.daporkchop.pepsimod.module.api.Module;
+import net.daporkchop.pepsimod.module.api.ModuleOption;
+import net.daporkchop.pepsimod.util.ReflectionStuff;
 
-public class AnnouncerSettings implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class BoatFlyMod extends Module {
+    public static BoatFlyMod INSTANCE;
 
-    public boolean clientSide = false;
-    public boolean join = false;
-    public boolean leave = false;
-    public boolean eat = false;
-    public boolean walk = false;
-    public boolean mine = false;
-    public boolean place = false;
-    public int delay = 5000;
+    public BoatFlyMod(boolean isEnabled, int key, boolean hide) {
+        super(isEnabled, "BoatFly", key, hide);
+    }
+
+    @Override
+    public void onEnable() {
+
+    }
+
+    @Override
+    public void onDisable() {
+
+    }
+
+    @Override
+    public void tick() {
+        if (mc.player.isRiding()) {
+            // fly
+            mc.player.getRidingEntity().motionY = ReflectionStuff.getPressed(mc.gameSettings.keyBindJump) ? 0.3 : 0;
+        }
+    }
+
+    @Override
+    public void init() {
+        INSTANCE = this;
+    }
+
+    @Override
+    public ModuleOption[] getDefaultOptions() {
+        return new ModuleOption[0];
+    }
+
+    public ModuleCategory getCategory() {
+        return ModuleCategory.MOVEMENT;
+    }
 }

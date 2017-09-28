@@ -118,7 +118,7 @@ public class XrayMod extends Module {
     }
 
     @Override
-    public void execute(String cmd, String[] args) { //TODO: make this less dirty by actually using the amazing system i made
+    public void execute(String cmd, String[] args) {
         if (args.length == 3 && !args[2].isEmpty() && cmd.startsWith(".xray add ")) {
             String s = args[2].toLowerCase();
             try {

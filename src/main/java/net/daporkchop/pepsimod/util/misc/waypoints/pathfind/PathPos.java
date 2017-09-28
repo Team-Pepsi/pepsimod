@@ -18,9 +18,7 @@ package net.daporkchop.pepsimod.util.misc.waypoints.pathfind;
 import net.minecraft.util.math.BlockPos;
 
 public class PathPos extends BlockPos {
-    private final boolean jumping;
-    public boolean mining;
-    public boolean placing;
+    public final boolean jumping;
 
     public PathPos(BlockPos pos) {
         this(pos, false);
@@ -29,10 +27,6 @@ public class PathPos extends BlockPos {
     public PathPos(BlockPos pos, boolean jumping) {
         super(pos);
         this.jumping = jumping;
-    }
-
-    public boolean isJumping() {
-        return jumping;
     }
 
     @Override
@@ -46,12 +40,12 @@ public class PathPos extends BlockPos {
         }
 
         PathPos node = (PathPos) obj;
-        return getX() == node.getX() && getY() == node.getY() && getZ() == node.getZ() && isJumping() == node.isJumping();
+        return getX() == node.getX() && getY() == node.getY() && getZ() == node.getZ() && jumping == node.jumping;
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode() * 2 + (isJumping() ? 1 : 0);
+        return super.hashCode() * 2 + (jumping ? 1 : 0);
     }
 
     public boolean roughEquals(BlockPos otherPos) {

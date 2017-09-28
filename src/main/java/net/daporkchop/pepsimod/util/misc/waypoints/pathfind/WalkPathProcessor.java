@@ -78,7 +78,7 @@ public class WalkPathProcessor extends PathProcessor {
         if (pos.getX() != nextPos.getX() || pos.getZ() != nextPos.getZ()) {
             ReflectionStuff.setPressed(mc.gameSettings.keyBindForward, true);
 
-            if (index > 0 && path.get(index - 1).isJumping() || pos.getY() < nextPos.getY()) {
+            if (index > 0 && path.get(index - 1).jumping || pos.getY() < nextPos.getY()) {
                 if (!(StepMod.INSTANCE.isEnabled && (PepsiMod.INSTANCE.miscOptions.step_legit || PepsiMod.INSTANCE.miscOptions.step_height == 1))) {
                     ReflectionStuff.setPressed(mc.gameSettings.keyBindJump, true);
                 }

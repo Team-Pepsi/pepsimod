@@ -108,14 +108,13 @@ public class PepsiMod {
         ModuleManager.registerModule(new AutoWalkMod(false, -1, false));
         ModuleManager.registerModule(new EntitySpeedMod(false, -1, false));
         ModuleManager.registerModule(new SafewalkMod(false, -1, false));
-        ModuleManager.registerModule(new InventoryMoveMod(false, -1, false)); //TODO: make this work
+        ModuleManager.registerModule(new InventoryMoveMod(false, -1, false));
         ModuleManager.registerModule(new HorseJumpPowerMod(false, -1, false));
         ModuleManager.registerModule(new AutoTotemMod(false, -1, false));
         ModuleManager.registerModule(new CrystalAuraMod(false, -1, false));
         ModuleManager.registerModule(new AntiTotemAnimationMod(false, -1, false));
         ModuleManager.registerModule(new AnnouncerMod(false, -1, false));
         ModuleManager.registerModule(new AutoRespawnMod(false, -1, false));
-        //ModuleManager.registerModule(new EntityStepMod(false, -1, false)); //TODO: fix or remove
         ModuleManager.registerModule(new JesusMod(false, -1, false)); //test
         ModuleManager.registerModule(new SprintMod(false, -1, false));
         ModuleManager.registerModule(new NoSlowdownMod(false, -1, false));
@@ -129,6 +128,8 @@ public class PepsiMod {
         ModuleManager.registerModule(new UnfocusedCPUMod(false, -1, false));
         ModuleManager.registerModule(new ESPMod(false, -1, false));
         ModuleManager.registerModule(new WaypointsMod(false, -1, false));
+        ModuleManager.registerModule(new NoClipMod(false, -1, false));
+        ModuleManager.registerModule(new BoatFlyMod(false, -1, false));
     }
 
     public static void registerCommands(FMLStateEvent event) {

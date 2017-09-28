@@ -17,6 +17,7 @@ package net.daporkchop.pepsimod.mixin.entity;
 
 import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
+import net.daporkchop.pepsimod.module.impl.movement.NoClipMod;
 import net.daporkchop.pepsimod.module.impl.movement.VelocityMod;
 import net.daporkchop.pepsimod.module.impl.render.AntiInvisibleMod;
 import net.daporkchop.pepsimod.module.impl.render.ESPMod;
@@ -63,7 +64,7 @@ public abstract class MixinEntity {
     @Inject(method = "move", at = @At("HEAD"))
     public void move(MoverType type, double x, double y, double z, CallbackInfo callbackInfo) {
         Entity thisAsEntity = Entity.class.cast(this);
-        if (FreecamMod.INSTANCE.isEnabled && thisAsEntity instanceof EntityPlayer) {
+        if ((FreecamMod.INSTANCE.isEnabled || NoClipMod.INSTANCE.isEnabled) && thisAsEntity instanceof EntityPlayer) {
             if (thisAsEntity == mc.player) {
                 this.setEntityBoundingBox(this.getEntityBoundingBox().offset(x * 10, y, z * 10));
             } else {

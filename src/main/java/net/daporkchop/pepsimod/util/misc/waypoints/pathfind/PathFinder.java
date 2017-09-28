@@ -130,7 +130,7 @@ public class PathFinder extends Default {
         // player can move sideways if flying, standing on the ground, jumping,
         // or inside of a block that allows sideways movement (ladders, webs,
         // etc.)
-        if (flying || onGround || pos.isJumping() || canMoveSidewaysInMidairAt(pos) || canClimbUpAt(pos.down())) {
+        if (flying || onGround || pos.jumping || canMoveSidewaysInMidairAt(pos) || canClimbUpAt(pos.down())) {
             // north
             if (checkHorizontalMovement(pos, north)) {
                 neighbors.add(new PathPos(north));
@@ -451,7 +451,7 @@ public class PathFinder extends Default {
                     break;
                 }
 
-                if (entry.getKey().isJumping()) {
+                if (entry.getKey().jumping) {
                     GL11.glColor4f(1, 0, 1, 0.75F);
                 } else {
                     GL11.glColor4f(1, 0, 0, 0.75F);

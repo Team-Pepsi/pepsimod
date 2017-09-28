@@ -19,15 +19,13 @@ import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.daporkchop.pepsimod.module.api.OptionCompletions;
-import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
-import net.daporkchop.pepsimod.module.api.option.ExtensionType;
+import net.daporkchop.pepsimod.util.ReflectionStuff;
 
-public class EntityStepMod extends Module {
-    public static EntityStepMod INSTANCE;
+public class NoClipMod extends Module {
+    public static NoClipMod INSTANCE;
 
-    public EntityStepMod(boolean isEnabled, int key, boolean hide) {
-        super(isEnabled, "EntityStep", key, hide);
+    public NoClipMod(boolean isEnabled, int key, boolean hide) {
+        super(isEnabled, "NoClip", key, hide);
     }
 
     @Override
@@ -37,15 +35,30 @@ public class EntityStepMod extends Module {
 
     @Override
     public void onDisable() {
-        if (PepsiMod.INSTANCE.hasInitializedModules && mc.player.getRidingEntity() != null) {
-            mc.player.getRidingEntity().stepHeight = 1f;
+        if (PepsiMod.INSTANCE.isInitialized) {
+            mc.player.noClip = false;
         }
     }
 
     @Override
     public void tick() {
-        if (mc.player.getRidingEntity() != null) {
-            mc.player.getRidingEntity().stepHeight = PepsiMod.INSTANCE.miscOptions.entityStep_step;
+        mc.player.noClip = true;
+        mc.player.fallDistance = 0;
+        mc.player.onGround = false;
+
+        mc.player.capabilities.isFlying = false;
+        mc.player.motionX = 0;
+        mc.player.motionY = 0;
+        mc.player.motionZ = 0;
+
+        float speed = 0.2F;
+        mc.player.jumpMovementFactor = speed;
+        if (ReflectionStuff.getPressed(mc.gameSettings.keyBindJump)) {
+            mc.player.motionY += speed;
+        }
+
+        if (ReflectionStuff.getPressed(mc.gameSettings.keyBindSneak)) {
+            mc.player.motionY -= speed;
         }
     }
 
@@ -56,16 +69,7 @@ public class EntityStepMod extends Module {
 
     @Override
     public ModuleOption[] getDefaultOptions() {
-        return new ModuleOption[]{
-                new ModuleOption<>(PepsiMod.INSTANCE.miscOptions.entityStep_step, "step", OptionCompletions.FLOAT,
-                        (value) -> {
-                            PepsiMod.INSTANCE.miscOptions.entityStep_step = Math.max(0, value);
-                            return true;
-                        },
-                        () -> {
-                            return PepsiMod.INSTANCE.miscOptions.entityStep_step;
-                        }, "Step", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 1f, 50f, 0.5f))
-        };
+        return new ModuleOption[0];
     }
 
     public ModuleCategory getCategory() {
