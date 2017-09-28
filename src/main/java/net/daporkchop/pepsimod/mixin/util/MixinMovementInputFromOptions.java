@@ -16,6 +16,7 @@
 package net.daporkchop.pepsimod.mixin.util;
 
 import net.daporkchop.pepsimod.module.impl.movement.InventoryMoveMod;
+import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.client.settings.GameSettings;
@@ -81,9 +82,9 @@ public abstract class MixinMovementInputFromOptions extends MovementInput {
     public boolean pepsimod_isPressed(KeyBinding keyBinding) {
         if (InventoryMoveMod.INSTANCE.isEnabled && mc.currentScreen != null) {
             if (mc.currentScreen instanceof InventoryEffectRenderer) {
-                return Keyboard.isKeyDown(keyBinding.getKeyCode()) || keyBinding.isKeyDown();
+                return Keyboard.isKeyDown(keyBinding.getKeyCode()) || ReflectionStuff.getPressed(keyBinding);
             } else if (mc.world.isRemote && mc.currentScreen instanceof GuiIngameMenu) {
-                return Keyboard.isKeyDown(keyBinding.getKeyCode()) || keyBinding.isKeyDown();
+                return Keyboard.isKeyDown(keyBinding.getKeyCode()) || ReflectionStuff.getPressed(keyBinding);
             }
         }
         return keyBinding.isKeyDown();

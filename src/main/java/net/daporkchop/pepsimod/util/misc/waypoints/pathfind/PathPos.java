@@ -37,15 +37,16 @@ public class PathPos extends BlockPos {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
+        }
 
-        if (!(obj instanceof PathPos))
+        if (!(obj instanceof PathPos)) {
             return false;
+        }
 
         PathPos node = (PathPos) obj;
-        return getX() == node.getX() && getY() == node.getY()
-                && getZ() == node.getZ() && isJumping() == node.isJumping();
+        return getX() == node.getX() && getY() == node.getY() && getZ() == node.getZ() && isJumping() == node.isJumping();
     }
 
     @Override
@@ -54,7 +55,6 @@ public class PathPos extends BlockPos {
     }
 
     public boolean roughEquals(BlockPos otherPos) {
-        return getX() == otherPos.getX() && getY() == otherPos.getY()
-                && getZ() == otherPos.getZ();
+        return getX() == otherPos.getX() && getY() == otherPos.getY() && getZ() == otherPos.getZ();
     }
 }

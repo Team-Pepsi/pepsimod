@@ -32,7 +32,6 @@ public abstract class PathProcessor extends Default {
     protected final ArrayList<PathPos> path;
     public boolean lookedLastTick = false;
     protected int index;
-    protected boolean done;
 
     public PathProcessor(ArrayList<PathPos> path) {
         if (path.isEmpty())
@@ -73,13 +72,5 @@ public abstract class PathProcessor extends Default {
         for (KeyBinding key : PepsiUtils.controls) {
             ReflectionStuff.setPressed(key, GameSettings.isKeyDown(key));
         }
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public final boolean isDone() {
-        return done;
     }
 }

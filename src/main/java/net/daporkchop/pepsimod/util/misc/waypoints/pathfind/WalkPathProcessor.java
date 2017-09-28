@@ -46,12 +46,10 @@ public class WalkPathProcessor extends PathProcessor {
             pos = new BlockPos(WMinecraft.getPlayer());
         index = 1;
         PathPos nextPos = null;
-        int posIndex = 0;
         boolean forceNext = false;
         try {
             nextPos = path.get(index);
-            posIndex = path.indexOf(pos);
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             forceNext = true;
         }
 
@@ -90,7 +88,6 @@ public class WalkPathProcessor extends PathProcessor {
             // go up
             if (pos.getY() < nextPos.getY()) {
                 // climb up
-                // TODO: Spider
                 Block block = WBlock.getBlock(pos);
                 if (block instanceof BlockLadder || block instanceof BlockVine) {
                     RotationUtils.faceVectorForWalking(WBlock.getBoundingBox(pos).getCenter());
