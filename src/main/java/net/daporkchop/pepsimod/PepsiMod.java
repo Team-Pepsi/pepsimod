@@ -131,6 +131,7 @@ public class PepsiMod {
         ModuleManager.registerModule(new NoClipMod());
         ModuleManager.registerModule(new BoatFlyMod());
         ModuleManager.registerModule(new NotificationsMod());
+        ModuleManager.registerModule(new BedBomberMod());
     }
 
     public static void registerCommands(FMLStateEvent event) {

@@ -41,6 +41,9 @@ public class MiscOptions implements Serializable {
     public boolean waypoints_dist = true;
     public boolean waypoints_coords = false;
     public float timer_multiplier = 1.0f;
+    public float bedbomber_range = 4.0f;
+    public int bedbomber_delay = 500;
+    public boolean bedbomber_resupply = true;
 
     public static class ModuleState implements Serializable {
         public boolean enabled;

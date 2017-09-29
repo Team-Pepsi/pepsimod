@@ -28,10 +28,10 @@ import net.daporkchop.pepsimod.util.misc.announcer.TaskType;
 import net.daporkchop.pepsimod.util.misc.announcer.impl.TaskBasic;
 import net.daporkchop.pepsimod.util.misc.announcer.impl.TaskBlock;
 import net.daporkchop.pepsimod.util.misc.announcer.impl.TaskMove;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
@@ -196,20 +196,20 @@ public class AnnouncerMod extends TimeModule {
         }
     }
 
-    public void onPlaceBlock(BlockEvent.PlaceEvent event) {
-        if (isEnabled && pepsiMod.announcerSettings.place && event.getPlayer() == mc.player) {
+    public void onPlaceBlock(Block block) {
+        if (isEnabled && pepsiMod.announcerSettings.place) {
             Iterator<QueuedTask> iterator = toSend.iterator();
             while (iterator.hasNext()) {
                 QueuedTask task = iterator.next();
                 if (task.type == TaskType.PLACE) {
                     TaskBlock taskBlock = (TaskBlock) task;
-                    if (taskBlock.block == event.getState().getBlock()) {
+                    if (taskBlock.block == block) {
                         taskBlock.count++;
                         return;
                     }
                 }
             }
-            toSend.add(new TaskBlock(TaskType.PLACE, event.getState().getBlock()));
+            toSend.add(new TaskBlock(TaskType.PLACE, block));
             tick();
         }
     }

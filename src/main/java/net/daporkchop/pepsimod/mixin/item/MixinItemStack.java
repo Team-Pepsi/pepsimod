@@ -16,15 +16,17 @@
 package net.daporkchop.pepsimod.mixin.item;
 
 import net.daporkchop.pepsimod.module.impl.misc.AnnouncerMod;
+import net.daporkchop.pepsimod.module.impl.misc.BedBomberMod;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBed;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.BlockSnapshot;
-import net.minecraftforge.event.ForgeEventFactory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -35,8 +37,13 @@ public abstract class MixinItemStack {
     @Inject(method = "onItemUse", at = @At("HEAD"))
     public void preOnItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ, CallbackInfoReturnable<EnumActionResult> callbackInfo) {
         if (worldIn.isRemote) {
-            BlockSnapshot snapshot = new BlockSnapshot(worldIn, pos, worldIn.getBlockState(pos));
-            AnnouncerMod.INSTANCE.onPlaceBlock(ForgeEventFactory.onPlayerBlockPlace(playerIn, snapshot, side, hand));
+            ItemStack this_ = ItemStack.class.cast(this);
+            if (this_.getItem() instanceof ItemBlock) {
+                Block block = ((ItemBlock) this_.getItem()).getBlock();
+                AnnouncerMod.INSTANCE.onPlaceBlock(block);
+            } else if (this_.getItem() instanceof ItemBed) {
+                BedBomberMod.INSTANCE.onPlaceBed();
+            }
         }
     }
 }
