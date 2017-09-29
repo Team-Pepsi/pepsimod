@@ -64,7 +64,6 @@ import java.util.TimerTask;
 public class PepsiMod {
     public static final String VERSION = "11.1";
     public static final String chatPrefix = PepsiUtils.COLOR_ESCAPE + "0" + PepsiUtils.COLOR_ESCAPE + "l[" + PepsiUtils.COLOR_ESCAPE + "c" + PepsiUtils.COLOR_ESCAPE + "lpepsi" + PepsiUtils.COLOR_ESCAPE + "9" + PepsiUtils.COLOR_ESCAPE + "lmod" + PepsiUtils.COLOR_ESCAPE + "0" + PepsiUtils.COLOR_ESCAPE + "l]" + PepsiUtils.COLOR_ESCAPE + "r ";
-    public static PepsiMod INSTANCE;
     public boolean isMcLeaksAccount = false;
     public Session originalSession = null;
     public DataTag dataTag = null;
@@ -79,6 +78,7 @@ public class PepsiMod {
     public ElytraFlySettings elytraFlySettings;
     public AnnouncerSettings announcerSettings;
     public Waypoints waypoints;
+    public NotificationsOptions notificationsOptions;
     private Minecraft mc;
 
     public static void registerModules(FMLStateEvent event) {
@@ -130,6 +130,7 @@ public class PepsiMod {
         ModuleManager.registerModule(new WaypointsMod());
         ModuleManager.registerModule(new NoClipMod());
         ModuleManager.registerModule(new BoatFlyMod());
+        ModuleManager.registerModule(new NotificationsMod());
     }
 
     public static void registerCommands(FMLStateEvent event) {
@@ -173,10 +174,10 @@ public class PepsiMod {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        INSTANCE = this;
         MinecraftForge.EVENT_BUS.register(new KeyRegistry());
         mc = Minecraft.getMinecraft();
         Default.mc = mc;
+        Default.pepsiMod = this;
     }
 
     @Mod.EventHandler
@@ -228,7 +229,7 @@ public class PepsiMod {
         PepsiUtils.timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                PepsiMod.INSTANCE.saveConfig();
+                Default.pepsiMod.saveConfig();
             }
         }, 360000, 360000);
     }
@@ -264,6 +265,7 @@ public class PepsiMod {
         elytraFlySettings = (ElytraFlySettings) dataTag.getSerializable("elytraFlySettings", new ElytraFlySettings());
         announcerSettings = (AnnouncerSettings) dataTag.getSerializable("announcerSettings", new AnnouncerSettings());
         waypoints = (Waypoints) dataTag.getSerializable("waypoints", new Waypoints());
+        notificationsOptions = (NotificationsOptions) dataTag.getSerializable("notificationsOptions", new NotificationsOptions());
 
         miscOptions = (MiscOptions) dataTag.getSerializable("miscOptions", new MiscOptions());
     }
@@ -298,6 +300,7 @@ public class PepsiMod {
         dataTag.setSerializable("elytraFlySettings", elytraFlySettings);
         dataTag.setSerializable("announcerSettings", announcerSettings);
         dataTag.setSerializable("waypoints", waypoints);
+        dataTag.setSerializable("notificationsOptions", notificationsOptions);
         dataTag.save();
     }
 

@@ -20,17 +20,14 @@ import com.mojang.authlib.AuthenticationService;
 import com.mojang.authlib.UserAuthentication;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.util.UUIDTypeAdapter;
-import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.util.misc.Default;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
 
 import java.lang.reflect.Field;
 import java.util.UUID;
 
-/**
- * Created by DaPorkchop_ on 18.02.17.
- */
-public class AccountManager {
+public class AccountManager extends Default {
 
     private final UserAuthentication auth;
 
@@ -64,8 +61,8 @@ public class AccountManager {
             }
 
             session.setAccessible(true);
-            if (PepsiMod.INSTANCE.originalSession == null) {
-                PepsiMod.INSTANCE.originalSession = Minecraft.getMinecraft().getSession();
+            if (pepsiMod.originalSession == null) {
+                pepsiMod.originalSession = Minecraft.getMinecraft().getSession();
             }
             session.set(Minecraft.getMinecraft(), s);
             session.setAccessible(false);

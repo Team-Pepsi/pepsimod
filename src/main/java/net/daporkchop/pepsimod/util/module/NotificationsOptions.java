@@ -13,39 +13,13 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.command.impl.waypoint;
+package net.daporkchop.pepsimod.util.module;
 
-import net.daporkchop.pepsimod.command.api.Command;
-import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
+import java.io.Serializable;
 
-import java.util.Collection;
-
-public class WaypointListCommand extends Command {
-    public WaypointListCommand() {
-        super("waypointlist");
-    }
-
-    @Override
-    public void execute(String cmd, String[] args) {
-        String s = "";
-        Collection<Waypoint> waypoints = pepsiMod.waypoints.getWaypoints();
-        for (Waypoint waypoint : waypoints) {
-            s += waypoint.name + ", ";
-        }
-        s = s.substring(0, s.length() - 2);
-        clientMessage(s);
-    }
-
-    @Override
-    public String getSuggestion(String cmd, String[] args) {
-        return cmd;
-    }
-
-    @Override
-    public String[] aliases() {
-        return new String[]{
-                "waypointlist",
-                "wlist"
-        };
-    }
+public class NotificationsOptions implements Serializable {
+    public boolean queue = false;
+    public boolean death = false;
+    public boolean chat = false;
+    public boolean player = false;
 }

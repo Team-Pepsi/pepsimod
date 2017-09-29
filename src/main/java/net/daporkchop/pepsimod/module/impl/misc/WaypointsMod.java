@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.misc;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -74,9 +73,9 @@ public class WaypointsMod extends Module {
         Vec3d start = RotationUtils.getClientLookVec().addVector(0, mc.player.getEyeHeight(), 0).addVector(ReflectionStuff.getRenderPosX(mc.getRenderManager()), ReflectionStuff.getRenderPosY(mc.getRenderManager()), ReflectionStuff.getRenderPosZ(mc.getRenderManager()));
         GL11.glBegin(GL11.GL_LINES);
 
-        RenderColor.glColor(PepsiMod.INSTANCE.miscOptions.waypoints_r, PepsiMod.INSTANCE.miscOptions.waypoints_g, PepsiMod.INSTANCE.miscOptions.waypoints_b);
+        RenderColor.glColor(pepsiMod.miscOptions.waypoints_r, pepsiMod.miscOptions.waypoints_g, pepsiMod.miscOptions.waypoints_b);
 
-        Collection<Waypoint> toRender = PepsiMod.INSTANCE.waypoints.getWaypoints();
+        Collection<Waypoint> toRender = pepsiMod.waypoints.getWaypoints();
         for (Waypoint waypoint : toRender) {
             GL11.glVertex3d(start.x, start.y, start.z);
             GL11.glVertex3i(waypoint.x, waypoint.y, waypoint.z);
@@ -92,13 +91,13 @@ public class WaypointsMod extends Module {
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
 
-        if (PepsiMod.INSTANCE.miscOptions.waypoints_nametag) {
+        if (pepsiMod.miscOptions.waypoints_nametag) {
             for (Waypoint waypoint : toRender) {
                 String text = waypoint.name;
-                if (PepsiMod.INSTANCE.miscOptions.waypoints_coords) {
+                if (pepsiMod.miscOptions.waypoints_coords) {
                     text += " \u00A77" + waypoint.x + "\u00A7f, \u00A77" + waypoint.y + "\u00A7f, \u00A77" + waypoint.z;
                 }
-                if (PepsiMod.INSTANCE.miscOptions.waypoints_dist) {
+                if (pepsiMod.miscOptions.waypoints_dist) {
                     text += " \u00A7f (\u00A7b" + PepsiUtils.roundFloatForSlider((float) mc.player.getDistance(waypoint.x, waypoint.y, waypoint.z)) + "\u00A7f)";
                 }
                 PepsiUtils.renderFloatingText(text,
@@ -112,61 +111,61 @@ public class WaypointsMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new ModuleOption<>(PepsiMod.INSTANCE.miscOptions.waypoints_tracers, "tracers", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.miscOptions.waypoints_tracers, "tracers", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.miscOptions.waypoints_tracers = value;
+                            pepsiMod.miscOptions.waypoints_tracers = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.miscOptions.waypoints_tracers;
+                            return pepsiMod.miscOptions.waypoints_tracers;
                         }, "Tracers"),
-                new ModuleOption<>(PepsiMod.INSTANCE.miscOptions.waypoints_nametag, "nametag", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.miscOptions.waypoints_nametag, "nametag", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.miscOptions.waypoints_nametag = value;
+                            pepsiMod.miscOptions.waypoints_nametag = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.miscOptions.waypoints_nametag;
+                            return pepsiMod.miscOptions.waypoints_nametag;
                         }, "Nametag"),
-                new ModuleOption<>(PepsiMod.INSTANCE.miscOptions.waypoints_dist, "distance", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.miscOptions.waypoints_dist, "distance", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.miscOptions.waypoints_dist = value;
+                            pepsiMod.miscOptions.waypoints_dist = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.miscOptions.waypoints_dist;
+                            return pepsiMod.miscOptions.waypoints_dist;
                         }, "Distance"),
-                new ModuleOption<>(PepsiMod.INSTANCE.miscOptions.waypoints_coords, "coords", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.miscOptions.waypoints_coords, "coords", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.miscOptions.waypoints_coords = value;
+                            pepsiMod.miscOptions.waypoints_coords = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.miscOptions.waypoints_coords;
+                            return pepsiMod.miscOptions.waypoints_coords;
                         }, "Coords"),
-                new ModuleOption<>(PepsiMod.INSTANCE.miscOptions.waypoints_r, "red", new String[]{"0", "256"},
+                new ModuleOption<>(pepsiMod.miscOptions.waypoints_r, "red", new String[]{"0", "256"},
                         (value) -> {
-                            PepsiMod.INSTANCE.miscOptions.waypoints_r = Math.max(0, Math.min(value, 255));
+                            pepsiMod.miscOptions.waypoints_r = Math.max(0, Math.min(value, 255));
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.miscOptions.waypoints_r;
+                            return pepsiMod.miscOptions.waypoints_r;
                         }, "Red", new ExtensionSlider(ExtensionType.VALUE_INT, 0, 255, 1)),
-                new ModuleOption<>(PepsiMod.INSTANCE.miscOptions.waypoints_g, "green", new String[]{"0", "256"},
+                new ModuleOption<>(pepsiMod.miscOptions.waypoints_g, "green", new String[]{"0", "256"},
                         (value) -> {
-                            PepsiMod.INSTANCE.miscOptions.waypoints_g = Math.max(0, Math.min(value, 255));
+                            pepsiMod.miscOptions.waypoints_g = Math.max(0, Math.min(value, 255));
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.miscOptions.waypoints_g;
+                            return pepsiMod.miscOptions.waypoints_g;
                         }, "Green", new ExtensionSlider(ExtensionType.VALUE_INT, 0, 255, 1)),
-                new ModuleOption<>(PepsiMod.INSTANCE.miscOptions.waypoints_b, "blue", new String[]{"0", "256"},
+                new ModuleOption<>(pepsiMod.miscOptions.waypoints_b, "blue", new String[]{"0", "256"},
                         (value) -> {
-                            PepsiMod.INSTANCE.miscOptions.waypoints_b = Math.max(0, Math.min(value, 255));
+                            pepsiMod.miscOptions.waypoints_b = Math.max(0, Math.min(value, 255));
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.miscOptions.waypoints_b;
+                            return pepsiMod.miscOptions.waypoints_b;
                         }, "Blue", new ExtensionSlider(ExtensionType.VALUE_INT, 0, 255, 1))
         };
     }

@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.clickgui;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.clickgui.api.EntryImplBase;
 import net.daporkchop.pepsimod.clickgui.api.IEntry;
 import net.daporkchop.pepsimod.clickgui.entry.Button;
@@ -108,9 +107,9 @@ public class Window extends EntryImplBase {
                 int barHeight = getScrollbarHeight();
                 int barY = getScrollbarY();
                 barY = Math.min(barY, getScrollingModuleCount() * 13 - 1 - barHeight);
-                RenderUtilsXdolf.drawRect(getX() + 97, getY() + 13 + barY, getX() + 99, Math.min(getY() + 13 + barY + barHeight, getY() + getDisplayedHeight() - 1), PepsiMod.INSTANCE.hudSettings.getColor());
+                RenderUtilsXdolf.drawRect(getX() + 97, getY() + 13 + barY, getX() + 99, Math.min(getY() + 13 + barY + barHeight, getY() + getDisplayedHeight() - 1), pepsiMod.hudSettings.getColor());
             } else {
-                RenderUtilsXdolf.drawRect(getX() + 97, getY() + 13, getX() + 99, getDisplayedHeight() - 1, PepsiMod.INSTANCE.hudSettings.getColor());
+                RenderUtilsXdolf.drawRect(getX() + 97, getY() + 13, getX() + 99, getDisplayedHeight() - 1, pepsiMod.hudSettings.getColor());
             }
             modulesCounted = 0;
             for (int i = getScroll(); i < getModulesToDisplay() + getScroll(); i++) {

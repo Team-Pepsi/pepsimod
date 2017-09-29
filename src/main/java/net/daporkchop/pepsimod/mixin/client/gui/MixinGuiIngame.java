@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.mixin.client.gui;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.impl.render.NoOverlayMod;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiIngame;
@@ -24,6 +23,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import static net.daporkchop.pepsimod.util.misc.Default.pepsiMod;
 
 @Mixin(GuiIngame.class)
 public abstract class MixinGuiIngame extends Gui {
@@ -36,7 +37,7 @@ public abstract class MixinGuiIngame extends Gui {
 
     @Inject(method = "renderPotionEffects", at = @At("HEAD"), cancellable = true)
     public void prerenderPotionEffects(ScaledResolution resolution, CallbackInfo callbackInfo) {
-        if (!PepsiMod.INSTANCE.hudSettings.effects) {
+        if (!pepsiMod.hudSettings.effects) {
             callbackInfo.cancel();
         }
     }

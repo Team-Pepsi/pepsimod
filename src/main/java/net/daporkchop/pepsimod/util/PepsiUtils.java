@@ -747,8 +747,8 @@ public class PepsiUtils extends Default {
 
             String label = waypoint.name;
 
-            boolean showDistance = PepsiMod.INSTANCE.miscOptions.waypoints_dist;
-            boolean showCoords = PepsiMod.INSTANCE.miscOptions.waypoints_coords;
+            boolean showDistance = pepsiMod.miscOptions.waypoints_dist;
+            boolean showCoords = pepsiMod.miscOptions.waypoints_coords;
 
             StringBuilder sb = new StringBuilder();
             sb.append(label);

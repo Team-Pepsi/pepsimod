@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.totally.not.skidded;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.util.Friends;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.misc.Default;
@@ -250,51 +249,51 @@ public class EntityUtils extends Default {
         public static final boolean[] team_colors = new boolean[]{true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true};
 
         public boolean targetFriends() {
-            return PepsiMod.INSTANCE.targetSettings.friends;
+            return pepsiMod.targetSettings.friends;
         }
 
         public boolean targetBehindWalls() {
-            return PepsiMod.INSTANCE.targetSettings.through_walls;
+            return pepsiMod.targetSettings.through_walls;
         }
 
         public float getRange() {
-            return PepsiMod.INSTANCE.targetSettings.reach;
+            return pepsiMod.targetSettings.reach;
         }
 
         public float getFOV() {
-            return PepsiMod.INSTANCE.targetSettings.fov;
+            return pepsiMod.targetSettings.fov;
         }
 
         public boolean targetPlayers() {
-            return PepsiMod.INSTANCE.targetSettings.players;
+            return pepsiMod.targetSettings.players;
         }
 
         public boolean targetAnimals() {
-            return PepsiMod.INSTANCE.targetSettings.animals;
+            return pepsiMod.targetSettings.animals;
         }
 
         public boolean targetMonsters() {
-            return PepsiMod.INSTANCE.targetSettings.monsters;
+            return pepsiMod.targetSettings.monsters;
         }
 
         public boolean targetGolems() {
-            return PepsiMod.INSTANCE.targetSettings.golems;
+            return pepsiMod.targetSettings.golems;
         }
 
         public boolean targetSleepingPlayers() {
-            return PepsiMod.INSTANCE.targetSettings.sleeping;
+            return pepsiMod.targetSettings.sleeping;
         }
 
         public boolean targetInvisiblePlayers() {
-            return PepsiMod.INSTANCE.targetSettings.players && PepsiMod.INSTANCE.targetSettings.invisible;
+            return pepsiMod.targetSettings.players && pepsiMod.targetSettings.invisible;
         }
 
         public boolean targetInvisibleMobs() {
-            return PepsiMod.INSTANCE.targetSettings.monsters && PepsiMod.INSTANCE.targetSettings.invisible;
+            return pepsiMod.targetSettings.monsters && pepsiMod.targetSettings.invisible;
         }
 
         public boolean targetTeams() {
-            return PepsiMod.INSTANCE.targetSettings.teams;
+            return pepsiMod.targetSettings.teams;
         }
 
         public boolean[] getTeamColors() {
@@ -302,7 +301,7 @@ public class EntityUtils extends Default {
         }
 
         public TargetBone getTargetBone() {
-            return PepsiMod.INSTANCE.targetSettings.targetBone;
+            return pepsiMod.targetSettings.targetBone;
         }
     }
 }

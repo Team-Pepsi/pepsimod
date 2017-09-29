@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.mixin.world;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.impl.render.NoWeatherMod;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,19 +22,21 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import static net.daporkchop.pepsimod.util.misc.Default.pepsiMod;
+
 @Mixin(World.class)
 public abstract class MixinWorld {
     @Inject(method = "getCelestialAngle", at = @At("HEAD"), cancellable = true)
     public void preGetCelestialAngle(float partialTicks, CallbackInfoReturnable<Float> callbackInfoReturnable)  {
-        if (NoWeatherMod.INSTANCE.isEnabled && PepsiMod.INSTANCE.noWeatherSettings.changeTime)    {
-            callbackInfoReturnable.setReturnValue(PepsiMod.INSTANCE.noWeatherSettings.time + 0.0f);
+        if (NoWeatherMod.INSTANCE.isEnabled && pepsiMod.noWeatherSettings.changeTime) {
+            callbackInfoReturnable.setReturnValue(pepsiMod.noWeatherSettings.time + 0.0f);
             callbackInfoReturnable.cancel();
         }
     }
 
     @Inject(method = "getRainStrength", at = @At("HEAD"), cancellable = true)
     public void preGetRainStrength(float partialTicks, CallbackInfoReturnable<Float> callbackInfoReturnable)    {
-        if (NoWeatherMod.INSTANCE.isEnabled && PepsiMod.INSTANCE.noWeatherSettings.disableRain) {
+        if (NoWeatherMod.INSTANCE.isEnabled && pepsiMod.noWeatherSettings.disableRain) {
             callbackInfoReturnable.setReturnValue(0.0f);
             callbackInfoReturnable.cancel();
         }

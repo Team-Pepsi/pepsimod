@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.combat;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -53,11 +52,11 @@ public class CriticalsMod extends Module {
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{new ModuleOption<>(true, "packet", OptionCompletions.BOOLEAN,
                 (value) -> {
-                    PepsiMod.INSTANCE.miscOptions.criticals_packet = value;
+                    pepsiMod.miscOptions.criticals_packet = value;
                     return true;
                 },
                 () -> {
-                    return PepsiMod.INSTANCE.miscOptions.criticals_packet;
+                    return pepsiMod.miscOptions.criticals_packet;
                 }, "Packet")};
     }
 

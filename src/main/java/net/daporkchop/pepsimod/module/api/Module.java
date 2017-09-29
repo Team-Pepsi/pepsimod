@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.api;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.CommandRegistry;
 import net.daporkchop.pepsimod.command.api.Command;
 import net.daporkchop.pepsimod.module.ModuleCategory;
@@ -117,19 +116,19 @@ public abstract class Module extends Command implements ITickListener {
     public final ModuleOption[] defaultOptions() {
         return ArrayUtils.addAll(new ModuleOption[]{new ModuleOption<>(false, "enabled", OptionCompletions.BOOLEAN,
                 (value) -> {
-                    PepsiMod.INSTANCE.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(isEnabled, hide)).enabled = value;
+                    pepsiMod.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(isEnabled, hide)).enabled = value;
                     return true;
                 },
                 () -> {
-                    return PepsiMod.INSTANCE.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(isEnabled, hide)).enabled;
+                    return pepsiMod.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(isEnabled, hide)).enabled;
                 }, "Enabled"),
                 new ModuleOption<>(false, "hidden", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(isEnabled, hide)).hidden = value;
+                            pepsiMod.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(isEnabled, hide)).hidden = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(isEnabled, hide)).hidden;
+                            return pepsiMod.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(isEnabled, hide)).hidden;
                         }, "Hidden")
         }, this.getDefaultOptions());
     }
@@ -250,8 +249,8 @@ public abstract class Module extends Command implements ITickListener {
      * Does nothing if the module has no custom name
      */
     public void updateName() {
-        if (PepsiMod.INSTANCE.isInitialized && hasModeInName()) {
-            if (PepsiMod.INSTANCE.hudSettings.rainbow) {
+        if (pepsiMod.isInitialized && hasModeInName()) {
+            if (pepsiMod.hudSettings.rainbow) {
                 text = new RainbowText(nameFull + PepsiUtils.COLOR_ESCAPE + "customa8a8a8 [" + getModeForName() + "]");
             } else {
                 text = new RainbowText(nameFull + PepsiUtils.COLOR_ESCAPE + "7 [" + getModeForName() + "]");
@@ -421,5 +420,9 @@ public abstract class Module extends Command implements ITickListener {
 
     public void onPlayerMove(MoveEvent e) {
 
+    }
+
+    public boolean shouldRegister() {
+        return true;
     }
 }

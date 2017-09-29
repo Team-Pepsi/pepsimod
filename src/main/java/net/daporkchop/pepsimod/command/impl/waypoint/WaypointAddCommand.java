@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.command.impl.waypoint;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.api.Command;
 import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
 
@@ -28,14 +27,14 @@ public class WaypointAddCommand extends Command {
     public void execute(String cmd, String[] args) {
         Waypoint waypoint = null;
         if (args.length >= 2) {
-            if (PepsiMod.INSTANCE.waypoints.getWaypoint(args[1]) == null) {
-                waypoint = PepsiMod.INSTANCE.waypoints.addWaypoint(args[1]);
+            if (pepsiMod.waypoints.getWaypoint(args[1]) == null) {
+                waypoint = pepsiMod.waypoints.addWaypoint(args[1]);
             } else {
                 clientMessage("Waypoint \u00A7o" + args[1] + "\u00A7r already exists!");
                 return;
             }
         } else {
-            waypoint = PepsiMod.INSTANCE.waypoints.addWaypoint();
+            waypoint = pepsiMod.waypoints.addWaypoint();
         }
         clientMessage("Added waypoint: \u00A7o" + waypoint.name + "\u00A7r in dimension " + waypoint.dim + " at XYZ " + waypoint.x + ", " + waypoint.y + ", " + waypoint.z);
     }

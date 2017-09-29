@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.command.impl;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.api.Command;
 
 public class SaveCommand extends Command {
@@ -25,7 +24,7 @@ public class SaveCommand extends Command {
 
     @Override
     public void execute(String cmd, String[] args) {
-        PepsiMod.INSTANCE.saveConfig();
+        pepsiMod.saveConfig();
         clientMessage("Saved config!");
     }
 

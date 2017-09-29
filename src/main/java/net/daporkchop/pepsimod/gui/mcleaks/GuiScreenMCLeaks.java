@@ -17,7 +17,6 @@ package net.daporkchop.pepsimod.gui.mcleaks;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.util.AccountManager;
 import net.daporkchop.pepsimod.util.HTTPUtils;
 import net.daporkchop.pepsimod.util.MCLeaks;
@@ -30,9 +29,8 @@ import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 
-/**
- * Created by daporkchop on 18.02.17.
- */
+import static net.daporkchop.pepsimod.util.misc.Default.pepsiMod;
+
 public class GuiScreenMCLeaks extends GuiScreen {
     public Minecraft mc;
     public GuiScreen prevScreen;
@@ -94,12 +92,12 @@ public class GuiScreenMCLeaks extends GuiScreen {
                     tokenField.setText("");
                 }
 
-                PepsiMod.INSTANCE.isMcLeaksAccount = true;
+                pepsiMod.isMcLeaksAccount = true;
             } else if (button.id == 2) {
-                if (PepsiMod.INSTANCE.originalSession != null) {
+                if (pepsiMod.originalSession != null) {
                     try {
-                        new AccountManager().setSession(PepsiMod.INSTANCE.originalSession);
-                        PepsiMod.INSTANCE.isMcLeaksAccount = false;
+                        new AccountManager().setSession(pepsiMod.originalSession);
+                        pepsiMod.isMcLeaksAccount = false;
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.movement;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -35,7 +34,7 @@ public class NoClipMod extends Module {
 
     @Override
     public void onDisable() {
-        if (PepsiMod.INSTANCE.isInitialized) {
+        if (pepsiMod.isInitialized) {
             mc.player.noClip = false;
         }
     }

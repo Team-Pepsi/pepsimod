@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.movement;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -68,8 +67,8 @@ public class EntitySpeedMod extends Module {
                         forward = -1.0D;
                     }
                 }
-                ridingEntity.motionX = (forward * PepsiMod.INSTANCE.miscOptions.entitySpeed_speed * Math.cos(Math.toRadians(yaw + 90.0F)) + strafe * PepsiMod.INSTANCE.miscOptions.entitySpeed_speed * Math.sin(Math.toRadians(yaw + 90.0F)));
-                ridingEntity.motionZ = (forward * PepsiMod.INSTANCE.miscOptions.entitySpeed_speed * Math.sin(Math.toRadians(yaw + 90.0F)) - strafe * PepsiMod.INSTANCE.miscOptions.entitySpeed_speed * Math.cos(Math.toRadians(yaw + 90.0F)));
+                ridingEntity.motionX = (forward * pepsiMod.miscOptions.entitySpeed_speed * Math.cos(Math.toRadians(yaw + 90.0F)) + strafe * pepsiMod.miscOptions.entitySpeed_speed * Math.sin(Math.toRadians(yaw + 90.0F)));
+                ridingEntity.motionZ = (forward * pepsiMod.miscOptions.entitySpeed_speed * Math.sin(Math.toRadians(yaw + 90.0F)) - strafe * pepsiMod.miscOptions.entitySpeed_speed * Math.cos(Math.toRadians(yaw + 90.0F)));
             }
         }
     }
@@ -82,13 +81,13 @@ public class EntitySpeedMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new ModuleOption<>(PepsiMod.INSTANCE.miscOptions.entitySpeed_speed, "speed", OptionCompletions.FLOAT,
+                new ModuleOption<>(pepsiMod.miscOptions.entitySpeed_speed, "speed", OptionCompletions.FLOAT,
                         (value) -> {
-                            PepsiMod.INSTANCE.miscOptions.entitySpeed_speed = Math.max(0, value);
+                            pepsiMod.miscOptions.entitySpeed_speed = Math.max(0, value);
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.miscOptions.entitySpeed_speed;
+                            return pepsiMod.miscOptions.entitySpeed_speed;
                         }, "Speed", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0f, 4f, 0.1f))
         };
     }

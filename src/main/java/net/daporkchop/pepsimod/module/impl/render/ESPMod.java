@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.render;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -58,53 +57,53 @@ public class ESPMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new ModuleOption<>(PepsiMod.INSTANCE.espSettings.monsters, "monsters", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.espSettings.monsters, "monsters", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.espSettings.monsters = value;
+                            pepsiMod.espSettings.monsters = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.espSettings.monsters;
+                            return pepsiMod.espSettings.monsters;
                         }, "Monsters"),
-                new ModuleOption<>(PepsiMod.INSTANCE.espSettings.animals, "animals", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.espSettings.animals, "animals", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.espSettings.animals = value;
+                            pepsiMod.espSettings.animals = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.espSettings.animals;
+                            return pepsiMod.espSettings.animals;
                         }, "Animals"),
-                new ModuleOption<>(PepsiMod.INSTANCE.espSettings.players, "players", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.espSettings.players, "players", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.espSettings.players = value;
+                            pepsiMod.espSettings.players = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.espSettings.players;
+                            return pepsiMod.espSettings.players;
                         }, "Players"),
-                new ModuleOption<>(PepsiMod.INSTANCE.espSettings.golems, "golems", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.espSettings.golems, "golems", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.espSettings.golems = value;
+                            pepsiMod.espSettings.golems = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.espSettings.golems;
+                            return pepsiMod.espSettings.golems;
                         }, "Golems"),
-                new ModuleOption<>(PepsiMod.INSTANCE.espSettings.invisible, "invisible", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.espSettings.invisible, "invisible", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.espSettings.invisible = value;
+                            pepsiMod.espSettings.invisible = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.espSettings.invisible;
+                            return pepsiMod.espSettings.invisible;
                         }, "Invisible"),
-                new ModuleOption<>(PepsiMod.INSTANCE.espSettings.friendColors, "friendColors", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.espSettings.friendColors, "friendColors", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.espSettings.friendColors = value;
+                            pepsiMod.espSettings.friendColors = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.espSettings.friendColors;
+                            return pepsiMod.espSettings.friendColors;
                         }, "FriendColors")
         };
     }

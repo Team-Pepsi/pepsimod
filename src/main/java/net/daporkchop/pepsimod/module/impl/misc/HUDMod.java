@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.misc;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
@@ -66,136 +65,136 @@ public class HUDMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new ModuleOption<>(PepsiMod.INSTANCE.hudSettings.drawLogo, "draw_logo", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.hudSettings.drawLogo, "draw_logo", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.hudSettings.drawLogo = value;
+                            pepsiMod.hudSettings.drawLogo = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.hudSettings.drawLogo;
+                            return pepsiMod.hudSettings.drawLogo;
                         }, "Watermark"),
-                new ModuleOption<>(PepsiMod.INSTANCE.hudSettings.arrayList, "arraylist", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.hudSettings.arrayList, "arraylist", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.hudSettings.arrayList = value;
+                            pepsiMod.hudSettings.arrayList = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.hudSettings.arrayList;
+                            return pepsiMod.hudSettings.arrayList;
                         }, "ArrayList"),
-                new ModuleOption<>(PepsiMod.INSTANCE.hudSettings.TPS, "tps", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.hudSettings.TPS, "tps", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.hudSettings.TPS = value;
+                            pepsiMod.hudSettings.TPS = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.hudSettings.TPS;
+                            return pepsiMod.hudSettings.TPS;
                         }, "TPS"),
-                new ModuleOption<>(PepsiMod.INSTANCE.hudSettings.coords, "coords", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.hudSettings.coords, "coords", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.hudSettings.coords = value;
+                            pepsiMod.hudSettings.coords = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.hudSettings.coords;
+                            return pepsiMod.hudSettings.coords;
                         }, "Coords"),
-                new ModuleOption<>(PepsiMod.INSTANCE.hudSettings.netherCoords, "nether_coords", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.hudSettings.netherCoords, "nether_coords", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.hudSettings.netherCoords = value;
+                            pepsiMod.hudSettings.netherCoords = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.hudSettings.netherCoords;
+                            return pepsiMod.hudSettings.netherCoords;
                         }, "NetherCoords"),
-                new ModuleOption<>(PepsiMod.INSTANCE.hudSettings.arrayListTop, "arraylist_top", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.hudSettings.arrayListTop, "arraylist_top", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.hudSettings.arrayListTop = value;
+                            pepsiMod.hudSettings.arrayListTop = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.hudSettings.arrayListTop;
+                            return pepsiMod.hudSettings.arrayListTop;
                         }, "ArrayListOnTop"),
-                new ModuleOption<>(PepsiMod.INSTANCE.hudSettings.serverBrand, "server_brand", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.hudSettings.serverBrand, "server_brand", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.hudSettings.serverBrand = value;
+                            pepsiMod.hudSettings.serverBrand = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.hudSettings.serverBrand;
+                            return pepsiMod.hudSettings.serverBrand;
                         }, "ServerBrand"),
-                new ModuleOption<>(PepsiMod.INSTANCE.hudSettings.rainbow, "rainbow", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.hudSettings.rainbow, "rainbow", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.hudSettings.rainbow = value;
+                            pepsiMod.hudSettings.rainbow = value;
                             for (Module module : ModuleManager.AVALIBLE_MODULES) {
                                 module.updateName();
                             }
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.hudSettings.rainbow;
+                            return pepsiMod.hudSettings.rainbow;
                         }, "Rainbow"),
-                new ModuleOption<>(PepsiMod.INSTANCE.hudSettings.direction, "direction", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.hudSettings.direction, "direction", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.hudSettings.direction = value;
+                            pepsiMod.hudSettings.direction = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.hudSettings.direction;
+                            return pepsiMod.hudSettings.direction;
                         }, "Direction"),
-                new ModuleOption<>(PepsiMod.INSTANCE.hudSettings.armor, "armor", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.hudSettings.armor, "armor", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.hudSettings.armor = value;
+                            pepsiMod.hudSettings.armor = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.hudSettings.armor;
+                            return pepsiMod.hudSettings.armor;
                         }, "Armor"),
-                new ModuleOption<>(PepsiMod.INSTANCE.hudSettings.effects, "effects", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.hudSettings.effects, "effects", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.hudSettings.effects = value;
+                            pepsiMod.hudSettings.effects = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.hudSettings.effects;
+                            return pepsiMod.hudSettings.effects;
                         }, "Effects"),
-                new ModuleOption<>(PepsiMod.INSTANCE.hudSettings.fps, "fps", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.hudSettings.fps, "fps", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.hudSettings.fps = value;
+                            pepsiMod.hudSettings.fps = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.hudSettings.fps;
+                            return pepsiMod.hudSettings.fps;
                         }, "FPS"),
-                new ModuleOption<>(PepsiMod.INSTANCE.hudSettings.ping, "ping", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.hudSettings.ping, "ping", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.hudSettings.ping = value;
+                            pepsiMod.hudSettings.ping = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.hudSettings.ping;
+                            return pepsiMod.hudSettings.ping;
                         }, "Ping"),
-                new ModuleOption<>(PepsiMod.INSTANCE.hudSettings.r, "r", new String[]{"0", "128", "255"},
+                new ModuleOption<>(pepsiMod.hudSettings.r, "r", new String[]{"0", "128", "255"},
                         (value) -> {
-                            PepsiMod.INSTANCE.hudSettings.r = value;
+                            pepsiMod.hudSettings.r = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.hudSettings.r;
+                            return pepsiMod.hudSettings.r;
                         }, "Red", new ExtensionSlider(ExtensionType.VALUE_INT, 0, 255, 1)),
-                new ModuleOption<>(PepsiMod.INSTANCE.hudSettings.g, "g", new String[]{"0", "128", "255"},
+                new ModuleOption<>(pepsiMod.hudSettings.g, "g", new String[]{"0", "128", "255"},
                         (value) -> {
-                            PepsiMod.INSTANCE.hudSettings.g = value;
+                            pepsiMod.hudSettings.g = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.hudSettings.g;
+                            return pepsiMod.hudSettings.g;
                         }, "Green", new ExtensionSlider(ExtensionType.VALUE_INT, 0, 255, 1)),
-                new ModuleOption<>(PepsiMod.INSTANCE.hudSettings.b, "b", new String[]{"0", "128", "255"},
+                new ModuleOption<>(pepsiMod.hudSettings.b, "b", new String[]{"0", "128", "255"},
                         (value) -> {
-                            PepsiMod.INSTANCE.hudSettings.b = value;
+                            pepsiMod.hudSettings.b = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.hudSettings.b;
+                            return pepsiMod.hudSettings.b;
                         }, "Blue", new ExtensionSlider(ExtensionType.VALUE_INT, 0, 255, 1))
         };
     }
