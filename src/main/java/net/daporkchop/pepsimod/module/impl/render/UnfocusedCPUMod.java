@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.render;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -54,13 +53,13 @@ public class UnfocusedCPUMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new ModuleOption<>(PepsiMod.INSTANCE.miscOptions.cpu_framecap, "limit", OptionCompletions.INTEGER,
+                new ModuleOption<>(pepsiMod.miscOptions.cpu_framecap, "limit", OptionCompletions.INTEGER,
                         (value) -> {
-                            PepsiMod.INSTANCE.miscOptions.cpu_framecap = Math.max(1, value);
+                            pepsiMod.miscOptions.cpu_framecap = Math.max(1, value);
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.miscOptions.cpu_framecap;
+                            return pepsiMod.miscOptions.cpu_framecap;
                         }, "Limit", new ExtensionSlider(ExtensionType.VALUE_INT, 1, 60, 1))
         };
     }
@@ -76,7 +75,7 @@ public class UnfocusedCPUMod extends Module {
 
     @Override
     public String getModeForName() {
-        return String.valueOf(PepsiMod.INSTANCE.miscOptions.cpu_framecap);
+        return String.valueOf(pepsiMod.miscOptions.cpu_framecap);
 
     }
 }

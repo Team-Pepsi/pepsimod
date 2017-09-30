@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.misc;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleLaunchState;
@@ -40,7 +39,7 @@ public class FreecamMod extends Module {
     @Override
     public void onEnable() {
         INSTANCE = this;//adding this a bunch because it always seems to be null idk y
-        if (PepsiMod.INSTANCE.hasInitializedModules) {
+        if (pepsiMod.hasInitializedModules) {
             fakePlayer = new EntityFakePlayer();
         }
     }
@@ -48,7 +47,7 @@ public class FreecamMod extends Module {
     @Override
     public void onDisable() {
         INSTANCE = this;//adding this a bunch because it always seems to be null idk y
-        if (PepsiMod.INSTANCE.hasInitializedModules) {
+        if (pepsiMod.hasInitializedModules) {
             fakePlayer.resetPlayerPosition();
             fakePlayer.despawn();
 
@@ -74,7 +73,7 @@ public class FreecamMod extends Module {
 
     @Override
     public void init() {
-        SPEED = PepsiMod.INSTANCE.dataTag.getFloat("Freecam_speed", 1.0f);
+        SPEED = pepsiMod.dataTag.getFloat("Freecam_speed", 1.0f);
         INSTANCE = this; //adding this a bunch because it always seems to be null idk y
     }
 

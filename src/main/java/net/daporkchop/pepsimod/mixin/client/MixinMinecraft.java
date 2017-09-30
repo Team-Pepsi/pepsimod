@@ -47,6 +47,7 @@ import java.nio.ByteBuffer;
 import java.util.Base64;
 
 import static net.daporkchop.pepsimod.util.misc.Default.mc;
+import static net.daporkchop.pepsimod.util.misc.Default.pepsiMod;
 
 @Mixin(Minecraft.class)
 public abstract class MixinMinecraft {
@@ -56,7 +57,7 @@ public abstract class MixinMinecraft {
     @Inject(method = "shutdown()V", at = @At("HEAD"))
     public void saveSettingsOnShutdown(CallbackInfo ci) {
         System.out.println("[PEPSIMOD] Saving config...");
-        PepsiMod.INSTANCE.saveConfig();
+        pepsiMod.saveConfig();
         System.out.println("[PEPSIMOD] Saved.");
 
         if (ZoomMod.INSTANCE.isEnabled) {
@@ -152,7 +153,7 @@ public abstract class MixinMinecraft {
     public void preGetLimitFramerate(CallbackInfoReturnable<Integer> callbackInfoReturnable) {
         try {
             if (UnfocusedCPUMod.INSTANCE.isEnabled && !Display.isActive()) {
-                callbackInfoReturnable.setReturnValue(PepsiMod.INSTANCE.miscOptions.cpu_framecap);
+                callbackInfoReturnable.setReturnValue(pepsiMod.miscOptions.cpu_framecap);
             }
         } catch (NullPointerException e) {
 

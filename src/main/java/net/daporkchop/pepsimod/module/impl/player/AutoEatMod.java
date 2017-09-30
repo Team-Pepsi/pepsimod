@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.player;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -63,7 +62,7 @@ public class AutoEatMod extends Module {
         }
 
         FoodStats foodStats = mc.player.getFoodStats();
-        if (foodStats.getFoodLevel() <= PepsiMod.INSTANCE.miscOptions.autoEat_threshold && shouldEat()) {
+        if (foodStats.getFoodLevel() <= pepsiMod.miscOptions.autoEat_threshold && shouldEat()) {
             eatFood();
         }
 
@@ -77,13 +76,13 @@ public class AutoEatMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new ModuleOption<>(PepsiMod.INSTANCE.miscOptions.autoEat_threshold, "threshold", OptionCompletions.FLOAT,
+                new ModuleOption<>(pepsiMod.miscOptions.autoEat_threshold, "threshold", OptionCompletions.FLOAT,
                         (value) -> {
-                            PepsiMod.INSTANCE.miscOptions.autoEat_threshold = Math.max(0, value);
+                            pepsiMod.miscOptions.autoEat_threshold = Math.max(0, value);
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.miscOptions.autoEat_threshold;
+                            return pepsiMod.miscOptions.autoEat_threshold;
                         }, "Threshold", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0f, 19f, 1f))
         };
     }

@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.mixin.client.renderer;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.impl.misc.WaypointsMod;
 import net.daporkchop.pepsimod.module.impl.render.*;
 import net.daporkchop.pepsimod.util.PepsiUtils;
@@ -44,6 +43,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import static net.daporkchop.pepsimod.util.misc.Default.pepsiMod;
 
 @Mixin(EntityRenderer.class)
 public abstract class MixinEntityRenderer {
@@ -408,7 +409,7 @@ public abstract class MixinEntityRenderer {
         if (TracersMod.INSTANCE.isEnabled) {
             TracersMod.INSTANCE.drawLines(partialTicks);
         }
-        if (PepsiMod.INSTANCE.miscOptions.waypoints_tracers && WaypointsMod.INSTANCE.isEnabled) {
+        if (pepsiMod.miscOptions.waypoints_tracers && WaypointsMod.INSTANCE.isEnabled) {
             WaypointsMod.INSTANCE.drawLines(partialTicks);
         }
     }

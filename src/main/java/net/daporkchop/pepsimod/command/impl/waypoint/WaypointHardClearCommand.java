@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.command.impl.waypoint;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.api.Command;
 
 public class WaypointHardClearCommand extends Command {
@@ -25,7 +24,7 @@ public class WaypointHardClearCommand extends Command {
 
     @Override
     public void execute(String cmd, String[] args) {
-        PepsiMod.INSTANCE.waypoints.hardClearWaypoints();
+        pepsiMod.waypoints.hardClearWaypoints();
         clientMessage("Cleared all waypoints on all servers!");
     }
 

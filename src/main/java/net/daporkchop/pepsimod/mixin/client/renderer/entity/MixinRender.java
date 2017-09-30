@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.mixin.client.renderer.entity;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.impl.render.ESPMod;
 import net.daporkchop.pepsimod.module.impl.render.HealthTagsMod;
 import net.daporkchop.pepsimod.util.Friends;
@@ -38,6 +37,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import static net.daporkchop.pepsimod.util.misc.Default.pepsiMod;
 
 @Mixin(Render.class)
 public abstract class MixinRender<T extends Entity> {
@@ -90,7 +91,7 @@ public abstract class MixinRender<T extends Entity> {
     @Inject(method = "getTeamColor", at = @At("HEAD"), cancellable = true)
     public void pregetTeamColor(T entity, CallbackInfoReturnable<Integer> callbackInfoReturnable) {
         if (ESPMod.INSTANCE.isEnabled) {
-            ESPSettings settings = PepsiMod.INSTANCE.espSettings;
+            ESPSettings settings = pepsiMod.espSettings;
             if (entity.isInvisible()) {
                 if (!settings.invisible) {
                     return;

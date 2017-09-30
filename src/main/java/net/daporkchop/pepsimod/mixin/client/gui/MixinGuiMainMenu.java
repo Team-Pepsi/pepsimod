@@ -16,7 +16,6 @@
 package net.daporkchop.pepsimod.mixin.client.gui;
 
 import net.daporkchop.pepsimod.PepsiInjectMethods;
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.util.ImageUtils;
@@ -40,6 +39,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.*;
 
+import static net.daporkchop.pepsimod.util.misc.Default.pepsiMod;
+
 @Mixin(GuiMainMenu.class)
 public abstract class MixinGuiMainMenu extends GuiScreen {
     public final ColorizedText PEPSIMOD_TEXT_GRADIENT = PepsiUtils.getGradientFromStringThroughColor("PepsiMod 11.0 for Minecraft 1.12.1", new Color(255, 0, 0), new Color(0, 0, 255), new Color(255, 255, 255));
@@ -50,13 +51,13 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
 
     @Inject(method = "initGui", at = @At("RETURN"))
     public void addPepsiIconAndChangeSplash(CallbackInfo ci) {
-        PepsiMod.INSTANCE.isInitialized = true;
-        if (!PepsiMod.INSTANCE.hasInitializedModules) {
+        pepsiMod.isInitialized = true;
+        if (!pepsiMod.hasInitializedModules) {
             for (Module module : ModuleManager.AVALIBLE_MODULES) {
                 module.doInit();
             }
             PepsiUtils.setBlockIdFields();
-            PepsiMod.INSTANCE.hasInitializedModules = true;
+            pepsiMod.hasInitializedModules = true;
         }
         TITLE = new Texture(ImageUtils.imgs.get(1));
         this.splashText = PepsiUtils.COLOR_ESCAPE + "c" + PepsiUtils.COLOR_ESCAPE + "lpepsi" + PepsiUtils.COLOR_ESCAPE + "9" + PepsiUtils.COLOR_ESCAPE + "lmod";

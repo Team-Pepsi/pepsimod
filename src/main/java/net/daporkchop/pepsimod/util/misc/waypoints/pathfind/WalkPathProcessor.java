@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.util.misc.waypoints.pathfind;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.impl.GoToCommand;
 import net.daporkchop.pepsimod.module.impl.movement.StepMod;
 import net.daporkchop.pepsimod.totally.not.skidded.RotationUtils;
@@ -79,7 +78,7 @@ public class WalkPathProcessor extends PathProcessor {
             ReflectionStuff.setPressed(mc.gameSettings.keyBindForward, true);
 
             if (index > 0 && path.get(index - 1).jumping || pos.getY() < nextPos.getY()) {
-                if (!(StepMod.INSTANCE.isEnabled && (PepsiMod.INSTANCE.miscOptions.step_legit || PepsiMod.INSTANCE.miscOptions.step_height == 1))) {
+                if (!(StepMod.INSTANCE.isEnabled && (pepsiMod.miscOptions.step_legit || pepsiMod.miscOptions.step_height == 1))) {
                     ReflectionStuff.setPressed(mc.gameSettings.keyBindJump, true);
                 }
             }
@@ -99,7 +98,7 @@ public class WalkPathProcessor extends PathProcessor {
                     }
 
                     // jump up
-                    if (!(StepMod.INSTANCE.isEnabled && (PepsiMod.INSTANCE.miscOptions.step_legit || PepsiMod.INSTANCE.miscOptions.step_height == 1))) {
+                    if (!(StepMod.INSTANCE.isEnabled && (pepsiMod.miscOptions.step_legit || pepsiMod.miscOptions.step_height == 1))) {
                         ReflectionStuff.setPressed(mc.gameSettings.keyBindJump, true);
                     }
                 }

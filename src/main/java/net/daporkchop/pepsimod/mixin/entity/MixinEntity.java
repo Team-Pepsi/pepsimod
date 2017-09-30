@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.mixin.entity;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
 import net.daporkchop.pepsimod.module.impl.movement.NoClipMod;
 import net.daporkchop.pepsimod.module.impl.movement.VelocityMod;
@@ -37,6 +36,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.daporkchop.pepsimod.util.misc.Default.mc;
+import static net.daporkchop.pepsimod.util.misc.Default.pepsiMod;
 
 @Mixin(Entity.class)
 public abstract class MixinEntity {
@@ -101,7 +101,7 @@ public abstract class MixinEntity {
     public void preisGlowing(CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (ESPMod.INSTANCE.isEnabled) {
             Entity this_ = Entity.class.cast(this);
-            ESPSettings settings = PepsiMod.INSTANCE.espSettings;
+            ESPSettings settings = pepsiMod.espSettings;
             if (this_.isInvisible()) {
                 if (!settings.invisible) {
                     return;

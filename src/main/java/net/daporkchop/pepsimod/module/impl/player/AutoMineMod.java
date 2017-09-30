@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.player;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -37,7 +36,7 @@ public class AutoMineMod extends Module {
 
     @Override
     public void onDisable() {
-        if (PepsiMod.INSTANCE.hasInitializedModules) {
+        if (pepsiMod.hasInitializedModules) {
             ReflectionStuff.setPressed(mc.gameSettings.keyBindAttack, false);
         }
     }

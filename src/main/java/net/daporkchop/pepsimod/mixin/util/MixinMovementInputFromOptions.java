@@ -15,6 +15,7 @@
 
 package net.daporkchop.pepsimod.mixin.util;
 
+import net.daporkchop.pepsimod.clickgui.ClickGUI;
 import net.daporkchop.pepsimod.module.impl.movement.InventoryMoveMod;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.minecraft.client.gui.GuiChat;
@@ -85,6 +86,8 @@ public abstract class MixinMovementInputFromOptions extends MovementInput {
             if (mc.currentScreen instanceof InventoryEffectRenderer) {
                 return Keyboard.isKeyDown(keyBinding.getKeyCode()) || ReflectionStuff.getPressed(keyBinding);
             } else if (mc.world.isRemote && mc.currentScreen instanceof GuiIngameMenu) {
+                return Keyboard.isKeyDown(keyBinding.getKeyCode()) || ReflectionStuff.getPressed(keyBinding);
+            } else if (mc.currentScreen instanceof ClickGUI) {
                 return Keyboard.isKeyDown(keyBinding.getKeyCode()) || ReflectionStuff.getPressed(keyBinding);
             } else if (mc.currentScreen instanceof GuiChat) {
                 return ReflectionStuff.getPressed(keyBinding);

@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.command.impl.waypoint;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.api.Command;
 import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
 
@@ -30,7 +29,7 @@ public class WaypointHideCommand extends Command {
     public void execute(String cmd, String[] args) {
         Waypoint waypoint = null;
         if (args.length >= 2) {
-            if ((waypoint = PepsiMod.INSTANCE.waypoints.getWaypoint(args[1])) == null) {
+            if ((waypoint = pepsiMod.waypoints.getWaypoint(args[1])) == null) {
                 clientMessage("No waypoint with name:\u00A7o" + args[1] + "\u00A7r!");
                 return;
             }
@@ -46,9 +45,9 @@ public class WaypointHideCommand extends Command {
     @Override
     public String getSuggestion(String cmd, String[] args) {
         if (args.length == 1) {
-            return cmd + " " + PepsiMod.INSTANCE.waypoints.getWaypoints().iterator().next().name;
+            return cmd + " " + pepsiMod.waypoints.getWaypoints().iterator().next().name;
         } else if (args.length == 2) {
-            Collection<Waypoint> waypoints = PepsiMod.INSTANCE.waypoints.getWaypoints();
+            Collection<Waypoint> waypoints = pepsiMod.waypoints.getWaypoints();
             for (Waypoint waypoint : waypoints) {
                 if (waypoint.name.startsWith(args[1])) {
                     return args[0] + " " + waypoint.name;

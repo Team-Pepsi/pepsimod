@@ -43,11 +43,20 @@ public class ModuleManager {
      * @return the Module passed to the function
      */
     public static final Module registerModule(Module toRegister) {
-        AVALIBLE_MODULES.add(toRegister);
-        if (toRegister.isEnabled) {
-            ENABLED_MODULES.add(toRegister);
+        if (toRegister.shouldRegister()) {
+            AVALIBLE_MODULES.add(toRegister);
+            if (toRegister.isEnabled) {
+                ENABLED_MODULES.add(toRegister);
+            }
         }
         return toRegister;
+    }
+
+    public static void unRegister(Module module) {
+        if (AVALIBLE_MODULES.contains(module)) {
+            AVALIBLE_MODULES.remove(module);
+            ENABLED_MODULES.remove(module);
+        }
     }
 
     /**

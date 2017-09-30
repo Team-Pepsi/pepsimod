@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.misc;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.clickgui.ClickGUI;
 import net.daporkchop.pepsimod.clickgui.Window;
 import net.daporkchop.pepsimod.module.ModuleCategory;
@@ -34,7 +33,7 @@ public class ClickGuiMod extends Module {
 
     @Override
     public void onEnable() {
-        if (PepsiMod.INSTANCE.isInitialized) {
+        if (pepsiMod.isInitialized) {
             for (Window window : ClickGUI.INSTANCE.windows) {
                 window.openGui();
             }

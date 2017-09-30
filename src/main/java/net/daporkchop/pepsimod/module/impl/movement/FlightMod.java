@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.movement;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -50,16 +49,16 @@ public class FlightMod extends Module {
         player.motionX = 0;
         player.motionY = 0;
         player.motionZ = 0;
-        ReflectionStuff.setLandMovementFactor(player, PepsiMod.INSTANCE.miscOptions.flight_speed);
-        player.jumpMovementFactor = PepsiMod.INSTANCE.miscOptions.flight_speed;
+        ReflectionStuff.setLandMovementFactor(player, pepsiMod.miscOptions.flight_speed);
+        player.jumpMovementFactor = pepsiMod.miscOptions.flight_speed;
         ReflectionStuff.setInWater(player, false);
 
         if (mc.inGameHasFocus) {
             if (Keyboard.isKeyDown(mc.gameSettings.keyBindJump.getKeyCode())) {
-                player.motionY += PepsiMod.INSTANCE.miscOptions.flight_speed / 2 + 0.2F;
+                player.motionY += pepsiMod.miscOptions.flight_speed / 2 + 0.2F;
             }
             if (Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode())) {
-                player.motionY -= PepsiMod.INSTANCE.miscOptions.flight_speed / 2 + 0.2F;
+                player.motionY -= pepsiMod.miscOptions.flight_speed / 2 + 0.2F;
             }
         }
     }
@@ -72,13 +71,13 @@ public class FlightMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new ModuleOption<>(PepsiMod.INSTANCE.miscOptions.flight_speed, "speed", OptionCompletions.FLOAT,
+                new ModuleOption<>(pepsiMod.miscOptions.flight_speed, "speed", OptionCompletions.FLOAT,
                         (value) -> {
-                            PepsiMod.INSTANCE.miscOptions.flight_speed = Math.max(0, value);
+                            pepsiMod.miscOptions.flight_speed = Math.max(0, value);
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.miscOptions.flight_speed;
+                            return pepsiMod.miscOptions.flight_speed;
                         }, "Speed", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.1f, 10f, 0.1f))
         };
     }

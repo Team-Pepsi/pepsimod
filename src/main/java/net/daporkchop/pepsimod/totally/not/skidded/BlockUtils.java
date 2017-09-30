@@ -374,8 +374,7 @@ public final class BlockUtils {
         return false;
     }
 
-    public static Iterable<BlockPos> getValidBlocksByDistance(double range,
-                                                              boolean ignoreVisibility, BlockValidator validator) {
+    public static Iterable<BlockPos> getValidBlocksByDistance(double range, boolean ignoreVisibility, BlockValidator validator) {
         // prepare range check
         Vec3d eyesPos = RotationUtils.getEyesPos().subtract(0.5, 0.5, 0.5);
         double rangeSq = Math.pow(range + 0.5, 2);

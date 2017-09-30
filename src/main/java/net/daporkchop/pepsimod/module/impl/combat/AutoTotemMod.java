@@ -63,10 +63,10 @@ public class AutoTotemMod extends Module {
 
         inv = player.inventory.mainInventory;
 
-        for (inventoryIndex = 0; inventoryIndex < inv.size(); inventoryIndex++) {
-            if (inv.get(inventoryIndex) != ItemStack.EMPTY) { //ItemStack.EMPTY
-                if ((offhand == null) || (offhand.getItem() != Items.TOTEM_OF_UNDYING)) { //ItemStack.TOTEM
-                    if (inv.get(inventoryIndex).getItem() == Items.TOTEM_OF_UNDYING) { //ItemStack.TOTEM
+        if ((offhand == null) || (offhand.getItem() != Items.TOTEM_OF_UNDYING)) {
+            for (inventoryIndex = 0; inventoryIndex < inv.size(); inventoryIndex++) {
+                if (inv.get(inventoryIndex) != ItemStack.EMPTY) {
+                    if (inv.get(inventoryIndex).getItem() == Items.TOTEM_OF_UNDYING) {
                         replaceTotem(inventoryIndex);
                         break;
                     }

@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.combat;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -54,9 +53,9 @@ public class CrystalAuraMod extends Module {
         EntityPlayerSP player = mc.player;
 
         currentMS = System.nanoTime() / 1000000;
-        if (hasDelayRun((long) (1000 / PepsiMod.INSTANCE.miscOptions.crystalAura_speed))) {
+        if (hasDelayRun((long) (1000 / pepsiMod.miscOptions.crystalAura_speed))) {
             for (Entity e : mc.world.loadedEntityList) {
-                if (player.getDistanceToEntity(e) < PepsiMod.INSTANCE.miscOptions.crystalAura_range) {
+                if (player.getDistanceToEntity(e) < pepsiMod.miscOptions.crystalAura_range) {
                     if (e instanceof EntityEnderCrystal) {
                         mc.playerController.attackEntity(player, e);
                         player.swingArm(EnumHand.MAIN_HAND);
@@ -76,21 +75,21 @@ public class CrystalAuraMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new ModuleOption<>(PepsiMod.INSTANCE.miscOptions.crystalAura_speed, "speed", OptionCompletions.FLOAT,
+                new ModuleOption<>(pepsiMod.miscOptions.crystalAura_speed, "speed", OptionCompletions.FLOAT,
                         (value) -> {
-                            PepsiMod.INSTANCE.miscOptions.crystalAura_speed = Math.max(value, 0);
+                            pepsiMod.miscOptions.crystalAura_speed = Math.max(value, 0);
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.miscOptions.crystalAura_speed;
+                            return pepsiMod.miscOptions.crystalAura_speed;
                         }, "Speed", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0f, 20f, 0.5f)),
-                new ModuleOption<>(PepsiMod.INSTANCE.miscOptions.crystalAura_range, "range", OptionCompletions.FLOAT,
+                new ModuleOption<>(pepsiMod.miscOptions.crystalAura_range, "range", OptionCompletions.FLOAT,
                         (value) -> {
-                            PepsiMod.INSTANCE.miscOptions.crystalAura_range = Math.max(value, 0);
+                            pepsiMod.miscOptions.crystalAura_range = Math.max(value, 0);
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.miscOptions.crystalAura_range;
+                            return pepsiMod.miscOptions.crystalAura_range;
                         }, "Range", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 3f, 10f, 0.05f))
         };
     }

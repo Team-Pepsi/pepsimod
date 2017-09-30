@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.module.impl.movement;
 
-import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -42,14 +41,14 @@ public class StepMod extends Module {
 
     @Override
     public void onDisable() {
-        if (PepsiMod.INSTANCE.hasInitializedModules) {
+        if (pepsiMod.hasInitializedModules) {
             mc.player.stepHeight = 0.5F;
         }
     }
 
     @Override
     public void tick() {
-        if (PepsiMod.INSTANCE.miscOptions.step_legit) {
+        if (pepsiMod.miscOptions.step_legit) {
             EntityPlayerSP player = mc.player;
 
             player.stepHeight = 0.5f;
@@ -93,7 +92,7 @@ public class StepMod extends Module {
             mc.player.connection.sendPacket(new CPacketPlayer.Position(player.posX, player.posY + 0.753 * stepHeight, player.posZ, player.onGround));
             player.setPosition(player.posX, player.posY + 1 * stepHeight, player.posZ);
         } else {
-            mc.player.stepHeight = PepsiMod.INSTANCE.miscOptions.step_height;
+            mc.player.stepHeight = pepsiMod.miscOptions.step_height;
         }
     }
 
@@ -105,21 +104,21 @@ public class StepMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new ModuleOption<>(PepsiMod.INSTANCE.miscOptions.step_height, "height", OptionCompletions.INTEGER,
+                new ModuleOption<>(pepsiMod.miscOptions.step_height, "height", OptionCompletions.INTEGER,
                         (value) -> {
-                            PepsiMod.INSTANCE.miscOptions.step_height = Math.max(0, value);
+                            pepsiMod.miscOptions.step_height = Math.max(0, value);
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.miscOptions.step_height;
+                            return pepsiMod.miscOptions.step_height;
                         }, "Height", new ExtensionSlider(ExtensionType.VALUE_INT, 1, 64, 1)),
-                new ModuleOption<>(PepsiMod.INSTANCE.miscOptions.step_legit, "legit", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(pepsiMod.miscOptions.step_legit, "legit", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            PepsiMod.INSTANCE.miscOptions.step_legit = value;
+                            pepsiMod.miscOptions.step_legit = value;
                             return true;
                         },
                         () -> {
-                            return PepsiMod.INSTANCE.miscOptions.step_legit;
+                            return pepsiMod.miscOptions.step_legit;
                         }, "Legit")
         };
     }
@@ -135,10 +134,10 @@ public class StepMod extends Module {
 
     @Override
     public String getModeForName() {
-        if (PepsiMod.INSTANCE.miscOptions.step_legit) {
+        if (pepsiMod.miscOptions.step_legit) {
             return "Legit";
         } else {
-            return String.valueOf(PepsiMod.INSTANCE.miscOptions.step_height);
+            return String.valueOf(pepsiMod.miscOptions.step_height);
         }
     }
 }
