@@ -33,6 +33,7 @@ import net.minecraft.util.Timer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.fml.common.FMLLog;
 
 import java.lang.reflect.Field;
@@ -68,8 +69,10 @@ public class ReflectionStuff extends Default {
     public static Field curBlockDamageMP;
     public static Field blockHitDelay;
     public static Field cPacketPlayer_onGround;
+    public static Field dimension;
 
     public static Method updateFallState;
+    public static Method rightClickMouse;
 
     private static Field modifiersField;
 
@@ -143,10 +146,30 @@ public class ReflectionStuff extends Default {
             blockHitDelay = getField(PlayerControllerMP.class, "blockHitDelay", "field_78781_i", "g");
             curBlockDamageMP = getField(PlayerControllerMP.class, "curBlockDamageMP", "field_78770_f", "e");
             cPacketPlayer_onGround = getField(CPacketPlayer.class, "onGround", "field_149474_g", "f");
+            dimension = getField(WorldInfo.class, "dimension", "field_76105_j", "p");
 
             updateFallState = getMethod(Entity.class, new String[]{"updateFallState", "func_184231_a", "a"}, double.class, boolean.class, IBlockState.class, BlockPos.class);
+            rightClickMouse = getMethod(Minecraft.class, new String[]{"rightClickMouse", "func_147121_ag", "aB"});
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static int getDimension() {
+        try {
+            return (int) dimension.get(mc.world.getWorldInfo());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static void rightClickMouse() {
+        try {
+            rightClickMouse.invoke(mc);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
         }
     }
 
@@ -477,6 +500,33 @@ public class ReflectionStuff extends Default {
     public static double getRenderPosZ(RenderManager mgr) {
         try {
             return (double) renderPosZ.get(mgr);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static double getRenderPosX() {
+        try {
+            return (double) renderPosX.get(mc.getRenderManager());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static double getRenderPosY() {
+        try {
+            return (double) renderPosY.get(mc.getRenderManager());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static double getRenderPosZ() {
+        try {
+            return (double) renderPosZ.get(mc.getRenderManager());
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);

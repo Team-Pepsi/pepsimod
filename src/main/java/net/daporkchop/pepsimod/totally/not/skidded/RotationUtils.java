@@ -129,6 +129,7 @@ public class RotationUtils extends Default {
                 + Math.abs(oldPitch - rotations[1]) < 1F;
     }
 
+
     public static boolean faceEntityClient(Entity entity) {
         // get position & rotation
         Vec3d eyesPos = getEyesPos();
@@ -213,8 +214,7 @@ public class RotationUtils extends Default {
         }
 
         // slowly synchronize server rotation with client
-        serverYaw =
-                limitAngleChange(serverYaw, mc.player.rotationYaw, 30);
+        serverYaw = limitAngleChange(serverYaw, mc.player.rotationYaw, 30);
         serverPitch = mc.player.rotationPitch;
     }
 

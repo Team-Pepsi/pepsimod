@@ -25,6 +25,7 @@ import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
 import net.daporkchop.pepsimod.util.event.MoveEvent;
 import net.daporkchop.pepsimod.util.misc.ITickListener;
 import net.daporkchop.pepsimod.util.module.MiscOptions;
+import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.network.Packet;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -404,6 +405,10 @@ public abstract class Module extends Command implements ITickListener {
      * called every frame
      */
     public void onRender(float partialTicks) {
+
+    }
+
+    public void onRenderGUI(float partialTicks, int width, int height, GuiIngame gui) {
 
     }
 

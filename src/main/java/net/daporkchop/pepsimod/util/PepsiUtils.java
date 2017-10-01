@@ -38,6 +38,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.*;
 import net.minecraft.util.EnumFacing;
@@ -455,6 +456,10 @@ public class PepsiUtils extends Default {
         GL11.glColor4b(color.r, color.g, color.b, color.a);
     }
 
+    public static void glColor(Color color) {
+        RenderColor.glColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+    }
+
     public static boolean isThrowable(ItemStack stack) {
         Item item = stack.getItem();
         return item instanceof ItemBow || item instanceof ItemSnowball || item instanceof ItemEgg || item instanceof ItemEnderPearl || item instanceof ItemSplashPotion || item instanceof ItemLingeringPotion || item instanceof ItemFishingRod;
@@ -722,173 +727,65 @@ public class PepsiUtils extends Default {
         tessellator.draw();
     }
 
-    /*public static void renderWaypoint(Waypoint waypoint) {
-        RenderManager renderManager = mc.getRenderManager();
-        if (renderManager.renderViewEntity == null) {
-            return;
+    public static int getBestTool(Block block) {
+        float best = -1.0F;
+        int index = -1;
+        for (int i = 0; i < 9; i++) {
+            ItemStack itemStack = mc.player.inventory.getStackInSlot(i);
+            if (itemStack != null) {
+                float str = itemStack.getItem().getDestroySpeed(itemStack, block.getDefaultState());
+                if (str > best) {
+                    best = str;
+                    index = i;
+                }
+            }
         }
-        RenderHelper.enableStandardItemLighting();
-        try {
-            Vec3d playerVec = renderManager.renderViewEntity.getPositionVector();
-
-            Vec3d waypointVec = waypoint.getPosition().addVector(0.0D, 0.118D, 0.0D);
-
-            double viewDistance = playerVec.distanceTo(waypointVec);
-            double maxRenderDistance = mc.gameSettings.renderDistanceChunks * 16;
-            double scale = 0.5;
-            if (viewDistance > maxRenderDistance) {
-                Vec3d delta = waypointVec.subtract(playerVec).normalize();
-                waypointVec = playerVec.addVector(delta.x * maxRenderDistance, delta.y * maxRenderDistance, delta.z * maxRenderDistance);
-                viewDistance = maxRenderDistance;
-            }
-            double shiftX = waypointVec.x - renderManager.viewerPosX;
-            double shiftY = waypointVec.y - renderManager.viewerPosY;
-            double shiftZ = waypointVec.z - renderManager.viewerPosZ;
-
-            String label = waypoint.name;
-
-            boolean showDistance = pepsiMod.miscOptions.waypoints_dist;
-            boolean showCoords = pepsiMod.miscOptions.waypoints_coords;
-
-            StringBuilder sb = new StringBuilder();
-            sb.append(label);
-            if (showCoords) {
-                sb.append(" x\u00A7b" + waypoint.x + "\u00A7r y\u00A7b" + waypoint.y + "\u00A7r z\u00A7b" + waypoint.z + "\u00A7r");
-            }
-            if (showDistance) {
-                sb.append(" \u00A77(\u00A79" + PepsiUtils.roundCoords(mc.player.getDistance(waypoint.x, waypoint.y, waypoint.z)) + "\u00A7rm\u00A77)");
-            }
-            if (sb.length() > 0) {
-                label = sb.toString();
-
-                GlStateManager.pushMatrix();
-                GlStateManager.disableLighting();
-                GL11.glNormal3d(0.0D, 0.0D, -1.0D * scale);
-
-                GlStateManager.translate(shiftX, shiftY, shiftZ);
-                GlStateManager.rotate(-renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-                GlStateManager.rotate(renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-                GlStateManager.scale(-scale, -scale, scale);
-
-                GlStateManager.depthMask(false);
-                //GlStateManager.depthMask(true);
-                GlStateManager.enableDepth();
-
-                drawLabel(label, 1.0D, -8, 0, 0.6F, Color.white.getRGB(), 1, 1, true);
-
-                GlStateManager.disableDepth();
-                GlStateManager.depthMask(false);
-
-                //drawLabel(label, 1.0D, -8, 0, 0.4F, Color.white.getRGB(), 1, 1, false);
-
-                GlStateManager.popMatrix();
-            }
-
-        } finally {
-            GlStateManager.depthMask(true);
-            GlStateManager.enableDepth();
-            GlStateManager.enableLighting();
-            GlStateManager.depthMask(true);
-            GlStateManager.enableCull();
-            GlStateManager.disableBlend();
-            GlStateManager.disableFog();
-
-            RenderHelper.disableStandardItemLighting();
-        }
+        return index;
     }
 
-    public static void drawLabel(String text, double x, double y, Integer bgColor, float bgAlpha, double bgWidth, double bgHeight, int color, float alpha, double fontScale, boolean fontShadow, double rotation) {
-        if ((text == null) || (text.length() == 0)) {
-            return;
-        }
-        FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
-        boolean drawRect = (bgColor != null) && (bgAlpha > 0.0F);
-        int height = drawRect ? getLabelHeight(fontRenderer, fontShadow) : fontRenderer.FONT_HEIGHT;
-        double width = fontRenderer.getStringWidth(text);
-        GlStateManager.pushMatrix();
-        try {
-            if (fontScale != 1.0D) {
-                x /= fontScale;
-                y /= fontScale;
-                GlStateManager.scale(fontScale, fontScale, 0.0D);
-            }
-            float textX = (float) x;
-            float textY = (float) y;
-            double rectX = x;
-            double rectY = y;
-            textX = (float) (x - width / 2.0D + (fontScale > 1.0D ? 0.5D : 0.0D));
-            rectX = (float) (x - Math.max(1.0D, bgWidth) / 2.0D + (fontScale > 1.0D ? 0.5D : 0.0D));
-
-            double vpad = drawRect ? (height - fontRenderer.FONT_HEIGHT) / 2.0D : 0.0D;
-
-            rectY = y - height / 2 + (fontScale > 1.0D ? 0.5D : 0.0D);
-            textY = (float) (rectY + vpad);
-
-
-            if (rotation != 0.0D) {
-                GlStateManager.translate(x, y, 0.0D);
-                GlStateManager.rotate((float) -rotation, 0.0F, 0.0F, 1.0F);
-                GlStateManager.translate(-x, -y, 0.0D);
-            }
-            GlStateManager.translate(textX - Math.floor(textX), textY - Math.floor(textY), 0.0D);
-            fontRenderer.drawString(text, textX, textY, color, fontShadow);
-        } finally {
-            GlStateManager.popMatrix();
-        }
-    }
-
-    public static int getLabelHeight(FontRenderer fr, boolean fontShadow) {
-        int vpad = fontShadow ? 6 : fr.getUnicodeFlag() ? 0 : 4;
-        return fr.FONT_HEIGHT + vpad;
-    }
-
-    public static void addVertex(double x, double y, double z) {
-        bufferBuilder.pos(x, y, z).tex(1.0D, 1.0D).endVertex();
-    }
-
-    public static void drawRectangle(double x, double y, double width, double height, int color, float alpha) {
-        GlStateManager.enableBlend();
-        GlStateManager.disableTexture2D();
-        GlStateManager.disableAlpha();
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-
-        startDrawingQuads(true);
-        addVertex(x, height + y, 0);
-        addVertex(x + width, height + y, 0);
-        addVertex(x + width, y, 0);
-        addVertex(x, y, 0);
-        Tessellator.getInstance().draw();
-
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.enableTexture2D();
-        GlStateManager.enableAlpha();
-        GlStateManager.disableBlend();
-    }
-
-    public static void startDrawingQuads(boolean useColor) {
-        if (useColor) {
-            bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+    public static double getDimensionCoord(double coord) {
+        if (ReflectionStuff.getDimension() == 0) {
+            return coord / 8;
         } else {
-            bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+            return coord * 8;
         }
     }
 
-    public static void addVertexWithUV(double x, double y, double z, double u, double v) {
-        bufferBuilder.pos(x, y, z).tex(u, v).endVertex();
+    public static int getArmorType(ItemArmor armor) {
+        return armor.armorType.ordinal() - 2;
     }
 
-    public static void drawLabel(String text, double x, double y, int bgColor, float bgAlpha, int color, float alpha, double fontScale, boolean fontShadow) {
-        drawLabel(text, x, y, bgColor, bgAlpha, color, alpha, fontScale, fontShadow, 0.0D);
+    public static double[] interpolate(Entity entity) {
+        double partialTicks = ReflectionStuff.getTimer().renderPartialTicks;
+        double[] pos = {entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks, entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks, entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks};
+
+        return pos;
     }
 
-    public static void drawLabel(String text, double x, double y, Integer bgColor, float bgAlpha, Integer color, float alpha, double fontScale, boolean fontShadow, double rotation) {
-        double bgWidth = 0.0D;
-        double bgHeight = 0.0D;
-        if ((bgColor != null) && (bgAlpha > 0.0F)) {
-            FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
-            bgWidth = fontRenderer.getStringWidth(text);
-            bgHeight = getLabelHeight(fontRenderer, fontShadow);
+    public static boolean isAttackable(EntityLivingBase entity) {
+        return entity != null && entity != mc.player && entity.isEntityAlive();
+    }
+
+    public static EntityLivingBase getClosestEntityWithoutReachFactor() {
+        EntityLivingBase closestEntity = null;
+        double distance = 9999.0D;
+        for (Object object : mc.world.loadedEntityList) {
+            if ((object instanceof EntityLivingBase)) {
+                EntityLivingBase entity = (EntityLivingBase) object;
+                if (isAttackable(entity)) {
+                    double newDistance = mc.player.getDistanceSqToEntity(entity);
+                    if (closestEntity != null) {
+                        if (distance > newDistance) {
+                            closestEntity = entity;
+                            distance = newDistance;
+                        }
+                    } else {
+                        closestEntity = entity;
+                        distance = newDistance;
+                    }
+                }
+            }
         }
-        drawLabel(text, x, y, bgColor, bgAlpha, bgWidth, bgHeight, color, alpha, fontScale, fontShadow, rotation);
-    }*/
+        return closestEntity;
+    }
 }

@@ -13,36 +13,63 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod;
+package net.daporkchop.pepsimod.module.impl.misc;
 
-import net.daporkchop.pepsimod.module.ModuleManager;
+import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
-import net.daporkchop.pepsimod.util.colors.ColorizedText;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiNewChat;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
+import net.daporkchop.pepsimod.module.api.ModuleOption;
+import net.daporkchop.pepsimod.util.ReflectionStuff;
+import net.minecraft.entity.projectile.EntityFishHook;
 
-public class PepsiInjectMethods {
-    public static void drawPepsiStuffToMainMenu(int mouseX, int mouseY, float partialTicks, GuiScreen screen) {
-        //draw stuff to menu
-        //nothing here for now
+public class AutoFishMod extends Module {
+    public static AutoFishMod INSTANCE;
+    public int timer;
+
+    public AutoFishMod() {
+        super("AutoFish");
     }
 
-    public static void drawPepsiStuffToIngame(Gui gui, GuiNewChat chat, int counter, ColorizedText title, Minecraft minecraft) {
-        GlStateManager.enableBlend();
-        GlStateManager.enableAlpha();
+    @Override
+    public void onEnable() {
+        timer = 0;
+    }
 
-        title.drawAtPos(gui, 2, 2);
+    @Override
+    public void onDisable() {
 
-        for (int i = 0; i < ModuleManager.ENABLED_MODULES.size(); i++) {
-            Module module = ModuleManager.ENABLED_MODULES.get(i);
-            module.text.drawAtPos(gui, 2, 22 + i * 10);
+    }
+
+    @Override
+    public void tick() {
+        if (this.timer > 0) {
+            this.timer -= 1;
+            if (this.timer == 0) {
+                ReflectionStuff.rightClickMouse();
+            }
+            return;
         }
-        chat.drawChat(counter);
 
-        GlStateManager.disableAlpha();
-        GlStateManager.disableBlend();
+        if ((mc.player.fishEntity != null) && (isHooked(mc.player.fishEntity))) {
+            ReflectionStuff.rightClickMouse();
+            this.timer = 20;
+        }
+    }
+
+    @Override
+    public void init() {
+        INSTANCE = this;
+    }
+
+    @Override
+    public ModuleOption[] getDefaultOptions() {
+        return new ModuleOption[0];
+    }
+
+    public ModuleCategory getCategory() {
+        return ModuleCategory.MISC;
+    }
+
+    private boolean isHooked(EntityFishHook hook) {
+        return (hook.motionX == 0.0D) && (hook.motionZ == 0.0D) && (hook.motionY != 0.0D);
     }
 }
