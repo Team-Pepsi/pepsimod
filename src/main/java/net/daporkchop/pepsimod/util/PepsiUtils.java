@@ -744,7 +744,7 @@ public class PepsiUtils extends Default {
     }
 
     public static double getDimensionCoord(double coord) {
-        if (ReflectionStuff.getDimension() == 0) {
+        if (mc.player.dimension == 0) {
             return coord / 8;
         } else {
             return coord * 8;
@@ -787,5 +787,14 @@ public class PepsiUtils extends Default {
             }
         }
         return closestEntity;
+    }
+
+    public static boolean isControlsPressed() {
+        for (KeyBinding keyBinding : controls) {
+            if (ReflectionStuff.getPressed(keyBinding)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

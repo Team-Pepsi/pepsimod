@@ -26,8 +26,8 @@ public class MiscOptions implements Serializable {
     public float entitySpeed_speed = 1.0f;
     public float crystalAura_speed = 1.0f;
     public float crystalAura_range = 3.8f;
-    public float entityStep_step = 1f;
     public float flight_speed = 1.0f;
+    public boolean flight_ncp = false;
     public float speedmine_speed = 0.4f;
     public float autoEat_threshold = 7f;
     public boolean step_legit = false;

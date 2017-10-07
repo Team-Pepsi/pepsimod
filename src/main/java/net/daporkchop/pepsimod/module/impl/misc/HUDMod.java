@@ -327,10 +327,10 @@ public class HUDMod extends Module {
             }
         }
 
-        i = mc.currentScreen instanceof GuiChat ? 12 : 0;
+        i = mc.currentScreen instanceof GuiChat ? 14 : 0;
         if (pepsiMod.hudSettings.coords) {
             String toRender = PepsiUtils.COLOR_ESCAPE + "7XYZ" + PepsiUtils.COLOR_ESCAPE + "f: " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(mc.player.posX) + "" + PepsiUtils.COLOR_ESCAPE + "f, " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(mc.player.posY) + "" + PepsiUtils.COLOR_ESCAPE + "f, " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(mc.player.posZ);
-            if (pepsiMod.hudSettings.netherCoords && ReflectionStuff.getDimension() != 1) {
+            if (pepsiMod.hudSettings.netherCoords && mc.player.dimension != 1) {
                 toRender += " " + PepsiUtils.COLOR_ESCAPE + "f(" + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(PepsiUtils.getDimensionCoord(mc.player.posX)) + "" + PepsiUtils.COLOR_ESCAPE + "f, " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(mc.player.posY) + "" + PepsiUtils.COLOR_ESCAPE + "f, " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(PepsiUtils.getDimensionCoord(mc.player.posZ)) + "" + PepsiUtils.COLOR_ESCAPE + "f)";
             }
             mc.fontRenderer.drawString(toRender, 2, height - (i += 10), Color.white.getRGB(), true);

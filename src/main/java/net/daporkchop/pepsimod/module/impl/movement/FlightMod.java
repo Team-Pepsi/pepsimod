@@ -15,18 +15,27 @@
 
 package net.daporkchop.pepsimod.module.impl.movement;
 
+import net.daporkchop.pepsimod.command.impl.DamageCommand;
 import net.daporkchop.pepsimod.module.ModuleCategory;
+import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
+import net.daporkchop.pepsimod.totally.not.skidded.RenderUtils;
+import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.AxisAlignedBB;
 import org.lwjgl.input.Keyboard;
+
+import java.awt.*;
 
 public class FlightMod extends Module {
     public static FlightMod INSTANCE;
+    public boolean wasOnGround = true;
+    public double roofY = -1.0D;
 
     public FlightMod() {
         super("Flight");
@@ -34,7 +43,9 @@ public class FlightMod extends Module {
 
     @Override
     public void onEnable() {
-
+        if (mc.player != null) {
+            DamageCommand.damage(5);
+        }
     }
 
     @Override
@@ -44,23 +55,72 @@ public class FlightMod extends Module {
 
     @Override
     public void tick() {
-        EntityPlayer player = mc.player;
-
-        player.motionX = 0;
-        player.motionY = 0;
-        player.motionZ = 0;
-        ReflectionStuff.setLandMovementFactor(player, pepsiMod.miscOptions.flight_speed);
-        player.jumpMovementFactor = pepsiMod.miscOptions.flight_speed;
-        ReflectionStuff.setInWater(player, false);
-
-        if (mc.inGameHasFocus) {
-            if (Keyboard.isKeyDown(mc.gameSettings.keyBindJump.getKeyCode())) {
-                player.motionY += pepsiMod.miscOptions.flight_speed / 2 + 0.2F;
+        if (pepsiMod.miscOptions.flight_ncp) {
+            if (!mc.player.onGround && this.wasOnGround) {
+                this.roofY = (mc.player.posY + 0.0D);
             }
-            if (Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode())) {
-                player.motionY -= pepsiMod.miscOptions.flight_speed / 2 + 0.2F;
+            if (mc.player.onGround) {
+                this.roofY = -1.0D;
+            }
+            if (mc.player.onGround && !this.wasOnGround && isEnabled) {
+                ModuleManager.disableModule(this);
+            }
+            this.wasOnGround = mc.player.onGround;
+            if (!isEnabled) {
+                return;
+            }
+            if (!mc.player.isOnLadder() && !mc.player.onGround) {
+                if (Keyboard.isKeyDown(57)) {
+                    if (this.roofY != -1.0D) {
+                        if (mc.player.posY + 0.4D > this.roofY) {
+                            mc.player.motionY = 0.0D;
+                        } else {
+                            mc.player.motionY = 0.4D;
+                        }
+                    }
+                } else if (Keyboard.isKeyDown(42)) {
+                    mc.player.motionY = -0.4D;
+                } else {
+                    mc.player.motionY = 0.0D;
+                }
+            }
+            if (this.roofY != -1.0D && mc.player.posY > this.roofY) {
+                mc.player.setPosition(mc.player.posX, this.roofY, mc.player.posZ);
+            }
+        } else {
+            EntityPlayer player = mc.player;
+
+            player.motionX = 0;
+            player.motionY = 0;
+            player.motionZ = 0;
+            ReflectionStuff.setLandMovementFactor(player, pepsiMod.miscOptions.flight_speed);
+            player.jumpMovementFactor = pepsiMod.miscOptions.flight_speed;
+            ReflectionStuff.setInWater(player, false);
+
+            if (mc.inGameHasFocus) {
+                if (Keyboard.isKeyDown(mc.gameSettings.keyBindJump.getKeyCode())) {
+                    player.motionY += pepsiMod.miscOptions.flight_speed / 2 + 0.2F;
+                }
+                if (Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode())) {
+                    player.motionY -= pepsiMod.miscOptions.flight_speed / 2 + 0.2F;
+                }
             }
         }
+    }
+
+    @Override
+    public void onRender(float partialTicks) {
+        if (this.roofY == -1.0D) {
+            return;
+        }
+        double y = this.roofY - ReflectionStuff.getRenderPosY() + mc.player.height;
+
+        int color = 16711680;
+
+        PepsiUtils.glColor(new Color(553582592));
+        RenderUtils.drawSolidBox(new AxisAlignedBB(-2.0D, 0.0D + y, -2.0D, 2.0D, 0.0D + y, 2.0D));
+        PepsiUtils.glColor(new Color(16711680));
+        RenderUtils.drawOutlinedBox(new AxisAlignedBB(-2.0D, 0.0D + y, -2.0D, 2.0D, 0.0D + y, 2.0D));
     }
 
     @Override
@@ -78,7 +138,15 @@ public class FlightMod extends Module {
                         },
                         () -> {
                             return pepsiMod.miscOptions.flight_speed;
-                        }, "Speed", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.1f, 10f, 0.1f))
+                        }, "Speed", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.1f, 10f, 0.1f)),
+                new ModuleOption<>(pepsiMod.miscOptions.flight_ncp, "ncp", OptionCompletions.BOOLEAN,
+                        (value) -> {
+                            pepsiMod.miscOptions.flight_ncp = value;
+                            return true;
+                        },
+                        () -> {
+                            return pepsiMod.miscOptions.flight_ncp;
+                        }, "NCP Bypass")
         };
     }
 

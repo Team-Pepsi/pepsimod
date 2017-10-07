@@ -134,6 +134,8 @@ public class PepsiMod {
         ModuleManager.registerModule(new AutoArmorMod());
         //ModuleManager.registerModule(new FastBowMod());
         //ModuleManager.registerModule(new BowAimBotMod());
+        ModuleManager.registerModule(new FastLadderMod());
+        ModuleManager.registerModule(new ParalyzeMod());
     }
 
     public static void registerCommands(FMLStateEvent event) {
@@ -153,6 +155,7 @@ public class PepsiMod {
         CommandRegistry.registerCommand(new WaypointRemoveCommand());
         CommandRegistry.registerCommand(new WaypointShowCommand());
         CommandRegistry.registerCommand(new GoToCommand());
+        CommandRegistry.registerCommand(new DamageCommand());
     }
 
     /**

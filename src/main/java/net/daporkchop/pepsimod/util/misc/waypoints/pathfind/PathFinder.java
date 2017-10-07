@@ -24,6 +24,7 @@ import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.misc.Default;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -243,13 +244,15 @@ public class PathFinder extends Default {
 
     public boolean canSafelyStandOn(BlockPos pos) {
         // check if solid
-        Material material = WBlock.getMaterial(pos);
+        IBlockState state = WBlock.getState(pos);
+        Block block = state.getBlock();
+        Material material = block.getMaterial(state);
         if (!canBeSolid(pos)) {
             return false;
         }
 
         // check if safe
-        return !(material == Material.CACTUS || material == Material.LAVA);
+        return !(material == Material.CACTUS || material == Material.LAVA || block instanceof BlockMagma);
     }
 
     public boolean canFallBelow(PathPos pos) {

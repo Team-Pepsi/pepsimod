@@ -143,6 +143,6 @@ public class BowAimBotMod extends Module {
     }
 
     public ModuleCategory getCategory() {
-        return ModuleCategory.PLACEHOLDER;
+        return ModuleCategory.COMBAT;
     }
 }

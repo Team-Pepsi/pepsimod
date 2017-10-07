@@ -13,24 +13,23 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.module.impl.player;
+package net.daporkchop.pepsimod.module.impl.movement;
 
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.daporkchop.pepsimod.totally.not.skidded.BlockUtils;
+import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.event.MoveEvent;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockPistonBase;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
+import net.minecraft.block.BlockLadder;
+import net.minecraft.block.BlockVine;
 import net.minecraft.util.math.BlockPos;
 
-public class ScaffoldMod extends Module {
-    public static ScaffoldMod INSTANCE;
+public class FastLadderMod extends Module {
+    public static FastLadderMod INSTANCE;
 
-    public ScaffoldMod() {
-        super("Scaffold");
+    public FastLadderMod() {
+        super("FastLadder");
     }
 
     @Override
@@ -45,47 +44,23 @@ public class ScaffoldMod extends Module {
 
     @Override
     public void tick() {
-        BlockPos belowPlayer = new BlockPos(mc.player).down();
 
-        // check if block is already placed
-        IBlockState state = mc.world.getBlockState(belowPlayer);
-        if (!state.getBlock().isReplaceable(mc.world, belowPlayer)) {
-            return;
-        }
+    }
 
-        // search blocks in hotbar
-        int newSlot = -1;
-        for (int i = 0; i < 9; i++) {
-            // filter out non-block items
-            ItemStack stack = mc.player.inventory.getStackInSlot(i);
-            if (stack == null || stack.isEmpty() || !(stack.getItem() instanceof ItemBlock)) {
-                continue;
+    @Override
+    public void onPlayerMove(MoveEvent e) {
+        if (PepsiUtils.isControlsPressed()) {
+            if (!mc.player.isOnLadder() || !mc.player.collidedHorizontally || !mc.player.onGround) {
+                return;
             }
-
-            // filter out non-solid blocks
-            Block block = Block.getBlockFromItem(stack.getItem());
-            if (!block.getDefaultState().isFullBlock() && !(block instanceof BlockPistonBase)) {
-                continue;
+            int ladders = getAboveLadders();
+            if (ladders == 0) {
+                return;
             }
-
-            newSlot = i;
-            break;
+            mc.player.setPosition(mc.player.posX, ladders < 10 ? ladders + 0.99D : 9.99D + mc.player.posY, mc.player.posZ);
+            mc.player.motionY = -0.1D;
+            mc.player.motionX = mc.player.motionZ = 0.0D;
         }
-
-        // check if any blocks were found
-        if (newSlot == -1) {
-            return;
-        }
-
-        // set slot
-        int oldSlot = mc.player.inventory.currentItem;
-        mc.player.inventory.currentItem = newSlot;
-
-        // place block
-        BlockUtils.placeBlockScaffold(belowPlayer);
-
-        // reset slot
-        mc.player.inventory.currentItem = oldSlot;
     }
 
     @Override
@@ -99,6 +74,19 @@ public class ScaffoldMod extends Module {
     }
 
     public ModuleCategory getCategory() {
-        return ModuleCategory.PLAYER;
+        return ModuleCategory.MOVEMENT;
+    }
+
+    public int getAboveLadders() {
+        int ladders = 0;
+        for (int dist = 1; dist < 256; dist++) {
+            BlockPos pos = new BlockPos(mc.player.posX, mc.player.posY + dist, mc.player.posZ);
+            Block block = mc.world.getBlockState(pos).getBlock();
+            if ((!(block instanceof BlockLadder)) && (!(block instanceof BlockVine))) {
+                break;
+            }
+            ladders++;
+        }
+        return ladders;
     }
 }
