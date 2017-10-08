@@ -70,6 +70,7 @@ public class ReflectionStuff extends Default {
     public static Field cPacketPlayer_onGround;
 
     public static Method updateFallState;
+    public static Method rightClickMouse;
 
     private static Field modifiersField;
 
@@ -145,8 +146,18 @@ public class ReflectionStuff extends Default {
             cPacketPlayer_onGround = getField(CPacketPlayer.class, "onGround", "field_149474_g", "f");
 
             updateFallState = getMethod(Entity.class, new String[]{"updateFallState", "func_184231_a", "a"}, double.class, boolean.class, IBlockState.class, BlockPos.class);
+            rightClickMouse = getMethod(Minecraft.class, new String[]{"rightClickMouse", "func_147121_ag", "aB"});
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void rightClickMouse() {
+        try {
+            rightClickMouse.invoke(mc);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
         }
     }
 
@@ -477,6 +488,33 @@ public class ReflectionStuff extends Default {
     public static double getRenderPosZ(RenderManager mgr) {
         try {
             return (double) renderPosZ.get(mgr);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static double getRenderPosX() {
+        try {
+            return (double) renderPosX.get(mc.getRenderManager());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static double getRenderPosY() {
+        try {
+            return (double) renderPosY.get(mc.getRenderManager());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static double getRenderPosZ() {
+        try {
+            return (double) renderPosZ.get(mc.getRenderManager());
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);

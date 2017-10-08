@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.mixin.client.gui;
 
-import net.daporkchop.pepsimod.PepsiInjectMethods;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.util.ImageUtils;
@@ -82,7 +81,6 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
     @Inject(method = "drawScreen", at = @At("RETURN"))
     public void addDrawPepsiStuff(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
         this.drawString(this.fontRenderer, PepsiUtils.COLOR_ESCAPE + "cCopyright Mojang AB. Do not distribute!", this.width - this.fontRenderer.getStringWidth("Copyright Mojang AB. Do not distribute!") - 2, this.height - 10, -1);
-        PepsiInjectMethods.drawPepsiStuffToMainMenu(mouseX, mouseY, partialTicks, this);
         PEPSIMOD_TEXT_GRADIENT.drawAtPos(this, 2, this.height - 20);
         PEPSIMOD_AUTHOR_GRADIENT.drawAtPos(this, 2, this.height - 10);
     }

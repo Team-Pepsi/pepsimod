@@ -13,24 +13,23 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.module.impl.player;
+package net.daporkchop.pepsimod.module.impl.misc;
 
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.daporkchop.pepsimod.totally.not.skidded.BlockUtils;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockPistonBase;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.client.CPacketPlayerDigging;
+import net.minecraft.world.GameType;
 
-public class ScaffoldMod extends Module {
-    public static ScaffoldMod INSTANCE;
+public class AutoToolMod extends Module {
+    public static AutoToolMod INSTANCE;
+    public boolean digging = false;
+    public int slot = 0;
 
-    public ScaffoldMod() {
-        super("Scaffold");
+    public AutoToolMod() {
+        super("AutoTool");
     }
 
     @Override
@@ -45,47 +44,25 @@ public class ScaffoldMod extends Module {
 
     @Override
     public void tick() {
-        BlockPos belowPlayer = new BlockPos(mc.player).down();
-
-        // check if block is already placed
-        IBlockState state = mc.world.getBlockState(belowPlayer);
-        if (!state.getBlock().isReplaceable(mc.world, belowPlayer)) {
-            return;
+        if (!mc.gameSettings.keyBindAttack.isKeyDown() && digging) {
+            digging = false;
+            mc.player.inventory.currentItem = slot;
         }
+    }
 
-        // search blocks in hotbar
-        int newSlot = -1;
-        for (int i = 0; i < 9; i++) {
-            // filter out non-block items
-            ItemStack stack = mc.player.inventory.getStackInSlot(i);
-            if (stack == null || stack.isEmpty() || !(stack.getItem() instanceof ItemBlock)) {
-                continue;
+    public boolean preSendPacket(Packet<?> packetIn) {
+        if (packetIn instanceof CPacketPlayerDigging) {
+            CPacketPlayerDigging pck = (CPacketPlayerDigging) packetIn;
+            if (mc.playerController.getCurrentGameType() != GameType.CREATIVE && pck.getAction() == CPacketPlayerDigging.Action.START_DESTROY_BLOCK) {
+                digging = true;
+                int bestIndex = PepsiUtils.getBestTool(mc.world.getBlockState(pck.getPosition()).getBlock());
+                if (bestIndex != -1) {
+                    slot = mc.player.inventory.currentItem;
+                    mc.player.inventory.currentItem = bestIndex;
+                }
             }
-
-            // filter out non-solid blocks
-            Block block = Block.getBlockFromItem(stack.getItem());
-            if (!block.getDefaultState().isFullBlock() && !(block instanceof BlockPistonBase)) {
-                continue;
-            }
-
-            newSlot = i;
-            break;
         }
-
-        // check if any blocks were found
-        if (newSlot == -1) {
-            return;
-        }
-
-        // set slot
-        int oldSlot = mc.player.inventory.currentItem;
-        mc.player.inventory.currentItem = newSlot;
-
-        // place block
-        BlockUtils.placeBlockScaffold(belowPlayer);
-
-        // reset slot
-        mc.player.inventory.currentItem = oldSlot;
+        return false;
     }
 
     @Override
@@ -99,6 +76,6 @@ public class ScaffoldMod extends Module {
     }
 
     public ModuleCategory getCategory() {
-        return ModuleCategory.PLAYER;
+        return ModuleCategory.MISC;
     }
 }

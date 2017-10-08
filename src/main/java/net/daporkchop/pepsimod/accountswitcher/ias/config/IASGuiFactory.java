@@ -13,8 +13,37 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.util.misc.waypoints.pathfind;
+package net.daporkchop.pepsimod.accountswitcher.ias.config;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.fml.client.IModGuiFactory;
+
+import java.util.Set;
 
 /**
- * this package is a highly modified version of the wurst ai
+ * This is the Gui Factory
+ *
+ * @author The_Fireplace
  */
+public class IASGuiFactory implements IModGuiFactory {
+
+    @Override
+    public void initialize(Minecraft minecraftInstance) {
+    }
+
+    @Override
+    public boolean hasConfigGui() {
+        return true;
+    }
+
+    @Override
+    public GuiScreen createConfigGui(GuiScreen parentScreen) {
+        return new IASConfigGui(parentScreen);
+    }
+
+    @Override
+    public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
+        return null;
+    }
+}

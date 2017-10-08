@@ -15,6 +15,7 @@
 
 package net.daporkchop.pepsimod.util;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 import java.util.HashMap;
@@ -67,7 +68,7 @@ public class Friends {
      * @param player the player to check
      * @return whether or not the player is a friend
      */
-    public static boolean isFriend(EntityPlayerMP player)   {
+    public static boolean isFriend(EntityPlayer player) {
         return FRIENDS.containsKey(player.getGameProfile().getId().toString());
     }
 

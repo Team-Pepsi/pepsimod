@@ -13,36 +13,12 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod;
+package net.daporkchop.pepsimod.accountswitcher.ias.tools;
 
-import net.daporkchop.pepsimod.module.ModuleManager;
-import net.daporkchop.pepsimod.module.api.Module;
-import net.daporkchop.pepsimod.util.colors.ColorizedText;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiNewChat;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
-
-public class PepsiInjectMethods {
-    public static void drawPepsiStuffToMainMenu(int mouseX, int mouseY, float partialTicks, GuiScreen screen) {
-        //draw stuff to menu
-        //nothing here for now
-    }
-
-    public static void drawPepsiStuffToIngame(Gui gui, GuiNewChat chat, int counter, ColorizedText title, Minecraft minecraft) {
-        GlStateManager.enableBlend();
-        GlStateManager.enableAlpha();
-
-        title.drawAtPos(gui, 2, 2);
-
-        for (int i = 0; i < ModuleManager.ENABLED_MODULES.size(); i++) {
-            Module module = ModuleManager.ENABLED_MODULES.get(i);
-            module.text.drawAtPos(gui, 2, 22 + i * 10);
-        }
-        chat.drawChat(counter);
-
-        GlStateManager.disableAlpha();
-        GlStateManager.disableBlend();
-    }
+/**
+ * @author The_Fireplace
+ */
+public class Reference {
+    public static final String MODID = "ias";
+    public static final String MODNAME = "In-Game Account Switcher";
 }

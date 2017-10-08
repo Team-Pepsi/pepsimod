@@ -13,46 +13,47 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.util.module;
+package net.daporkchop.pepsimod.accountswitcher.tools.alt;
+
+import net.daporkchop.pepsimod.accountswitcher.tools.Config;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.ArrayList;
 
-public class MiscOptions implements Serializable {
-    private static final long serialVersionUID = 6988070214567038785L;
+/**
+ * @author mrebhan
+ * @author The_Fireplace
+ */
+public class AltDatabase implements Serializable {
 
-    public HashMap<String, ModuleState> states = new HashMap<>();
-    public boolean criticals_packet = true;
-    public float entitySpeed_speed = 1.0f;
-    public float crystalAura_speed = 1.0f;
-    public float crystalAura_range = 3.8f;
-    public float flight_speed = 1.0f;
-    public boolean flight_ncp = false;
-    public float speedmine_speed = 0.4f;
-    public float autoEat_threshold = 7f;
-    public boolean step_legit = false;
-    public int step_height = 1;
-    public int cpu_framecap = 5;
-    public boolean waypoints_tracers = false;
-    public int waypoints_r = 0;
-    public int waypoints_g = 0;
-    public int waypoints_b = 0;
-    public boolean waypoints_nametag = false;
-    public boolean waypoints_dist = true;
-    public boolean waypoints_coords = false;
-    public float timer_multiplier = 1.0f;
-    public float bedbomber_range = 4.0f;
-    public int bedbomber_delay = 500;
-    public boolean bedbomber_resupply = true;
+    public static final long serialVersionUID = 0xA17DA7AB;
+    private static AltDatabase instance;
 
-    public static class ModuleState implements Serializable {
-        public boolean enabled;
-        public boolean hidden;
+    private final ArrayList<AccountData> altList;
 
-        public ModuleState(boolean a, boolean b) {
-            enabled = a;
-            hidden = b;
+    private AltDatabase() {
+        this.altList = new ArrayList<>();
+    }
+
+    private static void loadFromConfig() {
+        if (instance == null)
+            instance = (AltDatabase) Config.getInstance().getKey("altaccounts");
+    }
+
+    private static void saveToConfig() {
+        Config.getInstance().setKey("altaccounts", instance);
+    }
+
+    public static AltDatabase getInstance() {
+        loadFromConfig();
+        if (instance == null) {
+            instance = new AltDatabase();
+            saveToConfig();
         }
+        return instance;
+    }
+
+    public ArrayList<AccountData> getAlts() {
+        return this.altList;
     }
 }
-

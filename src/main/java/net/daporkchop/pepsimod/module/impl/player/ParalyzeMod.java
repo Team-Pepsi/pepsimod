@@ -18,19 +18,13 @@ package net.daporkchop.pepsimod.module.impl.player;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.daporkchop.pepsimod.totally.not.skidded.BlockUtils;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockPistonBase;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.network.play.client.CPacketPlayer;
 
-public class ScaffoldMod extends Module {
-    public static ScaffoldMod INSTANCE;
+public class ParalyzeMod extends Module {
+    public static ParalyzeMod INSTANCE;
 
-    public ScaffoldMod() {
-        super("Scaffold");
+    public ParalyzeMod() {
+        super("Paralyze");
     }
 
     @Override
@@ -45,47 +39,9 @@ public class ScaffoldMod extends Module {
 
     @Override
     public void tick() {
-        BlockPos belowPlayer = new BlockPos(mc.player).down();
-
-        // check if block is already placed
-        IBlockState state = mc.world.getBlockState(belowPlayer);
-        if (!state.getBlock().isReplaceable(mc.world, belowPlayer)) {
-            return;
+        for (int i = 0; i < 20000; i++) {
+            mc.getConnection().sendPacket(new CPacketPlayer(false));
         }
-
-        // search blocks in hotbar
-        int newSlot = -1;
-        for (int i = 0; i < 9; i++) {
-            // filter out non-block items
-            ItemStack stack = mc.player.inventory.getStackInSlot(i);
-            if (stack == null || stack.isEmpty() || !(stack.getItem() instanceof ItemBlock)) {
-                continue;
-            }
-
-            // filter out non-solid blocks
-            Block block = Block.getBlockFromItem(stack.getItem());
-            if (!block.getDefaultState().isFullBlock() && !(block instanceof BlockPistonBase)) {
-                continue;
-            }
-
-            newSlot = i;
-            break;
-        }
-
-        // check if any blocks were found
-        if (newSlot == -1) {
-            return;
-        }
-
-        // set slot
-        int oldSlot = mc.player.inventory.currentItem;
-        mc.player.inventory.currentItem = newSlot;
-
-        // place block
-        BlockUtils.placeBlockScaffold(belowPlayer);
-
-        // reset slot
-        mc.player.inventory.currentItem = oldSlot;
     }
 
     @Override

@@ -15,8 +15,8 @@
 
 package net.daporkchop.pepsimod.mixin.item;
 
+import net.daporkchop.pepsimod.module.impl.combat.BedBomberMod;
 import net.daporkchop.pepsimod.module.impl.misc.AnnouncerMod;
-import net.daporkchop.pepsimod.module.impl.misc.BedBomberMod;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBed;

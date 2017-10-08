@@ -26,7 +26,33 @@ public class WaypointAddCommand extends Command {
     @Override
     public void execute(String cmd, String[] args) {
         Waypoint waypoint = null;
-        if (args.length >= 2) {
+        if (args.length >= 5) {
+            if (pepsiMod.waypoints.getWaypoint(args[1]) == null) {
+                int x, y, z;
+                try {
+                    x = Integer.parseInt(args[2]);
+                } catch (NumberFormatException e) {
+                    clientMessage("Invalid integer: " + args[2]);
+                    return;
+                }
+                try {
+                    y = Integer.parseInt(args[3]);
+                } catch (NumberFormatException e) {
+                    clientMessage("Invalid integer: " + args[3]);
+                    return;
+                }
+                try {
+                    z = Integer.parseInt(args[4]);
+                } catch (NumberFormatException e) {
+                    clientMessage("Invalid integer: " + args[4]);
+                    return;
+                }
+                pepsiMod.waypoints.addWaypoint(waypoint = new Waypoint(args[1], x, y, z, mc.player.dimension));
+            } else {
+                clientMessage("Waypoint \u00A7o" + args[1] + "\u00A7r already exists!");
+                return;
+            }
+        } else if (args.length >= 2) {
             if (pepsiMod.waypoints.getWaypoint(args[1]) == null) {
                 waypoint = pepsiMod.waypoints.addWaypoint(args[1]);
             } else {

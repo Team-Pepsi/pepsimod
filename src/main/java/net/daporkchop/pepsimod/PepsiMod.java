@@ -15,6 +15,7 @@
 
 package net.daporkchop.pepsimod;
 
+import net.daporkchop.pepsimod.accountswitcher.ias.IAS;
 import net.daporkchop.pepsimod.clickgui.ClickGUI;
 import net.daporkchop.pepsimod.clickgui.Window;
 import net.daporkchop.pepsimod.clickgui.api.IEntry;
@@ -30,10 +31,7 @@ import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.ModuleOptionSave;
 import net.daporkchop.pepsimod.module.api.ModuleSortType;
-import net.daporkchop.pepsimod.module.impl.combat.AuraMod;
-import net.daporkchop.pepsimod.module.impl.combat.AutoTotemMod;
-import net.daporkchop.pepsimod.module.impl.combat.CriticalsMod;
-import net.daporkchop.pepsimod.module.impl.combat.CrystalAuraMod;
+import net.daporkchop.pepsimod.module.impl.combat.*;
 import net.daporkchop.pepsimod.module.impl.misc.*;
 import net.daporkchop.pepsimod.module.impl.movement.*;
 import net.daporkchop.pepsimod.module.impl.player.*;
@@ -132,6 +130,13 @@ public class PepsiMod {
         ModuleManager.registerModule(new BoatFlyMod());
         ModuleManager.registerModule(new NotificationsMod());
         ModuleManager.registerModule(new BedBomberMod());
+        ModuleManager.registerModule(new AutoFishMod());
+        ModuleManager.registerModule(new AutoToolMod());
+        ModuleManager.registerModule(new AutoArmorMod());
+        //ModuleManager.registerModule(new FastBowMod());
+        //ModuleManager.registerModule(new BowAimBotMod());
+        ModuleManager.registerModule(new FastLadderMod());
+        ModuleManager.registerModule(new ParalyzeMod());
     }
 
     public static void registerCommands(FMLStateEvent event) {
@@ -151,6 +156,7 @@ public class PepsiMod {
         CommandRegistry.registerCommand(new WaypointRemoveCommand());
         CommandRegistry.registerCommand(new WaypointShowCommand());
         CommandRegistry.registerCommand(new GoToCommand());
+        CommandRegistry.registerCommand(new DamageCommand());
     }
 
     /**
@@ -179,6 +185,7 @@ public class PepsiMod {
         mc = Minecraft.getMinecraft();
         Default.mc = mc;
         Default.pepsiMod = this;
+        IAS.preInit(event);
     }
 
     @Mod.EventHandler
@@ -213,6 +220,7 @@ public class PepsiMod {
 
         registerCommands(event);
         initModules();
+        IAS.init(event);
     }
 
     @Mod.EventHandler
@@ -233,6 +241,7 @@ public class PepsiMod {
                 Default.pepsiMod.saveConfig();
             }
         }, 360000, 360000);
+        IAS.postInit(event);
     }
 
     public void loadConfig() {

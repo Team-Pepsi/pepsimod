@@ -13,7 +13,7 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.module.impl.misc;
+package net.daporkchop.pepsimod.module.impl.combat;
 
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
@@ -60,7 +60,7 @@ public class BedBomberMod extends TimeModule {
     public void tick() {
         updateMS();
 
-        if (hasTimePassedM(pepsiMod.miscOptions.bedbomber_delay)) {
+        if (hasTimePassedM(pepsiMod.miscOptions.bedbomber_delay) && (mc.player.dimension == -1 || mc.player.dimension == 1)) {
             Iterable<BlockPos> validBlocks = BlockUtils.getValidBlocksByDistance(pepsiMod.miscOptions.bedbomber_range, false, validator);
 
             for (BlockPos pos : validBlocks) {
@@ -132,7 +132,7 @@ public class BedBomberMod extends TimeModule {
     }
 
     public ModuleCategory getCategory() {
-        return ModuleCategory.MISC;
+        return ModuleCategory.COMBAT;
     }
 
     public void replaceBed(int inventoryIndex) {

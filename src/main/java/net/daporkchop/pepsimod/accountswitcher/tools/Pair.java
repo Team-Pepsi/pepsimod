@@ -13,46 +13,40 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.util.module;
+package net.daporkchop.pepsimod.accountswitcher.tools;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
-public class MiscOptions implements Serializable {
-    private static final long serialVersionUID = 6988070214567038785L;
+/**
+ * Simple Pair system with 2 variables.
+ *
+ * @param <V1> First variable (mostly {@link String})
+ * @param <V2> Second variable
+ * @author MRebhan
+ * @author The_Fireplace
+ */
 
-    public HashMap<String, ModuleState> states = new HashMap<>();
-    public boolean criticals_packet = true;
-    public float entitySpeed_speed = 1.0f;
-    public float crystalAura_speed = 1.0f;
-    public float crystalAura_range = 3.8f;
-    public float flight_speed = 1.0f;
-    public boolean flight_ncp = false;
-    public float speedmine_speed = 0.4f;
-    public float autoEat_threshold = 7f;
-    public boolean step_legit = false;
-    public int step_height = 1;
-    public int cpu_framecap = 5;
-    public boolean waypoints_tracers = false;
-    public int waypoints_r = 0;
-    public int waypoints_g = 0;
-    public int waypoints_b = 0;
-    public boolean waypoints_nametag = false;
-    public boolean waypoints_dist = true;
-    public boolean waypoints_coords = false;
-    public float timer_multiplier = 1.0f;
-    public float bedbomber_range = 4.0f;
-    public int bedbomber_delay = 500;
-    public boolean bedbomber_resupply = true;
+public class Pair<V1, V2> implements Serializable {
+    private static final long serialVersionUID = 2586850598481149380L;
 
-    public static class ModuleState implements Serializable {
-        public boolean enabled;
-        public boolean hidden;
+    private V1 obj1;
+    private V2 obj2;
 
-        public ModuleState(boolean a, boolean b) {
-            enabled = a;
-            hidden = b;
-        }
+    public Pair(V1 obj1, V2 obj2) {
+        this.obj1 = obj1;
+        this.obj2 = obj2;
+    }
+
+    public V1 getValue1() {
+        return this.obj1;
+    }
+
+    public V2 getValue2() {
+        return this.obj2;
+    }
+
+    @Override
+    public String toString() {
+        return Pair.class.getName() + "@" + Integer.toHexString(this.hashCode()) + " [" + this.obj1.toString() + ", " + this.obj2.toString() + "]";
     }
 }
-
