@@ -15,6 +15,7 @@
 
 package net.daporkchop.pepsimod;
 
+import net.daporkchop.pepsimod.accountswitcher.ias.IAS;
 import net.daporkchop.pepsimod.clickgui.ClickGUI;
 import net.daporkchop.pepsimod.clickgui.Window;
 import net.daporkchop.pepsimod.clickgui.api.IEntry;
@@ -184,6 +185,7 @@ public class PepsiMod {
         mc = Minecraft.getMinecraft();
         Default.mc = mc;
         Default.pepsiMod = this;
+        IAS.preInit(event);
     }
 
     @Mod.EventHandler
@@ -218,6 +220,7 @@ public class PepsiMod {
 
         registerCommands(event);
         initModules();
+        IAS.init(event);
     }
 
     @Mod.EventHandler
@@ -238,6 +241,7 @@ public class PepsiMod {
                 Default.pepsiMod.saveConfig();
             }
         }, 360000, 360000);
+        IAS.postInit(event);
     }
 
     public void loadConfig() {

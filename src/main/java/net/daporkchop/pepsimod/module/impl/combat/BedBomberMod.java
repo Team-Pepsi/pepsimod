@@ -60,7 +60,7 @@ public class BedBomberMod extends TimeModule {
     public void tick() {
         updateMS();
 
-        if (hasTimePassedM(pepsiMod.miscOptions.bedbomber_delay)) {
+        if (hasTimePassedM(pepsiMod.miscOptions.bedbomber_delay) && (mc.player.dimension == -1 || mc.player.dimension == 1)) {
             Iterable<BlockPos> validBlocks = BlockUtils.getValidBlocksByDistance(pepsiMod.miscOptions.bedbomber_range, false, validator);
 
             for (BlockPos pos : validBlocks) {

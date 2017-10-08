@@ -47,7 +47,7 @@ public class WaypointAddCommand extends Command {
                     clientMessage("Invalid integer: " + args[4]);
                     return;
                 }
-                pepsiMod.waypoints.addWaypoint(new Waypoint(args[1], x, y, z, mc.player.dimension));
+                pepsiMod.waypoints.addWaypoint(waypoint = new Waypoint(args[1], x, y, z, mc.player.dimension));
             } else {
                 clientMessage("Waypoint \u00A7o" + args[1] + "\u00A7r already exists!");
                 return;
