@@ -38,6 +38,7 @@
     "scoreboard.MixinScoreboard",
     "block.MixinBlockSoulSand",
     "client.entity.MixinEntityPlayerSP",
-    "util.MixinMovementInputFromOptions"
+    "util.MixinMovementInputFromOptions",
+    "entity.passive.MixinEntityPig"
   ]
 }

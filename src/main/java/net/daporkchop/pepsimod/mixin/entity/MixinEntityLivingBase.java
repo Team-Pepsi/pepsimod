@@ -16,7 +16,9 @@
 package net.daporkchop.pepsimod.mixin.entity;
 
 import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
+import net.daporkchop.pepsimod.module.impl.movement.ElytraFlyMod;
 import net.daporkchop.pepsimod.module.impl.render.AntiBlindMod;
+import net.daporkchop.pepsimod.util.module.ElytraFlyMode;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -35,7 +37,11 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import static net.daporkchop.pepsimod.util.misc.Default.mc;
+import static net.daporkchop.pepsimod.util.misc.Default.pepsiMod;
 
 @Mixin(EntityLivingBase.class)
 public abstract class MixinEntityLivingBase extends Entity {
@@ -60,6 +66,23 @@ public abstract class MixinEntityLivingBase extends Entity {
         }
     }
 
+    @Inject(method = "onLivingUpdate", at = @At("HEAD"))
+    public void preOnLivingUpdate(CallbackInfo callbackInfo) {
+        EntityLivingBase thisAsEntity = EntityLivingBase.class.cast(this);
+        if (thisAsEntity == mc.player && ElytraFlyMod.INSTANCE.isEnabled && pepsiMod.elytraFlySettings.mode == ElytraFlyMode.PACKET) {
+            motionY = 0;
+        }
+        if (FreecamMod.INSTANCE.isEnabled) {
+            if (mc.gameSettings.keyBindJump.isKeyDown()) {
+                mc.player.motionY = FreecamMod.SPEED;
+            } else if (mc.gameSettings.keyBindSneak.isKeyDown()) {
+                mc.player.motionY = -FreecamMod.SPEED;
+            } else {
+                mc.player.motionY = 0;
+            }
+        }
+    }
+
     @Shadow
     public boolean isElytraFlying() {
         return false;
@@ -68,6 +91,9 @@ public abstract class MixinEntityLivingBase extends Entity {
     @Overwrite
     public void travel(float p_191986_1_, float p_191986_2_, float p_191986_3_) {
         EntityLivingBase thisAsEntity = EntityLivingBase.class.cast(this);
+        if (thisAsEntity == mc.player && ElytraFlyMod.INSTANCE.isEnabled && pepsiMod.elytraFlySettings.mode == ElytraFlyMode.PACKET) {
+            motionY = 0;
+        }
         if (this.isServerWorld() || this.canPassengerSteer()) {
             if (!this.isInWater() || FreecamMod.INSTANCE.isEnabled || thisAsEntity instanceof EntityPlayer && ((EntityPlayer) thisAsEntity).capabilities.isFlying) {
                 if (!this.isInLava() || thisAsEntity instanceof EntityPlayer && ((EntityPlayer) thisAsEntity).capabilities.isFlying) {

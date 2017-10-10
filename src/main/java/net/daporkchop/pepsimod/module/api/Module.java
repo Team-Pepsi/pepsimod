@@ -83,12 +83,12 @@ public abstract class Module extends Command implements ITickListener {
      */
     public boolean toggle() {
         this.isEnabled = !this.isEnabled;
+        this.getOptionByName("enabled").setValue(this.isEnabled);
         if (this.isEnabled) {
             this.onEnable();
         } else {
             this.onDisable();
         }
-        this.getOptionByName("enabled").setValue(this.isEnabled);
         return this.isEnabled;
     }
 
@@ -100,12 +100,12 @@ public abstract class Module extends Command implements ITickListener {
      */
     public boolean setEnabled(boolean isEnabled) {
         this.isEnabled = isEnabled;
+        this.getOptionByName("enabled").setValue(this.isEnabled);
         if (this.isEnabled) {
             this.onEnable();
         } else {
             this.onDisable();
         }
-        this.getOptionByName("enabled").setValue(this.isEnabled);
         return isEnabled;
     }
 

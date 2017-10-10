@@ -18,6 +18,7 @@ package net.daporkchop.pepsimod.module.impl.misc;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
+import net.daporkchop.pepsimod.module.impl.player.AutoEatMod;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
@@ -26,7 +27,7 @@ import net.minecraft.world.GameType;
 public class AutoToolMod extends Module {
     public static AutoToolMod INSTANCE;
     public boolean digging = false;
-    public int slot = 0;
+    public int slot = -1;
 
     public AutoToolMod() {
         super("AutoTool");
@@ -47,17 +48,20 @@ public class AutoToolMod extends Module {
         if (!mc.gameSettings.keyBindAttack.isKeyDown() && digging) {
             digging = false;
             mc.player.inventory.currentItem = slot;
+            slot = -1;
         }
     }
 
     public boolean preSendPacket(Packet<?> packetIn) {
-        if (packetIn instanceof CPacketPlayerDigging) {
+        if (AutoEatMod.INSTANCE.doneEating && packetIn instanceof CPacketPlayerDigging) {
             CPacketPlayerDigging pck = (CPacketPlayerDigging) packetIn;
             if (mc.playerController.getCurrentGameType() != GameType.CREATIVE && pck.getAction() == CPacketPlayerDigging.Action.START_DESTROY_BLOCK) {
                 digging = true;
                 int bestIndex = PepsiUtils.getBestTool(mc.world.getBlockState(pck.getPosition()).getBlock());
                 if (bestIndex != -1) {
-                    slot = mc.player.inventory.currentItem;
+                    if (slot == -1) {
+                        slot = mc.player.inventory.currentItem;
+                    }
                     mc.player.inventory.currentItem = bestIndex;
                 }
             }
