@@ -329,11 +329,11 @@ public class PepsiUtils extends Default {
     }
 
     public static boolean canEntityBeSeen(Entity entityIn, EntityPlayer player, TargetBone bone) {
-        return entityIn.world.rayTraceBlocks(new Vec3d(player.posX, player.posY + (double) player.getEyeHeight(), player.posZ), new Vec3d(entityIn.posX, entityIn.posY + getTargetHeight(entityIn, bone), entityIn.posZ), false, true, false) == null;
+        return entityIn.world.rayTraceBlocks(new Vec3d(player.posX, player.posY + (double) player.getEyeHeight(), player.posZ), new Vec3d(entityIn.posX, getTargetHeight(entityIn, bone), entityIn.posZ), false, true, false) == null;
     }
 
     public static double getTargetHeight(Entity entity, TargetBone bone) {
-        double targetHeight = 0;
+        double targetHeight = entity.posY;
         if (bone == TargetBone.HEAD) {
             targetHeight = entity.getEyeHeight();
         } else if (bone == TargetBone.MIDDLE) {

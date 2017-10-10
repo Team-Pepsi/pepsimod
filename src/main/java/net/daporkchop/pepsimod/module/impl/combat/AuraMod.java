@@ -21,6 +21,7 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
+import net.daporkchop.pepsimod.module.impl.player.AutoEatMod;
 import net.daporkchop.pepsimod.totally.not.skidded.EntityUtils;
 import net.daporkchop.pepsimod.totally.not.skidded.RotationUtils;
 import net.daporkchop.pepsimod.util.PepsiUtils;
@@ -52,6 +53,10 @@ public class AuraMod extends Module {
 
     @Override
     public void tick() {
+        if (AutoEatMod.INSTANCE.isEnabled && !AutoEatMod.INSTANCE.doneEating) {
+            return;
+        }
+
         if (pepsiMod.targetSettings.use_cooldown) {
             if (mc.player.getCooledAttackStrength(0) == 1) {
                 Entity entity = EntityUtils.getBestEntityToAttack(EntityUtils.DEFAULT_SETTINGS);

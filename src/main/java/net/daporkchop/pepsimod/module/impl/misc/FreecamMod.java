@@ -61,14 +61,6 @@ public class FreecamMod extends Module {
         mc.player.motionZ = 0;
 
         mc.player.jumpMovementFactor = SPEED / 10;
-
-        if (mc.gameSettings.keyBindJump.isKeyDown()) {
-            mc.player.motionY = SPEED;
-        } else if (mc.gameSettings.keyBindSneak.isKeyDown()) {
-            mc.player.motionY = -SPEED;
-        } else {
-            mc.player.motionY = 0;
-        }
     }
 
     @Override

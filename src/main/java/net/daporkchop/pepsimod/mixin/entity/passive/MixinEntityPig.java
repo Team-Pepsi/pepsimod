@@ -13,13 +13,32 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.util.module;
+package net.daporkchop.pepsimod.mixin.entity.passive;
 
-import java.io.Serializable;
+import net.daporkchop.pepsimod.module.impl.movement.EntitySpeedMod;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 
-public enum ElytraFlyMode implements Serializable {
-    NORMAL,
-    PACKET;
+@Mixin(EntityPig.class)
+public abstract class MixinEntityPig extends EntityAnimal {
+    public MixinEntityPig() {
+        super(null);
+    }
 
-    private static final long serialVersionUID = 1L;
+    @Overwrite
+    public boolean canBeSteered() {
+        Entity entity = this.getControllingPassenger();
+
+        if (!(entity instanceof EntityPlayer)) {
+            return false;
+        } else {
+            EntityPlayer entityplayer = (EntityPlayer) entity;
+            return EntitySpeedMod.INSTANCE.isEnabled || entityplayer.getHeldItemMainhand().getItem() == Items.CARROT_ON_A_STICK || entityplayer.getHeldItemOffhand().getItem() == Items.CARROT_ON_A_STICK;
+        }
+    }
 }

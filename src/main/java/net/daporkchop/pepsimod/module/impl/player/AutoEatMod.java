@@ -34,7 +34,7 @@ import net.minecraft.util.FoodStats;
 
 public class AutoEatMod extends Module {
     public static AutoEatMod INSTANCE;
-    public boolean doneEating;
+    public boolean doneEating = true;
 
     public AutoEatMod() {
         super("AutoEat");
@@ -50,22 +50,22 @@ public class AutoEatMod extends Module {
         if (mc.world != null) {
             ReflectionStuff.setPressed(mc.gameSettings.keyBindUseItem, false);
         }
+        doneEating = true;
     }
 
     @Override
     public void tick() {
-        ItemStack curStack = mc.player.inventory.getCurrentItem();
-
         if (!shouldEat()) {
             ReflectionStuff.setPressed(mc.gameSettings.keyBindUseItem, false);
+            doneEating = true;
             return;
         }
 
         FoodStats foodStats = mc.player.getFoodStats();
         if (foodStats.getFoodLevel() <= pepsiMod.miscOptions.autoEat_threshold && shouldEat()) {
+            doneEating = false;
             eatFood();
         }
-
     }
 
     @Override
@@ -92,10 +92,8 @@ public class AutoEatMod extends Module {
     }
 
     private void eatFood() {
-
         for (int slot = 44; slot >= 9; slot--) {
             ItemStack stack = mc.player.inventoryContainer.getSlot(slot).getStack();
-
 
             if (stack != null) {
                 if (slot >= 36 && slot <= 44) {
