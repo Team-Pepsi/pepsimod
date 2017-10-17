@@ -39,6 +39,8 @@
     "block.MixinBlockSoulSand",
     "client.entity.MixinEntityPlayerSP",
     "util.MixinMovementInputFromOptions",
-    "entity.passive.MixinEntityPig"
+    "entity.passive.MixinEntityPig",
+    "entity.passive.MixinabstractHorse",
+    "client.gui.MixinGuiConnecting"
   ]
 }

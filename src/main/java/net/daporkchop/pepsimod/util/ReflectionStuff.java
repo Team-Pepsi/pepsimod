@@ -19,6 +19,8 @@ import net.daporkchop.pepsimod.util.misc.Default;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.GuiDisconnected;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderItem;
@@ -68,6 +70,7 @@ public class ReflectionStuff extends Default {
     public static Field curBlockDamageMP;
     public static Field blockHitDelay;
     public static Field cPacketPlayer_onGround;
+    public static Field parentScreen;
 
     public static Method updateFallState;
     public static Method rightClickMouse;
@@ -144,11 +147,20 @@ public class ReflectionStuff extends Default {
             blockHitDelay = getField(PlayerControllerMP.class, "blockHitDelay", "field_78781_i", "g");
             curBlockDamageMP = getField(PlayerControllerMP.class, "curBlockDamageMP", "field_78770_f", "e");
             cPacketPlayer_onGround = getField(CPacketPlayer.class, "onGround", "field_149474_g", "f");
+            parentScreen = getField(GuiDisconnected.class, "parentScreen", "field_146307_h", "h");
 
             updateFallState = getMethod(Entity.class, new String[]{"updateFallState", "func_184231_a", "a"}, double.class, boolean.class, IBlockState.class, BlockPos.class);
             rightClickMouse = getMethod(Minecraft.class, new String[]{"rightClickMouse", "func_147121_ag", "aB"});
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static GuiScreen getParentScreen(GuiDisconnected disconnected) {
+        try {
+            return (GuiScreen) parentScreen.get(disconnected);
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
         }
     }
 

@@ -22,7 +22,6 @@ import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.util.UUIDTypeAdapter;
 import net.daporkchop.pepsimod.accountswitcher.MR;
 import net.daporkchop.pepsimod.accountswitcher.ias.account.AlreadyLoggedInException;
-import net.daporkchop.pepsimod.accountswitcher.ias.config.ConfigValues;
 import net.daporkchop.pepsimod.accountswitcher.iasencrypt.EncryptionTools;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
@@ -79,9 +78,6 @@ public class AltManager {
             } catch (Exception e) {
                 throwable = e;
             }
-        } else {
-            if (!ConfigValues.ENABLERELOG)
-                throwable = new AlreadyLoggedInException();
         }
         return throwable;
     }

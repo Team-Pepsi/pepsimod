@@ -149,7 +149,6 @@ public class GuiAccountSelector extends GuiScreen {
             if (queriedaccounts.get(selectedAccountIndex).useCount > 0) {
                 this.drawString(fontRenderer, "Last used:", width - 8 - 61, height / 2 - 64 - 15 + 30, -1);
                 this.drawString(fontRenderer, JavaTools.getJavaCompat().getFormattedDate(), width - 8 - 61, height / 2 - 64 - 15 + 39, -1);
-
             }
         }
     }

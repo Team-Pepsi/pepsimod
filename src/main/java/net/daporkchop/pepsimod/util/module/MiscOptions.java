@@ -44,6 +44,7 @@ public class MiscOptions implements Serializable {
     public float bedbomber_range = 4.0f;
     public int bedbomber_delay = 500;
     public boolean bedbomber_resupply = true;
+    public boolean autoReconnect = false;
 
     public static class ModuleState implements Serializable {
         public boolean enabled;
