@@ -29,6 +29,8 @@ import net.daporkchop.pepsimod.util.module.TargetBone;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiDisconnected;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -45,6 +47,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.opengl.GL11;
 
@@ -106,11 +109,14 @@ public class PepsiUtils extends Default {
     public static Color RAINBOW_COLOR = new Color(0, 0, 0);
     public static RainbowText PEPSI_NAME = new RainbowText("PepsiMod " + PepsiMod.VERSION);
     public static Field block_pepsimod_id = null;
-    public static BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
     public static ArrayList<ITickListener> tickListeners = new ArrayList<>();
     public static ArrayList<ITickListener> toRemoveTickListeners = new ArrayList<>();
     public static ArrayList<IWurstRenderListener> wurstRenderListeners = new ArrayList<>();
     public static ArrayList<IWurstRenderListener> toRemoveWurstRenderListeners = new ArrayList<>();
+    public static GuiButton reconnectButton, autoReconnectButton;
+    public static int autoReconnectWaitTime = 5;
+    public static String lastIp;
+    public static int lastPort;
 
     static {
         TOOBEETOOTEE_DATA.setResourceMode(ServerData.ServerResourceMode.PROMPT);
@@ -122,9 +128,24 @@ public class PepsiUtils extends Default {
             }
         }, 1000, 1000);
 
-        timer.schedule(new TimerTask() {
+        timer.schedule(new TimerTask() { //autoreconnect
             @Override
             public void run() {
+                if (mc.currentScreen != null && mc.currentScreen instanceof GuiDisconnected && autoReconnectButton != null && pepsiMod.miscOptions.autoReconnect) {
+                    autoReconnectButton.displayString = "AutoReconnect (\u00A7a" + --autoReconnectWaitTime + "\u00A7r)";
+                    if (autoReconnectWaitTime == 0) {
+                        ServerData data = new ServerData("", lastIp + ":" + lastPort, false);
+                        data.setResourceMode(ServerData.ServerResourceMode.PROMPT);
+                        FMLClientHandler.instance().connectToServer(mc.currentScreen, data);
+                        autoReconnectWaitTime = 5;
+                    }
+                }
+            }
+        }, 1000, 1000);
+
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() { //rainbow
                 //red
                 if (rainbowCycle.red == ColorChangeType.INCREASE) {
                     rainbowCycle.r += 4;

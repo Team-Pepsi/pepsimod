@@ -15,11 +15,19 @@
 
 package net.daporkchop.pepsimod.module.impl.misc;
 
+import net.daporkchop.pepsimod.command.api.Command;
 import net.daporkchop.pepsimod.module.ModuleCategory;
+import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
+import net.daporkchop.pepsimod.totally.not.skidded.WMinecraft;
+import net.daporkchop.pepsimod.totally.not.skidded.WPlayerController;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
-import net.minecraft.entity.projectile.EntityFishHook;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemFishingRod;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.SPacketSoundEffect;
 
 public class AutoFishMod extends Module {
     public static AutoFishMod INSTANCE;
@@ -29,29 +37,107 @@ public class AutoFishMod extends Module {
         super("AutoFish");
     }
 
+    public static boolean isBobberSplash(SPacketSoundEffect soundEffect) {
+        return SoundEvents.ENTITY_BOBBER_SPLASH.equals(soundEffect.getSound());
+    }
+
     @Override
     public void onEnable() {
+        // reset timer
         timer = 0;
     }
 
     @Override
     public void onDisable() {
-
+        // reset timer
+        timer = 0;
     }
 
     @Override
     public void tick() {
-        if (this.timer > 0) {
-            this.timer -= 1;
-            if (this.timer == 0) {
-                ReflectionStuff.rightClickMouse();
+        // search fishing rod in hotbar
+        int rodInHotbar = -1;
+        for (int i = 0; i < 9; i++) {
+            // skip non-rod items
+            ItemStack stack = WMinecraft.getPlayer().inventory.getStackInSlot(i);
+            if (stack.isEmpty() || !(stack.getItem() instanceof ItemFishingRod)) {
+                continue;
             }
+
+            rodInHotbar = i;
+            break;
+        }
+
+        // check if any rod was found
+        if (rodInHotbar != -1) {
+            // select fishing rod
+            if (WMinecraft.getPlayer().inventory.currentItem != rodInHotbar) {
+                WMinecraft.getPlayer().inventory.currentItem = rodInHotbar;
+                return;
+            }
+
+            // wait for timer
+            if (timer > 0) {
+                timer--;
+                return;
+            }
+
+            // check bobber
+            if (WMinecraft.getPlayer().fishEntity != null) {
+                return;
+            }
+
+            // cast rod
+            rightClick();
             return;
         }
 
-        if ((mc.player.fishEntity != null) && (isHooked(mc.player.fishEntity))) {
-            ReflectionStuff.rightClickMouse();
-            this.timer = 20;
+        // search fishing rod in inventory
+        int rodInInventory = -1;
+        for (int i = 9; i < 36; i++) {
+            // skip non-rod items
+            ItemStack stack =
+                    WMinecraft.getPlayer().inventory.getStackInSlot(i);
+            if (stack.isEmpty() || !(stack.getItem() instanceof ItemFishingRod))
+                continue;
+
+            rodInInventory = i;
+            break;
+        }
+
+        // check if completely out of rods
+        if (rodInInventory == -1) {
+            Command.clientMessage("Out of fishing rods.");
+            ModuleManager.disableModule(this);
+            return;
+        }
+
+        // find empty hotbar slot
+        int hotbarSlot = -1;
+        for (int i = 0; i < 9; i++) {
+            // skip non-empty slots
+            if (!mc.player.inventory.getStackInSlot(i).isEmpty()) {
+                continue;
+            }
+
+            hotbarSlot = i;
+            break;
+        }
+
+        // check if hotbar is full
+        boolean swap = false;
+        if (hotbarSlot == -1) {
+            hotbarSlot = WMinecraft.getPlayer().inventory.currentItem;
+            swap = true;
+        }
+
+        // place rod in hotbar slot
+        WPlayerController.windowClick_PICKUP(rodInInventory);
+        WPlayerController.windowClick_PICKUP(36 + hotbarSlot);
+
+        // swap old hotbar item with rod
+        if (swap) {
+            WPlayerController.windowClick_PICKUP(rodInInventory);
         }
     }
 
@@ -69,7 +155,33 @@ public class AutoFishMod extends Module {
         return ModuleCategory.MISC;
     }
 
-    private boolean isHooked(EntityFishHook hook) {
-        return (hook.motionX == 0.0D) && (hook.motionZ == 0.0D) && (hook.motionY != 0.0D);
+    private void rightClick() {
+        // check held item
+        ItemStack stack = mc.player.inventory.getCurrentItem();
+        if (stack.isEmpty() || !(stack.getItem() instanceof ItemFishingRod)) {
+            return;
+        }
+
+        // right click
+        ReflectionStuff.rightClickMouse();
+
+        // reset timer
+        timer = 15;
+    }
+
+    @Override
+    public void postRecievePacket(Packet<?> packetIn) {
+        // check packet type
+        if (!(packetIn instanceof SPacketSoundEffect)) {
+            return;
+        }
+
+        // check sound type
+        if (!isBobberSplash((SPacketSoundEffect) packetIn)) {
+            return;
+        }
+
+        // catch fish
+        rightClick();
     }
 }
