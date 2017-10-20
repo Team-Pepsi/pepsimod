@@ -40,7 +40,7 @@
     "client.entity.MixinEntityPlayerSP",
     "util.MixinMovementInputFromOptions",
     "entity.passive.MixinEntityPig",
-    "entity.passive.MixinabstractHorse",
+    "entity.passive.MixinAbstractHorse",
     "client.gui.MixinGuiConnecting"
   ]
 }
