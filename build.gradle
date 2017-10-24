@@ -45,7 +45,7 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.2-14.23.0.2486"
+    version = "1.12.2-14.23.0.2487"
     runDir = "run"
     mappings = "snapshot_20170919"
     makeObfSourceJar = false
@@ -66,6 +66,7 @@ dependencies {
     compile("org.spongepowered:mixin:0.7.2-SNAPSHOT") {
         exclude module: "launchwrapper"
     }
+    compile("com.flowpowered:flow-noise:1.0.1-SNAPSHOT")
 }
 
 processResources {
