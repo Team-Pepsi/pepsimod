@@ -15,6 +15,7 @@
 
 package net.daporkchop.pepsimod.util;
 
+import com.google.common.collect.ImmutableSet;
 import net.daporkchop.pepsimod.util.misc.Default;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -25,6 +26,7 @@ import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.resources.DefaultResourcePack;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -40,6 +42,7 @@ import net.minecraftforge.fml.common.FMLLog;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Set;
 
 public class ReflectionStuff extends Default {
     public static Field renderPosX;
@@ -71,6 +74,7 @@ public class ReflectionStuff extends Default {
     public static Field blockHitDelay;
     public static Field cPacketPlayer_onGround;
     public static Field parentScreen;
+    public static Field DEFAULT_RESOURCE_DOMAINS;
 
     public static Method updateFallState;
     public static Method rightClickMouse;
@@ -148,11 +152,22 @@ public class ReflectionStuff extends Default {
             curBlockDamageMP = getField(PlayerControllerMP.class, "curBlockDamageMP", "field_78770_f", "e");
             cPacketPlayer_onGround = getField(CPacketPlayer.class, "onGround", "field_149474_g", "f");
             parentScreen = getField(GuiDisconnected.class, "parentScreen", "field_146307_h", "h");
+            DEFAULT_RESOURCE_DOMAINS = getField(DefaultResourcePack.class, "DEFAULT_RESOURCE_DOMAINS", "field_110608_a", "a");
 
             updateFallState = getMethod(Entity.class, new String[]{"updateFallState", "func_184231_a", "a"}, double.class, boolean.class, IBlockState.class, BlockPos.class);
             rightClickMouse = getMethod(Minecraft.class, new String[]{"rightClickMouse", "func_147121_ag", "aB"});
+
+            setDEFAULT_RESOURCE_DOMAINS(ImmutableSet.<String>builder().addAll(DefaultResourcePack.DEFAULT_RESOURCE_DOMAINS).add("wdl").build());
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void setDEFAULT_RESOURCE_DOMAINS(Set<String> n) {
+        try {
+            DEFAULT_RESOURCE_DOMAINS.set(null, n);
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
         }
     }
 
