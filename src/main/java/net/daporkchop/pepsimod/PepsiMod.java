@@ -41,6 +41,7 @@ import net.daporkchop.pepsimod.util.datatag.DataTag;
 import net.daporkchop.pepsimod.util.misc.Default;
 import net.daporkchop.pepsimod.util.misc.waypoints.Waypoints;
 import net.daporkchop.pepsimod.util.module.*;
+import net.daporkchop.pepsimod.wdl.WDL;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Session;
@@ -186,6 +187,7 @@ public class PepsiMod {
         Default.mc = mc;
         Default.pepsiMod = this;
         IAS.preInit(event);
+        new WDL();
     }
 
     @Mod.EventHandler

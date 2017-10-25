@@ -29,6 +29,7 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -116,6 +117,13 @@ public abstract class MixinEntity {
             } else if (settings.golems && this_ instanceof EntityGolem) {
                 callbackInfoReturnable.setReturnValue(true);
             }
+        }
+    }
+
+    @Inject(method = "isInWater", at = @At("HEAD"), cancellable = true)
+    public void preIsInWater(CallbackInfoReturnable<Boolean> callbackInfoReturnable)    {
+        if (FreecamMod.INSTANCE.isEnabled)  {
+            callbackInfoReturnable.setReturnValue(false);
         }
     }
 }
