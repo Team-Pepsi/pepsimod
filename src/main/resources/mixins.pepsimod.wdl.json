@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_8",
+  "package": "net.daporkchop.pepsimod.wdl.mixin",
+  "refmap": "mixins.pepsimod.wdl.refmap.json",
+  "mixins": [
+    "client.network.MixinNetHandlerPlayClient",
+    "client.multiplayer.MixinWorldClient",
+    "client.gui.MixinGuiIngameMenu",
+    "crash.MixinCrashReport"
+  ]
+}

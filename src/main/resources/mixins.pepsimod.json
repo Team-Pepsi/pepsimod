@@ -41,6 +41,7 @@
     "util.MixinMovementInputFromOptions",
     "entity.passive.MixinEntityPig",
     "entity.passive.MixinAbstractHorse",
-    "client.gui.MixinGuiConnecting"
+    "client.gui.MixinGuiConnecting",
+    "client.resources.MixinLocale"
   ]
 }

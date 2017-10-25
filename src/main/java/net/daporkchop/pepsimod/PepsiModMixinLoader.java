@@ -15,6 +15,7 @@
 
 package net.daporkchop.pepsimod;
 
+import net.daporkchop.pepsimod.wdl.mixin.WDLMixinLoader;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
@@ -33,6 +34,7 @@ public class PepsiModMixinLoader implements IFMLLoadingPlugin {
         FMLLog.log.info("\n\n\nPepsiMod Mixin init\n\n");
         MixinBootstrap.init();
         Mixins.addConfiguration("mixins.pepsimod.json");
+        WDLMixinLoader.loadMixins();
 
         for (Method m : ClientBrandRetriever.class.getDeclaredMethods()) {
             FMLLog.log.info(m.getName() + " " + m.toString());
