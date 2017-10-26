@@ -22,7 +22,7 @@ public class NoWeatherTranslator implements IConfigTranslator {
     public static final NoWeatherTranslator INSTANCE = new NoWeatherTranslator();
     public boolean disableRain = false;
     public boolean changeTime = false;
-    public long time = 0;
+    public int time = 0;
 
     private NoWeatherTranslator() {
 
@@ -37,7 +37,7 @@ public class NoWeatherTranslator implements IConfigTranslator {
     public void decode(String fieldName, JsonObject json) {
         disableRain = getBoolean(json, "disableRain", disableRain);
         changeTime = getBoolean(json, "changeTime", changeTime);
-        time = getLong(json, "time", time);
+        time = getInt(json, "time", time);
     }
 
     public String name() {

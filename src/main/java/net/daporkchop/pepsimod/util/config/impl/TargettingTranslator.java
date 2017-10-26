@@ -18,8 +18,6 @@ package net.daporkchop.pepsimod.util.config.impl;
 import com.google.gson.JsonObject;
 import net.daporkchop.pepsimod.util.config.IConfigTranslator;
 
-import java.io.Serializable;
-
 public class TargettingTranslator implements IConfigTranslator {
     public static final TargettingTranslator INSTANCE = new TargettingTranslator();
     public boolean players = false;
@@ -85,7 +83,7 @@ public class TargettingTranslator implements IConfigTranslator {
         return "targetting";
     }
 
-    public enum TargetBone implements Serializable {
+    public enum TargetBone {
         HEAD,
         FEET,
         MIDDLE;

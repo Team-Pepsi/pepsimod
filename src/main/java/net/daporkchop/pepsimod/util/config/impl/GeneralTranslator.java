@@ -21,7 +21,6 @@ import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleSortType;
 import net.daporkchop.pepsimod.util.config.IConfigTranslator;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,7 +54,7 @@ public class GeneralTranslator implements IConfigTranslator {
         return "general";
     }
 
-    public static class ModuleState implements Serializable {
+    public static class ModuleState {
         public static ModuleState DEFAULT = new ModuleState(false, false);
         public boolean enabled;
         public boolean hidden;

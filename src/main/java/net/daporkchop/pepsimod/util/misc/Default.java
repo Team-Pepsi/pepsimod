@@ -18,9 +18,7 @@ package net.daporkchop.pepsimod.util.misc;
 import net.daporkchop.pepsimod.PepsiMod;
 import net.minecraft.client.Minecraft;
 
-import java.io.Serializable;
-
-public abstract class Default implements Serializable {
+public abstract class Default {
     public static Minecraft mc = null;
     public static PepsiMod pepsiMod = null;
 }

@@ -15,9 +15,8 @@
 
 package net.daporkchop.pepsimod.util.misc.waypoints;
 
-import java.io.Serializable;
 import java.util.Hashtable;
 
-public class ServerWaypoints implements Serializable {
+public class ServerWaypoints {
     public Hashtable<Integer, DimensionWaypoints> waypoints = new Hashtable<>();
 }

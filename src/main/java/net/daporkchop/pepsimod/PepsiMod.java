@@ -51,7 +51,6 @@ import org.apache.commons.io.IOUtils;
 import org.lwjgl.input.Keyboard;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -220,16 +219,13 @@ public class PepsiMod {
 
     public void loadConfig() {
         String json = null; //TODO
-        FILECONFIG:
         if (json == null) {
             File file = new File(getWorkingFolder().getPath() + File.separatorChar + "pepsimodConf.json");
             try {
                 if (!file.exists()) {
                     file.createNewFile();
-                    IOUtils.write(Config.saveConfig().getBytes(), new FileOutputStream(file));
-                    break FILECONFIG;
                 }
-                json = IOUtils.toString(new FileInputStream(file));
+                json = "{}";
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -243,8 +239,8 @@ public class PepsiMod {
             File file = new File(getWorkingFolder().getPath() + File.separatorChar + "pepsimodConf.json");
             if (!file.exists()) {
                 file.createNewFile();
-                IOUtils.write(Config.saveConfig().getBytes(), new FileOutputStream(file));
             }
+            IOUtils.write(Config.saveConfig().getBytes(), new FileOutputStream(file));
         } catch (IOException e) {
             e.printStackTrace();
         }

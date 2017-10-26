@@ -17,9 +17,7 @@ package net.daporkchop.pepsimod.util.misc.waypoints;
 
 import net.minecraft.util.math.Vec3d;
 
-import java.io.Serializable;
-
-public class Waypoint implements Serializable {
+public class Waypoint {
     public final String name;
     public final int x;
     public final int y;

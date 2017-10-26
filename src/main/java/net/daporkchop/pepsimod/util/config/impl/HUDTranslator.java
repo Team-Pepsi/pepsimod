@@ -38,7 +38,7 @@ public class HUDTranslator implements IConfigTranslator {
     public boolean effects = false;
     public boolean fps = true;
     public boolean ping = true;
-    public JsonObject json;
+    public JsonObject json = new JsonObject();
 
     private HUDTranslator() {
 

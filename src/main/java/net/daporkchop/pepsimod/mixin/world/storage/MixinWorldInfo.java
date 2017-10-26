@@ -28,7 +28,7 @@ public abstract class MixinWorldInfo {
     @Inject(method = "getWorldTime", at = @At("HEAD"), cancellable = true)
     public void preGetWorldTime(CallbackInfoReturnable<Long> callbackInfoReturnable) {
         if (NoWeatherMod.INSTANCE.state.enabled && NoWeatherTranslator.INSTANCE.changeTime) {
-            callbackInfoReturnable.setReturnValue(NoWeatherTranslator.INSTANCE.time);
+            callbackInfoReturnable.setReturnValue((long) NoWeatherTranslator.INSTANCE.time);
         }
     }
 }
