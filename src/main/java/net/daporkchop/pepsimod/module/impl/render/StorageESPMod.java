@@ -23,6 +23,7 @@ import net.daporkchop.pepsimod.totally.not.skidded.RenderUtils;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.RenderColor;
+import net.daporkchop.pepsimod.util.config.impl.ESPTranslator;
 import net.minecraft.block.BlockChest;
 import net.minecraft.tileentity.*;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -72,7 +73,7 @@ public class StorageESPMod extends Module {
         furnace.clear();
 
         for (TileEntity te : mc.world.loadedTileEntityList) {
-            if ((pepsiMod.espSettings.basic || pepsiMod.espSettings.trapped) && te instanceof TileEntityChest) {
+            if ((ESPTranslator.INSTANCE.basic || ESPTranslator.INSTANCE.trapped) && te instanceof TileEntityChest) {
                 TileEntityChest chestTe = (TileEntityChest) te;
 
                 if (chestTe.adjacentChestXPos != null || chestTe.adjacentChestZPos != null) {
@@ -88,19 +89,19 @@ public class StorageESPMod extends Module {
                 }
 
                 if (chestTe.getChestType() == BlockChest.Type.TRAP) {
-                    if (pepsiMod.espSettings.trapped) {
+                    if (ESPTranslator.INSTANCE.trapped) {
                         trapped.add(bb);
                     }
                 } else {
-                    if (pepsiMod.espSettings.basic) {
+                    if (ESPTranslator.INSTANCE.basic) {
                         basic.add(bb);
                     }
                 }
-            } else if (pepsiMod.espSettings.ender && te instanceof TileEntityEnderChest) {
+            } else if (ESPTranslator.INSTANCE.ender && te instanceof TileEntityEnderChest) {
                 ender.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(mc.world, te.getPos())), te.getPos()));
-            } else if (pepsiMod.espSettings.furnace && te instanceof TileEntityFurnace) {
+            } else if (ESPTranslator.INSTANCE.furnace && te instanceof TileEntityFurnace) {
                 furnace.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(mc.world, te.getPos())), te.getPos()));
-            } else if (pepsiMod.espSettings.hopper && te instanceof TileEntityHopper) {
+            } else if (ESPTranslator.INSTANCE.hopper && te instanceof TileEntityHopper) {
                 hopper.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(mc.world, te.getPos())), te.getPos()));
             }
         }
@@ -114,45 +115,45 @@ public class StorageESPMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new ModuleOption<>(pepsiMod.espSettings.basic, "normal", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(ESPTranslator.INSTANCE.basic, "normal", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.espSettings.basic = value;
+                            ESPTranslator.INSTANCE.basic = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.espSettings.basic;
+                            return ESPTranslator.INSTANCE.basic;
                         }, "Normal"),
-                new ModuleOption<>(pepsiMod.espSettings.trapped, "trapped", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(ESPTranslator.INSTANCE.trapped, "trapped", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.espSettings.trapped = value;
+                            ESPTranslator.INSTANCE.trapped = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.espSettings.trapped;
+                            return ESPTranslator.INSTANCE.trapped;
                         }, "Trapped"),
-                new ModuleOption<>(pepsiMod.espSettings.ender, "ender", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(ESPTranslator.INSTANCE.ender, "ender", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.espSettings.ender = value;
+                            ESPTranslator.INSTANCE.ender = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.espSettings.ender;
+                            return ESPTranslator.INSTANCE.ender;
                         }, "Ender"),
-                new ModuleOption<>(pepsiMod.espSettings.hopper, "hopper", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(ESPTranslator.INSTANCE.hopper, "hopper", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.espSettings.hopper = value;
+                            ESPTranslator.INSTANCE.hopper = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.espSettings.hopper;
+                            return ESPTranslator.INSTANCE.hopper;
                         }, "Hopper"),
-                new ModuleOption<>(pepsiMod.espSettings.furnace, "furnace", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(ESPTranslator.INSTANCE.furnace, "furnace", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.espSettings.furnace = value;
+                            ESPTranslator.INSTANCE.furnace = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.espSettings.furnace;
+                            return ESPTranslator.INSTANCE.furnace;
                         }, "Furnace")
         };
     }
@@ -170,7 +171,7 @@ public class StorageESPMod extends Module {
         GL11.glPushMatrix();
         GL11.glTranslated(-ReflectionStuff.getRenderPosX(mc.getRenderManager()), -ReflectionStuff.getRenderPosY(mc.getRenderManager()), -ReflectionStuff.getRenderPosZ(mc.getRenderManager()));
 
-        if (pepsiMod.espSettings.basic) {
+        if (ESPTranslator.INSTANCE.basic) {
             GL11.glColor4b(chestColor.r, chestColor.g, chestColor.b, chestColor.a);
 
             basic.forEach((entry) -> {
@@ -178,7 +179,7 @@ public class StorageESPMod extends Module {
             });
         }
 
-        if (pepsiMod.espSettings.trapped) {
+        if (ESPTranslator.INSTANCE.trapped) {
             GL11.glColor4b(trappedColor.r, trappedColor.g, trappedColor.b, trappedColor.a);
 
             trapped.forEach((entry) -> {
@@ -186,7 +187,7 @@ public class StorageESPMod extends Module {
             });
         }
 
-        if (pepsiMod.espSettings.ender) {
+        if (ESPTranslator.INSTANCE.ender) {
             GL11.glColor4b(enderColor.r, enderColor.g, enderColor.b, enderColor.a);
 
             ender.forEach((entry) -> {
@@ -194,7 +195,7 @@ public class StorageESPMod extends Module {
             });
         }
 
-        if (pepsiMod.espSettings.hopper) {
+        if (ESPTranslator.INSTANCE.hopper) {
             GL11.glColor4b(hopperColor.r, hopperColor.g, hopperColor.b, hopperColor.a);
 
             hopper.forEach((entry) -> {
@@ -202,7 +203,7 @@ public class StorageESPMod extends Module {
             });
         }
 
-        if (pepsiMod.espSettings.furnace) {
+        if (ESPTranslator.INSTANCE.furnace) {
             GL11.glColor4b(furnaceColor.r, furnaceColor.g, furnaceColor.b, furnaceColor.a);
 
             furnace.forEach((entry) -> {

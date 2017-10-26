@@ -26,6 +26,8 @@ import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
+import net.daporkchop.pepsimod.util.config.impl.GeneralTranslator;
+import net.daporkchop.pepsimod.util.config.impl.HUDTranslator;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.item.ItemStack;
@@ -63,7 +65,7 @@ public class HUDMod extends Module {
             module.updateName();
         }
 
-        ModuleManager.sortModules(ModuleManager.sortType);
+        ModuleManager.sortModules(GeneralTranslator.INSTANCE.sortType);
     }
 
     @Override
@@ -74,136 +76,136 @@ public class HUDMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new ModuleOption<>(pepsiMod.hudSettings.drawLogo, "draw_logo", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(HUDTranslator.INSTANCE.drawLogo, "draw_logo", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.hudSettings.drawLogo = value;
+                            HUDTranslator.INSTANCE.drawLogo = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.hudSettings.drawLogo;
+                            return HUDTranslator.INSTANCE.drawLogo;
                         }, "Watermark"),
-                new ModuleOption<>(pepsiMod.hudSettings.arrayList, "arraylist", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(HUDTranslator.INSTANCE.arrayList, "arraylist", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.hudSettings.arrayList = value;
+                            HUDTranslator.INSTANCE.arrayList = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.hudSettings.arrayList;
+                            return HUDTranslator.INSTANCE.arrayList;
                         }, "ArrayList"),
-                new ModuleOption<>(pepsiMod.hudSettings.TPS, "tps", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(HUDTranslator.INSTANCE.TPS, "tps", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.hudSettings.TPS = value;
+                            HUDTranslator.INSTANCE.TPS = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.hudSettings.TPS;
+                            return HUDTranslator.INSTANCE.TPS;
                         }, "TPS"),
-                new ModuleOption<>(pepsiMod.hudSettings.coords, "coords", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(HUDTranslator.INSTANCE.coords, "coords", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.hudSettings.coords = value;
+                            HUDTranslator.INSTANCE.coords = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.hudSettings.coords;
+                            return HUDTranslator.INSTANCE.coords;
                         }, "Coords"),
-                new ModuleOption<>(pepsiMod.hudSettings.netherCoords, "nether_coords", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(HUDTranslator.INSTANCE.netherCoords, "nether_coords", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.hudSettings.netherCoords = value;
+                            HUDTranslator.INSTANCE.netherCoords = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.hudSettings.netherCoords;
+                            return HUDTranslator.INSTANCE.netherCoords;
                         }, "NetherCoords"),
-                new ModuleOption<>(pepsiMod.hudSettings.arrayListTop, "arraylist_top", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(HUDTranslator.INSTANCE.arrayListTop, "arraylist_top", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.hudSettings.arrayListTop = value;
+                            HUDTranslator.INSTANCE.arrayListTop = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.hudSettings.arrayListTop;
+                            return HUDTranslator.INSTANCE.arrayListTop;
                         }, "ArrayListOnTop"),
-                new ModuleOption<>(pepsiMod.hudSettings.serverBrand, "server_brand", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(HUDTranslator.INSTANCE.serverBrand, "server_brand", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.hudSettings.serverBrand = value;
+                            HUDTranslator.INSTANCE.serverBrand = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.hudSettings.serverBrand;
+                            return HUDTranslator.INSTANCE.serverBrand;
                         }, "ServerBrand"),
-                new ModuleOption<>(pepsiMod.hudSettings.rainbow, "rainbow", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(HUDTranslator.INSTANCE.rainbow, "rainbow", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.hudSettings.rainbow = value;
+                            HUDTranslator.INSTANCE.rainbow = value;
                             for (Module module : ModuleManager.AVALIBLE_MODULES) {
                                 module.updateName();
                             }
                             return true;
                         },
                         () -> {
-                            return pepsiMod.hudSettings.rainbow;
+                            return HUDTranslator.INSTANCE.rainbow;
                         }, "Rainbow"),
-                new ModuleOption<>(pepsiMod.hudSettings.direction, "direction", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(HUDTranslator.INSTANCE.direction, "direction", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.hudSettings.direction = value;
+                            HUDTranslator.INSTANCE.direction = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.hudSettings.direction;
+                            return HUDTranslator.INSTANCE.direction;
                         }, "Direction"),
-                new ModuleOption<>(pepsiMod.hudSettings.armor, "armor", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(HUDTranslator.INSTANCE.armor, "armor", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.hudSettings.armor = value;
+                            HUDTranslator.INSTANCE.armor = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.hudSettings.armor;
+                            return HUDTranslator.INSTANCE.armor;
                         }, "Armor"),
-                new ModuleOption<>(pepsiMod.hudSettings.effects, "effects", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(HUDTranslator.INSTANCE.effects, "effects", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.hudSettings.effects = value;
+                            HUDTranslator.INSTANCE.effects = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.hudSettings.effects;
+                            return HUDTranslator.INSTANCE.effects;
                         }, "Effects"),
-                new ModuleOption<>(pepsiMod.hudSettings.fps, "fps", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(HUDTranslator.INSTANCE.fps, "fps", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.hudSettings.fps = value;
+                            HUDTranslator.INSTANCE.fps = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.hudSettings.fps;
+                            return HUDTranslator.INSTANCE.fps;
                         }, "FPS"),
-                new ModuleOption<>(pepsiMod.hudSettings.ping, "ping", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(HUDTranslator.INSTANCE.ping, "ping", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.hudSettings.ping = value;
+                            HUDTranslator.INSTANCE.ping = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.hudSettings.ping;
+                            return HUDTranslator.INSTANCE.ping;
                         }, "Ping"),
-                new ModuleOption<>(pepsiMod.hudSettings.r, "r", new String[]{"0", "128", "255"},
+                new ModuleOption<>(HUDTranslator.INSTANCE.r, "r", new String[]{"0", "128", "255"},
                         (value) -> {
-                            pepsiMod.hudSettings.r = value;
+                            HUDTranslator.INSTANCE.r = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.hudSettings.r;
+                            return HUDTranslator.INSTANCE.r;
                         }, "Red", new ExtensionSlider(ExtensionType.VALUE_INT, 0, 255, 1)),
-                new ModuleOption<>(pepsiMod.hudSettings.g, "g", new String[]{"0", "128", "255"},
+                new ModuleOption<>(HUDTranslator.INSTANCE.g, "g", new String[]{"0", "128", "255"},
                         (value) -> {
-                            pepsiMod.hudSettings.g = value;
+                            HUDTranslator.INSTANCE.g = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.hudSettings.g;
+                            return HUDTranslator.INSTANCE.g;
                         }, "Green", new ExtensionSlider(ExtensionType.VALUE_INT, 0, 255, 1)),
-                new ModuleOption<>(pepsiMod.hudSettings.b, "b", new String[]{"0", "128", "255"},
+                new ModuleOption<>(HUDTranslator.INSTANCE.b, "b", new String[]{"0", "128", "255"},
                         (value) -> {
-                            pepsiMod.hudSettings.b = value;
+                            HUDTranslator.INSTANCE.b = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.hudSettings.b;
+                            return HUDTranslator.INSTANCE.b;
                         }, "Blue", new ExtensionSlider(ExtensionType.VALUE_INT, 0, 255, 1))
         };
     }
@@ -227,32 +229,32 @@ public class HUDMod extends Module {
 
     @Override
     public void onRenderGUI(float partialTicks, int width, int height, GuiIngame gui) {
-        if (pepsiMod.hudSettings.drawLogo) {
-            if (pepsiMod.hudSettings.rainbow) {
+        if (HUDTranslator.INSTANCE.drawLogo) {
+            if (HUDTranslator.INSTANCE.rainbow) {
                 PepsiUtils.PEPSI_NAME.drawAtPos(gui, 2, 2, 0);
             } else {
-                pepsiMod.hudSettings.bindColor();
-                mc.fontRenderer.drawString(PepsiUtils.PEPSI_NAME.text, 2, 2, pepsiMod.hudSettings.getColor(), true);
+                HUDTranslator.INSTANCE.bindColor();
+                mc.fontRenderer.drawString(PepsiUtils.PEPSI_NAME.text, 2, 2, HUDTranslator.INSTANCE.getColor(), true);
             }
         }
 
-        if (pepsiMod.hudSettings.arrayList) {
-            if (pepsiMod.hudSettings.arrayListTop) {
+        if (HUDTranslator.INSTANCE.arrayList) {
+            if (HUDTranslator.INSTANCE.arrayListTop) {
                 for (int i = 0, j = 0; i < ModuleManager.ENABLED_MODULES.size(); i++) {
                     Module module = ModuleManager.ENABLED_MODULES.get(i);
-                    if (module.hide) {
+                    if (module.state.hidden) {
                         continue;
                     }
 
-                    if (pepsiMod.hudSettings.rainbow) {
+                    if (HUDTranslator.INSTANCE.rainbow) {
                         if (module.text instanceof RainbowText) {
                             ((RainbowText) module.text).drawAtPos(gui, width - 2 - module.text.width(), 2 + j * 10, ++j * 10);
                         } else {
                             module.text.drawAtPos(gui, width - 2 - module.text.width(), 2 + ++j * 10);
                         }
                     } else {
-                        pepsiMod.hudSettings.bindColor();
-                        mc.fontRenderer.drawString(module.text.getRawText(), width - 2 - module.text.width(), 2 + j * 10, pepsiMod.hudSettings.getColor());
+                        HUDTranslator.INSTANCE.bindColor();
+                        mc.fontRenderer.drawString(module.text.getRawText(), width - 2 - module.text.width(), 2 + j * 10, HUDTranslator.INSTANCE.getColor());
                         j++;
                     }
                 }
@@ -260,19 +262,19 @@ public class HUDMod extends Module {
                 if (!(mc.currentScreen instanceof GuiChat)) {
                     for (int i = 0, j = 0; i < ModuleManager.ENABLED_MODULES.size(); i++) {
                         Module module = ModuleManager.ENABLED_MODULES.get(i);
-                        if (module.hide) {
+                        if (module.state.hidden) {
                             continue;
                         }
 
-                        if (pepsiMod.hudSettings.rainbow) {
+                        if (HUDTranslator.INSTANCE.rainbow) {
                             if (module.text instanceof RainbowText) {
                                 ((RainbowText) module.text).drawAtPos(gui, width - 2 - module.text.width(), height - 2 - j * 10, ++j * 8);
                             } else {
                                 module.text.drawAtPos(gui, width - 2 - module.text.width(), height - 2 - ++j * -10);
                             }
                         } else {
-                            pepsiMod.hudSettings.bindColor();
-                            mc.fontRenderer.drawString(module.text.getRawText(), width - 2 - module.text.width(), height - 12 - j * 10, pepsiMod.hudSettings.getColor());
+                            HUDTranslator.INSTANCE.bindColor();
+                            mc.fontRenderer.drawString(module.text.getRawText(), width - 2 - module.text.width(), height - 12 - j * 10, HUDTranslator.INSTANCE.getColor());
                             j++;
                         }
                     }
@@ -281,13 +283,13 @@ public class HUDMod extends Module {
         }
 
         int i = 0;
-        if (pepsiMod.hudSettings.arrayListTop) {
+        if (HUDTranslator.INSTANCE.arrayListTop) {
             if (!(mc.currentScreen instanceof GuiChat)) {
-                if (pepsiMod.hudSettings.serverBrand) {
+                if (HUDTranslator.INSTANCE.serverBrand) {
                     String text = PepsiUtils.COLOR_ESCAPE + "7Server brand: " + PepsiUtils.COLOR_ESCAPE + "r" + HUDMod.INSTANCE.serverBrand;
                     gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("Server brand: " + HUDMod.INSTANCE.serverBrand) + 2), height - 2 - ++i * 10, Color.white.getRGB());
                 }
-                if (pepsiMod.hudSettings.ping) {
+                if (HUDTranslator.INSTANCE.ping) {
                     try {
                         int ping = mc.getConnection().getPlayerInfo(mc.getConnection().getGameProfile().getId()).getResponseTime();
                         String text = PepsiUtils.COLOR_ESCAPE + "7Ping: " + PepsiUtils.COLOR_ESCAPE + "r" + ping;
@@ -295,21 +297,21 @@ public class HUDMod extends Module {
                     } catch (NullPointerException e) {
                     }
                 }
-                if (pepsiMod.hudSettings.TPS) {
+                if (HUDTranslator.INSTANCE.TPS) {
                     String text = PepsiUtils.COLOR_ESCAPE + "7TPS: " + PepsiUtils.COLOR_ESCAPE + "r" + TickRate.TPS;
                     gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("TPS: " + TickRate.TPS) + 2), height - 2 - ++i * 10, Color.white.getRGB());
                 }
-                if (pepsiMod.hudSettings.fps) {
+                if (HUDTranslator.INSTANCE.fps) {
                     String text = PepsiUtils.COLOR_ESCAPE + "7FPS: " + PepsiUtils.COLOR_ESCAPE + "r" + ReflectionStuff.getDebugFps();
                     gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("FPS: " + ReflectionStuff.getDebugFps()) + 2), height - 2 - ++i * 10, Color.white.getRGB());
                 }
             }
         } else {
-            if (pepsiMod.hudSettings.serverBrand) {
+            if (HUDTranslator.INSTANCE.serverBrand) {
                 String text = PepsiUtils.COLOR_ESCAPE + "7Server brand: " + PepsiUtils.COLOR_ESCAPE + "r" + HUDMod.INSTANCE.serverBrand;
                 gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("Server brand: " + HUDMod.INSTANCE.serverBrand) + 2), 2 + i++ * 10, Color.white.getRGB());
             }
-            if (pepsiMod.hudSettings.ping) {
+            if (HUDTranslator.INSTANCE.ping) {
                 try {
                     int ping = mc.getConnection().getPlayerInfo(mc.getConnection().getGameProfile().getId()).getResponseTime();
                     String text = PepsiUtils.COLOR_ESCAPE + "7Ping: " + PepsiUtils.COLOR_ESCAPE + "r" + ping;
@@ -317,30 +319,30 @@ public class HUDMod extends Module {
                 } catch (NullPointerException e) {
                 }
             }
-            if (pepsiMod.hudSettings.TPS) {
+            if (HUDTranslator.INSTANCE.TPS) {
                 String text = PepsiUtils.COLOR_ESCAPE + "7TPS: " + PepsiUtils.COLOR_ESCAPE + "r" + TickRate.TPS;
                 gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("TPS: " + TickRate.TPS) + 2), 2 + i++ * 10, Color.white.getRGB());
             }
-            if (pepsiMod.hudSettings.fps) {
+            if (HUDTranslator.INSTANCE.fps) {
                 String text = PepsiUtils.COLOR_ESCAPE + "7FPS: " + PepsiUtils.COLOR_ESCAPE + "r" + ReflectionStuff.getDebugFps();
                 gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("FPS: " + ReflectionStuff.getDebugFps()) + 2), 2 + i++ * 10, Color.white.getRGB());
             }
         }
 
         i = mc.currentScreen instanceof GuiChat ? 14 : 0;
-        if (pepsiMod.hudSettings.coords) {
+        if (HUDTranslator.INSTANCE.coords) {
             String toRender = PepsiUtils.COLOR_ESCAPE + "7XYZ" + PepsiUtils.COLOR_ESCAPE + "f: " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(mc.player.posX) + "" + PepsiUtils.COLOR_ESCAPE + "f, " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(mc.player.posY) + "" + PepsiUtils.COLOR_ESCAPE + "f, " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(mc.player.posZ);
-            if (pepsiMod.hudSettings.netherCoords && mc.player.dimension != 1) {
+            if (HUDTranslator.INSTANCE.netherCoords && mc.player.dimension != 1) {
                 toRender += " " + PepsiUtils.COLOR_ESCAPE + "f(" + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(PepsiUtils.getDimensionCoord(mc.player.posX)) + "" + PepsiUtils.COLOR_ESCAPE + "f, " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(mc.player.posY) + "" + PepsiUtils.COLOR_ESCAPE + "f, " + PepsiUtils.COLOR_ESCAPE + "7" + PepsiUtils.roundCoords(PepsiUtils.getDimensionCoord(mc.player.posZ)) + "" + PepsiUtils.COLOR_ESCAPE + "f)";
             }
             mc.fontRenderer.drawString(toRender, 2, height - (i += 10), Color.white.getRGB(), true);
         }
-        if (pepsiMod.hudSettings.direction) {
+        if (HUDTranslator.INSTANCE.direction) {
             mc.fontRenderer.drawString(PepsiUtils.COLOR_ESCAPE + "7[" + PepsiUtils.COLOR_ESCAPE + "f" + PepsiUtils.getFacing() + PepsiUtils.COLOR_ESCAPE + "7]", 2, height - (i += 10), Color.white.getRGB(), true);
         }
 
 
-        if (pepsiMod.hudSettings.armor) {
+        if (HUDTranslator.INSTANCE.armor) {
             i = 0;
             int xPos = width / 2;
             xPos -= 103;

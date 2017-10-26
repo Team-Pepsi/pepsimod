@@ -36,7 +36,7 @@ public abstract class MixinBlockLiquid extends Block {
 
     @Inject(method = "isPassable", at = @At("HEAD"), cancellable = true)
     public void preIsPassable(IBlockAccess worldIn, BlockPos pos, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (XrayMod.INSTANCE.isEnabled) {
+        if (XrayMod.INSTANCE.state.enabled) {
             callbackInfoReturnable.setReturnValue(true);
             return;
         }

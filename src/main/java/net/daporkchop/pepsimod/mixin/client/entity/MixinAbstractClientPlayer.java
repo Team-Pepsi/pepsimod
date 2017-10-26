@@ -39,7 +39,7 @@ public abstract class MixinAbstractClientPlayer extends EntityPlayer {
         if (FreecamMod.INSTANCE == null) {
             System.out.println("Freecam instance was null!!!");
         } else {
-            if (FreecamMod.INSTANCE.isEnabled) {
+            if (FreecamMod.INSTANCE.state.enabled) {
                 callbackInfoReturnable.setReturnValue(true);
                 callbackInfoReturnable.cancel();
             }

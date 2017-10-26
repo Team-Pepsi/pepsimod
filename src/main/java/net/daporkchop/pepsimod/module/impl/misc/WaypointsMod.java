@@ -25,6 +25,7 @@ import net.daporkchop.pepsimod.totally.not.skidded.RotationUtils;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.RenderColor;
+import net.daporkchop.pepsimod.util.config.impl.WaypointsTranslator;
 import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
@@ -73,9 +74,9 @@ public class WaypointsMod extends Module {
         Vec3d start = RotationUtils.getClientLookVec().addVector(0, mc.player.getEyeHeight(), 0).addVector(ReflectionStuff.getRenderPosX(mc.getRenderManager()), ReflectionStuff.getRenderPosY(mc.getRenderManager()), ReflectionStuff.getRenderPosZ(mc.getRenderManager()));
         GL11.glBegin(GL11.GL_LINES);
 
-        RenderColor.glColor(pepsiMod.miscOptions.waypoints_r, pepsiMod.miscOptions.waypoints_g, pepsiMod.miscOptions.waypoints_b);
+        RenderColor.glColor(WaypointsTranslator.INSTANCE.r, WaypointsTranslator.INSTANCE.g, WaypointsTranslator.INSTANCE.b);
 
-        Collection<Waypoint> toRender = pepsiMod.waypoints.getWaypoints();
+        Collection<Waypoint> toRender = WaypointsTranslator.INSTANCE.getWaypoints();
         for (Waypoint waypoint : toRender) {
             GL11.glVertex3d(start.x, start.y, start.z);
             GL11.glVertex3i(waypoint.x, waypoint.y, waypoint.z);
@@ -91,13 +92,13 @@ public class WaypointsMod extends Module {
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
 
-        if (pepsiMod.miscOptions.waypoints_nametag) {
+        if (WaypointsTranslator.INSTANCE.nametag) {
             for (Waypoint waypoint : toRender) {
                 String text = waypoint.name;
-                if (pepsiMod.miscOptions.waypoints_coords) {
+                if (WaypointsTranslator.INSTANCE.coords) {
                     text += " \u00A77" + waypoint.x + "\u00A7f, \u00A77" + waypoint.y + "\u00A7f, \u00A77" + waypoint.z;
                 }
-                if (pepsiMod.miscOptions.waypoints_dist) {
+                if (WaypointsTranslator.INSTANCE.dist) {
                     text += " \u00A7f (\u00A7b" + PepsiUtils.roundFloatForSlider((float) mc.player.getDistance(waypoint.x, waypoint.y, waypoint.z)) + "\u00A7f)";
                 }
                 PepsiUtils.renderFloatingText(text,
@@ -111,61 +112,61 @@ public class WaypointsMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new ModuleOption<>(pepsiMod.miscOptions.waypoints_tracers, "tracers", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(WaypointsTranslator.INSTANCE.tracers, "tracers", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.miscOptions.waypoints_tracers = value;
+                            WaypointsTranslator.INSTANCE.tracers = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.miscOptions.waypoints_tracers;
+                            return WaypointsTranslator.INSTANCE.tracers;
                         }, "Tracers"),
-                new ModuleOption<>(pepsiMod.miscOptions.waypoints_nametag, "nametag", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(WaypointsTranslator.INSTANCE.nametag, "nametag", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.miscOptions.waypoints_nametag = value;
+                            WaypointsTranslator.INSTANCE.nametag = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.miscOptions.waypoints_nametag;
+                            return WaypointsTranslator.INSTANCE.nametag;
                         }, "Nametag"),
-                new ModuleOption<>(pepsiMod.miscOptions.waypoints_dist, "distance", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(WaypointsTranslator.INSTANCE.dist, "distance", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.miscOptions.waypoints_dist = value;
+                            WaypointsTranslator.INSTANCE.dist = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.miscOptions.waypoints_dist;
+                            return WaypointsTranslator.INSTANCE.dist;
                         }, "Distance"),
-                new ModuleOption<>(pepsiMod.miscOptions.waypoints_coords, "coords", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(WaypointsTranslator.INSTANCE.coords, "coords", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.miscOptions.waypoints_coords = value;
+                            WaypointsTranslator.INSTANCE.coords = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.miscOptions.waypoints_coords;
+                            return WaypointsTranslator.INSTANCE.coords;
                         }, "Coords"),
-                new ModuleOption<>(pepsiMod.miscOptions.waypoints_r, "red", new String[]{"0", "256"},
+                new ModuleOption<>(WaypointsTranslator.INSTANCE.r, "red", new String[]{"0", "256"},
                         (value) -> {
-                            pepsiMod.miscOptions.waypoints_r = Math.max(0, Math.min(value, 255));
+                            WaypointsTranslator.INSTANCE.r = Math.max(0, Math.min(value, 255));
                             return true;
                         },
                         () -> {
-                            return pepsiMod.miscOptions.waypoints_r;
+                            return WaypointsTranslator.INSTANCE.r;
                         }, "Red", new ExtensionSlider(ExtensionType.VALUE_INT, 0, 255, 1)),
-                new ModuleOption<>(pepsiMod.miscOptions.waypoints_g, "green", new String[]{"0", "256"},
+                new ModuleOption<>(WaypointsTranslator.INSTANCE.g, "green", new String[]{"0", "256"},
                         (value) -> {
-                            pepsiMod.miscOptions.waypoints_g = Math.max(0, Math.min(value, 255));
+                            WaypointsTranslator.INSTANCE.g = Math.max(0, Math.min(value, 255));
                             return true;
                         },
                         () -> {
-                            return pepsiMod.miscOptions.waypoints_g;
+                            return WaypointsTranslator.INSTANCE.g;
                         }, "Green", new ExtensionSlider(ExtensionType.VALUE_INT, 0, 255, 1)),
-                new ModuleOption<>(pepsiMod.miscOptions.waypoints_b, "blue", new String[]{"0", "256"},
+                new ModuleOption<>(WaypointsTranslator.INSTANCE.b, "blue", new String[]{"0", "256"},
                         (value) -> {
-                            pepsiMod.miscOptions.waypoints_b = Math.max(0, Math.min(value, 255));
+                            WaypointsTranslator.INSTANCE.b = Math.max(0, Math.min(value, 255));
                             return true;
                         },
                         () -> {
-                            return pepsiMod.miscOptions.waypoints_b;
+                            return WaypointsTranslator.INSTANCE.b;
                         }, "Blue", new ExtensionSlider(ExtensionType.VALUE_INT, 0, 255, 1))
         };
     }

@@ -56,7 +56,7 @@ public class BowAimBotMod extends Module {
 
     @Override
     public void onRenderGUI(float partialTicks, int width, int height, GuiIngame gui) {
-        if (!FastBowMod.INSTANCE.isEnabled && velocity != -1.0f) {
+        if (!FastBowMod.INSTANCE.state.enabled && velocity != -1.0f) {
             if (velocity > 0.0f) {
                 gui.drawCenteredString(mc.fontRenderer, "Ready!", width / 2, height / 2 - 20, 16777215);
             } else {
@@ -102,7 +102,7 @@ public class BowAimBotMod extends Module {
         if (this.velocity > 1.0F) {
             this.velocity = 1.0F;
         }
-        if (FastBowMod.INSTANCE.isEnabled) {
+        if (FastBowMod.INSTANCE.state.enabled) {
             this.velocity = 1.0F;
         }
         if (this.velocity < 0.1D) {

@@ -22,6 +22,7 @@ import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
+import net.daporkchop.pepsimod.util.config.impl.AutoEatTranslator;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityTameable;
@@ -62,7 +63,7 @@ public class AutoEatMod extends Module {
         }
 
         FoodStats foodStats = mc.player.getFoodStats();
-        if (foodStats.getFoodLevel() <= pepsiMod.miscOptions.autoEat_threshold && shouldEat()) {
+        if (foodStats.getFoodLevel() <= AutoEatTranslator.INSTANCE.threshold && shouldEat()) {
             doneEating = false;
             eatFood();
         }
@@ -76,13 +77,13 @@ public class AutoEatMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new ModuleOption<>(pepsiMod.miscOptions.autoEat_threshold, "threshold", OptionCompletions.FLOAT,
+                new ModuleOption<>(AutoEatTranslator.INSTANCE.threshold, "threshold", OptionCompletions.FLOAT,
                         (value) -> {
-                            pepsiMod.miscOptions.autoEat_threshold = Math.max(0, value);
+                            AutoEatTranslator.INSTANCE.threshold = Math.max(0, value);
                             return true;
                         },
                         () -> {
-                            return pepsiMod.miscOptions.autoEat_threshold;
+                            return AutoEatTranslator.INSTANCE.threshold;
                         }, "Threshold", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0f, 19f, 1f))
         };
     }

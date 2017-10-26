@@ -45,7 +45,7 @@ public class FastBowMod extends Module {
 
     @Override
     public void tick() {
-        if (mc.player.getHealth() > 0.0f && (mc.player.onGround || FlightMod.INSTANCE.isEnabled || mc.player.capabilities.isCreativeMode) && !mc.player.inventory.getCurrentItem().isEmpty()) {
+        if (mc.player.getHealth() > 0.0f && (mc.player.onGround || FlightMod.INSTANCE.state.enabled || mc.player.capabilities.isCreativeMode) && !mc.player.inventory.getCurrentItem().isEmpty()) {
             if (mc.player.inventory.getCurrentItem().getItem() instanceof ItemBow && mc.gameSettings.keyBindUseItem.isKeyDown()) {
                 WPlayerController.processRightClick();
                 for (int i = 0; i < 20; i++) {

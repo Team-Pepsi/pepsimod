@@ -21,6 +21,7 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
+import net.daporkchop.pepsimod.util.config.impl.NoWeatherTranslator;
 
 public class NoWeatherMod extends Module {
     public static NoWeatherMod INSTANCE;
@@ -54,31 +55,31 @@ public class NoWeatherMod extends Module {
         return new ModuleOption[]{
                 new ModuleOption<>(false, "disableRain", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.noWeatherSettings.disableRain = value;
+                            NoWeatherTranslator.INSTANCE.disableRain = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.noWeatherSettings.disableRain;
+                            return NoWeatherTranslator.INSTANCE.disableRain;
                         }, "Disable Rain"),
                 new ModuleOption<>(false, "changeTime", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.noWeatherSettings.changeTime = value;
+                            NoWeatherTranslator.INSTANCE.changeTime = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.noWeatherSettings.changeTime;
+                            return NoWeatherTranslator.INSTANCE.changeTime;
                         }, "Change Time"),
-                new ModuleOption<>(pepsiMod.noWeatherSettings.time, "time", new String[]{"0", "6000", "12000", "18000", "24000"},
+                new ModuleOption<>(NoWeatherTranslator.INSTANCE.time, "time", new String[]{"0", "6000", "12000", "18000", "24000"},
                         (value) -> {
                             if (value < 0 || value > 24000) {
                                 clientMessage("Time must be in range 0-24000!");
                                 return false;
                             }
-                            pepsiMod.noWeatherSettings.time = value;
+                            NoWeatherTranslator.INSTANCE.time = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.noWeatherSettings.time;
+                            return NoWeatherTranslator.INSTANCE.time;
                         }, "Time", new ExtensionSlider(ExtensionType.VALUE_INT, 0, 24000, 500))
         };
     }

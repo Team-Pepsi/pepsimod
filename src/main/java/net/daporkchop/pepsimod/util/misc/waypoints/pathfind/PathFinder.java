@@ -38,8 +38,8 @@ import java.util.Map.Entry;
 
 public class PathFinder extends Default {
     public final HashMap<PathPos, PathPos> prevPosMap = new HashMap<>();
-    public final boolean noWaterSlowdown = NoSlowdownMod.INSTANCE.isEnabled;
-    public final boolean jesus = JesusMod.INSTANCE.isEnabled;
+    public final boolean noWaterSlowdown = NoSlowdownMod.INSTANCE.state.enabled;
+    public final boolean jesus = JesusMod.INSTANCE.state.enabled;
     public final BlockPos goal;
     public final HashMap<PathPos, Float> costMap = new HashMap<>();
     public final PathQueue queue = new PathQueue();

@@ -20,7 +20,7 @@ import net.daporkchop.pepsimod.module.impl.movement.NoClipMod;
 import net.daporkchop.pepsimod.module.impl.movement.VelocityMod;
 import net.daporkchop.pepsimod.module.impl.render.AntiInvisibleMod;
 import net.daporkchop.pepsimod.module.impl.render.ESPMod;
-import net.daporkchop.pepsimod.util.module.ESPSettings;
+import net.daporkchop.pepsimod.util.config.impl.ESPTranslator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.monster.EntityGolem;
@@ -29,7 +29,6 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -37,7 +36,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.daporkchop.pepsimod.util.misc.Default.mc;
-import static net.daporkchop.pepsimod.util.misc.Default.pepsiMod;
 
 @Mixin(Entity.class)
 public abstract class MixinEntity {
@@ -65,7 +63,7 @@ public abstract class MixinEntity {
     @Inject(method = "move", at = @At("HEAD"))
     public void move(MoverType type, double x, double y, double z, CallbackInfo callbackInfo) {
         Entity thisAsEntity = Entity.class.cast(this);
-        if ((FreecamMod.INSTANCE.isEnabled || NoClipMod.INSTANCE.isEnabled) && thisAsEntity instanceof EntityPlayer) {
+        if ((FreecamMod.INSTANCE.state.enabled || NoClipMod.INSTANCE.state.enabled) && thisAsEntity instanceof EntityPlayer) {
             if (thisAsEntity == mc.player) {
                 this.setEntityBoundingBox(this.getEntityBoundingBox().offset(x * 10, y, z * 10));
             } else {
@@ -92,7 +90,7 @@ public abstract class MixinEntity {
 
     @Inject(method = "isInvisibleToPlayer", at = @At("HEAD"), cancellable = true)
     public void preIsInvisibleToPlayer(EntityPlayer player, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (AntiInvisibleMod.INSTANCE.isEnabled) {
+        if (AntiInvisibleMod.INSTANCE.state.enabled) {
             callbackInfoReturnable.setReturnValue(true);
             callbackInfoReturnable.cancel();
         }
@@ -100,21 +98,20 @@ public abstract class MixinEntity {
 
     @Inject(method = "isGlowing", at = @At("HEAD"), cancellable = true)
     public void preisGlowing(CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (ESPMod.INSTANCE.isEnabled) {
+        if (ESPMod.INSTANCE.state.enabled) {
             Entity this_ = Entity.class.cast(this);
-            ESPSettings settings = pepsiMod.espSettings;
             if (this_.isInvisible()) {
-                if (!settings.invisible) {
+                if (!ESPTranslator.INSTANCE.invisible) {
                     return;
                 }
             }
-            if (settings.animals && this_ instanceof EntityAnimal) {
+            if (ESPTranslator.INSTANCE.animals && this_ instanceof EntityAnimal) {
                 callbackInfoReturnable.setReturnValue(true);
-            } else if (settings.monsters && this_ instanceof EntityMob) {
+            } else if (ESPTranslator.INSTANCE.monsters && this_ instanceof EntityMob) {
                 callbackInfoReturnable.setReturnValue(true);
-            } else if (settings.players && this_ instanceof EntityPlayer) {
+            } else if (ESPTranslator.INSTANCE.players && this_ instanceof EntityPlayer) {
                 callbackInfoReturnable.setReturnValue(true);
-            } else if (settings.golems && this_ instanceof EntityGolem) {
+            } else if (ESPTranslator.INSTANCE.golems && this_ instanceof EntityGolem) {
                 callbackInfoReturnable.setReturnValue(true);
             }
         }
@@ -122,7 +119,7 @@ public abstract class MixinEntity {
 
     @Inject(method = "isInWater", at = @At("HEAD"), cancellable = true)
     public void preIsInWater(CallbackInfoReturnable<Boolean> callbackInfoReturnable)    {
-        if (FreecamMod.INSTANCE.isEnabled)  {
+        if (FreecamMod.INSTANCE.state.enabled) {
             callbackInfoReturnable.setReturnValue(false);
         }
     }

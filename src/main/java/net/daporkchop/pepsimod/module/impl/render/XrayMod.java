@@ -19,7 +19,7 @@ import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.util.PepsiUtils;
-import net.daporkchop.pepsimod.util.module.XrayUtils;
+import net.daporkchop.pepsimod.util.config.impl.XrayTranslator;
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 
@@ -97,13 +97,13 @@ public class XrayMod extends Module {
                 return "";
             }
         } else if (args.length == 2 && args[1].equals("remove")) {
-            return cmd + " " + Block.REGISTRY.getObjectById(XrayUtils.target_blocks.get(0)).getRegistryName().toString();
+            return cmd + " " + Block.REGISTRY.getObjectById(XrayTranslator.INSTANCE.target_blocks.get(0)).getRegistryName().toString();
         } else if (args.length == 3 && args[1].equals("remove")) {
             if (args[2].isEmpty()) {
-                return cmd + Block.REGISTRY.getObjectById(XrayUtils.target_blocks.get(0)).getRegistryName().toString();
+                return cmd + Block.REGISTRY.getObjectById(XrayTranslator.INSTANCE.target_blocks.get(0)).getRegistryName().toString();
             } else {
                 String arg = args[2];
-                for (Integer i : XrayUtils.target_blocks) {
+                for (Integer i : XrayTranslator.INSTANCE.target_blocks) {
                     String s = Block.REGISTRY.getObjectById(i).getRegistryName().toString();
                     if (s.startsWith(arg)) {
                         return args[0] + " " + args[1] + " " + s;
@@ -127,9 +127,9 @@ public class XrayMod extends Module {
                 if (block == null) {
                     clientMessage("Not a valid block ID: " + PepsiUtils.COLOR_ESCAPE + "o" + args[2]);
                 } else {
-                    XrayUtils.target_blocks.add(id);
+                    XrayTranslator.INSTANCE.target_blocks.add(id);
                     clientMessage("Added " + PepsiUtils.COLOR_ESCAPE + "o" + block.getRegistryName().toString() + PepsiUtils.COLOR_ESCAPE + "r to the Xray list");
-                    if (this.isEnabled) {
+                    if (this.state.enabled) {
                         mc.renderGlobal.loadRenderers();
                     }
                 }
@@ -140,9 +140,9 @@ public class XrayMod extends Module {
                     if (block == null) {
                         clientMessage("Invalid id: " + PepsiUtils.COLOR_ESCAPE + "o" + s);
                     } else {
-                        XrayUtils.target_blocks.add(PepsiUtils.getBlockId(block));
+                        XrayTranslator.INSTANCE.target_blocks.add(PepsiUtils.getBlockId(block));
                         clientMessage("Added " + PepsiUtils.COLOR_ESCAPE + "o" + block.getRegistryName().toString() + PepsiUtils.COLOR_ESCAPE + "r to the Xray list");
-                        if (this.isEnabled) {
+                        if (this.state.enabled) {
                             mc.renderGlobal.loadRenderers();
                         }
                     }
@@ -155,10 +155,10 @@ public class XrayMod extends Module {
             String s = args[2].toLowerCase();
             try {
                 int id = Integer.parseInt(s);
-                if (XrayUtils.target_blocks.contains(id)) {
-                    XrayUtils.target_blocks.remove((Integer) id);
+                if (XrayTranslator.INSTANCE.target_blocks.contains(id)) {
+                    XrayTranslator.INSTANCE.target_blocks.remove((Integer) id);
                     clientMessage("Removed " + PepsiUtils.COLOR_ESCAPE + "o" + id + PepsiUtils.COLOR_ESCAPE + "r from the Xray list");
-                    if (this.isEnabled) {
+                    if (this.state.enabled) {
                         mc.renderGlobal.loadRenderers();
                     }
                 } else {
@@ -172,10 +172,10 @@ public class XrayMod extends Module {
                         clientMessage("Invalid id: " + PepsiUtils.COLOR_ESCAPE + "o" + s);
                     } else {
                         int id = PepsiUtils.getBlockId(block);
-                        if (XrayUtils.target_blocks.contains(id)) {
-                            XrayUtils.target_blocks.remove((Integer) id);
+                        if (XrayTranslator.INSTANCE.target_blocks.contains(id)) {
+                            XrayTranslator.INSTANCE.target_blocks.remove((Integer) id);
                             clientMessage("Removed " + PepsiUtils.COLOR_ESCAPE + "o" + s + PepsiUtils.COLOR_ESCAPE + "r from the Xray list");
-                            if (this.isEnabled) {
+                            if (this.state.enabled) {
                                 mc.renderGlobal.loadRenderers();
                             }
                         } else {

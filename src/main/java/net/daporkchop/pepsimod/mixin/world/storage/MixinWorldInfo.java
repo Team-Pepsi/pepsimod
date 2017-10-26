@@ -13,23 +13,22 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.util.module;
+package net.daporkchop.pepsimod.mixin.world.storage;
 
-import java.io.Serializable;
+import net.daporkchop.pepsimod.module.impl.render.NoWeatherMod;
+import net.daporkchop.pepsimod.util.config.impl.NoWeatherTranslator;
+import net.minecraft.world.storage.WorldInfo;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-public class ESPSettings implements Serializable {
-    private static final long serialVersionUID = 1L;
-
-    public boolean basic = false;
-    public boolean trapped = false;
-    public boolean ender = false;
-    public boolean hopper = false;
-    public boolean furnace = false;
-
-    public boolean monsters = false;
-    public boolean animals = false;
-    public boolean players = false;
-    public boolean golems = false;
-    public boolean invisible = false;
-    public boolean friendColors = true;
+@Mixin(WorldInfo.class)
+public abstract class MixinWorldInfo {
+    @Inject(method = "getWorldTime", at = @At("HEAD"), cancellable = true)
+    public void preGetWorldTime(CallbackInfoReturnable<Long> callbackInfoReturnable) {
+        if (NoWeatherMod.INSTANCE.state.enabled && NoWeatherTranslator.INSTANCE.changeTime) {
+            callbackInfoReturnable.setReturnValue(NoWeatherTranslator.INSTANCE.time);
+        }
+    }
 }

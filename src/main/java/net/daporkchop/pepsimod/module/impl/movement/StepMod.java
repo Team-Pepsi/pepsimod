@@ -21,6 +21,7 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
+import net.daporkchop.pepsimod.util.config.impl.StepTranslator;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -48,7 +49,7 @@ public class StepMod extends Module {
 
     @Override
     public void tick() {
-        if (pepsiMod.miscOptions.step_legit) {
+        if (StepTranslator.INSTANCE.legit) {
             EntityPlayerSP player = mc.player;
 
             player.stepHeight = 0.5f;
@@ -92,7 +93,7 @@ public class StepMod extends Module {
             mc.player.connection.sendPacket(new CPacketPlayer.Position(player.posX, player.posY + 0.753 * stepHeight, player.posZ, player.onGround));
             player.setPosition(player.posX, player.posY + 1 * stepHeight, player.posZ);
         } else {
-            mc.player.stepHeight = pepsiMod.miscOptions.step_height;
+            mc.player.stepHeight = StepTranslator.INSTANCE.height;
         }
     }
 
@@ -104,21 +105,21 @@ public class StepMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new ModuleOption<>(pepsiMod.miscOptions.step_height, "height", OptionCompletions.INTEGER,
+                new ModuleOption<>(StepTranslator.INSTANCE.height, "height", OptionCompletions.INTEGER,
                         (value) -> {
-                            pepsiMod.miscOptions.step_height = Math.max(0, value);
+                            StepTranslator.INSTANCE.height = Math.max(0, value);
                             return true;
                         },
                         () -> {
-                            return pepsiMod.miscOptions.step_height;
+                            return StepTranslator.INSTANCE.height;
                         }, "Height", new ExtensionSlider(ExtensionType.VALUE_INT, 1, 64, 1)),
-                new ModuleOption<>(pepsiMod.miscOptions.step_legit, "legit", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(StepTranslator.INSTANCE.legit, "legit", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.miscOptions.step_legit = value;
+                            StepTranslator.INSTANCE.legit = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.miscOptions.step_legit;
+                            return StepTranslator.INSTANCE.legit;
                         }, "Legit")
         };
     }
@@ -134,10 +135,10 @@ public class StepMod extends Module {
 
     @Override
     public String getModeForName() {
-        if (pepsiMod.miscOptions.step_legit) {
+        if (StepTranslator.INSTANCE.legit) {
             return "Legit";
         } else {
-            return String.valueOf(pepsiMod.miscOptions.step_height);
+            return String.valueOf(StepTranslator.INSTANCE.height);
         }
     }
 }

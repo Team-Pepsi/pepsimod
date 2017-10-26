@@ -17,6 +17,7 @@ package net.daporkchop.pepsimod.command.impl;
 
 import net.daporkchop.pepsimod.command.api.Command;
 import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.config.impl.WaypointsTranslator;
 import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
 import net.daporkchop.pepsimod.util.misc.waypoints.pathfind.PathFindTickListener;
 import net.daporkchop.pepsimod.util.misc.waypoints.pathfind.PathFinder;
@@ -50,7 +51,7 @@ public class GoToCommand extends Command {
             return;
         }
         if (args.length == 2) {
-            Waypoint waypoint = pepsiMod.waypoints.getWaypoint(args[1]);
+            Waypoint waypoint = WaypointsTranslator.INSTANCE.getWaypoint(args[1]);
             if (waypoint == null) {
                 clientMessage("No such waypoint: " + args[1]);
                 return;

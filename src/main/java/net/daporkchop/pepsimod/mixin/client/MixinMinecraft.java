@@ -20,8 +20,9 @@ import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.impl.render.UnfocusedCPUMod;
 import net.daporkchop.pepsimod.module.impl.render.ZoomMod;
-import net.daporkchop.pepsimod.util.Friends;
 import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.config.impl.CpuLimitTranslator;
+import net.daporkchop.pepsimod.util.config.impl.FriendsTranslator;
 import net.daporkchop.pepsimod.util.misc.ITickListener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -60,7 +61,7 @@ public abstract class MixinMinecraft {
         pepsiMod.saveConfig();
         System.out.println("[PEPSIMOD] Saved.");
 
-        if (ZoomMod.INSTANCE.isEnabled) {
+        if (ZoomMod.INSTANCE.state.enabled) {
             ModuleManager.disableModule(ZoomMod.INSTANCE);
             mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
         }
@@ -94,12 +95,12 @@ public abstract class MixinMinecraft {
                         if (Minecraft.getMinecraft().objectMouseOver != null) {
                             RayTraceResult result = Minecraft.getMinecraft().objectMouseOver;
                             if (result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit instanceof EntityPlayer) {
-                                if (Friends.isFriend(result.entityHit.getUniqueID().toString())) {
+                                if (FriendsTranslator.INSTANCE.friends.contains(result.entityHit.getUniqueID().toString())) {
                                     player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + "Removed \u00A7c" + result.entityHit.getName() + "\u00A7r as a friend"));
-                                    Friends.removeFriend(result.entityHit.getUniqueID().toString());
+                                    FriendsTranslator.INSTANCE.friends.remove(result.entityHit.getUniqueID().toString());
                                 } else {
                                     player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + "Added \u00A79" + result.entityHit.getName() + "\u00A7r as a friend"));
-                                    Friends.addFriend(result.entityHit.getUniqueID().toString(), result.entityHit.getName());
+                                    FriendsTranslator.INSTANCE.friends.add(result.entityHit.getUniqueID().toString());
                                 }
                             }
                             FMLLog.log.info(result.entityHit.getClass().getCanonicalName());
@@ -143,7 +144,7 @@ public abstract class MixinMinecraft {
 
     @Inject(method = "displayGuiScreen", at = @At("HEAD"))
     public void preDisplayGuiScreen(GuiScreen guiScreen, CallbackInfo callbackInfo) {
-        if (ZoomMod.INSTANCE.isEnabled) {
+        if (ZoomMod.INSTANCE.state.enabled) {
             ModuleManager.disableModule(ZoomMod.INSTANCE);
             mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
         }
@@ -152,8 +153,8 @@ public abstract class MixinMinecraft {
     @Inject(method = "getLimitFramerate", at = @At("HEAD"), cancellable = true)
     public void preGetLimitFramerate(CallbackInfoReturnable<Integer> callbackInfoReturnable) {
         try {
-            if (UnfocusedCPUMod.INSTANCE.isEnabled && !Display.isActive()) {
-                callbackInfoReturnable.setReturnValue(pepsiMod.miscOptions.cpu_framecap);
+            if (UnfocusedCPUMod.INSTANCE.state.enabled && !Display.isActive()) {
+                callbackInfoReturnable.setReturnValue(CpuLimitTranslator.INSTANCE.limit);
             }
         } catch (NullPointerException e) {
 

@@ -31,7 +31,7 @@ public class TaskMove extends QueuedTask {
     }
 
     public String getMessage() {
-        if (!AnnouncerMod.INSTANCE.isEnabled || (mc.player.posX == posX && mc.player.posZ == posZ)) {
+        if (!AnnouncerMod.INSTANCE.state.enabled || (mc.player.posX == posX && mc.player.posZ == posZ)) {
             return null;
         }
 

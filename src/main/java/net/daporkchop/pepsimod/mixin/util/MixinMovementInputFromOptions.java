@@ -82,7 +82,7 @@ public abstract class MixinMovementInputFromOptions extends MovementInput {
     }
 
     public boolean pepsimod_isPressed(KeyBinding keyBinding) {
-        if (InventoryMoveMod.INSTANCE.isEnabled && mc.currentScreen != null) {
+        if (InventoryMoveMod.INSTANCE.state.enabled && mc.currentScreen != null) {
             if (mc.currentScreen instanceof InventoryEffectRenderer) {
                 return Keyboard.isKeyDown(keyBinding.getKeyCode()) || ReflectionStuff.getPressed(keyBinding);
             } else if (mc.world.isRemote && mc.currentScreen instanceof GuiIngameMenu) {

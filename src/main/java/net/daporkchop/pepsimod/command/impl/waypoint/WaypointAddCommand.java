@@ -16,6 +16,7 @@
 package net.daporkchop.pepsimod.command.impl.waypoint;
 
 import net.daporkchop.pepsimod.command.api.Command;
+import net.daporkchop.pepsimod.util.config.impl.WaypointsTranslator;
 import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
 
 public class WaypointAddCommand extends Command {
@@ -27,7 +28,7 @@ public class WaypointAddCommand extends Command {
     public void execute(String cmd, String[] args) {
         Waypoint waypoint = null;
         if (args.length >= 5) {
-            if (pepsiMod.waypoints.getWaypoint(args[1]) == null) {
+            if (WaypointsTranslator.INSTANCE.getWaypoint(args[1]) == null) {
                 int x, y, z;
                 try {
                     x = Integer.parseInt(args[2]);
@@ -47,20 +48,20 @@ public class WaypointAddCommand extends Command {
                     clientMessage("Invalid integer: " + args[4]);
                     return;
                 }
-                pepsiMod.waypoints.addWaypoint(waypoint = new Waypoint(args[1], x, y, z, mc.player.dimension));
+                WaypointsTranslator.INSTANCE.addWaypoint(waypoint = new Waypoint(args[1], x, y, z, mc.player.dimension));
             } else {
                 clientMessage("Waypoint \u00A7o" + args[1] + "\u00A7r already exists!");
                 return;
             }
         } else if (args.length >= 2) {
-            if (pepsiMod.waypoints.getWaypoint(args[1]) == null) {
-                waypoint = pepsiMod.waypoints.addWaypoint(args[1]);
+            if (WaypointsTranslator.INSTANCE.getWaypoint(args[1]) == null) {
+                waypoint = WaypointsTranslator.INSTANCE.addWaypoint(args[1]);
             } else {
                 clientMessage("Waypoint \u00A7o" + args[1] + "\u00A7r already exists!");
                 return;
             }
         } else {
-            waypoint = pepsiMod.waypoints.addWaypoint();
+            waypoint = WaypointsTranslator.INSTANCE.addWaypoint();
         }
         clientMessage("Added waypoint: \u00A7o" + waypoint.name + "\u00A7r in dimension " + waypoint.dim + " at XYZ " + waypoint.x + ", " + waypoint.y + ", " + waypoint.z);
     }

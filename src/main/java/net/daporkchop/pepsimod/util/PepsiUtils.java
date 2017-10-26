@@ -22,10 +22,11 @@ import net.daporkchop.pepsimod.util.colors.GradientText;
 import net.daporkchop.pepsimod.util.colors.rainbow.ColorChangeType;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowCycle;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
+import net.daporkchop.pepsimod.util.config.impl.GeneralTranslator;
+import net.daporkchop.pepsimod.util.config.impl.TargettingTranslator;
 import net.daporkchop.pepsimod.util.misc.Default;
 import net.daporkchop.pepsimod.util.misc.ITickListener;
 import net.daporkchop.pepsimod.util.misc.IWurstRenderListener;
-import net.daporkchop.pepsimod.util.module.TargetBone;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -131,7 +132,7 @@ public class PepsiUtils extends Default {
         timer.schedule(new TimerTask() { //autoreconnect
             @Override
             public void run() {
-                if (mc.currentScreen != null && mc.currentScreen instanceof GuiDisconnected && autoReconnectButton != null && pepsiMod.miscOptions.autoReconnect) {
+                if (mc.currentScreen != null && mc.currentScreen instanceof GuiDisconnected && autoReconnectButton != null && GeneralTranslator.INSTANCE.autoReconnect) {
                     autoReconnectButton.displayString = "AutoReconnect (\u00A7a" + --autoReconnectWaitTime + "\u00A7r)";
                     if (autoReconnectWaitTime == 0) {
                         ServerData data = new ServerData("", lastIp + ":" + lastPort, false);
@@ -349,21 +350,21 @@ public class PepsiUtils extends Default {
         return toRunOn;
     }
 
-    public static boolean canEntityBeSeen(Entity entityIn, EntityPlayer player, TargetBone bone) {
+    public static boolean canEntityBeSeen(Entity entityIn, EntityPlayer player, TargettingTranslator.TargetBone bone) {
         return entityIn.world.rayTraceBlocks(new Vec3d(player.posX, player.posY + (double) player.getEyeHeight(), player.posZ), new Vec3d(entityIn.posX, getTargetHeight(entityIn, bone), entityIn.posZ), false, true, false) == null;
     }
 
-    public static double getTargetHeight(Entity entity, TargetBone bone) {
+    public static double getTargetHeight(Entity entity, TargettingTranslator.TargetBone bone) {
         double targetHeight = entity.posY;
-        if (bone == TargetBone.HEAD) {
+        if (bone == TargettingTranslator.TargetBone.HEAD) {
             targetHeight = entity.getEyeHeight();
-        } else if (bone == TargetBone.MIDDLE) {
+        } else if (bone == TargettingTranslator.TargetBone.MIDDLE) {
             targetHeight = entity.getEyeHeight() / 2;
         }
         return targetHeight;
     }
 
-    public static Vec3d adjustVectorForBone(Vec3d vec3d, Entity entity, TargetBone bone) {
+    public static Vec3d adjustVectorForBone(Vec3d vec3d, Entity entity, TargettingTranslator.TargetBone bone) {
         ReflectionStuff.setY_vec3d(vec3d, getTargetHeight(entity, bone));
         return vec3d;
     }

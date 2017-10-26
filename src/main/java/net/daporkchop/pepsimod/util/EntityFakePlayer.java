@@ -13,14 +13,39 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.util.module;
+package net.daporkchop.pepsimod.util;
 
-import java.io.Serializable;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
 
-public enum TargetBone implements Serializable {
-    HEAD,
-    FEET,
-    MIDDLE;
+import static net.daporkchop.pepsimod.util.misc.Default.mc;
 
-    private static final long serialVersionUID = 1L;
+public class EntityFakePlayer extends EntityOtherPlayerMP {
+    public EntityFakePlayer() {
+        super(mc.world, mc.player.getGameProfile());
+        copyLocationAndAnglesFrom(mc.player);
+
+        // fix inventory
+        inventory.copyInventory(mc.player.inventory);
+        PepsiUtils.copyPlayerModel(mc.player, this);
+
+        // fix rotation
+        rotationYawHead = mc.player.rotationYawHead;
+        renderYawOffset = mc.player.renderYawOffset;
+
+        // fix cape movement
+        chasingPosX = posX;
+        chasingPosY = posY;
+        chasingPosZ = posZ;
+
+        // spawn
+        mc.world.addEntityToWorld(getEntityId(), this);
+    }
+
+    public void resetPlayerPosition() {
+        mc.player.setPositionAndRotation(posX, posY, posZ, rotationYaw, rotationPitch);
+    }
+
+    public void despawn() {
+        mc.world.removeEntityFromWorld(getEntityId());
+    }
 }

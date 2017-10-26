@@ -42,6 +42,7 @@
     "entity.passive.MixinEntityPig",
     "entity.passive.MixinAbstractHorse",
     "client.gui.MixinGuiConnecting",
-    "client.resources.MixinLocale"
+    "client.resources.MixinLocale",
+    "world.storage.MixinWorldInfo"
   ]
 }

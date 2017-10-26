@@ -13,13 +13,26 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.util.module;
+package net.daporkchop.pepsimod.util.config;
 
-import java.io.Serializable;
+import com.google.gson.JsonObject;
 
-public class NotificationsOptions implements Serializable {
-    public boolean queue = false;
-    public boolean death = false;
-    public boolean chat = false;
-    public boolean player = false;
+public class BaseImplTranslator implements IConfigTranslator {
+    public static final BaseImplTranslator INSTANCE = new BaseImplTranslator();
+
+    private BaseImplTranslator() {
+
+    }
+
+    public void encode(JsonObject json) {
+
+    }
+
+    public void decode(String fieldName, JsonObject json) {
+
+    }
+
+    public String name() {
+        return "delet_this";
+    }
 }

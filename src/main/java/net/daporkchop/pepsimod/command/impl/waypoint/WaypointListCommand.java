@@ -16,6 +16,7 @@
 package net.daporkchop.pepsimod.command.impl.waypoint;
 
 import net.daporkchop.pepsimod.command.api.Command;
+import net.daporkchop.pepsimod.util.config.impl.WaypointsTranslator;
 import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
 
 import java.util.Collection;
@@ -28,7 +29,7 @@ public class WaypointListCommand extends Command {
     @Override
     public void execute(String cmd, String[] args) {
         String s = "";
-        Collection<Waypoint> waypoints = pepsiMod.waypoints.getWaypoints();
+        Collection<Waypoint> waypoints = WaypointsTranslator.INSTANCE.getWaypoints();
         for (Waypoint waypoint : waypoints) {
             s += waypoint.name + ", ";
         }

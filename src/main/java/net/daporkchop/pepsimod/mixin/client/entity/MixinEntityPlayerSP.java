@@ -147,7 +147,7 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
         this.movementInput.updatePlayerMoveState();
         this.mc.getTutorial().handleMovement(this.movementInput);
 
-        if (this.isHandActive() && !this.isRiding() && !NoSlowdownMod.INSTANCE.isEnabled) {
+        if (this.isHandActive() && !this.isRiding() && !NoSlowdownMod.INSTANCE.state.enabled) {
             this.movementInput.moveStrafe *= 0.2F;
             this.movementInput.moveForward *= 0.2F;
             this.sprintToggleTimer = 0;
@@ -288,7 +288,7 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
 
     @Inject(method = "isAutoJumpEnabled", at = @At("HEAD"), cancellable = true)
     public void preisAutoJumpEnabled(CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (StepMod.INSTANCE.isEnabled) {
+        if (StepMod.INSTANCE.state.enabled) {
             callbackInfoReturnable.setReturnValue(false);
         }
     }
@@ -334,7 +334,7 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
             boolean flag2 = d0 * d0 + d1 * d1 + d2 * d2 > 9.0E-4D || this.positionUpdateTicks >= 20;
             boolean flag3 = d3 != 0.0D || d4 != 0.0D;
 
-            if (FlightMod.INSTANCE.isEnabled || FreecamMod.INSTANCE.isEnabled) {
+            if (FlightMod.INSTANCE.state.enabled || FreecamMod.INSTANCE.state.enabled) {
 
             } else if (this.isRiding()) {
                 this.connection.sendPacket(new CPacketPlayer.PositionRotation(this.motionX, -999.0D, this.motionZ, this.rotationYaw, this.rotationPitch, this.onGround));

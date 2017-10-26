@@ -31,7 +31,7 @@ public abstract class MixinWorldClient extends World {
 
     @Inject(method = "doVoidFogParticles", at = @At("HEAD"), cancellable = true)
     public void preDoVoidFogParticles(int posX, int posY, int posZ, CallbackInfo callbackInfo) {
-        if (FreecamMod.INSTANCE.isEnabled) {
+        if (FreecamMod.INSTANCE.state.enabled) {
             callbackInfo.cancel();
         }
     }

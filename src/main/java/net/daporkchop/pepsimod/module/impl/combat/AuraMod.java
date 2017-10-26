@@ -25,7 +25,7 @@ import net.daporkchop.pepsimod.module.impl.player.AutoEatMod;
 import net.daporkchop.pepsimod.totally.not.skidded.EntityUtils;
 import net.daporkchop.pepsimod.totally.not.skidded.RotationUtils;
 import net.daporkchop.pepsimod.util.PepsiUtils;
-import net.daporkchop.pepsimod.util.module.TargetBone;
+import net.daporkchop.pepsimod.util.config.impl.TargettingTranslator;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumHand;
 
@@ -53,35 +53,35 @@ public class AuraMod extends Module {
 
     @Override
     public void tick() {
-        if (AutoEatMod.INSTANCE.isEnabled && !AutoEatMod.INSTANCE.doneEating) {
+        if (AutoEatMod.INSTANCE.state.enabled && !AutoEatMod.INSTANCE.doneEating) {
             return;
         }
 
-        if (pepsiMod.targetSettings.use_cooldown) {
+        if (TargettingTranslator.INSTANCE.use_cooldown) {
             if (mc.player.getCooledAttackStrength(0) == 1) {
                 Entity entity = EntityUtils.getBestEntityToAttack(EntityUtils.DEFAULT_SETTINGS);
                 if (entity == null) {
                     return;
                 }
 
-                if (pepsiMod.targetSettings.rotate) {
+                if (TargettingTranslator.INSTANCE.rotate) {
                     if (!RotationUtils.faceEntityPacket(entity)) {
                         return;
                     }
-                    if (!pepsiMod.targetSettings.silent) {
+                    if (!TargettingTranslator.INSTANCE.silent) {
                         RotationUtils.faceEntityClient(entity);
                     }
                 }
 
                 mc.playerController.attackEntity(mc.player, entity);
-                if (!pepsiMod.targetSettings.silent) {
+                if (!TargettingTranslator.INSTANCE.silent) {
                     mc.player.swingArm(EnumHand.MAIN_HAND);
                 }
             }
         } else {
             lastTick++;
 
-            if (lastTick >= pepsiMod.targetSettings.delay) {
+            if (lastTick >= TargettingTranslator.INSTANCE.delay) {
                 lastTick = 0;
 
                 Entity entity = EntityUtils.getBestEntityToAttack(EntityUtils.DEFAULT_SETTINGS);
@@ -89,17 +89,17 @@ public class AuraMod extends Module {
                     return;
                 }
 
-                if (pepsiMod.targetSettings.rotate) {
+                if (TargettingTranslator.INSTANCE.rotate) {
                     if (!RotationUtils.faceEntityPacket(entity)) {
                         return;
                     }
-                    if (!pepsiMod.targetSettings.silent) {
+                    if (!TargettingTranslator.INSTANCE.silent) {
                         RotationUtils.faceEntityClient(entity);
                     }
                 }
 
                 mc.playerController.attackEntity(mc.player, entity);
-                if (!pepsiMod.targetSettings.silent) {
+                if (!TargettingTranslator.INSTANCE.silent) {
                     mc.player.swingArm(EnumHand.MAIN_HAND);
                 }
             }
@@ -114,133 +114,133 @@ public class AuraMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{ //wtf why is this throwing an NPE
-                new ModuleOption<>(pepsiMod.targetSettings.players, "players", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(TargettingTranslator.INSTANCE.players, "players", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.targetSettings.players = value;
+                            TargettingTranslator.INSTANCE.players = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.targetSettings.players;
+                            return TargettingTranslator.INSTANCE.players;
                         }, "Players"),
-                new ModuleOption<>(pepsiMod.targetSettings.animals, "animals", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(TargettingTranslator.INSTANCE.animals, "animals", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.targetSettings.animals = value;
+                            TargettingTranslator.INSTANCE.animals = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.targetSettings.animals;
+                            return TargettingTranslator.INSTANCE.animals;
                         }, "Animals"),
-                new ModuleOption<>(pepsiMod.targetSettings.monsters, "monsters", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(TargettingTranslator.INSTANCE.monsters, "monsters", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.targetSettings.monsters = value;
+                            TargettingTranslator.INSTANCE.monsters = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.targetSettings.monsters;
+                            return TargettingTranslator.INSTANCE.monsters;
                         }, "Monsters"),
-                new ModuleOption<>(pepsiMod.targetSettings.golems, "golems", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(TargettingTranslator.INSTANCE.golems, "golems", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.targetSettings.golems = value;
+                            TargettingTranslator.INSTANCE.golems = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.targetSettings.golems;
+                            return TargettingTranslator.INSTANCE.golems;
                         }, "Golems"),
-                new ModuleOption<>(pepsiMod.targetSettings.sleeping, "sleeping", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(TargettingTranslator.INSTANCE.sleeping, "sleeping", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.targetSettings.sleeping = value;
+                            TargettingTranslator.INSTANCE.sleeping = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.targetSettings.sleeping;
+                            return TargettingTranslator.INSTANCE.sleeping;
                         }, "Sleeping"),
-                new ModuleOption<>(pepsiMod.targetSettings.invisible, "invisible", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(TargettingTranslator.INSTANCE.invisible, "invisible", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.targetSettings.invisible = value;
+                            TargettingTranslator.INSTANCE.invisible = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.targetSettings.invisible;
+                            return TargettingTranslator.INSTANCE.invisible;
                         }, "Invisible"),
-                new ModuleOption<>(pepsiMod.targetSettings.teams, "teams", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(TargettingTranslator.INSTANCE.teams, "teams", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.targetSettings.teams = value;
+                            TargettingTranslator.INSTANCE.teams = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.targetSettings.teams;
+                            return TargettingTranslator.INSTANCE.teams;
                         }, "Teams"),
-                new ModuleOption<>(pepsiMod.targetSettings.friends, "friends", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(TargettingTranslator.INSTANCE.friends, "friends", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.targetSettings.friends = value;
+                            TargettingTranslator.INSTANCE.friends = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.targetSettings.friends;
+                            return TargettingTranslator.INSTANCE.friends;
                         }, "Friends"),
-                new ModuleOption<>(pepsiMod.targetSettings.through_walls, "through_walls", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(TargettingTranslator.INSTANCE.through_walls, "through_walls", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.targetSettings.through_walls = value;
+                            TargettingTranslator.INSTANCE.through_walls = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.targetSettings.through_walls;
+                            return TargettingTranslator.INSTANCE.through_walls;
                         }, "Through Walls"),
-                new ModuleOption<>(pepsiMod.targetSettings.fov, "fov", OptionCompletions.FLOAT,
+                new ModuleOption<>(TargettingTranslator.INSTANCE.fov, "fov", OptionCompletions.FLOAT,
                         (value) -> {
-                            pepsiMod.targetSettings.fov = value;
+                            TargettingTranslator.INSTANCE.fov = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.targetSettings.fov;
+                            return TargettingTranslator.INSTANCE.fov;
                         }, "FOV", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.0f, 360.0f, 0.5f)),
-                new ModuleOption<>(pepsiMod.targetSettings.reach, "reach", OptionCompletions.FLOAT,
+                new ModuleOption<>(TargettingTranslator.INSTANCE.reach, "reach", OptionCompletions.FLOAT,
                         (value) -> {
-                            pepsiMod.targetSettings.reach = value;
+                            TargettingTranslator.INSTANCE.reach = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.targetSettings.reach;
+                            return TargettingTranslator.INSTANCE.reach;
                         }, "Reach", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.0f, 10.0f, 0.1f)),
-                new ModuleOption<>(pepsiMod.targetSettings.delay, "delay", OptionCompletions.INTEGER,
+                new ModuleOption<>(TargettingTranslator.INSTANCE.delay, "delay", OptionCompletions.INTEGER,
                         (value) -> {
-                            pepsiMod.targetSettings.delay = value;
+                            TargettingTranslator.INSTANCE.delay = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.targetSettings.delay;
+                            return TargettingTranslator.INSTANCE.delay;
                         }, "Delay", new ExtensionSlider(ExtensionType.VALUE_INT, 0, 50, 1)),
-                new ModuleOption<>(pepsiMod.targetSettings.use_cooldown, "use_cooldown", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(TargettingTranslator.INSTANCE.use_cooldown, "use_cooldown", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.targetSettings.use_cooldown = value;
+                            TargettingTranslator.INSTANCE.use_cooldown = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.targetSettings.use_cooldown;
+                            return TargettingTranslator.INSTANCE.use_cooldown;
                         }, "Use Cooldown"),
-                new ModuleOption<>(pepsiMod.targetSettings.silent, "silent", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(TargettingTranslator.INSTANCE.silent, "silent", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.targetSettings.silent = value;
+                            TargettingTranslator.INSTANCE.silent = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.targetSettings.silent;
+                            return TargettingTranslator.INSTANCE.silent;
                         }, "Silent"),
-                new ModuleOption<>(pepsiMod.targetSettings.rotate, "rotate", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(TargettingTranslator.INSTANCE.rotate, "rotate", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.targetSettings.rotate = value;
+                            TargettingTranslator.INSTANCE.rotate = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.targetSettings.rotate;
+                            return TargettingTranslator.INSTANCE.rotate;
                         }, "Rotate"),
-                new ModuleOption<>(pepsiMod.targetSettings.targetBone, "bone", targetBoneStrings,
+                new ModuleOption<>(TargettingTranslator.INSTANCE.targetBone, "bone", targetBoneStrings,
                         (value) -> {
-                            pepsiMod.targetSettings.targetBone = value;
+                            TargettingTranslator.INSTANCE.targetBone = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.targetSettings.targetBone;
+                            return TargettingTranslator.INSTANCE.targetBone;
                         }, "Bone", false)
         };
     }
@@ -253,10 +253,10 @@ public class AuraMod extends Module {
     @Override
     public String getModeForName() {
         String mode = "";
-        if (pepsiMod.targetSettings.silent) {
+        if (TargettingTranslator.INSTANCE.silent) {
             mode += "Silent:";
         }
-        if (pepsiMod.targetSettings.rotate) {
+        if (TargettingTranslator.INSTANCE.rotate) {
             mode += "Rotate";
         } else {
             mode += "NoRotate";
@@ -290,7 +290,7 @@ public class AuraMod extends Module {
         if (args.length == 3 && !args[2].isEmpty() && cmd.startsWith(".aura bone ")) {
             String s = args[2].toUpperCase();
             try {
-                TargetBone bone = TargetBone.valueOf(s);
+                TargettingTranslator.TargetBone bone = TargettingTranslator.TargetBone.valueOf(s);
                 if (bone == null) {
                     clientMessage("Not a valid bone: " + args[2]);
                 } else {

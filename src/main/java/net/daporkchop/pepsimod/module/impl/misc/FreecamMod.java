@@ -21,10 +21,10 @@ import net.daporkchop.pepsimod.module.api.ModuleLaunchState;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
-import net.daporkchop.pepsimod.util.module.EntityFakePlayer;
+import net.daporkchop.pepsimod.util.EntityFakePlayer;
+import net.daporkchop.pepsimod.util.config.impl.FreecamTranslator;
 
 public class FreecamMod extends Module {
-    public static float SPEED = 1.0f;
     public static FreecamMod INSTANCE;
     public EntityFakePlayer fakePlayer;
 
@@ -60,12 +60,11 @@ public class FreecamMod extends Module {
         mc.player.motionX = 0;
         mc.player.motionZ = 0;
 
-        mc.player.jumpMovementFactor = SPEED / 10;
+        mc.player.jumpMovementFactor = FreecamTranslator.INSTANCE.speed / 10;
     }
 
     @Override
     public void init() {
-        SPEED = pepsiMod.dataTag.getFloat("Freecam_speed", 1.0f);
         INSTANCE = this; //adding this a bunch because it always seems to be null idk y
     }
 
@@ -78,11 +77,11 @@ public class FreecamMod extends Module {
                                 clientMessage("Speed cannot be negative or 0!");
                                 return false;
                             }
-                            FreecamMod.SPEED = value;
+                            FreecamTranslator.INSTANCE.speed = value;
                             return true;
                         },
                         () -> {
-                            return FreecamMod.SPEED;
+                            return FreecamTranslator.INSTANCE.speed;
                         }, "Speed", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.0f, 1.0f, 0.1f))
         };
     }

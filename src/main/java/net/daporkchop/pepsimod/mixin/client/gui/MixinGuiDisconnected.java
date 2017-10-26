@@ -22,6 +22,7 @@ import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.impl.render.ZoomMod;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
+import net.daporkchop.pepsimod.util.config.impl.GeneralTranslator;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiDisconnected;
 import net.minecraft.client.gui.GuiScreen;
@@ -36,8 +37,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
-
-import static net.daporkchop.pepsimod.util.misc.Default.pepsiMod;
 
 @Mixin(GuiDisconnected.class)
 public abstract class MixinGuiDisconnected extends GuiScreen {
@@ -58,7 +57,7 @@ public abstract class MixinGuiDisconnected extends GuiScreen {
 
     @Inject(method = "drawScreen", at = @At("HEAD"))
     public void preDrawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo callbackInfo) {
-        if (ZoomMod.INSTANCE.isEnabled) {
+        if (ZoomMod.INSTANCE.state.enabled) {
             ModuleManager.disableModule(ZoomMod.INSTANCE);
             mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
         }
@@ -91,7 +90,7 @@ public abstract class MixinGuiDisconnected extends GuiScreen {
         PepsiUtils.autoReconnectWaitTime = 5;
         this.buttonList.add(PepsiUtils.reconnectButton = new GuiButton(1, this.width / 2 - 100, Math.min(this.height / 2 + this.textHeight / 2 + this.fontRenderer.FONT_HEIGHT + 22, this.height - 30 + 22), "Reconnect"));
         this.buttonList.add(PepsiUtils.autoReconnectButton = new GuiButton(2, this.width / 2 - 100, Math.min(this.height / 2 + this.textHeight / 2 + this.fontRenderer.FONT_HEIGHT + 44, this.height - 30 + 44), "AutoReconnect"));
-        if (!pepsiMod.miscOptions.autoReconnect) {
+        if (!GeneralTranslator.INSTANCE.autoReconnect) {
             PepsiUtils.autoReconnectButton.displayString = "AutoReconnect (\u00A7cDisabled\u00A7r)";
         }
     }
@@ -104,8 +103,8 @@ public abstract class MixinGuiDisconnected extends GuiScreen {
             FMLClientHandler.instance().connectToServer(mc.currentScreen, data);
             callbackInfo.cancel();
         } else if (button.id == 2) {
-            pepsiMod.miscOptions.autoReconnect = !pepsiMod.miscOptions.autoReconnect;
-            if (pepsiMod.miscOptions.autoReconnect) {
+            GeneralTranslator.INSTANCE.autoReconnect = !GeneralTranslator.INSTANCE.autoReconnect;
+            if (GeneralTranslator.INSTANCE.autoReconnect) {
                 PepsiUtils.autoReconnectWaitTime = 5;
                 PepsiUtils.autoReconnectButton.displayString = "AutoReconnect (\u00A7a" + --PepsiUtils.autoReconnectWaitTime + "\u00A7r)";
             } else {

@@ -13,16 +13,28 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.util.module;
+package net.daporkchop.pepsimod.util.config.impl;
 
-import java.io.Serializable;
+import com.google.gson.JsonObject;
+import net.daporkchop.pepsimod.util.config.IConfigTranslator;
 
-public class ElytraFlySettings implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class FreecamTranslator implements IConfigTranslator {
+    public static final FreecamTranslator INSTANCE = new FreecamTranslator();
+    public float speed = 1.0f;
 
-    public boolean easyStart = false;
-    public boolean stopInWater = true;
-    public boolean fly = false;
-    public float speed = 0.2f;
-    public ElytraFlyMode mode = ElytraFlyMode.NORMAL;
+    private FreecamTranslator() {
+
+    }
+
+    public void encode(JsonObject json) {
+        json.addProperty("speed", speed);
+    }
+
+    public void decode(String fieldName, JsonObject json) {
+        speed = getFloat(json, "speed", speed);
+    }
+
+    public String name() {
+        return "freecam";
+    }
 }

@@ -57,7 +57,7 @@ public class JesusMod extends Module {
     }
 
     public boolean shouldBeSolid() {
-        return isEnabled && mc.player != null && mc.player.fallDistance <= 3 && !mc.gameSettings.keyBindSneak.isPressed() && !mc.player.isInWater();
+        return state.enabled && mc.player != null && mc.player.fallDistance <= 3 && !mc.gameSettings.keyBindSneak.isPressed() && !mc.player.isInWater();
     }
 
     @Override

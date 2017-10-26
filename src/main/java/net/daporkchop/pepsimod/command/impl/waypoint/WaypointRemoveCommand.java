@@ -16,6 +16,7 @@
 package net.daporkchop.pepsimod.command.impl.waypoint;
 
 import net.daporkchop.pepsimod.command.api.Command;
+import net.daporkchop.pepsimod.util.config.impl.WaypointsTranslator;
 import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
 
 import java.util.Collection;
@@ -29,7 +30,7 @@ public class WaypointRemoveCommand extends Command {
     public void execute(String cmd, String[] args) {
         Waypoint waypoint = null;
         if (args.length >= 2) {
-            if ((waypoint = pepsiMod.waypoints.removeWaypoint(args[1])) == null) {
+            if ((waypoint = WaypointsTranslator.INSTANCE.removeWaypoint(args[1])) == null) {
                 clientMessage("No waypoint with name:\u00A7o" + args[1] + "\u00A7r!");
                 return;
             }
@@ -43,9 +44,9 @@ public class WaypointRemoveCommand extends Command {
     @Override
     public String getSuggestion(String cmd, String[] args) {
         if (args.length == 1) {
-            return cmd + " " + pepsiMod.waypoints.getWaypoints().iterator().next().name;
+            return cmd + " " + WaypointsTranslator.INSTANCE.getWaypoints().iterator().next().name;
         } else if (args.length == 2) {
-            Collection<Waypoint> waypoints = pepsiMod.waypoints.getWaypoints();
+            Collection<Waypoint> waypoints = WaypointsTranslator.INSTANCE.getWaypoints();
             for (Waypoint waypoint : waypoints) {
                 if (waypoint.name.startsWith(args[1])) {
                     return args[0] + " " + waypoint.name;

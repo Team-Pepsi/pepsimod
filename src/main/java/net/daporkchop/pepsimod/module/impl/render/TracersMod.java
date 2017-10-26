@@ -20,11 +20,12 @@ import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.totally.not.skidded.RotationUtils;
-import net.daporkchop.pepsimod.util.Friends;
+import net.daporkchop.pepsimod.util.EntityFakePlayer;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.RenderColor;
-import net.daporkchop.pepsimod.util.module.EntityFakePlayer;
+import net.daporkchop.pepsimod.util.config.impl.FriendsTranslator;
+import net.daporkchop.pepsimod.util.config.impl.TracersTranslator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
@@ -80,75 +81,75 @@ public class TracersMod extends Module {
         return new ModuleOption[]{
                 new ModuleOption<>(false, "sleeping", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.tracerSettings.sleeping = value;
+                            TracersTranslator.INSTANCE.sleeping = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.tracerSettings.sleeping;
+                            return TracersTranslator.INSTANCE.sleeping;
                         }, "Sleeping"),
                 new ModuleOption<>(false, "invisible", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.tracerSettings.invisible = value;
+                            TracersTranslator.INSTANCE.invisible = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.tracerSettings.invisible;
+                            return TracersTranslator.INSTANCE.invisible;
                         }, "Invisible"),
                 new ModuleOption<>(true, "friendColors", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.tracerSettings.friendColors = value;
+                            TracersTranslator.INSTANCE.friendColors = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.tracerSettings.friendColors;
+                            return TracersTranslator.INSTANCE.friendColors;
                         }, "FriendColors"),
                 new ModuleOption<>(false, "animals", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.tracerSettings.animals = value;
+                            TracersTranslator.INSTANCE.animals = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.tracerSettings.animals;
+                            return TracersTranslator.INSTANCE.animals;
                         }, "Animals"),
                 new ModuleOption<>(false, "monsters", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.tracerSettings.monsters = value;
+                            TracersTranslator.INSTANCE.monsters = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.tracerSettings.monsters;
+                            return TracersTranslator.INSTANCE.monsters;
                         }, "Monsters"),
                 new ModuleOption<>(false, "players", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.tracerSettings.players = value;
+                            TracersTranslator.INSTANCE.players = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.tracerSettings.players;
+                            return TracersTranslator.INSTANCE.players;
                         }, "Players"),
                 new ModuleOption<>(false, "items", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.tracerSettings.items = value;
+                            TracersTranslator.INSTANCE.items = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.tracerSettings.items;
+                            return TracersTranslator.INSTANCE.items;
                         }, "Items"),
                 new ModuleOption<>(false, "everything", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.tracerSettings.everything = value;
+                            TracersTranslator.INSTANCE.everything = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.tracerSettings.everything;
+                            return TracersTranslator.INSTANCE.everything;
                         }, "Everything"),
                 new ModuleOption<>(true, "distanceColor", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.tracerSettings.distanceColor = value;
+                            TracersTranslator.INSTANCE.distanceColor = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.tracerSettings.distanceColor;
+                            return TracersTranslator.INSTANCE.distanceColor;
                         }, "DistanceColor")
         };
     }
@@ -177,22 +178,22 @@ public class TracersMod extends Module {
                 continue;
             }
 
-            if (!pepsiMod.tracerSettings.invisible && entity.isInvisible()) {
+            if (!TracersTranslator.INSTANCE.invisible && entity.isInvisible()) {
                 continue;
             }
 
-            if ((pepsiMod.tracerSettings.players || pepsiMod.tracerSettings.everything) && entity instanceof EntityPlayer) {
+            if ((TracersTranslator.INSTANCE.players || TracersTranslator.INSTANCE.everything) && entity instanceof EntityPlayer) {
                 if (entity == mc.player || entity instanceof EntityFakePlayer) {
                     continue;
                 }
 
-                if (!pepsiMod.tracerSettings.sleeping && ReflectionStuff.getSleeping((EntityPlayer) entity)) {
+                if (!TracersTranslator.INSTANCE.sleeping && ReflectionStuff.getSleeping((EntityPlayer) entity)) {
                     continue;
                 }
 
-                if (pepsiMod.tracerSettings.friendColors && Friends.isFriend(entity.getUniqueID().toString())) {
+                if (TracersTranslator.INSTANCE.friendColors && FriendsTranslator.INSTANCE.friends.contains(entity.getUniqueID().toString())) {
                     color = friendColor;
-                } else if (pepsiMod.tracerSettings.distanceColor) {
+                } else if (TracersTranslator.INSTANCE.distanceColor) {
                     double dist = mc.player.getDistanceSqToEntity(entity);
                     if (dist >= 625) {
                         color = distSafe;
@@ -206,8 +207,8 @@ public class TracersMod extends Module {
                         color = dist5;
                     }
                 }
-            } else if ((pepsiMod.tracerSettings.monsters || pepsiMod.tracerSettings.everything) && entity instanceof EntityMob) {
-                if (pepsiMod.tracerSettings.distanceColor) {
+            } else if ((TracersTranslator.INSTANCE.monsters || TracersTranslator.INSTANCE.everything) && entity instanceof EntityMob) {
+                if (TracersTranslator.INSTANCE.distanceColor) {
                     double dist = mc.player.getDistanceSqToEntity(entity);
                     if (dist >= 625) {
                         color = distSafe;
@@ -223,9 +224,9 @@ public class TracersMod extends Module {
                 } else {
                     color = monsterColor;
                 }
-            } else if ((pepsiMod.tracerSettings.animals || pepsiMod.tracerSettings.everything) && entity instanceof EntityAnimal) {
+            } else if ((TracersTranslator.INSTANCE.animals || TracersTranslator.INSTANCE.everything) && entity instanceof EntityAnimal) {
                 color = animalColor;
-            } else if ((pepsiMod.tracerSettings.items || pepsiMod.tracerSettings.everything) && entity instanceof EntityItem) {
+            } else if ((TracersTranslator.INSTANCE.items || TracersTranslator.INSTANCE.everything) && entity instanceof EntityItem) {
                 color = itemColor;
             } else {
                 continue;

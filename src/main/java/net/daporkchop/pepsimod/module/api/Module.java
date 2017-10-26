@@ -22,14 +22,14 @@ import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
+import net.daporkchop.pepsimod.util.config.impl.GeneralTranslator;
+import net.daporkchop.pepsimod.util.config.impl.HUDTranslator;
 import net.daporkchop.pepsimod.util.event.MoveEvent;
 import net.daporkchop.pepsimod.util.misc.ITickListener;
-import net.daporkchop.pepsimod.util.module.MiscOptions;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.network.Packet;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
@@ -40,14 +40,12 @@ import java.util.ArrayList;
  * gl understanding my overly complicated class heirachy
  */
 public abstract class Module extends Command implements ITickListener {
-    public boolean isEnabled;
     public KeyBinding keybind;
-    public boolean hide;
     public ColorizedText text;
     public ModuleOption[] options;
     public String nameFull;
     public String[] completionOptions;
-    public ModuleOptionSave[] tempOptionLoading;
+    public GeneralTranslator.ModuleState state;
 
     public Module(String name) {
         this(false, name, -1, false);
@@ -56,16 +54,18 @@ public abstract class Module extends Command implements ITickListener {
     public Module(boolean def, String name, int keybind, boolean hide) {
         super(name.toLowerCase());
         nameFull = name;
+        this.options = getDefaultOptions();
         registerKeybind(name, keybind);
-        this.isEnabled = shouldBeEnabled(def, getLaunchState());
-        if (this.isEnabled) {
+        state = GeneralTranslator.INSTANCE.states.get(name);
+        if (state == null) {
+            GeneralTranslator.INSTANCE.states.put(name, state = new GeneralTranslator.ModuleState(def, hide));
+        }
+        if (this.state.enabled) {
             this.onEnable();
         } else {
             this.onDisable();
         }
-        this.hide = hide;
     }
-
     public static boolean shouldBeEnabled(boolean in, ModuleLaunchState state) {
         if (state == ModuleLaunchState.ENABLED) {
             return true;
@@ -82,56 +82,29 @@ public abstract class Module extends Command implements ITickListener {
      * @return the new status
      */
     public boolean toggle() {
-        this.isEnabled = !this.isEnabled;
-        this.getOptionByName("enabled").setValue(this.isEnabled);
-        if (this.isEnabled) {
+        this.state.enabled = !this.state.enabled;
+        this.getOptionByName("enabled").setValue(this.state.enabled);
+        if (this.state.enabled) {
             this.onEnable();
         } else {
             this.onDisable();
         }
-        return this.isEnabled;
+        return this.state.enabled;
     }
 
     /**
      * Enables or disables a Module
      *
-     * @param isEnabled the new status
      * @return the given argument
      */
-    public boolean setEnabled(boolean isEnabled) {
-        this.isEnabled = isEnabled;
-        this.getOptionByName("enabled").setValue(this.isEnabled);
-        if (this.isEnabled) {
+    public boolean setEnabled(boolean enabled) {
+        this.state.enabled = enabled;
+        if (this.state.enabled) {
             this.onEnable();
         } else {
             this.onDisable();
         }
-        return isEnabled;
-    }
-
-    /**
-     * Gets all the default module options
-     *
-     * @return all the default module options
-     */
-    public final ModuleOption[] defaultOptions() {
-        return ArrayUtils.addAll(new ModuleOption[]{new ModuleOption<>(false, "enabled", OptionCompletions.BOOLEAN,
-                (value) -> {
-                    pepsiMod.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(isEnabled, hide)).enabled = value;
-                    return true;
-                },
-                () -> {
-                    return pepsiMod.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(isEnabled, hide)).enabled;
-                }, "Enabled"),
-                new ModuleOption<>(false, "hidden", OptionCompletions.BOOLEAN,
-                        (value) -> {
-                            pepsiMod.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(isEnabled, hide)).hidden = value;
-                            return true;
-                        },
-                        () -> {
-                            return pepsiMod.miscOptions.states.getOrDefault(name, new MiscOptions.ModuleState(isEnabled, hide)).hidden;
-                        }, "Hidden")
-        }, this.getDefaultOptions());
+        return state.enabled;
     }
 
     /**
@@ -170,7 +143,7 @@ public abstract class Module extends Command implements ITickListener {
     }
 
     public boolean shouldTick() {
-        return isEnabled;
+        return state.enabled;
     }
 
     /**
@@ -251,7 +224,7 @@ public abstract class Module extends Command implements ITickListener {
      */
     public void updateName() {
         if (pepsiMod.isInitialized && hasModeInName()) {
-            if (pepsiMod.hudSettings.rainbow) {
+            if (HUDTranslator.INSTANCE.rainbow) {
                 text = new RainbowText(nameFull + PepsiUtils.COLOR_ESCAPE + "customa8a8a8 [" + getModeForName() + "]");
             } else {
                 text = new RainbowText(nameFull + PepsiUtils.COLOR_ESCAPE + "7 [" + getModeForName() + "]");
@@ -381,7 +354,7 @@ public abstract class Module extends Command implements ITickListener {
 
                         switch (args[1]) {
                             case "hidden":
-                                this.hide = (boolean) opt.getValue();
+                                this.state.hidden = (boolean) opt.getValue();
                                 break;
                             case "enabled":
                                 if ((boolean) opt.getValue()) {

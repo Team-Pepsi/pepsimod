@@ -46,7 +46,7 @@ public class ZoomMod extends Module {
 
     @Override
     public void tick() {
-        if (this.isEnabled) {
+        if (this.state.enabled) {
             if (mc.gameSettings.fovSetting > 12f) {
                 for (int i = 0; i < 100; i++) {
                     if (mc.gameSettings.fovSetting > 12f) {

@@ -41,7 +41,7 @@ public abstract class MixinNetHandlerPlayClient {
 
     @Inject(method = "sendPacket", at = @At("HEAD"), cancellable = true)
     public void preSendPacket(Packet<?> packet, CallbackInfo callbackInfo) {
-        if (FreecamMod.INSTANCE.isEnabled) {
+        if (FreecamMod.INSTANCE.state.enabled) {
             if (packet instanceof CPacketPlayer) {
                 callbackInfo.cancel();
             }

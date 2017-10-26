@@ -21,6 +21,7 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
+import net.daporkchop.pepsimod.util.config.impl.CrystalAuraTranslator;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityEnderCrystal;
@@ -53,9 +54,9 @@ public class CrystalAuraMod extends Module {
         EntityPlayerSP player = mc.player;
 
         currentMS = System.nanoTime() / 1000000;
-        if (hasDelayRun((long) (1000 / pepsiMod.miscOptions.crystalAura_speed))) {
+        if (hasDelayRun((long) (1000 / CrystalAuraTranslator.INSTANCE.speed))) {
             for (Entity e : mc.world.loadedEntityList) {
-                if (player.getDistanceToEntity(e) < pepsiMod.miscOptions.crystalAura_range) {
+                if (player.getDistanceToEntity(e) < CrystalAuraTranslator.INSTANCE.range) {
                     if (e instanceof EntityEnderCrystal) {
                         mc.playerController.attackEntity(player, e);
                         player.swingArm(EnumHand.MAIN_HAND);
@@ -75,21 +76,21 @@ public class CrystalAuraMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new ModuleOption<>(pepsiMod.miscOptions.crystalAura_speed, "speed", OptionCompletions.FLOAT,
+                new ModuleOption<>(CrystalAuraTranslator.INSTANCE.speed, "speed", OptionCompletions.FLOAT,
                         (value) -> {
-                            pepsiMod.miscOptions.crystalAura_speed = Math.max(value, 0);
+                            CrystalAuraTranslator.INSTANCE.speed = Math.max(value, 0);
                             return true;
                         },
                         () -> {
-                            return pepsiMod.miscOptions.crystalAura_speed;
+                            return CrystalAuraTranslator.INSTANCE.speed;
                         }, "Speed", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0f, 20f, 0.5f)),
-                new ModuleOption<>(pepsiMod.miscOptions.crystalAura_range, "range", OptionCompletions.FLOAT,
+                new ModuleOption<>(CrystalAuraTranslator.INSTANCE.range, "range", OptionCompletions.FLOAT,
                         (value) -> {
-                            pepsiMod.miscOptions.crystalAura_range = Math.max(value, 0);
+                            CrystalAuraTranslator.INSTANCE.range = Math.max(value, 0);
                             return true;
                         },
                         () -> {
-                            return pepsiMod.miscOptions.crystalAura_range;
+                            return CrystalAuraTranslator.INSTANCE.range;
                         }, "Range", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 3f, 10f, 0.05f))
         };
     }

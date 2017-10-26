@@ -79,7 +79,7 @@ public class VelocityMod extends Module {
     }
 
     public float getVelocity() {
-        if (this.isEnabled) {
+        if (this.state.enabled) {
             return PROCENT;
         } else {
             return 1.0f;

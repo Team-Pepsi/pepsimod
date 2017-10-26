@@ -19,7 +19,7 @@ import net.daporkchop.pepsimod.module.impl.misc.AnnouncerMod;
 import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
 import net.daporkchop.pepsimod.module.impl.movement.NoClipMod;
 import net.daporkchop.pepsimod.module.impl.render.XrayMod;
-import net.daporkchop.pepsimod.util.module.XrayUtils;
+import net.daporkchop.pepsimod.util.config.impl.XrayTranslator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
@@ -41,9 +41,9 @@ public abstract class MixinBlock extends net.minecraftforge.registries.IForgeReg
 
     @Inject(method = "isFullCube", at = @At("HEAD"), cancellable = true)
     public void preIsFullCube(IBlockState state, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (XrayMod.INSTANCE.isEnabled) {
-            callbackInfoReturnable.setReturnValue(XrayUtils.isTargeted(Block.class.cast(this)));
-        } else if (FreecamMod.INSTANCE.isEnabled || NoClipMod.INSTANCE.isEnabled) {
+        if (XrayMod.INSTANCE.state.enabled) {
+            callbackInfoReturnable.setReturnValue(XrayTranslator.INSTANCE.isTargeted(Block.class.cast(this)));
+        } else if (FreecamMod.INSTANCE.state.enabled || NoClipMod.INSTANCE.state.enabled) {
             callbackInfoReturnable.setReturnValue(false);
         }
     }
@@ -57,7 +57,7 @@ public abstract class MixinBlock extends net.minecraftforge.registries.IForgeReg
 
     @Inject(method = "shouldSideBeRendered", at = @At("HEAD"), cancellable = true)
     public void preShouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side, CallbackInfoReturnable<Boolean> callbackInfo) {
-        if (XrayMod.INSTANCE.isEnabled) {
+        if (XrayMod.INSTANCE.state.enabled) {
             callbackInfo.setReturnValue(true);
             callbackInfo.cancel();
         }

@@ -15,10 +15,10 @@
 
 package net.daporkchop.pepsimod.totally.not.skidded;
 
-import net.daporkchop.pepsimod.util.Friends;
 import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.config.impl.FriendsTranslator;
+import net.daporkchop.pepsimod.util.config.impl.TargettingTranslator;
 import net.daporkchop.pepsimod.util.misc.Default;
-import net.daporkchop.pepsimod.util.module.TargetBone;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.monster.EntityMob;
@@ -60,7 +60,7 @@ public class EntityUtils extends Default {
         }
 
         // friends
-        if (!settings.targetFriends() && Friends.isFriend(en.getUniqueID().toString())) {
+        if (!settings.targetFriends() && FriendsTranslator.INSTANCE.friends.contains(en.getUniqueID().toString())) {
             return false;
         }
 
@@ -249,59 +249,59 @@ public class EntityUtils extends Default {
         public static final boolean[] team_colors = new boolean[]{true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true};
 
         public boolean targetFriends() {
-            return pepsiMod.targetSettings.friends;
+            return TargettingTranslator.INSTANCE.friends;
         }
 
         public boolean targetBehindWalls() {
-            return pepsiMod.targetSettings.through_walls;
+            return TargettingTranslator.INSTANCE.through_walls;
         }
 
         public float getRange() {
-            return pepsiMod.targetSettings.reach;
+            return TargettingTranslator.INSTANCE.reach;
         }
 
         public float getFOV() {
-            return pepsiMod.targetSettings.fov;
+            return TargettingTranslator.INSTANCE.fov;
         }
 
         public boolean targetPlayers() {
-            return pepsiMod.targetSettings.players;
+            return TargettingTranslator.INSTANCE.players;
         }
 
         public boolean targetAnimals() {
-            return pepsiMod.targetSettings.animals;
+            return TargettingTranslator.INSTANCE.animals;
         }
 
         public boolean targetMonsters() {
-            return pepsiMod.targetSettings.monsters;
+            return TargettingTranslator.INSTANCE.monsters;
         }
 
         public boolean targetGolems() {
-            return pepsiMod.targetSettings.golems;
+            return TargettingTranslator.INSTANCE.golems;
         }
 
         public boolean targetSleepingPlayers() {
-            return pepsiMod.targetSettings.sleeping;
+            return TargettingTranslator.INSTANCE.sleeping;
         }
 
         public boolean targetInvisiblePlayers() {
-            return pepsiMod.targetSettings.players && pepsiMod.targetSettings.invisible;
+            return TargettingTranslator.INSTANCE.players && TargettingTranslator.INSTANCE.invisible;
         }
 
         public boolean targetInvisibleMobs() {
-            return pepsiMod.targetSettings.monsters && pepsiMod.targetSettings.invisible;
+            return TargettingTranslator.INSTANCE.monsters && TargettingTranslator.INSTANCE.invisible;
         }
 
         public boolean targetTeams() {
-            return pepsiMod.targetSettings.teams;
+            return TargettingTranslator.INSTANCE.teams;
         }
 
         public boolean[] getTeamColors() {
             return team_colors;
         }
 
-        public TargetBone getTargetBone() {
-            return pepsiMod.targetSettings.targetBone;
+        public TargettingTranslator.TargetBone getTargetBone() {
+            return TargettingTranslator.INSTANCE.targetBone;
         }
     }
 }

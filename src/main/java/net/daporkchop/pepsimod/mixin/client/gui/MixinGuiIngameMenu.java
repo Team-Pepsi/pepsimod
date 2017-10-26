@@ -30,7 +30,7 @@ import static net.daporkchop.pepsimod.util.misc.Default.mc;
 public abstract class MixinGuiIngameMenu {
     @Inject(method = "actionPerformed", at = @At("HEAD"))
     public void preActionPerformed(GuiButton button, CallbackInfo callbackInfo) {
-        if (ZoomMod.INSTANCE.isEnabled) {
+        if (ZoomMod.INSTANCE.state.enabled) {
             ModuleManager.disableModule(ZoomMod.INSTANCE);
             mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
         }

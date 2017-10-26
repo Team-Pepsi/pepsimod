@@ -13,20 +13,31 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.util.module;
+package net.daporkchop.pepsimod.util.config.impl;
 
-import java.io.Serializable;
+import com.google.gson.JsonObject;
+import net.daporkchop.pepsimod.util.config.IConfigTranslator;
 
-public class TracerSettings implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class StepTranslator implements IConfigTranslator {
+    public static final StepTranslator INSTANCE = new StepTranslator();
+    public boolean legit = false;
+    public int height = 1;
 
-    public boolean sleeping = false;
-    public boolean invisible = false;
-    public boolean friendColors = true;
-    public boolean animals = false;
-    public boolean monsters = false;
-    public boolean players = false;
-    public boolean items = false;
-    public boolean everything = false;
-    public boolean distanceColor = true;
+    private StepTranslator() {
+
+    }
+
+    public void encode(JsonObject json) {
+        json.addProperty("legit", legit);
+        json.addProperty("height", height);
+    }
+
+    public void decode(String fieldName, JsonObject json) {
+        legit = getBoolean(json, "legit", legit);
+        height = getInt(json, "height", height);
+    }
+
+    public String name() {
+        return "step";
+    }
 }

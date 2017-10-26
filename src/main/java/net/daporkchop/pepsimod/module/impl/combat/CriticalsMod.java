@@ -19,6 +19,7 @@ import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
+import net.daporkchop.pepsimod.util.config.impl.CriticalsTranslator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.NetworkManager;
@@ -52,11 +53,11 @@ public class CriticalsMod extends Module {
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{new ModuleOption<>(true, "packet", OptionCompletions.BOOLEAN,
                 (value) -> {
-                    pepsiMod.miscOptions.criticals_packet = value;
+                    CriticalsTranslator.INSTANCE.packet = value;
                     return true;
                 },
                 () -> {
-                    return pepsiMod.miscOptions.criticals_packet;
+                    return CriticalsTranslator.INSTANCE.packet;
                 }, "Packet")};
     }
 

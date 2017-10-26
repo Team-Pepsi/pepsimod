@@ -17,9 +17,9 @@ package net.daporkchop.pepsimod.mixin.client.renderer.entity;
 
 import net.daporkchop.pepsimod.module.impl.render.ESPMod;
 import net.daporkchop.pepsimod.module.impl.render.HealthTagsMod;
-import net.daporkchop.pepsimod.util.Friends;
 import net.daporkchop.pepsimod.util.PepsiUtils;
-import net.daporkchop.pepsimod.util.module.ESPSettings;
+import net.daporkchop.pepsimod.util.config.impl.ESPTranslator;
+import net.daporkchop.pepsimod.util.config.impl.FriendsTranslator;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.entity.Render;
@@ -37,8 +37,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import static net.daporkchop.pepsimod.util.misc.Default.pepsiMod;
 
 @Mixin(Render.class)
 public abstract class MixinRender<T extends Entity> {
@@ -64,11 +62,11 @@ public abstract class MixinRender<T extends Entity> {
             int i = "deadmau5".equals(str) ? -10 : 0;
 
             if (entityIn instanceof EntityLivingBase) {
-                if (entityIn instanceof EntityPlayer && Friends.isFriend(entityIn.getUniqueID().toString())) {
+                if (entityIn instanceof EntityPlayer && FriendsTranslator.INSTANCE.friends.contains(entityIn.getUniqueID().toString())) {
                     str = PepsiUtils.COLOR_ESCAPE + "b" + str;
                 }
 
-                if (HealthTagsMod.INSTANCE.isEnabled) {
+                if (HealthTagsMod.INSTANCE.state.enabled) {
                     str += " ";
                     int health = (int) ((EntityLivingBase) entityIn).getHealth();
                     if (health <= 5) {
@@ -90,23 +88,22 @@ public abstract class MixinRender<T extends Entity> {
 
     @Inject(method = "getTeamColor", at = @At("HEAD"), cancellable = true)
     public void pregetTeamColor(T entity, CallbackInfoReturnable<Integer> callbackInfoReturnable) {
-        if (ESPMod.INSTANCE.isEnabled) {
-            ESPSettings settings = pepsiMod.espSettings;
+        if (ESPMod.INSTANCE.state.enabled) {
             if (entity.isInvisible()) {
-                if (!settings.invisible) {
+                if (!ESPTranslator.INSTANCE.invisible) {
                     return;
                 }
             }
-            if (settings.animals && entity instanceof EntityAnimal) {
+            if (ESPTranslator.INSTANCE.animals && entity instanceof EntityAnimal) {
                 callbackInfoReturnable.setReturnValue(ESPMod.animalColor.getIntColor());
-            } else if (settings.monsters && entity instanceof EntityMob) {
+            } else if (ESPTranslator.INSTANCE.monsters && entity instanceof EntityMob) {
                 callbackInfoReturnable.setReturnValue(ESPMod.monsterColor.getIntColor());
-            } else if (settings.players && entity instanceof EntityPlayer) {
-                if (settings.friendColors && Friends.isFriend(entity.getUniqueID().toString())) {
+            } else if (ESPTranslator.INSTANCE.players && entity instanceof EntityPlayer) {
+                if (ESPTranslator.INSTANCE.friendColors && FriendsTranslator.INSTANCE.friends.contains(entity.getUniqueID().toString())) {
                     callbackInfoReturnable.setReturnValue(ESPMod.friendColor.getIntColor());
                 }
                 callbackInfoReturnable.setReturnValue(ESPMod.playerColor.getIntColor());
-            } else if (settings.golems && entity instanceof EntityGolem) {
+            } else if (ESPTranslator.INSTANCE.golems && entity instanceof EntityGolem) {
                 callbackInfoReturnable.setReturnValue(ESPMod.golemColor.getIntColor());
             }
         }

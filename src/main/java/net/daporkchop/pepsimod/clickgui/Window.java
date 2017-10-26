@@ -28,6 +28,7 @@ import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 import net.daporkchop.pepsimod.totally.not.skidded.RenderUtilsXdolf;
 import net.daporkchop.pepsimod.util.BetterScaledResolution;
 import net.daporkchop.pepsimod.util.colors.ColorUtils;
+import net.daporkchop.pepsimod.util.config.impl.HUDTranslator;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -107,9 +108,9 @@ public class Window extends EntryImplBase {
                 int barHeight = getScrollbarHeight();
                 int barY = getScrollbarY();
                 barY = Math.min(barY, getScrollingModuleCount() * 13 - 1 - barHeight);
-                RenderUtilsXdolf.drawRect(getX() + 97, getY() + 13 + barY, getX() + 99, Math.min(getY() + 13 + barY + barHeight, getY() + getDisplayedHeight() - 1), pepsiMod.hudSettings.getColor());
+                RenderUtilsXdolf.drawRect(getX() + 97, getY() + 13 + barY, getX() + 99, Math.min(getY() + 13 + barY + barHeight, getY() + getDisplayedHeight() - 1), HUDTranslator.INSTANCE.getColor());
             } else {
-                RenderUtilsXdolf.drawRect(getX() + 97, getY() + 13, getX() + 99, getDisplayedHeight() - 1, pepsiMod.hudSettings.getColor());
+                RenderUtilsXdolf.drawRect(getX() + 97, getY() + 13, getX() + 99, getDisplayedHeight() - 1, HUDTranslator.INSTANCE.getColor());
             }
             modulesCounted = 0;
             for (int i = getScroll(); i < getModulesToDisplay() + getScroll(); i++) {
@@ -228,7 +229,7 @@ public class Window extends EntryImplBase {
             }
             Button b = this.addButton(new Button(this, module));
             for (ModuleOption option : module.options) {
-                if (option.makeButton && !(option.getName().equals("enabled") || option.getName().equals("hidden"))) {
+                if (option.makeButton) {
                     if (option.extended == null) {
                         this.addSubButton(new SubButton(b, option));
                     } else if (option.extended.getType() == ExtensionType.TYPE_SLIDER) {

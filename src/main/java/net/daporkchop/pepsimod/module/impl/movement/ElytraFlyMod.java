@@ -24,7 +24,7 @@ import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
-import net.daporkchop.pepsimod.util.module.ElytraFlyMode;
+import net.daporkchop.pepsimod.util.config.impl.ElytraFlyTranslator;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemElytra;
 import net.minecraft.item.ItemStack;
@@ -45,7 +45,7 @@ public class ElytraFlyMod extends TimeModule {
 
     @Override
     public void onEnable() {
-        if (pepsiMod.elytraFlySettings.mode == ElytraFlyMode.PACKET) {
+        if (ElytraFlyTranslator.INSTANCE.mode == ElytraFlyTranslator.ElytraFlyMode.PACKET) {
             if (mc.world == null) {
                 ModuleManager.disableModule(this);
             }
@@ -67,12 +67,12 @@ public class ElytraFlyMod extends TimeModule {
         }
 
         if (mc.player.isElytraFlying()) {
-            if (pepsiMod.elytraFlySettings.stopInWater && mc.player.isInWater()) {
+            if (ElytraFlyTranslator.INSTANCE.stopInWater && mc.player.isInWater()) {
                 mc.getConnection().sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_FALL_FLYING));
                 return;
             }
 
-            if (pepsiMod.elytraFlySettings.fly && pepsiMod.elytraFlySettings.mode == ElytraFlyMode.NORMAL) {
+            if (ElytraFlyTranslator.INSTANCE.fly && ElytraFlyTranslator.INSTANCE.mode == ElytraFlyTranslator.ElytraFlyMode.NORMAL) {
                 if (ReflectionStuff.getPressed(mc.gameSettings.keyBindJump)) {
                     mc.player.motionY += 0.08;
                 } else if (ReflectionStuff.getPressed(mc.gameSettings.keyBindSneak)) {
@@ -81,16 +81,16 @@ public class ElytraFlyMod extends TimeModule {
 
                 if (ReflectionStuff.getPressed(mc.gameSettings.keyBindForward)) {
                     double yaw = Math.toRadians(mc.player.rotationYaw);
-                    mc.player.motionX -= Math.sin(yaw) * pepsiMod.elytraFlySettings.speed;
-                    mc.player.motionZ += Math.cos(yaw) * pepsiMod.elytraFlySettings.speed;
+                    mc.player.motionX -= Math.sin(yaw) * ElytraFlyTranslator.INSTANCE.speed;
+                    mc.player.motionZ += Math.cos(yaw) * ElytraFlyTranslator.INSTANCE.speed;
                 } else if (ReflectionStuff.getPressed(mc.gameSettings.keyBindBack)) {
                     double yaw = Math.toRadians(mc.player.rotationYaw);
-                    mc.player.motionX += Math.sin(yaw) * pepsiMod.elytraFlySettings.speed;
-                    mc.player.motionZ -= Math.cos(yaw) * pepsiMod.elytraFlySettings.speed;
+                    mc.player.motionX += Math.sin(yaw) * ElytraFlyTranslator.INSTANCE.speed;
+                    mc.player.motionZ -= Math.cos(yaw) * ElytraFlyTranslator.INSTANCE.speed;
                 }
 
             }
-        } else if (pepsiMod.elytraFlySettings.easyStart && pepsiMod.elytraFlySettings.mode != ElytraFlyMode.PACKET && ItemElytra.isUsable(chestplate) && mc.gameSettings.keyBindJump.isPressed()) {
+        } else if (ElytraFlyTranslator.INSTANCE.easyStart && ElytraFlyTranslator.INSTANCE.mode != ElytraFlyTranslator.ElytraFlyMode.PACKET && ItemElytra.isUsable(chestplate) && mc.gameSettings.keyBindJump.isPressed()) {
             if (hasTimePassedM(1000)) {
                 updateLastMS();
                 mc.player.setJumping(false);
@@ -99,16 +99,16 @@ public class ElytraFlyMod extends TimeModule {
             }
             mc.getConnection().sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_FALL_FLYING));
         }
-        if (pepsiMod.elytraFlySettings.fly && pepsiMod.elytraFlySettings.mode == ElytraFlyMode.PACKET) {
+        if (ElytraFlyTranslator.INSTANCE.fly && ElytraFlyTranslator.INSTANCE.mode == ElytraFlyTranslator.ElytraFlyMode.PACKET) {
             mc.player.motionX = mc.player.motionZ = 0;
             if (ReflectionStuff.getPressed(mc.gameSettings.keyBindForward)) {
                 double yaw = Math.toRadians(mc.player.rotationYaw);
-                mc.player.motionX -= Math.sin(yaw) * pepsiMod.elytraFlySettings.speed;
-                mc.player.motionZ += Math.cos(yaw) * pepsiMod.elytraFlySettings.speed;
+                mc.player.motionX -= Math.sin(yaw) * ElytraFlyTranslator.INSTANCE.speed;
+                mc.player.motionZ += Math.cos(yaw) * ElytraFlyTranslator.INSTANCE.speed;
             } else if (ReflectionStuff.getPressed(mc.gameSettings.keyBindBack)) {
                 double yaw = Math.toRadians(mc.player.rotationYaw);
-                mc.player.motionX += Math.sin(yaw) * pepsiMod.elytraFlySettings.speed;
-                mc.player.motionZ -= Math.cos(yaw) * pepsiMod.elytraFlySettings.speed;
+                mc.player.motionX += Math.sin(yaw) * ElytraFlyTranslator.INSTANCE.speed;
+                mc.player.motionZ -= Math.cos(yaw) * ElytraFlyTranslator.INSTANCE.speed;
             }
             mc.player.motionY = 0;
             mc.getConnection().sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_FALL_FLYING));
@@ -124,45 +124,45 @@ public class ElytraFlyMod extends TimeModule {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new ModuleOption<>(pepsiMod.elytraFlySettings.easyStart, "easyStart", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(ElytraFlyTranslator.INSTANCE.easyStart, "easyStart", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.elytraFlySettings.easyStart = value;
+                            ElytraFlyTranslator.INSTANCE.easyStart = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.elytraFlySettings.easyStart;
+                            return ElytraFlyTranslator.INSTANCE.easyStart;
                         }, "EasyStart"),
-                new ModuleOption<>(pepsiMod.elytraFlySettings.stopInWater, "stopInWater", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(ElytraFlyTranslator.INSTANCE.stopInWater, "stopInWater", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.elytraFlySettings.stopInWater = value;
+                            ElytraFlyTranslator.INSTANCE.stopInWater = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.elytraFlySettings.stopInWater;
+                            return ElytraFlyTranslator.INSTANCE.stopInWater;
                         }, "StopInWater"),
-                new ModuleOption<>(pepsiMod.elytraFlySettings.fly, "fly", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(ElytraFlyTranslator.INSTANCE.fly, "fly", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.elytraFlySettings.fly = value;
+                            ElytraFlyTranslator.INSTANCE.fly = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.elytraFlySettings.fly;
+                            return ElytraFlyTranslator.INSTANCE.fly;
                         }, "Fly"),
-                new ModuleOption<>(pepsiMod.elytraFlySettings.mode, "mode", modes,
+                new ModuleOption<>(ElytraFlyTranslator.INSTANCE.mode, "mode", modes,
                         (value) -> {
-                            pepsiMod.elytraFlySettings.mode = value;
+                            ElytraFlyTranslator.INSTANCE.mode = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.elytraFlySettings.mode;
+                            return ElytraFlyTranslator.INSTANCE.mode;
                         }, "Mode", false),
-                new ModuleOption<>(pepsiMod.elytraFlySettings.speed, "speed", OptionCompletions.FLOAT,
+                new ModuleOption<>(ElytraFlyTranslator.INSTANCE.speed, "speed", OptionCompletions.FLOAT,
                         (value) -> {
-                            pepsiMod.elytraFlySettings.speed = Math.max(value, 0);
+                            ElytraFlyTranslator.INSTANCE.speed = Math.max(value, 0);
                             return true;
                         },
                         () -> {
-                            return pepsiMod.elytraFlySettings.speed;
+                            return ElytraFlyTranslator.INSTANCE.speed;
                         }, "Speed", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0f, 3f, 0.01f))
         };
     }
@@ -174,7 +174,7 @@ public class ElytraFlyMod extends TimeModule {
 
     @Override
     public String getModeForName() {
-        return pepsiMod.elytraFlySettings.mode.name();
+        return ElytraFlyTranslator.INSTANCE.mode.name();
     }
 
     public ModuleCategory getCategory() {
@@ -207,7 +207,7 @@ public class ElytraFlyMod extends TimeModule {
         if (args.length == 3 && !args[2].isEmpty() && cmd.startsWith(".elytra+ mode ")) {
             String s = args[2].toUpperCase();
             try {
-                ElytraFlyMode mode = ElytraFlyMode.valueOf(s);
+                ElytraFlyTranslator.ElytraFlyMode mode = ElytraFlyTranslator.ElytraFlyMode.valueOf(s);
                 if (mode == null) {
                     clientMessage("Not a valid mode: " + args[2]);
                 } else {

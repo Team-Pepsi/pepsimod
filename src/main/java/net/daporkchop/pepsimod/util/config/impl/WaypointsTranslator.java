@@ -13,17 +13,35 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.util.misc.waypoints;
+package net.daporkchop.pepsimod.util.config.impl;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import net.daporkchop.pepsimod.util.config.IConfigTranslator;
 import net.daporkchop.pepsimod.util.misc.Default;
+import net.daporkchop.pepsimod.util.misc.waypoints.DimensionWaypoints;
+import net.daporkchop.pepsimod.util.misc.waypoints.ServerWaypoints;
+import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.UUID;
 
-public class Waypoints extends Default implements Serializable {
+public class WaypointsTranslator extends Default implements IConfigTranslator {
+    public static final WaypointsTranslator INSTANCE = new WaypointsTranslator();
+    public boolean tracers = false;
+    public int r = 0;
+    public int g = 0;
+    public int b = 0;
+    public boolean nametag = false;
+    public boolean dist = true;
+    public boolean coords = false;
     public Hashtable<String, ServerWaypoints> identifiersToServerWaypoints = new Hashtable<>();
+
+    private WaypointsTranslator() {
+
+    }
 
     public static String getCurrentServerIdentifier() {
         if (mc.isIntegratedServerRunning()) {
@@ -31,6 +49,65 @@ public class Waypoints extends Default implements Serializable {
         } else {
             return mc.getCurrentServerData().serverIP;
         }
+    }
+
+    public void encode(JsonObject json) {
+        json.addProperty("tracers", tracers);
+        json.addProperty("r", r);
+        json.addProperty("g", g);
+        json.addProperty("b", b);
+        json.addProperty("nametag", nametag);
+        json.addProperty("dist", dist);
+        json.addProperty("coords", coords);
+
+        for (Map.Entry<String, ServerWaypoints> server : identifiersToServerWaypoints.entrySet()) {
+            for (Map.Entry<Integer, DimensionWaypoints> dimension : server.getValue().waypoints.entrySet()) {
+                for (Map.Entry<String, Waypoint> waypoint : dimension.getValue().waypoints.entrySet()) {
+                    json.addProperty(server.getKey() + "." + dimension.getKey() + "." + waypoint.getKey() + ".name", waypoint.getValue().name);
+                    json.addProperty(server.getKey() + "." + dimension.getKey() + "." + waypoint.getKey() + ".x", waypoint.getValue().x);
+                    json.addProperty(server.getKey() + "." + dimension.getKey() + "." + waypoint.getKey() + ".y", waypoint.getValue().y);
+                    json.addProperty(server.getKey() + "." + dimension.getKey() + "." + waypoint.getKey() + ".z", waypoint.getValue().z);
+                    json.addProperty(server.getKey() + "." + dimension.getKey() + "." + waypoint.getKey() + ".dim", waypoint.getValue().dim);
+                    json.addProperty(server.getKey() + "." + dimension.getKey() + "." + waypoint.getKey() + ".shown", waypoint.getValue().shown);
+                }
+            }
+        }
+    }
+
+    public void decode(String fieldName, JsonObject json) {
+        tracers = getBoolean(json, "tracers", tracers);
+        r = getInt(json, "r", r);
+        g = getInt(json, "g", g);
+        b = getInt(json, "b", b);
+        nametag = getBoolean(json, "nametag", nametag);
+        dist = getBoolean(json, "dist", dist);
+        coords = getBoolean(json, "coords", coords);
+
+        for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
+            if (entry.getKey().endsWith(".name")) { //waypoint definition
+                String baseKey = entry.getKey().substring(0, entry.getKey().length() - 5);
+                String name = getString(json, baseKey + ".name", UUID.randomUUID().toString());
+                int x = getInt(json, baseKey + ".x", 0);
+                int y = getInt(json, baseKey + ".y", 0);
+                int z = getInt(json, baseKey + ".z", 0);
+                int dim = getInt(json, baseKey + ".dim", 0);
+                boolean shown = getBoolean(json, baseKey + ".shown", true);
+                String serverIdentifier = getString(json, baseKey + ".server", "localhost");
+                ServerWaypoints serber = identifiersToServerWaypoints.get(serverIdentifier);
+                if (serber == null) {
+                    identifiersToServerWaypoints.put(serverIdentifier, serber = new ServerWaypoints());
+                }
+                DimensionWaypoints dimension = serber.waypoints.get(dim);
+                if (dimension == null) {
+                    serber.waypoints.put(dim, dimension = new DimensionWaypoints());
+                }
+                dimension.waypoints.put(name, new Waypoint(name, x, y, z, shown, dim));
+            }
+        }
+    }
+
+    public String name() {
+        return "waypoints";
     }
 
     public Collection<Waypoint> getWaypoints() {

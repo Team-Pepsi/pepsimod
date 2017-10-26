@@ -13,19 +13,41 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.util.module;
+package net.daporkchop.pepsimod.util.config.impl;
 
-import java.io.Serializable;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import net.daporkchop.pepsimod.util.config.IConfigTranslator;
 
-public class AnnouncerSettings implements Serializable {
-    private static final long serialVersionUID = 1L;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-    public boolean clientSide = false;
-    public boolean join = false;
-    public boolean leave = false;
-    public boolean eat = false;
-    public boolean walk = false;
-    public boolean mine = false;
-    public boolean place = false;
-    public int delay = 5000;
+public class FriendsTranslator implements IConfigTranslator {
+    public static final FriendsTranslator INSTANCE = new FriendsTranslator();
+    public ArrayList<String> friends = new ArrayList<>();
+
+    private FriendsTranslator() {
+
+    }
+
+    public void encode(JsonObject json) {
+        JsonArray array = new JsonArray();
+        for (String s : friends) {
+            array.add(new JsonPrimitive(s));
+        }
+        json.add("friends", array);
+    }
+
+    public void decode(String fieldName, JsonObject json) {
+        JsonArray array = getArray(json, "friends", new JsonArray());
+        for (Iterator<JsonElement> iterator = array.iterator(); iterator.hasNext(); ) {
+            friends.add(iterator.next().getAsString());
+        }
+    }
+
+    public String name() {
+        return "friends";
+    }
 }

@@ -13,30 +13,31 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.module.api;
+package net.daporkchop.pepsimod.util.config.impl;
 
-import java.io.Serializable;
+import com.google.gson.JsonObject;
+import net.daporkchop.pepsimod.util.config.IConfigTranslator;
 
-/**
- * used to save CustomOptions
- * because lambdas cannot be serialized
- */
-public class ModuleOptionSave<T> implements Serializable {
-    final T VALUE;
+public class CrystalAuraTranslator implements IConfigTranslator {
+    public static final CrystalAuraTranslator INSTANCE = new CrystalAuraTranslator();
+    public float speed = 1.0f;
+    public float range = 3.8f;
 
-    public ModuleOptionSave(ModuleOption<T> option) {
-        VALUE = option.getValue();
+    private CrystalAuraTranslator() {
+
     }
 
-    public ModuleOptionSave(T defaultValue) {
-        VALUE = defaultValue;
+    public void encode(JsonObject json) {
+        json.addProperty("speed", speed);
+        json.addProperty("range", range);
     }
 
-    public boolean setValue(T value) {
-        return true;
+    public void decode(String fieldName, JsonObject json) {
+        speed = getFloat(json, "speed", speed);
+        range = getFloat(json, "range", range);
     }
 
-    public T getValue() {
-        return VALUE;
+    public String name() {
+        return "crystalaura";
     }
 }

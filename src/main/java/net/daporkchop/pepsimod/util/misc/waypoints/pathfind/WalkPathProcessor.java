@@ -21,6 +21,7 @@ import net.daporkchop.pepsimod.totally.not.skidded.RotationUtils;
 import net.daporkchop.pepsimod.totally.not.skidded.WBlock;
 import net.daporkchop.pepsimod.totally.not.skidded.WMinecraft;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
+import net.daporkchop.pepsimod.util.config.impl.StepTranslator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLadder;
 import net.minecraft.block.BlockVine;
@@ -78,7 +79,7 @@ public class WalkPathProcessor extends PathProcessor {
             ReflectionStuff.setPressed(mc.gameSettings.keyBindForward, true);
 
             if (index > 0 && path.get(index - 1).jumping || pos.getY() < nextPos.getY()) {
-                if (!(StepMod.INSTANCE.isEnabled && (pepsiMod.miscOptions.step_legit || pepsiMod.miscOptions.step_height == 1))) {
+                if (!(StepMod.INSTANCE.state.enabled && (StepTranslator.INSTANCE.legit || StepTranslator.INSTANCE.height == 1))) {
                     ReflectionStuff.setPressed(mc.gameSettings.keyBindJump, true);
                 }
             }
@@ -98,7 +99,7 @@ public class WalkPathProcessor extends PathProcessor {
                     }
 
                     // jump up
-                    if (!(StepMod.INSTANCE.isEnabled && (pepsiMod.miscOptions.step_legit || pepsiMod.miscOptions.step_height == 1))) {
+                    if (!(StepMod.INSTANCE.state.enabled && (StepTranslator.INSTANCE.legit || StepTranslator.INSTANCE.height == 1))) {
                         ReflectionStuff.setPressed(mc.gameSettings.keyBindJump, true);
                     }
                 }

@@ -66,7 +66,7 @@ public abstract class MixinNetworkManager {
     @Inject(method = "closeChannel", at = @At("HEAD"))
     public void preCloseChannel(ITextComponent message, CallbackInfo callbackInfo) {
         TickRate.reset();
-        if (FreecamMod.INSTANCE.isEnabled) {
+        if (FreecamMod.INSTANCE.state.enabled) {
             ModuleManager.disableModule(FreecamMod.INSTANCE);
         }
     }

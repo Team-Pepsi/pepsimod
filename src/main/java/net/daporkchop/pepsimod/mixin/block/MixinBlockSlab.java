@@ -36,7 +36,7 @@ public abstract class MixinBlockSlab extends Block {
 
     @Inject(method = "isFullCube", at = @At("HEAD"), cancellable = true)
     public void preIsFullCube(IBlockState state, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (FreecamMod.INSTANCE.isEnabled) {
+        if (FreecamMod.INSTANCE.state.enabled) {
             callbackInfoReturnable.setReturnValue(false);
             return;
         }

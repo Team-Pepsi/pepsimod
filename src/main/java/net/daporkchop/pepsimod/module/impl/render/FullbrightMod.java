@@ -35,7 +35,7 @@ public class FullbrightMod extends Module {
 
     @Override
     public void tick() {
-        if (this.isEnabled || XrayMod.INSTANCE.isEnabled) {
+        if (this.state.enabled || XrayMod.INSTANCE.state.enabled) {
             if (mc.gameSettings.gammaSetting < 16f) {
                 mc.gameSettings.gammaSetting += 0.5f;
             }

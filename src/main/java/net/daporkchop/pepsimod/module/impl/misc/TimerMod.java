@@ -22,6 +22,7 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
+import net.daporkchop.pepsimod.util.config.impl.TimerTranslator;
 
 public class TimerMod extends Module {
     public static TimerMod INSTANCE;
@@ -64,11 +65,11 @@ public class TimerMod extends Module {
                                 clientMessage("Multiplier cannot be negative or 0!");
                                 return false;
                             }
-                            pepsiMod.miscOptions.timer_multiplier = value;
+                            TimerTranslator.INSTANCE.multiplier = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.miscOptions.timer_multiplier;
+                            return TimerTranslator.INSTANCE.multiplier;
                         }, "Multiplier", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.0f, 1.0f, 0.01f)),
                 new ModuleOption<>(false, "tps_sync", OptionCompletions.BOOLEAN,
                         (value) -> {
@@ -92,11 +93,11 @@ public class TimerMod extends Module {
     }
 
     public float getMultiplier() {
-        if (this.isEnabled) {
+        if (this.state.enabled) {
             if (tps_sync) {
-                return TickRate.TPS / 20 * pepsiMod.miscOptions.timer_multiplier;
+                return TickRate.TPS / 20 * TimerTranslator.INSTANCE.multiplier;
             } else {
-                return pepsiMod.miscOptions.timer_multiplier;
+                return TimerTranslator.INSTANCE.multiplier;
             }
         } else {
             return 1.0f;

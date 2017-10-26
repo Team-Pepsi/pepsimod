@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinVisGraph {
     @Inject(method = "setOpaqueCube", at = @At("HEAD"), cancellable = true)
     public void preSetOpaqueCube(BlockPos pos, CallbackInfo callbackInfo) {
-        if (XrayMod.INSTANCE.isEnabled || FreecamMod.INSTANCE.isEnabled) {
+        if (XrayMod.INSTANCE.state.enabled || FreecamMod.INSTANCE.state.enabled) {
             callbackInfo.cancel();
         }
         //vanilla code follows

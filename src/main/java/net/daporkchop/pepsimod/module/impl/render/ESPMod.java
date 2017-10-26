@@ -20,6 +20,7 @@ import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.util.RenderColor;
+import net.daporkchop.pepsimod.util.config.impl.ESPTranslator;
 
 public class ESPMod extends Module {
     public static final RenderColor friendColor = new RenderColor(76, 144, 255, 255);
@@ -57,53 +58,53 @@ public class ESPMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new ModuleOption<>(pepsiMod.espSettings.monsters, "monsters", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(ESPTranslator.INSTANCE.monsters, "monsters", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.espSettings.monsters = value;
+                            ESPTranslator.INSTANCE.monsters = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.espSettings.monsters;
+                            return ESPTranslator.INSTANCE.monsters;
                         }, "Monsters"),
-                new ModuleOption<>(pepsiMod.espSettings.animals, "animals", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(ESPTranslator.INSTANCE.animals, "animals", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.espSettings.animals = value;
+                            ESPTranslator.INSTANCE.animals = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.espSettings.animals;
+                            return ESPTranslator.INSTANCE.animals;
                         }, "Animals"),
-                new ModuleOption<>(pepsiMod.espSettings.players, "players", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(ESPTranslator.INSTANCE.players, "players", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.espSettings.players = value;
+                            ESPTranslator.INSTANCE.players = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.espSettings.players;
+                            return ESPTranslator.INSTANCE.players;
                         }, "Players"),
-                new ModuleOption<>(pepsiMod.espSettings.golems, "golems", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(ESPTranslator.INSTANCE.golems, "golems", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.espSettings.golems = value;
+                            ESPTranslator.INSTANCE.golems = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.espSettings.golems;
+                            return ESPTranslator.INSTANCE.golems;
                         }, "Golems"),
-                new ModuleOption<>(pepsiMod.espSettings.invisible, "invisible", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(ESPTranslator.INSTANCE.invisible, "invisible", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.espSettings.invisible = value;
+                            ESPTranslator.INSTANCE.invisible = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.espSettings.invisible;
+                            return ESPTranslator.INSTANCE.invisible;
                         }, "Invisible"),
-                new ModuleOption<>(pepsiMod.espSettings.friendColors, "friendColors", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(ESPTranslator.INSTANCE.friendColors, "friendColors", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.espSettings.friendColors = value;
+                            ESPTranslator.INSTANCE.friendColors = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.espSettings.friendColors;
+                            return ESPTranslator.INSTANCE.friendColors;
                         }, "FriendColors")
         };
     }

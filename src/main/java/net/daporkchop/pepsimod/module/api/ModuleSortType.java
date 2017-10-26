@@ -15,11 +15,13 @@
 
 package net.daporkchop.pepsimod.module.api;
 
-import java.io.Serializable;
-
-public enum ModuleSortType implements Serializable {
+public enum ModuleSortType {
     ALPHABETICAL,
     SIZE,
     RANDOM,
-    DEFAULT
+    DEFAULT;
+
+    public static ModuleSortType fromOrdinal(int ordinal) {
+        return values()[ordinal];
+    }
 }

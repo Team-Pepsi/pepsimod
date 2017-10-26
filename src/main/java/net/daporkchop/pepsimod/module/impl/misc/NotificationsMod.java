@@ -20,6 +20,7 @@ import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
+import net.daporkchop.pepsimod.util.config.impl.NotificationsTranslator;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketChat;
 import net.minecraft.network.play.server.SPacketSpawnPlayer;
@@ -63,7 +64,7 @@ public class NotificationsMod extends Module {
     @Override
     public void tick() {
         trayIcon.setToolTip("x" + Math.floor(mc.player.posX) + " y" + Math.floor(mc.player.posY) + " z" + Math.floor(mc.player.posZ));
-        if (pepsiMod.notificationsOptions.death && mc.player.getHealth() <= 0) {
+        if (NotificationsTranslator.INSTANCE.death && mc.player.getHealth() <= 0) {
             sendNotification("You died!", TrayIcon.MessageType.WARNING);
         }
     }
@@ -85,37 +86,37 @@ public class NotificationsMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new ModuleOption<>(pepsiMod.notificationsOptions.chat, "chat", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(NotificationsTranslator.INSTANCE.chat, "chat", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.notificationsOptions.chat = value;
+                            NotificationsTranslator.INSTANCE.chat = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.notificationsOptions.chat;
+                            return NotificationsTranslator.INSTANCE.chat;
                         }, "Chat"),
-                new ModuleOption<>(pepsiMod.notificationsOptions.queue, "queue", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(NotificationsTranslator.INSTANCE.queue, "queue", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.notificationsOptions.queue = value;
+                            NotificationsTranslator.INSTANCE.queue = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.notificationsOptions.queue;
+                            return NotificationsTranslator.INSTANCE.queue;
                         }, "Queue"),
-                new ModuleOption<>(pepsiMod.notificationsOptions.death, "death", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(NotificationsTranslator.INSTANCE.death, "death", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.notificationsOptions.death = value;
+                            NotificationsTranslator.INSTANCE.death = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.notificationsOptions.death;
+                            return NotificationsTranslator.INSTANCE.death;
                         }, "Death"),
-                new ModuleOption<>(pepsiMod.notificationsOptions.player, "visual_range", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(NotificationsTranslator.INSTANCE.player, "visual_range", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.notificationsOptions.player = value;
+                            NotificationsTranslator.INSTANCE.player = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.notificationsOptions.player;
+                            return NotificationsTranslator.INSTANCE.player;
                         }, "Visual Range")
         };
     }
@@ -135,16 +136,16 @@ public class NotificationsMod extends Module {
             SPacketChat pck = (SPacketChat) packet;
             if (!pck.isSystem()) {
                 String message = pck.getChatComponent().getUnformattedText().toLowerCase();
-                if (pepsiMod.notificationsOptions.queue && message.startsWith("position in queue")) {
+                if (NotificationsTranslator.INSTANCE.queue && message.startsWith("position in queue")) {
                     inQueue = true;
                 } else if (inQueue && message.startsWith("connecting to")) {
                     sendNotification("Finished going through the queue!", TrayIcon.MessageType.INFO);
                     inQueue = false;
-                } else if (pepsiMod.notificationsOptions.chat && message.contains(mc.getSession().getUsername().toLowerCase())) {
+                } else if (NotificationsTranslator.INSTANCE.chat && message.contains(mc.getSession().getUsername().toLowerCase())) {
                     sendNotification("Your name was mentioned in chat!", TrayIcon.MessageType.INFO);
                 }
             }
-        } else if (pepsiMod.notificationsOptions.player && packet instanceof SPacketSpawnPlayer) {
+        } else if (NotificationsTranslator.INSTANCE.player && packet instanceof SPacketSpawnPlayer) {
             sendNotification(mc.getConnection().getPlayerInfo(((SPacketSpawnPlayer) packet).getUniqueId()).getGameProfile().getName() + " entered visual range!", TrayIcon.MessageType.INFO);
         }
     }

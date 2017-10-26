@@ -94,7 +94,7 @@ public class Button extends EntryImplBase {
     }
 
     public int getColor() {
-        return ColorUtils.getColorForGuiEntry(ColorUtils.TYPE_BUTTON, isMouseHovered(), module.isEnabled);
+        return ColorUtils.getColorForGuiEntry(ColorUtils.TYPE_BUTTON, isMouseHovered(), module.state.enabled);
     }
 
     public boolean shouldRender() {

@@ -22,6 +22,7 @@ import net.daporkchop.pepsimod.module.api.TimeModule;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 import net.daporkchop.pepsimod.totally.not.skidded.BlockUtils;
+import net.daporkchop.pepsimod.util.config.impl.BedBomberTranslator;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.inventory.ClickType;
@@ -60,8 +61,8 @@ public class BedBomberMod extends TimeModule {
     public void tick() {
         updateMS();
 
-        if (hasTimePassedM(pepsiMod.miscOptions.bedbomber_delay) && (mc.player.dimension == -1 || mc.player.dimension == 1)) {
-            Iterable<BlockPos> validBlocks = BlockUtils.getValidBlocksByDistance(pepsiMod.miscOptions.bedbomber_range, false, validator);
+        if (hasTimePassedM(BedBomberTranslator.INSTANCE.delay) && (mc.player.dimension == -1 || mc.player.dimension == 1)) {
+            Iterable<BlockPos> validBlocks = BlockUtils.getValidBlocksByDistance(BedBomberTranslator.INSTANCE.range, false, validator);
 
             for (BlockPos pos : validBlocks) {
                 if (BlockUtils.rightClickBlockLegit(pos)) {
@@ -72,7 +73,7 @@ public class BedBomberMod extends TimeModule {
 
         replaceBed(-1);
 
-        if (shouldRestock && pepsiMod.miscOptions.bedbomber_resupply && itemMoveTick == 3) {
+        if (shouldRestock && BedBomberTranslator.INSTANCE.resupply && itemMoveTick == 3) {
             if (itemTimer > 0) {
                 itemTimer--;
                 return;
@@ -104,29 +105,29 @@ public class BedBomberMod extends TimeModule {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new ModuleOption<>(pepsiMod.miscOptions.bedbomber_range, "range", OptionCompletions.FLOAT,
+                new ModuleOption<>(BedBomberTranslator.INSTANCE.range, "range", OptionCompletions.FLOAT,
                         (value) -> {
-                            pepsiMod.miscOptions.bedbomber_range = Math.max(value, 0);
+                            BedBomberTranslator.INSTANCE.range = Math.max(value, 0);
                             return true;
                         },
                         () -> {
-                            return pepsiMod.miscOptions.bedbomber_range;
+                            return BedBomberTranslator.INSTANCE.range;
                         }, "Range", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.0f, 10.0f, 0.5f)),
-                new ModuleOption<>(pepsiMod.miscOptions.bedbomber_delay, "delay", OptionCompletions.FLOAT,
+                new ModuleOption<>(BedBomberTranslator.INSTANCE.delay, "delay", OptionCompletions.FLOAT,
                         (value) -> {
-                            pepsiMod.miscOptions.bedbomber_delay = Math.max(value, 0);
+                            BedBomberTranslator.INSTANCE.delay = Math.max(value, 0);
                             return true;
                         },
                         () -> {
-                            return pepsiMod.miscOptions.bedbomber_delay;
+                            return BedBomberTranslator.INSTANCE.delay;
                         }, "Delay", new ExtensionSlider(ExtensionType.VALUE_INT, 0, 5000, 50)),
-                new ModuleOption<>(pepsiMod.miscOptions.bedbomber_resupply, "resupply", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(BedBomberTranslator.INSTANCE.resupply, "resupply", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.miscOptions.bedbomber_resupply = value;
+                            BedBomberTranslator.INSTANCE.resupply = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.miscOptions.bedbomber_resupply;
+                            return BedBomberTranslator.INSTANCE.resupply;
                         }, "Resupply")
         };
     }
@@ -161,7 +162,7 @@ public class BedBomberMod extends TimeModule {
     }
 
     public void onPlaceBed() {
-        if (isEnabled && pepsiMod.miscOptions.bedbomber_resupply) {
+        if (state.enabled && BedBomberTranslator.INSTANCE.resupply) {
             shouldRestock = true;
             itemTimer = 3;
         }

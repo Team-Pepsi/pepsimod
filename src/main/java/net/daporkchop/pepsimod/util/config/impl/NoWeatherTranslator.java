@@ -13,40 +13,34 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.util.module;
+package net.daporkchop.pepsimod.util.config.impl;
 
-import org.lwjgl.opengl.GL11;
+import com.google.gson.JsonObject;
+import net.daporkchop.pepsimod.util.config.IConfigTranslator;
 
-import java.io.Serializable;
+public class NoWeatherTranslator implements IConfigTranslator {
+    public static final NoWeatherTranslator INSTANCE = new NoWeatherTranslator();
+    public boolean disableRain = false;
+    public boolean changeTime = false;
+    public long time = 0;
 
-public class HUDSettings implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private NoWeatherTranslator() {
 
-    public boolean drawLogo = true;  //
-    public boolean arrayList = true; //
-    public boolean TPS = false;      //
-    public boolean coords = false;//
-    public boolean netherCoords = false;//
-    public boolean arrayListTop = true;//
-    public boolean serverBrand = false;
-    public boolean rainbow = true;//
-    public int r = 0;//
-    public int g = 0;//
-    public int b = 0;//
-    public boolean direction = true;//
-    public boolean armor = false;
-    public boolean effects = false;//
-    public boolean fps = true;//
-    public boolean ping = true;//
-
-    public void bindColor() {
-        byte r = (byte) Math.floorDiv(this.r, 2);
-        byte g = (byte) Math.floorDiv(this.g, 2);
-        byte b = (byte) Math.floorDiv(this.b, 2);
-        GL11.glColor3b(r, g, b);
     }
 
-    public int getColor()   {
-        return (255 & 255) << 24 | (r & 255) << 16 | (g & 255) << 8 | (b & 255) << 0;
+    public void encode(JsonObject json) {
+        json.addProperty("disableRain", disableRain);
+        json.addProperty("changeTime", changeTime);
+        json.addProperty("time", time);
+    }
+
+    public void decode(String fieldName, JsonObject json) {
+        disableRain = getBoolean(json, "disableRain", disableRain);
+        changeTime = getBoolean(json, "changeTime", changeTime);
+        time = getLong(json, "time", time);
+    }
+
+    public String name() {
+        return "noWeather";
     }
 }

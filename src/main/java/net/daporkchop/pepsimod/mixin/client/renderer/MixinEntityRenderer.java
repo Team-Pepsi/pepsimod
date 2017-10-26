@@ -18,6 +18,7 @@ package net.daporkchop.pepsimod.mixin.client.renderer;
 import net.daporkchop.pepsimod.module.impl.misc.WaypointsMod;
 import net.daporkchop.pepsimod.module.impl.render.*;
 import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.config.impl.WaypointsTranslator;
 import net.daporkchop.pepsimod.util.misc.IWurstRenderListener;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -43,8 +44,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import static net.daporkchop.pepsimod.util.misc.Default.pepsiMod;
 
 @Mixin(EntityRenderer.class)
 public abstract class MixinEntityRenderer {
@@ -79,7 +78,7 @@ public abstract class MixinEntityRenderer {
 
     @Inject(method = "drawNameplate", at = @At("HEAD"), cancellable = true)
     private static void preDrawNameplate(FontRenderer fontRendererIn, String str, float x, float y, float z, int verticalShift, float viewerYaw, float viewerPitch, boolean isThirdPersonFrontal, boolean isSneaking, CallbackInfo callbackInfo) {
-        if (NameTagsMod.INSTANCE.isEnabled) {
+        if (NameTagsMod.INSTANCE.state.enabled) {
             PepsiUtils.drawNameplateNoScale(fontRendererIn, str, x, y, z, verticalShift, viewerYaw, viewerPitch, isThirdPersonFrontal, isSneaking);
             callbackInfo.cancel();
         }
@@ -332,7 +331,7 @@ public abstract class MixinEntityRenderer {
 
         float f1 = this.mc.player.prevTimeInPortal + (this.mc.player.timeInPortal - this.mc.player.prevTimeInPortal) * partialTicks;
 
-        if (f1 > 0.0F && !AntiBlindMod.INSTANCE.isEnabled) { //code xd
+        if (f1 > 0.0F && !AntiBlindMod.INSTANCE.state.enabled) { //code xd
             int i = 20;
 
             if (this.mc.player.isPotionActive(MobEffects.NAUSEA)) {
@@ -380,7 +379,7 @@ public abstract class MixinEntityRenderer {
 
     @Inject(method = "hurtCameraEffect", at = @At("HEAD"), cancellable = true)
     public void preHurtCameraEffect(float partialTicks, CallbackInfo callbackInfo) {
-        if (NoHurtCamMod.INSTANCE.isEnabled) {
+        if (NoHurtCamMod.INSTANCE.state.enabled) {
             callbackInfo.cancel();
         }
     }
@@ -397,7 +396,7 @@ public abstract class MixinEntityRenderer {
 
     @Redirect(method = "setupFog", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;setFogDensity(F)V"))
     public void changeFog(float density) {
-        if (NoOverlayMod.INSTANCE.isEnabled) {
+        if (NoOverlayMod.INSTANCE.state.enabled) {
             GlStateManager.setFogDensity(0.01f);
         } else {
             GlStateManager.setFogDensity(density);
@@ -406,24 +405,24 @@ public abstract class MixinEntityRenderer {
 
     @Inject(method = "renderWorldPass", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/EntityRenderer;renderHand:Z", shift = At.Shift.BEFORE))
     public void renderLines(int pass, float partialTicks, long finishTimeNano, CallbackInfo ci) {
-        if (TracersMod.INSTANCE.isEnabled) {
+        if (TracersMod.INSTANCE.state.enabled) {
             TracersMod.INSTANCE.drawLines(partialTicks);
         }
-        if (pepsiMod.miscOptions.waypoints_tracers && WaypointsMod.INSTANCE.isEnabled) {
+        if (WaypointsTranslator.INSTANCE.tracers && WaypointsMod.INSTANCE.state.enabled) {
             WaypointsMod.INSTANCE.drawLines(partialTicks);
         }
     }
 
     @Inject(method = "displayItemActivation", at = @At("HEAD"), cancellable = true)
     public void preDisplayItemActivation(ItemStack stack, CallbackInfo callbackInfo) {
-        if (AntiTotemAnimationMod.INSTANCE.isEnabled) {
+        if (AntiTotemAnimationMod.INSTANCE.state.enabled) {
             callbackInfo.cancel();
         }
     }
 
     @Inject(method = "renderItemActivation", at = @At("HEAD"), cancellable = true)
     public void preRenderItemActivation(int a, int b, float c, CallbackInfo callbackInfo) {
-        if (AntiTotemAnimationMod.INSTANCE.isEnabled) {
+        if (AntiTotemAnimationMod.INSTANCE.state.enabled) {
             callbackInfo.cancel();
         }
     }

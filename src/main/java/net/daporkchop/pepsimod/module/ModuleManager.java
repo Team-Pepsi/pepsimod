@@ -18,6 +18,7 @@ package net.daporkchop.pepsimod.module;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleSortType;
 import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.config.impl.GeneralTranslator;
 import net.minecraft.network.Packet;
 
 import java.util.ArrayList;
@@ -34,8 +35,6 @@ public class ModuleManager {
      */
     public static ArrayList<Module> ENABLED_MODULES = new ArrayList<>();
 
-    public static ModuleSortType sortType = ModuleSortType.SIZE;
-
     /**
      * Adds a module to the registry
      *
@@ -45,7 +44,7 @@ public class ModuleManager {
     public static final Module registerModule(Module toRegister) {
         if (toRegister.shouldRegister()) {
             AVALIBLE_MODULES.add(toRegister);
-            if (toRegister.isEnabled) {
+            if (toRegister.state.enabled) {
                 ENABLED_MODULES.add(toRegister);
             }
         }
@@ -84,7 +83,7 @@ public class ModuleManager {
      * @return the disabled module
      */
     public static final Module disableModule(Module toDisable) {
-        if (toDisable.isEnabled && ENABLED_MODULES.contains(toDisable)) {
+        if (toDisable.state.enabled && ENABLED_MODULES.contains(toDisable)) {
             if (AVALIBLE_MODULES.contains(toDisable)) {
                 ENABLED_MODULES.remove(toDisable);
                 toDisable.setEnabled(false);
@@ -102,7 +101,7 @@ public class ModuleManager {
      * @return the toggled module
      */
     public static final Module toggleModule(Module toToggle) {
-        if (toToggle.isEnabled) {
+        if (toToggle.state.enabled) {
             disableModule(toToggle);
         } else {
             enableModule(toToggle);
@@ -127,7 +126,7 @@ public class ModuleManager {
     }
 
     public static final void sortModules(ModuleSortType type) {
-        sortType = type;
+        GeneralTranslator.INSTANCE.sortType = type;
         switch (type) {
             case ALPHABETICAL:
                 ArrayList<Module> tempArrayList = (ArrayList<Module>) ENABLED_MODULES.clone();

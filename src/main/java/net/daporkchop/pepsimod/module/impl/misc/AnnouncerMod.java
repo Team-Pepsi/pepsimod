@@ -22,6 +22,7 @@ import net.daporkchop.pepsimod.module.api.TimeModule;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.config.impl.AnnouncerTranslator;
 import net.daporkchop.pepsimod.util.misc.announcer.MessagePrefixes;
 import net.daporkchop.pepsimod.util.misc.announcer.QueuedTask;
 import net.daporkchop.pepsimod.util.misc.announcer.TaskType;
@@ -61,7 +62,7 @@ public class AnnouncerMod extends TimeModule {
     public void tick() {
         if (mc.world != null && mc.world.isRemote) {
             updateMS();
-            if (hasTimePassedM(pepsiMod.announcerSettings.delay)) {
+            if (hasTimePassedM(AnnouncerTranslator.INSTANCE.delay)) {
                 updateLastMS();
                 MAINLOOP:
                 while (toSend.size() > 0) {
@@ -69,7 +70,7 @@ public class AnnouncerMod extends TimeModule {
                     if (task != null) {
                         String msg = task.getMessage();
                         if (msg != null) {
-                            if (pepsiMod.announcerSettings.clientSide) {
+                            if (AnnouncerTranslator.INSTANCE.clientSide) {
                                 mc.player.sendMessage(new TextComponentString(PepsiUtils.COLOR_ESCAPE + "a" + msg));
                             } else {
                                 mc.player.sendChatMessage(msg);
@@ -82,7 +83,7 @@ public class AnnouncerMod extends TimeModule {
                 }
             }
 
-            if (pepsiMod.announcerSettings.walk) {
+            if (AnnouncerTranslator.INSTANCE.walk) {
                 Iterator<QueuedTask> iterator = toSend.iterator();
                 boolean hasMoveValue = false;
                 while (iterator.hasNext()) {
@@ -107,69 +108,69 @@ public class AnnouncerMod extends TimeModule {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new ModuleOption<>(pepsiMod.announcerSettings.clientSide, "client", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(AnnouncerTranslator.INSTANCE.clientSide, "client", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.announcerSettings.clientSide = value;
+                            AnnouncerTranslator.INSTANCE.clientSide = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.announcerSettings.clientSide;
+                            return AnnouncerTranslator.INSTANCE.clientSide;
                         }, "Client Sided"),
-                new ModuleOption<>(pepsiMod.announcerSettings.join, "join", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(AnnouncerTranslator.INSTANCE.join, "join", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.announcerSettings.join = value;
+                            AnnouncerTranslator.INSTANCE.join = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.announcerSettings.join;
+                            return AnnouncerTranslator.INSTANCE.join;
                         }, "Join"),
-                new ModuleOption<>(pepsiMod.announcerSettings.leave, "leave", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(AnnouncerTranslator.INSTANCE.leave, "leave", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.announcerSettings.leave = value;
+                            AnnouncerTranslator.INSTANCE.leave = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.announcerSettings.leave;
+                            return AnnouncerTranslator.INSTANCE.leave;
                         }, "Leave"),
-                new ModuleOption<>(pepsiMod.announcerSettings.eat, "eat", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(AnnouncerTranslator.INSTANCE.eat, "eat", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.announcerSettings.eat = value;
+                            AnnouncerTranslator.INSTANCE.eat = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.announcerSettings.eat;
+                            return AnnouncerTranslator.INSTANCE.eat;
                         }, "Food"),
-                new ModuleOption<>(pepsiMod.announcerSettings.walk, "walk", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(AnnouncerTranslator.INSTANCE.walk, "walk", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.announcerSettings.walk = value;
+                            AnnouncerTranslator.INSTANCE.walk = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.announcerSettings.walk;
+                            return AnnouncerTranslator.INSTANCE.walk;
                         }, "Walk"),
-                new ModuleOption<>(pepsiMod.announcerSettings.mine, "mine", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(AnnouncerTranslator.INSTANCE.mine, "mine", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.announcerSettings.mine = value;
+                            AnnouncerTranslator.INSTANCE.mine = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.announcerSettings.mine;
+                            return AnnouncerTranslator.INSTANCE.mine;
                         }, "Mined"),
-                new ModuleOption<>(pepsiMod.announcerSettings.place, "place", OptionCompletions.BOOLEAN,
+                new ModuleOption<>(AnnouncerTranslator.INSTANCE.place, "place", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            pepsiMod.announcerSettings.place = value;
+                            AnnouncerTranslator.INSTANCE.place = value;
                             return true;
                         },
                         () -> {
-                            return pepsiMod.announcerSettings.place;
+                            return AnnouncerTranslator.INSTANCE.place;
                         }, "Place"),
-                new ModuleOption<>(pepsiMod.announcerSettings.delay, "delay", OptionCompletions.INTEGER,
+                new ModuleOption<>(AnnouncerTranslator.INSTANCE.delay, "delay", OptionCompletions.INTEGER,
                         (value) -> {
-                            pepsiMod.announcerSettings.delay = Math.max(value, 0);
+                            AnnouncerTranslator.INSTANCE.delay = Math.max(value, 0);
                             return true;
                         },
                         () -> {
-                            return pepsiMod.announcerSettings.delay;
+                            return AnnouncerTranslator.INSTANCE.delay;
                         }, "Delay", new ExtensionSlider(ExtensionType.VALUE_INT, 0, 10000, 500))
         };
     }
@@ -179,7 +180,7 @@ public class AnnouncerMod extends TimeModule {
     }
 
     public void onBreakBlock(IBlockState state) {
-        if (isEnabled && pepsiMod.announcerSettings.mine) {
+        if (this.state.enabled && AnnouncerTranslator.INSTANCE.mine) {
             Iterator<QueuedTask> iterator = toSend.iterator();
             while (iterator.hasNext()) {
                 QueuedTask task = iterator.next();
@@ -197,7 +198,7 @@ public class AnnouncerMod extends TimeModule {
     }
 
     public void onPlaceBlock(Block block) {
-        if (isEnabled && pepsiMod.announcerSettings.place) {
+        if (this.state.enabled && AnnouncerTranslator.INSTANCE.place) {
             Iterator<QueuedTask> iterator = toSend.iterator();
             while (iterator.hasNext()) {
                 QueuedTask task = iterator.next();
@@ -215,13 +216,13 @@ public class AnnouncerMod extends TimeModule {
     }
 
     public void onPlayerJoin(String name) {
-        if (isEnabled && pepsiMod.announcerSettings.join) {
+        if (this.state.enabled && AnnouncerTranslator.INSTANCE.join) {
             QueuedTask task = new TaskBasic(TaskType.JOIN, MessagePrefixes.getMessage(TaskType.JOIN, name));
             if (hasTimePassedM(2000))   {
                 updateLastMS();
                 String msg = task.getMessage();
                 if (msg != null) {
-                    if (pepsiMod.announcerSettings.clientSide) {
+                    if (AnnouncerTranslator.INSTANCE.clientSide) {
                         mc.player.sendMessage(new TextComponentString(PepsiUtils.COLOR_ESCAPE + "a" + msg));
                     } else {
                         mc.player.sendChatMessage(msg);
@@ -233,13 +234,13 @@ public class AnnouncerMod extends TimeModule {
     }
 
     public void onPlayerLeave(String name) {
-        if (isEnabled && pepsiMod.announcerSettings.leave) {
+        if (this.state.enabled && AnnouncerTranslator.INSTANCE.leave) {
             QueuedTask task = new TaskBasic(TaskType.LEAVE, MessagePrefixes.getMessage(TaskType.LEAVE, name));
             if (hasTimePassedM(2000))   {
                 updateLastMS();
                 String msg = task.getMessage();
                 if (msg != null) {
-                    if (pepsiMod.announcerSettings.clientSide) {
+                    if (AnnouncerTranslator.INSTANCE.clientSide) {
                         mc.player.sendMessage(new TextComponentString(PepsiUtils.COLOR_ESCAPE + "a" + msg));
                     } else {
                         mc.player.sendChatMessage(msg);

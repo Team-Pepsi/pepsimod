@@ -22,6 +22,7 @@ import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
+import net.daporkchop.pepsimod.util.config.impl.SpeedmineTranslator;
 
 public class SpeedmineMod extends Module {
     public static SpeedmineMod INSTANCE;
@@ -43,8 +44,8 @@ public class SpeedmineMod extends Module {
     @Override
     public void tick() {
         if (mc.world != null) {
-            if (ReflectionStuff.getCurBlockDamageMP() < pepsiMod.miscOptions.speedmine_speed) {
-                ReflectionStuff.setCurBlockDamageMP(pepsiMod.miscOptions.speedmine_speed);
+            if (ReflectionStuff.getCurBlockDamageMP() < SpeedmineTranslator.INSTANCE.speed) {
+                ReflectionStuff.setCurBlockDamageMP(SpeedmineTranslator.INSTANCE.speed);
             }
             if (ReflectionStuff.getBlockHitDelay() > 1) {
                 ReflectionStuff.setBlockHitDelay(1);
@@ -60,13 +61,13 @@ public class SpeedmineMod extends Module {
     @Override
     public ModuleOption[] getDefaultOptions() {
         return new ModuleOption[]{
-                new ModuleOption<>(pepsiMod.miscOptions.speedmine_speed, "speed", OptionCompletions.FLOAT,
+                new ModuleOption<>(SpeedmineTranslator.INSTANCE.speed, "speed", OptionCompletions.FLOAT,
                         (value) -> {
-                            pepsiMod.miscOptions.speedmine_speed = Math.max(0, value);
+                            SpeedmineTranslator.INSTANCE.speed = Math.max(0, value);
                             return true;
                         },
                         () -> {
-                            return pepsiMod.miscOptions.speedmine_speed;
+                            return SpeedmineTranslator.INSTANCE.speed;
                         }, "Speed", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.1f, 1f, 0.1f))
         };
     }

@@ -38,7 +38,7 @@ public abstract class MixinEntityPig extends EntityAnimal {
             return false;
         } else {
             EntityPlayer entityplayer = (EntityPlayer) entity;
-            return EntitySpeedMod.INSTANCE.isEnabled || entityplayer.getHeldItemMainhand().getItem() == Items.CARROT_ON_A_STICK || entityplayer.getHeldItemOffhand().getItem() == Items.CARROT_ON_A_STICK;
+            return EntitySpeedMod.INSTANCE.state.enabled || entityplayer.getHeldItemMainhand().getItem() == Items.CARROT_ON_A_STICK || entityplayer.getHeldItemOffhand().getItem() == Items.CARROT_ON_A_STICK;
         }
     }
 }
