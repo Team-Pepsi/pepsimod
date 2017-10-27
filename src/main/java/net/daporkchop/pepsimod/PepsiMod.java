@@ -218,29 +218,41 @@ public class PepsiMod {
     }
 
     public void loadConfig() {
-        String json = null; //TODO
-        if (json == null) {
+        String launcherJson = null;
+        try {
+            Class<?> clazz = Class.forName("team.pepsi.pepsimod.launcher.util.PepsimodSent");
+            launcherJson = (String) clazz.getField("config").get(clazz.getField("INSTANCE").get(null));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (launcherJson == null) {
             File file = new File(getWorkingFolder().getPath() + File.separatorChar + "pepsimodConf.json");
             try {
                 if (!file.exists()) {
                     file.createNewFile();
                 }
-                json = "{}";
+                launcherJson = "{}";
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        Config.loadConfig(json);
+        Config.loadConfig(launcherJson);
     }
 
     public void saveConfig() {
-        //xd_finish_this; //TODO
+        String config = Config.saveConfig();
+        try {
+            Class.forName("team.pepsi.pepsimod.launcher.PepsiModServerManager").getDeclaredMethod("setConfig").invoke(null, config);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         try {
             File file = new File(getWorkingFolder().getPath() + File.separatorChar + "pepsimodConf.json");
-            if (!file.exists()) {
-                file.createNewFile();
+            if (file.exists()) {
+                file.delete();
             }
-            IOUtils.write(Config.saveConfig().getBytes(), new FileOutputStream(file));
+            file.createNewFile();
+            IOUtils.write(config.getBytes(), new FileOutputStream(file));
         } catch (IOException e) {
             e.printStackTrace();
         }
