@@ -50,8 +50,6 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
     private String splashText;
     private Texture TITLE;
 
-    public final ResourceLocation PEPSIMOD_LOGO = ImageUtils.imgs.get(1);
-
     @Inject(method = "initGui", at = @At("RETURN"))
     public void addPepsiIconAndChangeSplash(CallbackInfo ci) {
         pepsiMod.isInitialized = true;
@@ -71,17 +69,15 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
     public void removeMenuLogoInit(TextureManager textureManager, ResourceLocation resource) {
         int titleX = width / 2 - 150, titleY = 20;
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        //TITLE.render(titleX, titleY + 10, 300, 100);
-        mc.getTextureManager().bindTexture(PEPSIMOD_LOGO);
-        drawModalRectWithCustomSizedTexture(titleX, titleY, 0f, 0f, 300, 100, 600f, 200f);
+        TITLE.render(titleX, titleY + 10, 300, 100);
     }
 
     @Redirect(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiMainMenu;drawTexturedModalRect(IIIIII)V"))
     public void removeMenuLogoRendering(GuiMainMenu guiMainMenu, int x, int y, int textureX, int textureY, int width, int height) {
     }
 
-    @Redirect(method = "drawScreen", at = @At(value = "INVOKE", target = "drawModalRectWithCustomSizedTexture(IIFFIIFF)V"))
-    public void removeSubLogoRendering(GuiMainMenu guiMainMenu, int x, int y, float a, float b, int c, int d, float e, float f) {
+    @Redirect(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;drawModalRectWithCustomSizedTexture(IIFFIIFF)V"))
+    public void removeSubLogoRendering(int x, int y, float a, float b, int c, int d, float e, float f) {
     }
 
     @Redirect(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiMainMenu;drawString(Lnet/minecraft/client/gui/FontRenderer;Ljava/lang/String;III)V"))
