@@ -44,7 +44,7 @@ public class GeneralTranslator implements IConfigTranslator {
 
     public void decode(String fieldName, JsonObject json) {
         for (Module module : ModuleManager.AVALIBLE_MODULES) {
-            states.put(module.name, ModuleState.fromString(json.get("module.enabled." + module.name).getAsString()));
+            states.put(module.nameFull, ModuleState.fromString(json.get("module.enabled." + module.nameFull).getAsString()));
         }
         autoReconnect = getBoolean(json, "autoReconnect", autoReconnect);
         sortType = ModuleSortType.fromOrdinal(getInt(json, "sortType", sortType.ordinal()));
