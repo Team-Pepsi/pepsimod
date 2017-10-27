@@ -242,7 +242,7 @@ public class PepsiMod {
     public void saveConfig() {
         String config = Config.saveConfig();
         try {
-            Class.forName("team.pepsi.pepsimod.launcher.PepsiModServerManager").getDeclaredMethod("setConfig").invoke(null, config);
+            Class.forName("team.pepsi.pepsimod.launcher.PepsiModServerManager").getDeclaredMethod("setConfig", String.class).invoke(null, config);
         } catch (Exception e) {
             e.printStackTrace();
         }
