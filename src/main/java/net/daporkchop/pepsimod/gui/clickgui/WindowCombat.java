@@ -21,7 +21,6 @@ import net.daporkchop.pepsimod.module.ModuleCategory;
 public class WindowCombat extends Window {
 
     public WindowCombat() {
-        super(104, 2, "Combat");
-        this.init(ModuleCategory.COMBAT);
+        super(104, 2, "Combat", ModuleCategory.COMBAT);
     }
 }

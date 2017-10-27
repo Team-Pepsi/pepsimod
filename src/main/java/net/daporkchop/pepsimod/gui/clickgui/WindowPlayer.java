@@ -21,7 +21,6 @@ import net.daporkchop.pepsimod.module.ModuleCategory;
 public class WindowPlayer extends Window {
 
     public WindowPlayer() {
-        super(410, 2, "Player");
-        this.init(ModuleCategory.PLAYER);
+        super(410, 2, "Player", ModuleCategory.PLAYER);
     }
 }

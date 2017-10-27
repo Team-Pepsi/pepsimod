@@ -21,7 +21,6 @@ import net.daporkchop.pepsimod.module.ModuleCategory;
 public class WindowRender extends Window {
 
     public WindowRender()   {
-        super(2, 2, "Render");
-        this.init(ModuleCategory.RENDER);
+        super(2, 2, "Render", ModuleCategory.RENDER);
     }
 }

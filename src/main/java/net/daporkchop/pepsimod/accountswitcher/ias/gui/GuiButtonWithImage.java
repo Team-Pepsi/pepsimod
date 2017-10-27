@@ -15,6 +15,7 @@
 
 package net.daporkchop.pepsimod.accountswitcher.ias.gui;
 
+import net.daporkchop.pepsimod.util.ImageUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -28,7 +29,7 @@ import net.minecraft.util.ResourceLocation;
  */
 public class GuiButtonWithImage extends GuiButton {
 
-    private static final ResourceLocation customButtonTextures = new ResourceLocation("accswitcher:textures/gui/custombutton.png");
+    private static final ResourceLocation customButtonTextures = ImageUtils.imgs.get(5);
 
     public GuiButtonWithImage(int buttonId, int x, int y, int widthIn,
                               int heightIn, String buttonText) {

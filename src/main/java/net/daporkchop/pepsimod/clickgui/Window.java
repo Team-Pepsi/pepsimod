@@ -45,10 +45,12 @@ public class Window extends EntryImplBase {
     private int renderYButton = 0;
     private boolean isDragging = false;
     private int dragX = 0, dragY = 0;
+    public ModuleCategory category;
 
-    public Window(int x, int y, String name) {
+    public Window(int x, int y, String name, ModuleCategory category) {
         super(x, y, 100, 12);
         text = name;
+        this.category = category;
     }
 
     public void processMouseClick(int mouseX, int mouseY, int button) {
@@ -222,7 +224,7 @@ public class Window extends EntryImplBase {
         }
     }
 
-    protected void init(ModuleCategory category) {
+    public void init(ModuleCategory category) {
         for (Module module : ModuleManager.AVALIBLE_MODULES) {
             if (module.getCategory() != category) {
                 continue;

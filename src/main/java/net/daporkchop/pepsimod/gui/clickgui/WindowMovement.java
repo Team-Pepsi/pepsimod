@@ -21,7 +21,6 @@ import net.daporkchop.pepsimod.module.ModuleCategory;
 public class WindowMovement extends Window {
 
     public WindowMovement() {
-        super(308, 2, "Movement");
-        this.init(ModuleCategory.MOVEMENT);
+        super(308, 2, "Movement", ModuleCategory.MOVEMENT);
     }
 }

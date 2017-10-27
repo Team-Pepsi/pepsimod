@@ -35,6 +35,12 @@ public class ClickGUI extends GuiScreen {
         this.windows = windows;
     }
 
+    public void initWindows() {
+        for (Window window : windows) {
+            window.init(window.category);
+        }
+    }
+
     protected void keyTyped(char eventChar, int eventKey) {
         if (eventKey == 1 || eventKey == ClickGuiMod.INSTANCE.keybind.getKeyCode()) {
             ModuleManager.disableModule(ClickGuiMod.INSTANCE);

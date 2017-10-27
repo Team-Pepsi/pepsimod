@@ -179,9 +179,6 @@ public class PepsiMod {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         new ClickGUI();
-        loadConfig();
-        registerModules(event);
-
         ClickGUI.INSTANCE.setWindows(
                 new WindowRender(),
                 new WindowCombat(),
@@ -190,6 +187,10 @@ public class PepsiMod {
                 new WindowPlayer()
         );
 
+        loadConfig();
+        registerModules(event);
+
+        ClickGUI.INSTANCE.initWindows();
         HUDTranslator.INSTANCE.parseConfigLate();
 
         registerCommands(event);

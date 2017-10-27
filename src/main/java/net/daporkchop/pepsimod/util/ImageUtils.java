@@ -33,7 +33,9 @@ public class ImageUtils {
             "gui/pepsibuttons.png",
             "gui/pepsimod.png",
             "gui/pepsimodBackground.png",
-            "misc/cape.png"
+            "misc/cape.png",
+            "gui/cmmbutton.png",
+            "gui/custombutton.png"
     };
 
     public static void init(HashMap<String, byte[]> images) {

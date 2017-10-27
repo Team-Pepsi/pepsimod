@@ -21,7 +21,6 @@ import net.daporkchop.pepsimod.module.ModuleCategory;
 public class WindowMisc extends Window {
 
     public WindowMisc() {
-        super(206, 2, "Misc");
-        this.init(ModuleCategory.MISC);
+        super(206, 2, "Misc", ModuleCategory.MISC);
     }
 }
