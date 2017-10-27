@@ -118,7 +118,7 @@ public interface IConfigTranslator {
         if (object.has(name)) {
             JsonElement element = object.get(name);
             if (element.isJsonArray()) {
-                return element.getAsJsonPrimitive().getAsJsonArray();
+                return element.getAsJsonArray();
             }
         }
 
