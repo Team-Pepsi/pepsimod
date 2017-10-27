@@ -15,7 +15,6 @@
 
 package net.daporkchop.pepsimod.wdl.mixin.crash;
 
-import net.daporkchop.pepsimod.wdl.WDLHooks;
 import net.minecraft.crash.CrashReport;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,6 +25,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinCrashReport {
     @Inject(method = "populateEnvironment", at = @At("RETURN"))
     public void postPopulateEnvironment(CallbackInfo callbackInfo) {
-        WDLHooks.onCrashReportPopulateEnvironment(CrashReport.class.cast(this));
+        //WDLHooks.onCrashReportPopulateEnvironment(CrashReport.class.cast(this));
     }
 }
