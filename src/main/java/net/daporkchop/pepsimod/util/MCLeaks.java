@@ -82,7 +82,7 @@ public class MCLeaks {
 
             JsonObject json = (new JsonParser()).parse(result).getAsJsonObject();
             if (!json.get("success").getAsBoolean()) {
-                mgr.closeChannel(new TextComponentString("§c§lError validating §9MCLeaks §ckey!"));
+                mgr.closeChannel(new TextComponentString("\u00A7c\u00A7lError validating \u00A79MCLeaks \u00A7ckey!"));
             }
 
             mgr.sendPacket(new CPacketEncryptionResponse(secretkey, publickey, pck.getVerifyToken()), new GenericFutureListener<Future<? super Void>>() {

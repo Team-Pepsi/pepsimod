@@ -57,7 +57,7 @@ public interface IWDLModDescripted extends IWDLMod {
     String getURL();
 
     /**
-     * A detailed description of the extension.  Color codes (§) and
+     * A detailed description of the extension.  Color codes (\u00A7) and
      * <code>\n</code> are allowed.
      *
      * @return A description, or null.

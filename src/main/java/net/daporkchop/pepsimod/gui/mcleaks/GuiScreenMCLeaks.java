@@ -137,7 +137,7 @@ public class GuiScreenMCLeaks extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.buttonList.get(0).enabled = !this.tokenField.getText().isEmpty();
         this.drawDefaultBackground();
-        this.drawCenteredString(this.fontRenderer, "§9§lMCLeaks login", this.width / 2, 17, 16777215);
+        this.drawCenteredString(this.fontRenderer, "\u00A79\u00A7lMCLeaks login", this.width / 2, 17, 16777215);
         this.drawCenteredString(this.fontRenderer, "Username: " + mc.getSession().getUsername(), this.width / 2, 27, 10526880);
         this.drawCenteredString(this.fontRenderer, "UUID: " + mc.getSession().getPlayerID(), this.width / 2, 37, 10526880);
         this.tokenField.drawTextBox();

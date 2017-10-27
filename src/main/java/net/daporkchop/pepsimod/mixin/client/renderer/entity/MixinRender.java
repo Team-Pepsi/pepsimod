@@ -70,13 +70,13 @@ public abstract class MixinRender<T extends Entity> {
                     str += " ";
                     int health = (int) ((EntityLivingBase) entityIn).getHealth();
                     if (health <= 5) {
-                        str += "§4";
+                        str += "\u00A74";
                     } else if (health <= 10) {
-                        str += "§6";
+                        str += "\u00A76";
                     } else if (health <= 15) {
-                        str += "§e";
+                        str += "\u00A7e";
                     } else {
-                        str += "§a";
+                        str += "\u00A7a";
                     }
                     str += health;
                 }

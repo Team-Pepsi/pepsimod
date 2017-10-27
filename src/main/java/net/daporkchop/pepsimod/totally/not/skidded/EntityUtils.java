@@ -155,7 +155,7 @@ public class EntityUtils extends Default {
         // check colors
         boolean hasKnownColor = false;
         for (int i = 0; i < 16; i++)
-            if (name.contains("§" + colors[i])) {
+            if (name.contains("\u00A7" + colors[i])) {
                 hasKnownColor = true;
                 if (teamColors[i]) {
                     return true;
