@@ -22,7 +22,6 @@ import net.daporkchop.pepsimod.module.api.ModuleSortType;
 import net.daporkchop.pepsimod.util.config.IConfigTranslator;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class GeneralTranslator implements IConfigTranslator {
     public static final GeneralTranslator INSTANCE = new GeneralTranslator();
@@ -34,20 +33,28 @@ public class GeneralTranslator implements IConfigTranslator {
 
     }
 
+    public JsonObject json = new JsonObject();
+
     public void encode(JsonObject json) {
-        for (Map.Entry<String, ModuleState> entry : states.entrySet()) {
-            json.addProperty("module.enabled." + entry.getKey(), entry.getValue().toString());
+        for (Module module : ModuleManager.AVALIBLE_MODULES) {
+            json.addProperty("module.enabled." + module.nameFull, module.state.toString());
         }
         json.addProperty("autoReconnect", autoReconnect);
         json.addProperty("sortType", sortType.ordinal());
     }
 
     public void decode(String fieldName, JsonObject json) {
-        for (Module module : ModuleManager.AVALIBLE_MODULES) {
-            states.put(module.nameFull, ModuleState.fromString(json.get("module.enabled." + module.nameFull).getAsString()));
-        }
+        this.json = json;
         autoReconnect = getBoolean(json, "autoReconnect", autoReconnect);
         sortType = ModuleSortType.fromOrdinal(getInt(json, "sortType", sortType.ordinal()));
+    }
+
+    public ModuleState getState(String name, ModuleState fallback) {
+        if (json.has("module.enabled." + name)) {
+            return ModuleState.fromString(json.get("module.enabled." + name).getAsString());
+        }
+
+        return fallback;
     }
 
     public String name() {

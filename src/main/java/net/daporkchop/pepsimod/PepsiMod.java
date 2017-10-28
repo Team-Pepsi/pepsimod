@@ -51,6 +51,7 @@ import org.apache.commons.io.IOUtils;
 import org.lwjgl.input.Keyboard;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -231,8 +232,10 @@ public class PepsiMod {
             try {
                 if (!file.exists()) {
                     file.createNewFile();
+                    launcherJson = "{}";
+                } else {
+                    launcherJson = IOUtils.toString(new FileInputStream(file));
                 }
-                launcherJson = "{}";
             } catch (IOException e) {
                 e.printStackTrace();
             }

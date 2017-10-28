@@ -56,14 +56,9 @@ public abstract class Module extends Command implements ITickListener {
         nameFull = name;
         this.options = getDefaultOptions();
         registerKeybind(name, keybind);
-        state = GeneralTranslator.INSTANCE.states.get(name);
+        state = GeneralTranslator.INSTANCE.getState(name, new GeneralTranslator.ModuleState(def, hide));
         if (state == null) {
             GeneralTranslator.INSTANCE.states.put(name, state = new GeneralTranslator.ModuleState(def, hide));
-        }
-        if (this.state.enabled) {
-            this.onEnable();
-        } else {
-            this.onDisable();
         }
     }
     public static boolean shouldBeEnabled(boolean in, ModuleLaunchState state) {
@@ -83,7 +78,6 @@ public abstract class Module extends Command implements ITickListener {
      */
     public boolean toggle() {
         this.state.enabled = !this.state.enabled;
-        this.getOptionByName("enabled").setValue(this.state.enabled);
         if (this.state.enabled) {
             this.onEnable();
         } else {

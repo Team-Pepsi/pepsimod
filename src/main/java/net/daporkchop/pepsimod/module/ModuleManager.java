@@ -45,7 +45,9 @@ public class ModuleManager {
         if (toRegister.shouldRegister()) {
             AVALIBLE_MODULES.add(toRegister);
             if (toRegister.state.enabled) {
-                ENABLED_MODULES.add(toRegister);
+                enableModule(toRegister);
+            } else {
+                disableModule(toRegister);
             }
         }
         return toRegister;

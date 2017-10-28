@@ -76,7 +76,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
     public void removeMenuLogoRendering(GuiMainMenu guiMainMenu, int x, int y, int textureX, int textureY, int width, int height) {
     }
 
-    @Redirect(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;drawModalRectWithCustomSizedTexture(IIFFIIFF)V"))
+    @Redirect(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiMainMenu;drawModalRectWithCustomSizedTexture(IIFFIIFF)V"))
     public void removeSubLogoRendering(int x, int y, float a, float b, int c, int d, float e, float f) {
     }
 
