@@ -18,19 +18,12 @@ package net.daporkchop.pepsimod.module.impl.movement;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
-import net.daporkchop.pepsimod.module.api.option.ExtensionType;
-import net.daporkchop.pepsimod.util.config.impl.VelocityTranslator;
 
-public class VelocityMod extends Module {
-    public static VelocityMod INSTANCE;
+public class SpeedMod extends Module {
+    public static SpeedMod INSTANCE;
 
-    {
-        INSTANCE = this;
-    }
-
-    public VelocityMod() {
-        super("Velocity");
+    public SpeedMod() {
+        super("Speed");
     }
 
     @Override
@@ -50,39 +43,12 @@ public class VelocityMod extends Module {
 
     @Override
     public void init() {
-
+        INSTANCE = this;
     }
 
     @Override
     public ModuleOption[] getDefaultOptions() {
-        return new ModuleOption[]{
-                new ModuleOption<>(1.0f, "strength", new String[]{"1.0", "0.0"},
-                        (value) -> {
-                            VelocityTranslator.INSTANCE.multiplier = value;
-                            return true;
-                        },
-                        () -> {
-                            return VelocityTranslator.INSTANCE.multiplier;
-                        }, "Strength", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.0f, 1.0f, 0.1f))
-        };
-    }
-
-    @Override
-    public boolean hasModeInName() {
-        return true;
-    }
-
-    @Override
-    public String getModeForName() {
-        return String.valueOf((float) getOptionByName("strength").getValue());
-    }
-
-    public float getVelocity() {
-        if (this.state.enabled) {
-            return VelocityTranslator.INSTANCE.multiplier;
-        } else {
-            return 1.0f;
-        }
+        return new ModuleOption[0];
     }
 
     public ModuleCategory getCategory() {

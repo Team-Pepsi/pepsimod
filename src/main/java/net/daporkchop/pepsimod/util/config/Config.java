@@ -50,6 +50,7 @@ public class Config {
         registerConfigTranslator(TargettingTranslator.INSTANCE);
         registerConfigTranslator(TimerTranslator.INSTANCE);
         registerConfigTranslator(TracersTranslator.INSTANCE);
+        registerConfigTranslator(VelocityTranslator.INSTANCE);
         registerConfigTranslator(WaypointsTranslator.INSTANCE);
         registerConfigTranslator(XrayTranslator.INSTANCE);
     }

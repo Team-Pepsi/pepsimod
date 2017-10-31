@@ -103,8 +103,8 @@ public class RotationUtils extends Default {
 
         float[] rotations = getNeededRotations(vec);
 
-        serverYaw = limitAngleChange(serverYaw, rotations[0], 30);
-        serverPitch = rotations[1];
+        serverYaw = rotations[0];
+        serverPitch = MathHelper.normalizeAngle((int) rotations[1], 360);
 
         return Math.abs(serverYaw - rotations[0]) < 1F;
     }
@@ -113,7 +113,7 @@ public class RotationUtils extends Default {
         float[] rotations = getNeededRotations2(vec);
 
         mc.getConnection().sendPacket(new CPacketPlayer.Rotation(rotations[0],
-                rotations[1], mc.player.onGround));
+                MathHelper.normalizeAngle((int) rotations[1], 360), mc.player.onGround));
     }
 
     public static boolean faceVectorClient(Vec3d vec) {
@@ -122,9 +122,8 @@ public class RotationUtils extends Default {
         float oldYaw = mc.player.prevRotationYaw;
         float oldPitch = mc.player.prevRotationPitch;
 
-        mc.player.rotationYaw =
-                limitAngleChange(oldYaw, rotations[0], 30);
-        mc.player.rotationPitch = rotations[1];
+        mc.player.rotationYaw = rotations[0];
+        mc.player.rotationPitch = MathHelper.normalizeAngle((int) rotations[1], 360);
 
         return Math.abs(oldYaw - rotations[0])
                 + Math.abs(oldPitch - rotations[1]) < 1F;
@@ -166,8 +165,7 @@ public class RotationUtils extends Default {
 
         float oldYaw = mc.player.prevRotationYaw;
 
-        mc.player.rotationYaw =
-                limitAngleChange(oldYaw, rotations[0], 30);
+        mc.player.rotationYaw = MathHelper.normalizeAngle((int) rotations[0], 360);
 
         return Math.abs(oldYaw - rotations[0]) < 1F;
     }
