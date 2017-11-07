@@ -566,16 +566,12 @@ public class PepsiUtils extends Default {
         GlStateManager.rotate(-viewerYaw, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate((float) (isThirdPersonFrontal ? -1 : 1) * viewerPitch, 1.0F, 0.0F, 0.0F);
 
-        float scale = 0.025f;
         isSneaking = false;
-        double distance = Math.sqrt(x * x + y * y + z * z);
-        if (distance > 10) {
-            scale *= distance / 10;
-        }
 
-        GlStateManager.scale(-scale, -scale, scale);
+        double distance = Math.max(1.6, mc.getRenderViewEntity().getDistanceToEntity(mc.player) / 4);
+        distance /= 100;
+        GlStateManager.scale(-distance, -distance, distance);
 
-        GlStateManager.scale(-0.025F, -0.025F, 0.025F);
         GlStateManager.disableLighting();
         GlStateManager.depthMask(false);
 
