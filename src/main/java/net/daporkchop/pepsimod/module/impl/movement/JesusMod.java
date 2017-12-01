@@ -24,6 +24,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraft.network.play.client.CPacketVehicleMove;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
@@ -42,6 +43,10 @@ public class JesusMod extends Module {
     }
 
     public boolean isOverLiquid() {
+        if (mc.player == null) {
+            return false;
+        }
+
         Entity entity = mc.player.isRiding() ? mc.player.getRidingEntity() : mc.player;
 
         boolean foundLiquid = false;
@@ -64,6 +69,10 @@ public class JesusMod extends Module {
     }
 
     public boolean shouldBeSolid() {
+        if (mc.player == null) {
+            return false;
+        }
+
         Entity entity = mc.player.isRiding() ? mc.player.getRidingEntity() : mc.player;
 
         return state.enabled && entity.fallDistance <= 3 && !mc.gameSettings.keyBindSneak.isPressed() && !entity.isInWater();
@@ -81,6 +90,10 @@ public class JesusMod extends Module {
 
     @Override
     public void tick() {
+        if (mc.player == null) {
+            return;
+        }
+
         Entity entity = mc.player.isRiding() ? mc.player.getRidingEntity() : mc.player;
 
         // check if sneaking
@@ -108,6 +121,10 @@ public class JesusMod extends Module {
 
     @Override
     public boolean preSendPacket(Packet<?> packet) {
+        if (mc.player == null) {
+            return false;
+        }
+
         Entity entity = mc.player.isRiding() ? mc.player.getRidingEntity() : mc.player;
 
         RETURN:
@@ -156,7 +173,7 @@ public class JesusMod extends Module {
 
             ReflectionStuff.setCPacketPlayer_y(pck, y);
             ReflectionStuff.setcPacketPlayer_onGround(pck, true);
-        }/* else if (mc.player.isRiding() && packet instanceof CPacketVehicleMove)   {
+        } else if (mc.player.isRiding() && packet instanceof CPacketVehicleMove) {
             // check inWater
             if (entity.isInWater()) {
                 break RETURN;
@@ -194,9 +211,8 @@ public class JesusMod extends Module {
                 y += 0.05;
             }
 
-            ReflectionStuff.setCPacketPlayer_y(pck, y);
-            ReflectionStuff.setcPacketPlayer_onGround(pck, true);
-        }*/
+            ReflectionStuff.setcPacketVehicleMove_y(pck, y);
+        }
 
         return false;
     }

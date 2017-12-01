@@ -33,6 +33,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraft.network.play.client.CPacketVehicleMove;
 import net.minecraft.util.Timer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -75,6 +76,7 @@ public class ReflectionStuff extends Default {
     public static Field cPacketPlayer_onGround;
     public static Field parentScreen;
     public static Field DEFAULT_RESOURCE_DOMAINS;
+    public static Field cPacketVehicleMove_y;
 
     public static Method updateFallState;
     public static Method rightClickMouse;
@@ -153,6 +155,7 @@ public class ReflectionStuff extends Default {
             cPacketPlayer_onGround = getField(CPacketPlayer.class, "onGround", "field_149474_g", "f");
             parentScreen = getField(GuiDisconnected.class, "parentScreen", "field_146307_h", "h");
             DEFAULT_RESOURCE_DOMAINS = getField(DefaultResourcePack.class, "DEFAULT_RESOURCE_DOMAINS", "field_110608_a", "a");
+            cPacketVehicleMove_y = getField(CPacketVehicleMove.class, "y", "field_187008_b", "b");
 
             updateFallState = getMethod(Entity.class, new String[]{"updateFallState", "func_184231_a", "a"}, double.class, boolean.class, IBlockState.class, BlockPos.class);
             rightClickMouse = getMethod(Minecraft.class, new String[]{"rightClickMouse", "func_147121_ag", "aB"});
@@ -160,6 +163,22 @@ public class ReflectionStuff extends Default {
             setDEFAULT_RESOURCE_DOMAINS(ImmutableSet.<String>builder().addAll(DefaultResourcePack.DEFAULT_RESOURCE_DOMAINS).add("wdl").build());
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static double getCPacketVehicleMove_y(CPacketVehicleMove n) {
+        try {
+            return (double) cPacketVehicleMove_y.get(n);
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static void setcPacketVehicleMove_y(CPacketVehicleMove n, double y) {
+        try {
+            cPacketVehicleMove_y.set(n, y);
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
         }
     }
 
