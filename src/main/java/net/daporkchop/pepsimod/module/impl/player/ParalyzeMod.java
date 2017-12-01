@@ -23,6 +23,10 @@ import net.minecraft.network.play.client.CPacketPlayer;
 public class ParalyzeMod extends Module {
     public static ParalyzeMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public ParalyzeMod() {
         super("Paralyze");
     }

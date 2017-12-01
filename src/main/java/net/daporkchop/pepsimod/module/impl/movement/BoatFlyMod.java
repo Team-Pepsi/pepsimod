@@ -23,6 +23,10 @@ import net.daporkchop.pepsimod.util.ReflectionStuff;
 public class BoatFlyMod extends Module {
     public static BoatFlyMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public BoatFlyMod() {
         super("BoatFly");
     }

@@ -23,6 +23,10 @@ import net.daporkchop.pepsimod.util.ReflectionStuff;
 public class FastPlaceMod extends Module {
     public static FastPlaceMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public FastPlaceMod() {
         super("FastPlace");
     }

@@ -32,6 +32,11 @@ import net.minecraft.util.EnumHand;
  */
 public class CrystalAuraMod extends Module {
     public static CrystalAuraMod INSTANCE;
+
+    {
+        INSTANCE = this;
+    }
+
     private long currentMS = 0L;
     private long lastMS = -1L;
 

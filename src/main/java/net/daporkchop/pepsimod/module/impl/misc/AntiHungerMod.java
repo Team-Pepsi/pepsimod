@@ -20,6 +20,12 @@ import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 
 public class AntiHungerMod extends Module {
+    public static AntiHungerMod INSTANCE;
+
+    {
+        INSTANCE = this;
+    }
+
     public static boolean ANTI_HUNGER = false;
 
     public AntiHungerMod() {

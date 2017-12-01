@@ -27,6 +27,10 @@ import org.lwjgl.input.Keyboard;
 public class ClickGuiMod extends Module {
     public static ClickGuiMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public ClickGuiMod(boolean isEnabled, int key) {
         super(isEnabled, "ClickGUI", key, true);
     }

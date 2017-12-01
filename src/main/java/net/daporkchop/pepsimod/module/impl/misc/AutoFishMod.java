@@ -31,6 +31,11 @@ import net.minecraft.network.play.server.SPacketSoundEffect;
 
 public class AutoFishMod extends Module {
     public static AutoFishMod INSTANCE;
+
+    {
+        INSTANCE = this;
+    }
+
     public int timer;
 
     public AutoFishMod() {

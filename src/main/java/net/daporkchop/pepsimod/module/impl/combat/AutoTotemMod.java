@@ -31,6 +31,11 @@ import net.minecraft.util.NonNullList;
  */
 public class AutoTotemMod extends Module {
     public static AutoTotemMod INSTANCE;
+
+    {
+        INSTANCE = this;
+    }
+
     private int timer;
 
     public AutoTotemMod() {

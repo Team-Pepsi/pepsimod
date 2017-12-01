@@ -30,6 +30,10 @@ import net.minecraft.util.math.BlockPos;
 public class JesusMod extends Module {
     public static JesusMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     private int tickTimer = 10;
     private int packetTimer = 0;
 

@@ -27,6 +27,10 @@ import net.daporkchop.pepsimod.util.config.impl.SpeedmineTranslator;
 public class SpeedmineMod extends Module {
     public static SpeedmineMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public SpeedmineMod() {
         super("Speedmine");
     }

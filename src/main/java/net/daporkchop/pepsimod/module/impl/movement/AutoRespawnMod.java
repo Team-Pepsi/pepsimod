@@ -20,6 +20,12 @@ import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 
 public class AutoRespawnMod extends Module {
+    public AutoRespawnMod INSTANCE;
+
+    {
+        INSTANCE = this;
+    }
+
     public AutoRespawnMod() {
         super("AutoRespawn");
     }

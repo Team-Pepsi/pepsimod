@@ -31,6 +31,10 @@ import java.util.List;
 public class StepMod extends Module {
     public static StepMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public StepMod() {
         super("Step");
     }

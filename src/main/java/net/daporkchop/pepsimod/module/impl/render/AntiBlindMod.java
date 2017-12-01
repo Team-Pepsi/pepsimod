@@ -22,6 +22,10 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 public class AntiBlindMod extends Module {
     public static AntiBlindMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public AntiBlindMod() {
         super("AntiBlind");
     }

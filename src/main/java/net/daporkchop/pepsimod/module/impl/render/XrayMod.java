@@ -26,6 +26,10 @@ import net.minecraft.util.ResourceLocation;
 public class XrayMod extends Module {
     public static XrayMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public XrayMod() {
         super("Xray");
     }

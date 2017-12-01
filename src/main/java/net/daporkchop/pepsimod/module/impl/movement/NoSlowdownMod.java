@@ -23,6 +23,10 @@ import net.minecraft.init.Blocks;
 public class NoSlowdownMod extends Module {
     public static NoSlowdownMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public NoSlowdownMod() {
         super("NoSlowdown");
     }

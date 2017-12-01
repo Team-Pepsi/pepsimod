@@ -21,6 +21,7 @@ import net.daporkchop.pepsimod.util.config.IConfigTranslator;
 public class TimerTranslator implements IConfigTranslator {
     public static final TimerTranslator INSTANCE = new TimerTranslator();
     public float multiplier = 1.0f;
+    public boolean tpsSync = false;
 
     private TimerTranslator() {
 
@@ -28,10 +29,12 @@ public class TimerTranslator implements IConfigTranslator {
 
     public void encode(JsonObject json) {
         json.addProperty("multiplier", multiplier);
+        json.addProperty("tpsSync", tpsSync);
     }
 
     public void decode(String fieldName, JsonObject json) {
         multiplier = getFloat(json, "multiplier", multiplier);
+        tpsSync = getBoolean(json, "tpsSync", tpsSync);
     }
 
     public String name() {

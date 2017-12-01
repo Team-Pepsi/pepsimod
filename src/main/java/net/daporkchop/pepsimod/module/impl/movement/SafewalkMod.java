@@ -24,6 +24,11 @@ import net.minecraft.client.renderer.Vector3d;
 
 public class SafewalkMod extends Module {
     public static SafewalkMod INSTANCE;
+
+    {
+        INSTANCE = this;
+    }
+
     private Vector3d vec = new Vector3d();
 
     public SafewalkMod() {

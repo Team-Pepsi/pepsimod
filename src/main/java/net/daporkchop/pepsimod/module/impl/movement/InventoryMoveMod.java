@@ -22,6 +22,10 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 public class InventoryMoveMod extends Module {
     public static InventoryMoveMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public InventoryMoveMod() {
         super("InventoryMove");
         INSTANCE = this;

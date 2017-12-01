@@ -20,6 +20,11 @@ import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 
 public class FullbrightMod extends Module {
+    public static FullbrightMod INSTANCE;
+
+    {
+        INSTANCE = this;
+    }
 
     public FullbrightMod() {
         super("Fullbright");

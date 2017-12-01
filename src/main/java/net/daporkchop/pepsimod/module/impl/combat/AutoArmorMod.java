@@ -26,6 +26,10 @@ import net.minecraft.item.ItemStack;
 public class AutoArmorMod extends TimeModule {
     public static AutoArmorMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public AutoArmorMod() {
         super("AutoArmor");
     }

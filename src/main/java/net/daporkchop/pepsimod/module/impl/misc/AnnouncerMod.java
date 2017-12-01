@@ -42,6 +42,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class AnnouncerMod extends TimeModule {
     public static AnnouncerMod INSTANCE;
+
+    {
+        INSTANCE = this;
+    }
+
     public Queue<QueuedTask> toSend = new ConcurrentLinkedQueue<>();
 
     public AnnouncerMod() {

@@ -29,6 +29,10 @@ import net.minecraft.util.math.BlockPos;
 public class FastBowMod extends Module {
     public static FastBowMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public FastBowMod() {
         super("FastBow");
     }

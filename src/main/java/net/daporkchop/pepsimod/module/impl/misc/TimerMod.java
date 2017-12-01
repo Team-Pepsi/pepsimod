@@ -26,7 +26,6 @@ import net.daporkchop.pepsimod.util.config.impl.TimerTranslator;
 
 public class TimerMod extends Module {
     public static TimerMod INSTANCE;
-    public boolean tps_sync = false;
 
     {
         INSTANCE = this;
@@ -73,11 +72,11 @@ public class TimerMod extends Module {
                         }, "Multiplier", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.0f, 1.0f, 0.01f)),
                 new ModuleOption<>(false, "tps_sync", OptionCompletions.BOOLEAN,
                         (value) -> {
-                            tps_sync = value;
+                            TimerTranslator.INSTANCE.tpsSync = value;
                             return true;
                         },
                         () -> {
-                            return tps_sync;
+                            return TimerTranslator.INSTANCE.tpsSync;
                         }, "TpsSync")
         };
     }
@@ -94,7 +93,7 @@ public class TimerMod extends Module {
 
     public float getMultiplier() {
         if (this.state.enabled) {
-            if (tps_sync) {
+            if (TimerTranslator.INSTANCE.tpsSync) {
                 return TickRate.TPS / 20 * TimerTranslator.INSTANCE.multiplier;
             } else {
                 return TimerTranslator.INSTANCE.multiplier;

@@ -23,6 +23,10 @@ import net.daporkchop.pepsimod.util.ReflectionStuff;
 public class HorseJumpPowerMod extends Module {
     public static HorseJumpPowerMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public HorseJumpPowerMod() {
         super("HorseJumpPower");
     }

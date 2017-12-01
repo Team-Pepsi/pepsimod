@@ -24,6 +24,10 @@ import org.lwjgl.input.Keyboard;
 public class AutoWalkMod extends Module {
     public static AutoWalkMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public AutoWalkMod() {
         super("AutoWalk");
     }

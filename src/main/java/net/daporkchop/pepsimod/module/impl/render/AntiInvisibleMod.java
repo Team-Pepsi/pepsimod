@@ -22,6 +22,10 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 public class AntiInvisibleMod extends Module {
     public static AntiInvisibleMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public AntiInvisibleMod() {
         super("AntiInvisible");
     }

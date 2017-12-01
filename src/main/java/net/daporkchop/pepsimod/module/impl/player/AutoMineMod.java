@@ -25,6 +25,10 @@ import net.minecraft.block.state.IBlockState;
 public class AutoMineMod extends Module {
     public static AutoMineMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public AutoMineMod() {
         super("AutoMine");
     }

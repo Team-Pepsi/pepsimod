@@ -32,6 +32,12 @@ import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
 public class TrajectoriesMod extends Module {
+    public static TrajectoriesMod INSTANCE;
+
+    {
+        INSTANCE = this;
+    }
+
     public static final RenderColor lineColor = new RenderColor(51, 196, 191, 128);
 
     public TrajectoriesMod() {

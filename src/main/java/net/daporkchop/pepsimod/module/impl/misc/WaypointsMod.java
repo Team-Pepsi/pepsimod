@@ -36,6 +36,10 @@ import java.util.Collection;
 public class WaypointsMod extends Module {
     public static WaypointsMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public WaypointsMod() {
         super("Waypoints");
     }

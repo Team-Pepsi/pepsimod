@@ -22,6 +22,10 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 public class HealthTagsMod extends Module {
     public static HealthTagsMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public HealthTagsMod() {
         super("HealthTags");
     }

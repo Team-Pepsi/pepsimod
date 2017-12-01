@@ -22,6 +22,10 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 public class BasicMod extends Module {
     public static BasicMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public BasicMod() {
         super("delet_this");
     }

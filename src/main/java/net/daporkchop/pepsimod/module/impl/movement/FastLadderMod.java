@@ -28,6 +28,10 @@ import net.minecraft.util.math.BlockPos;
 public class FastLadderMod extends Module {
     public static FastLadderMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public FastLadderMod() {
         super("FastLadder");
     }

@@ -35,6 +35,10 @@ import java.util.Base64;
 public class NotificationsMod extends Module {
     public static NotificationsMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public TrayIcon trayIcon;
     public SystemTray tray;
     public PopupMenu menu;

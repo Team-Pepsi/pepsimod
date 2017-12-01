@@ -22,6 +22,10 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 public class NameTagsMod extends Module {
     public static NameTagsMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public NameTagsMod() {
         super("NameTags");
     }

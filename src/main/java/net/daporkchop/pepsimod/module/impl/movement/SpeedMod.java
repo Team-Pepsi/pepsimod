@@ -22,6 +22,10 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 public class SpeedMod extends Module {
     public static SpeedMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public SpeedMod() {
         super("Speed");
     }

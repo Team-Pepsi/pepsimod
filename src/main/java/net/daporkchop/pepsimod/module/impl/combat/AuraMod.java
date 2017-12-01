@@ -30,6 +30,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumHand;
 
 public class AuraMod extends Module {
+    public static AuraMod INSTANCE;
+
+    {
+        INSTANCE = this;
+    }
+
     public static final String[] targetBoneStrings = new String[]{"head", "feet", "middle"};
     public int lastTick = 0;
 

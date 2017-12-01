@@ -26,6 +26,11 @@ import net.daporkchop.pepsimod.util.config.impl.FreecamTranslator;
 
 public class FreecamMod extends Module {
     public static FreecamMod INSTANCE;
+
+    {
+        INSTANCE = this;
+    }
+
     public EntityFakePlayer fakePlayer;
 
     {

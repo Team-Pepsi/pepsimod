@@ -26,6 +26,10 @@ import net.daporkchop.pepsimod.util.config.impl.NoWeatherTranslator;
 public class NoWeatherMod extends Module {
     public static NoWeatherMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public NoWeatherMod() {
         super("NoWeather");
     }

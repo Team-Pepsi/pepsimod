@@ -35,6 +35,11 @@ import net.minecraft.util.FoodStats;
 
 public class AutoEatMod extends Module {
     public static AutoEatMod INSTANCE;
+
+    {
+        INSTANCE = this;
+    }
+
     public boolean doneEating = true;
 
     public AutoEatMod() {

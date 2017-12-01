@@ -38,6 +38,11 @@ import java.awt.*;
 
 public class HUDMod extends Module {
     public static HUDMod INSTANCE;
+
+    {
+        INSTANCE = this;
+    }
+    
     public String serverBrand = "";
 
     public HUDMod(boolean isEnabled, int key) {

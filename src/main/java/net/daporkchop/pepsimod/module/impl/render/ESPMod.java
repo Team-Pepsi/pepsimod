@@ -31,6 +31,10 @@ public class ESPMod extends Module {
 
     public static ESPMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public ESPMod() {
         super("ESP");
     }

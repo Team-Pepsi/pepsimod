@@ -29,6 +29,10 @@ import net.minecraft.util.MovementInput;
 public class EntitySpeedMod extends Module {
     public static EntitySpeedMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public EntitySpeedMod() {
         super("EntitySpeed");
     }

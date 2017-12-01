@@ -34,6 +34,11 @@ import net.minecraft.util.math.BlockPos;
 
 public class BedBomberMod extends TimeModule {
     public static BedBomberMod INSTANCE;
+
+    {
+        INSTANCE = this;
+    }
+
     private static BlockUtils.BlockValidator validator =
             (pos) -> {
                 IBlockState state = mc.world.getBlockState(pos);

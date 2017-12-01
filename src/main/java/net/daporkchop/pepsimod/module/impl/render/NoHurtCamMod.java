@@ -22,6 +22,10 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 public class NoHurtCamMod extends Module {
     public static NoHurtCamMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public NoHurtCamMod() {
         super("NoHurtCam");
     }

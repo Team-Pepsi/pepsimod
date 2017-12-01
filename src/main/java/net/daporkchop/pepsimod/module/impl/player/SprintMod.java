@@ -22,6 +22,10 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 public class SprintMod extends Module {
     public static SprintMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public SprintMod() {
         super("Sprint");
     }

@@ -23,6 +23,11 @@ public class NoFallMod extends Module {
     public static boolean NO_FALL = false;
     public static NoFallMod INSTANCE;
 
+
+    {
+        INSTANCE = this;
+    }
+
     public NoFallMod() {
         super("NoFall");
     }

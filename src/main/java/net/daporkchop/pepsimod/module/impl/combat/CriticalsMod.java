@@ -28,6 +28,11 @@ import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketUseEntity;
 
 public class CriticalsMod extends Module {
+    public static CriticalsMod INSTANCE;
+
+    {
+        INSTANCE = this;
+    }
 
     public CriticalsMod() {
         super("Criticals");

@@ -29,6 +29,10 @@ import net.minecraft.util.math.BlockPos;
 public class ScaffoldMod extends Module {
     public static ScaffoldMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public ScaffoldMod() {
         super("Scaffold");
     }

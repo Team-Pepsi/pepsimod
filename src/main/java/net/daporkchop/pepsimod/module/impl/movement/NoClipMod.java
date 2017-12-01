@@ -23,6 +23,10 @@ import net.daporkchop.pepsimod.util.ReflectionStuff;
 public class NoClipMod extends Module {
     public static NoClipMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public NoClipMod() {
         super("NoClip");
     }

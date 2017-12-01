@@ -32,6 +32,11 @@ import java.awt.*;
 
 public class BowAimBotMod extends Module {
     public static BowAimBotMod INSTANCE;
+
+    {
+        INSTANCE = this;
+    }
+
     public EntityLivingBase target;
     public float velocity;
 

@@ -26,6 +26,11 @@ import net.minecraft.world.GameType;
 
 public class AutoToolMod extends Module {
     public static AutoToolMod INSTANCE;
+
+    {
+        INSTANCE = this;
+    }
+
     public boolean digging = false;
     public int slot = -1;
 

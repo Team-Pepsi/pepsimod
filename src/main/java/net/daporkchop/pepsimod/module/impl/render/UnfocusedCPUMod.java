@@ -26,6 +26,10 @@ import net.daporkchop.pepsimod.util.config.impl.CpuLimitTranslator;
 public class UnfocusedCPUMod extends Module {
     public static UnfocusedCPUMod INSTANCE;
 
+    {
+        INSTANCE = this;
+    }
+
     public UnfocusedCPUMod() {
         super("UnfocusedCPU");
         INSTANCE = this;

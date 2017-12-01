@@ -34,6 +34,11 @@ import java.awt.*;
 
 public class FlightMod extends Module {
     public static FlightMod INSTANCE;
+
+    {
+        INSTANCE = this;
+    }
+
     public boolean wasOnGround = true;
     public double roofY = -1.0D;
 
