@@ -15,10 +15,8 @@
 
 package net.daporkchop.pepsimod.wdl.mixin;
 
-import org.spongepowered.asm.mixin.Mixins;
-
 public class WDLMixinLoader {
     public static void loadMixins() {
-        Mixins.addConfiguration("mixins.pepsimod.wdl.json");
+
     }
 }

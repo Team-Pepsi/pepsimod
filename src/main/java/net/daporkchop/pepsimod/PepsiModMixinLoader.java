@@ -32,6 +32,7 @@ public class PepsiModMixinLoader implements IFMLLoadingPlugin {
         FMLLog.log.info("\n\n\nPepsiMod Mixin init\n\n");
         MixinBootstrap.init();
         Mixins.addConfiguration("mixins.pepsimod.json");
+        Mixins.addConfiguration("mixins.pepsimod.wdl.json");
         WDLMixinLoader.loadMixins();
 
         MixinEnvironment.getDefaultEnvironment().setObfuscationContext("searge");
