@@ -21,6 +21,7 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -37,11 +38,13 @@ public class JesusMod extends Module {
     }
 
     public boolean isOverLiquid() {
+        Entity entity = mc.player.isRiding() ? mc.player.getRidingEntity() : mc.player;
+
         boolean foundLiquid = false;
         boolean foundSolid = false;
 
         // check collision boxes below player
-        for (AxisAlignedBB bb : mc.world.getCollisionBoxes(mc.player, mc.player.getEntityBoundingBox().offset(0, -0.5, 0))) {
+        for (AxisAlignedBB bb : mc.world.getCollisionBoxes(entity, entity.getEntityBoundingBox().offset(0, -0.5, 0))) {
             BlockPos pos = new BlockPos(bb.getCenter());
             IBlockState state = mc.world.getBlockState(pos);
             Material material = state.getBlock().getMaterial(state);
@@ -57,7 +60,9 @@ public class JesusMod extends Module {
     }
 
     public boolean shouldBeSolid() {
-        return state.enabled && mc.player != null && mc.player.fallDistance <= 3 && !mc.gameSettings.keyBindSneak.isPressed() && !mc.player.isInWater();
+        Entity entity = mc.player.isRiding() ? mc.player.getRidingEntity() : mc.player;
+
+        return state.enabled && entity.fallDistance <= 3 && !mc.gameSettings.keyBindSneak.isPressed() && !entity.isInWater();
     }
 
     @Override
@@ -72,23 +77,25 @@ public class JesusMod extends Module {
 
     @Override
     public void tick() {
+        Entity entity = mc.player.isRiding() ? mc.player.getRidingEntity() : mc.player;
+
         // check if sneaking
         if (mc.gameSettings.keyBindSneak.isPressed()) {
             return;
         }
 
         // move up in water
-        if (mc.player.isInWater()) {
-            mc.player.motionY = 0.11;
+        if (entity.isInWater()) {
+            entity.motionY = 0.11;
             tickTimer = 0;
             return;
         }
 
         // simulate jumping out of water
         if (tickTimer == 0) {
-            mc.player.motionY = 0.30;
+            entity.motionY = 0.30;
         } else if (tickTimer == 1) {
-            mc.player.motionY = 0;
+            entity.motionY = 0;
         }
 
         // update timer
@@ -97,20 +104,22 @@ public class JesusMod extends Module {
 
     @Override
     public boolean preSendPacket(Packet<?> packet) {
+        Entity entity = mc.player.isRiding() ? mc.player.getRidingEntity() : mc.player;
+
         RETURN:
-        if (packet instanceof CPacketPlayer) {
+        if (!mc.player.isRiding() && packet instanceof CPacketPlayer) {
             // check if packet contains a position
             if (!(packet instanceof CPacketPlayer.Position || packet instanceof CPacketPlayer.PositionRotation)) {
                 break RETURN;
             }
 
             // check inWater
-            if (mc.player.isInWater()) {
+            if (entity.isInWater()) {
                 break RETURN;
             }
 
             // check fall distance
-            if (mc.player.fallDistance > 3F) {
+            if (entity.fallDistance > 3F) {
                 break RETURN;
             }
 
@@ -135,7 +144,7 @@ public class JesusMod extends Module {
             double y = pck.getY(0);
 
             // offset y
-            if (mc.player.ticksExisted % 2 == 0) {
+            if (entity.ticksExisted % 2 == 0) {
                 y -= 0.05;
             } else {
                 y += 0.05;
@@ -143,7 +152,47 @@ public class JesusMod extends Module {
 
             ReflectionStuff.setCPacketPlayer_y(pck, y);
             ReflectionStuff.setcPacketPlayer_onGround(pck, true);
-        }
+        }/* else if (mc.player.isRiding() && packet instanceof CPacketVehicleMove)   {
+            // check inWater
+            if (entity.isInWater()) {
+                break RETURN;
+            }
+
+            // check fall distance
+            if (entity.fallDistance > 3F) {
+                break RETURN;
+            }
+
+            if (!isOverLiquid()) {
+                break RETURN;
+            }
+
+            // if not actually moving, cancel packet
+            if (mc.player.movementInput == null) {
+                return true;
+            }
+
+            // wait for timer
+            packetTimer++;
+            if (packetTimer < 4) {
+                break RETURN;
+            }
+
+            CPacketVehicleMove pck = (CPacketVehicleMove) packet;
+
+            // get position
+            double y = pck.getY();
+
+            // offset y
+            if (entity.ticksExisted % 2 == 0) {
+                y -= 0.05;
+            } else {
+                y += 0.05;
+            }
+
+            ReflectionStuff.setCPacketPlayer_y(pck, y);
+            ReflectionStuff.setcPacketPlayer_onGround(pck, true);
+        }*/
 
         return false;
     }

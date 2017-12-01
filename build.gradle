@@ -63,7 +63,7 @@ repositories {
 }
 
 dependencies {
-    compile("org.spongepowered:mixin:0.7.2-SNAPSHOT") {
+    compile("org.spongepowered:mixin:0.7.5-SNAPSHOT") {
         exclude module: "launchwrapper"
     }
     compile("com.flowpowered:flow-noise:1.0.1-SNAPSHOT")

@@ -16,7 +16,6 @@
 package net.daporkchop.pepsimod;
 
 import net.daporkchop.pepsimod.wdl.mixin.WDLMixinLoader;
-import net.minecraft.client.ClientBrandRetriever;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.spongepowered.asm.launch.MixinBootstrap;
@@ -24,7 +23,6 @@ import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.Mixins;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Method;
 import java.util.Map;
 
 public class PepsiModMixinLoader implements IFMLLoadingPlugin {
@@ -35,10 +33,6 @@ public class PepsiModMixinLoader implements IFMLLoadingPlugin {
         MixinBootstrap.init();
         Mixins.addConfiguration("mixins.pepsimod.json");
         WDLMixinLoader.loadMixins();
-
-        for (Method m : ClientBrandRetriever.class.getDeclaredMethods()) {
-            FMLLog.log.info(m.getName() + " " + m.toString());
-        }
 
         MixinEnvironment.getDefaultEnvironment().setObfuscationContext("searge");
 
