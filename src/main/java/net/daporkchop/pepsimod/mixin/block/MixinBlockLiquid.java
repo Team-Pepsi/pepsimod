@@ -28,6 +28,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import static net.daporkchop.pepsimod.util.misc.Default.pepsiMod;
+
 @Mixin(BlockLiquid.class)
 public abstract class MixinBlockLiquid extends Block {
     protected MixinBlockLiquid() {
@@ -36,16 +38,20 @@ public abstract class MixinBlockLiquid extends Block {
 
     @Inject(method = "isPassable", at = @At("HEAD"), cancellable = true)
     public void preIsPassable(IBlockAccess worldIn, BlockPos pos, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (XrayMod.INSTANCE.state.enabled) {
-            callbackInfoReturnable.setReturnValue(true);
-            return;
+        if (pepsiMod.hasInitializedModules) {
+            if (XrayMod.INSTANCE.state.enabled) {
+                callbackInfoReturnable.setReturnValue(true);
+                return;
+            }
         }
     }
 
     @Inject(method = "getCollisionBoundingBox", at = @At("HEAD"), cancellable = true)
     public void preGetCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos, CallbackInfoReturnable<AxisAlignedBB> callbackInfoReturnable) {
-        if (JesusMod.INSTANCE.shouldBeSolid()) {
-            callbackInfoReturnable.setReturnValue(FULL_BLOCK_AABB);
+        if (pepsiMod.hasInitializedModules) {
+            if (JesusMod.INSTANCE.shouldBeSolid()) {
+                callbackInfoReturnable.setReturnValue(FULL_BLOCK_AABB);
+            }
         }
     }
 }

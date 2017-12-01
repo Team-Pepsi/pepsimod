@@ -32,6 +32,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import static net.daporkchop.pepsimod.util.misc.Default.pepsiMod;
+
 @Mixin(Block.class)
 public abstract class MixinBlock extends net.minecraftforge.registries.IForgeRegistryEntry.Impl<Block> {
     /**
@@ -41,10 +43,12 @@ public abstract class MixinBlock extends net.minecraftforge.registries.IForgeReg
 
     @Inject(method = "isFullCube", at = @At("HEAD"), cancellable = true)
     public void preIsFullCube(IBlockState state, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (XrayMod.INSTANCE.state.enabled) {
-            callbackInfoReturnable.setReturnValue(XrayTranslator.INSTANCE.isTargeted(Block.class.cast(this)));
-        } else if (FreecamMod.INSTANCE.state.enabled || NoClipMod.INSTANCE.state.enabled) {
-            callbackInfoReturnable.setReturnValue(false);
+        if (pepsiMod.hasInitializedModules) {
+            if (XrayMod.INSTANCE.state.enabled) {
+                callbackInfoReturnable.setReturnValue(XrayTranslator.INSTANCE.isTargeted(Block.class.cast(this)));
+            } else if (FreecamMod.INSTANCE.state.enabled || NoClipMod.INSTANCE.state.enabled) {
+                callbackInfoReturnable.setReturnValue(false);
+            }
         }
     }
 
@@ -57,9 +61,11 @@ public abstract class MixinBlock extends net.minecraftforge.registries.IForgeReg
 
     @Inject(method = "shouldSideBeRendered", at = @At("HEAD"), cancellable = true)
     public void preShouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side, CallbackInfoReturnable<Boolean> callbackInfo) {
-        if (XrayMod.INSTANCE.state.enabled) {
-            callbackInfo.setReturnValue(true);
-            callbackInfo.cancel();
+        if (pepsiMod.hasInitializedModules) {
+            if (XrayMod.INSTANCE.state.enabled) {
+                callbackInfo.setReturnValue(true);
+                callbackInfo.cancel();
+            }
         }
         //vanilla code follows
     }

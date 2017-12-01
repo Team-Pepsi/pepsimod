@@ -25,6 +25,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import static net.daporkchop.pepsimod.util.misc.Default.pepsiMod;
+
 @Mixin(BlockSlab.class)
 public abstract class MixinBlockSlab extends Block {
     protected MixinBlockSlab() {
@@ -36,9 +38,11 @@ public abstract class MixinBlockSlab extends Block {
 
     @Inject(method = "isFullCube", at = @At("HEAD"), cancellable = true)
     public void preIsFullCube(IBlockState state, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (FreecamMod.INSTANCE.state.enabled) {
-            callbackInfoReturnable.setReturnValue(false);
-            return;
+        if (pepsiMod.hasInitializedModules) {
+            if (FreecamMod.INSTANCE.state.enabled) {
+                callbackInfoReturnable.setReturnValue(false);
+                return;
+            }
         }
     }
 }

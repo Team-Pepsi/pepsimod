@@ -33,10 +33,6 @@ public class FreecamMod extends Module {
 
     public EntityFakePlayer fakePlayer;
 
-    {
-        INSTANCE = this;
-    }
-
     public FreecamMod() {
         super("Freecam");
     }
