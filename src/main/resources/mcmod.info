@@ -1,13 +1,15 @@
 [
   {
     "modid": "pepsimod",
-    "name": "PepsiMod",
-    "description": "A hacked client for Forge\nMade by Team Pepsi, for Team Pepsi",
+    "name": "pepsimod",
+    "description": "A hacked client for Forge\nMade by DaPorkchop_, for Team Pepsi",
     "version": "11.1",
     "mcversion": "1.12.2",
     "url": "",
-    "updateUrl": "",
-    "authorList": ["Team Pepsi's awesome developer team"],
+    "updateUrl": "https://raw.githubusercontent.com/Team-Pepsi/pepsimod/master/update.json",
+    "authorList": [
+      "DaPorkchop_"
+    ],
     "credits": "Pepsi, for being amazing",
     "screenshots": [],
     "dependencies": []

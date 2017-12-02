@@ -15,10 +15,11 @@
 
 package net.daporkchop.pepsimod;
 
-import net.daporkchop.pepsimod.wdl.mixin.WDLMixinLoader;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.MixinEnvironment;
+import org.spongepowered.asm.mixin.Mixins;
 
 import javax.annotation.Nullable;
 import java.util.Map;
