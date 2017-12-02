@@ -15,13 +15,9 @@
 
 package net.daporkchop.pepsimod.mixin.client.gui;
 
-import net.daporkchop.pepsimod.accountswitcher.tools.alt.AccountData;
-import net.daporkchop.pepsimod.accountswitcher.tools.alt.AltDatabase;
-import net.daporkchop.pepsimod.accountswitcher.tools.alt.AltManager;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.impl.render.ZoomMod;
 import net.daporkchop.pepsimod.util.PepsiUtils;
-import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.config.impl.GeneralTranslator;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiDisconnected;
@@ -35,8 +31,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.ArrayList;
 
 @Mixin(GuiDisconnected.class)
 public abstract class MixinGuiDisconnected extends GuiScreen {
@@ -60,28 +54,6 @@ public abstract class MixinGuiDisconnected extends GuiScreen {
         if (ZoomMod.INSTANCE.state.enabled) {
             ModuleManager.disableModule(ZoomMod.INSTANCE);
             mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
-        }
-    }
-
-    private void login(AccountData data) {
-        AltManager.getInstance().setUser(data.user, data.pass);
-    }
-
-    @Inject(method = "initGui", at = @At("HEAD"))
-    public void preInitGui(CallbackInfo callbackInfo) {
-        if (reason.equals("disconnect.loginFailedInfo.invalidSession") || message.getUnformattedText().toLowerCase().contains("invalid session")) {
-            ArrayList<AccountData> tmp = (ArrayList<AccountData>) AltDatabase.getInstance().getAlts().clone();
-            for (AccountData data : tmp) {
-                if (mc.getSession().getUsername().equals(data.alias)) {
-                    login(data);
-                    break;
-                }
-            }
-        }
-
-        if (parentScreen instanceof GuiDisconnected) {
-            GuiScreen newParent = ReflectionStuff.getParentScreen((GuiDisconnected) parentScreen);
-            parentScreen = newParent;
         }
     }
 
