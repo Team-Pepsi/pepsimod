@@ -20,7 +20,6 @@ import net.daporkchop.pepsimod.clickgui.api.EntryImplBase;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
-import net.daporkchop.pepsimod.totally.not.skidded.RenderUtilsXdolf;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.colors.ColorUtils;
 import org.lwjgl.opengl.GL11;
@@ -81,8 +80,8 @@ public class SubSlider extends EntryImplBase {
         y = window.getRenderYButton();
         x = window.getX() + 4;
         updateIsMouseHovered(mouseX, mouseY);
-        RenderUtilsXdolf.drawRect(getX(), getY(), getX() + getWidth(), getY() + height, ColorUtils.BACKGROUND);
-        RenderUtilsXdolf.drawRect(getX(), getY(), getX() + currentWidth, getY() + height, getColor());
+        PepsiUtils.drawRect(getX(), getY(), getX() + getWidth(), getY() + height, ColorUtils.BACKGROUND);
+        PepsiUtils.drawRect(getX(), getY(), getX() + currentWidth, getY() + height, getColor());
         GL11.glColor3f(0f, 0f, 0f);
         mc.fontRenderer.drawString(option.displayName + ": " + (isFloat ? PepsiUtils.roundFloatForSlider(floatValue) : intValue), getX() + 2, getY() + 2, Color.BLACK.getRGB());
     }

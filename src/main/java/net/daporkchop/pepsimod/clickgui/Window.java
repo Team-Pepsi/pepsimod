@@ -25,8 +25,8 @@ import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
-import net.daporkchop.pepsimod.totally.not.skidded.RenderUtilsXdolf;
 import net.daporkchop.pepsimod.util.BetterScaledResolution;
+import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.colors.ColorUtils;
 import net.daporkchop.pepsimod.util.config.impl.HUDTranslator;
 import org.lwjgl.opengl.GL11;
@@ -102,7 +102,7 @@ public class Window extends EntryImplBase {
 
         updateIsMouseHovered(mouseX, mouseY);
         renderYButton = getY();
-        RenderUtilsXdolf.drawRect(getX(), getY(), getX() + getWidth(), getY() + getDisplayedHeight(), getColor());
+        PepsiUtils.drawRect(getX(), getY(), getX() + getWidth(), getY() + getDisplayedHeight(), getColor());
         GL11.glColor3f(0f, 0f, 0f);
         drawString(getX() + 2, getY() + 2, text, Color.BLACK.getRGB());
         if (isOpen) {
@@ -110,9 +110,9 @@ public class Window extends EntryImplBase {
                 int barHeight = getScrollbarHeight();
                 int barY = getScrollbarY();
                 barY = Math.min(barY, getScrollingModuleCount() * 13 - 1 - barHeight);
-                RenderUtilsXdolf.drawRect(getX() + 97, getY() + 13 + barY, getX() + 99, Math.min(getY() + 13 + barY + barHeight, getY() + getDisplayedHeight() - 1), HUDTranslator.INSTANCE.getColor());
+                PepsiUtils.drawRect(getX() + 97, getY() + 13 + barY, getX() + 99, Math.min(getY() + 13 + barY + barHeight, getY() + getDisplayedHeight() - 1), HUDTranslator.INSTANCE.getColor());
             } else {
-                RenderUtilsXdolf.drawRect(getX() + 97, getY() + 13, getX() + 99, getDisplayedHeight() - 1, HUDTranslator.INSTANCE.getColor());
+                PepsiUtils.drawRect(getX() + 97, getY() + 13, getX() + 99, getDisplayedHeight() - 1, HUDTranslator.INSTANCE.getColor());
             }
             modulesCounted = 0;
             for (int i = getScroll(); i < getModulesToDisplay() + getScroll(); i++) {

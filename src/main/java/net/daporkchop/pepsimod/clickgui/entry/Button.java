@@ -20,7 +20,7 @@ import net.daporkchop.pepsimod.clickgui.api.EntryImplBase;
 import net.daporkchop.pepsimod.clickgui.api.IEntry;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
-import net.daporkchop.pepsimod.totally.not.skidded.RenderUtilsXdolf;
+import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.colors.ColorUtils;
 import org.lwjgl.opengl.GL11;
 
@@ -60,7 +60,7 @@ public class Button extends EntryImplBase {
         y = window.getRenderYButton();
         x = window.getX() + 2;
         updateIsMouseHovered(mouseX, mouseY);
-        RenderUtilsXdolf.drawRect(getX(), getY(), getX() + getWidth(), getY() + height, getColor());
+        PepsiUtils.drawRect(getX(), getY(), getX() + getWidth(), getY() + height, getColor());
         GL11.glColor3f(0f, 0f, 0f);
         drawString(getX() + 2, getY() + 2, module.nameFull, Color.BLACK.getRGB());
     }
