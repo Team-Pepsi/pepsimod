@@ -18,7 +18,7 @@ package net.daporkchop.pepsimod.module.impl.player;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.daporkchop.pepsimod.totally.not.skidded.BlockUtils;
+import net.daporkchop.pepsimod.the.wurst.pkg.name.BlockUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.state.IBlockState;

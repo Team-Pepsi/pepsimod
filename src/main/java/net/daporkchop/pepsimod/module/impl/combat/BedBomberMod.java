@@ -21,7 +21,7 @@ import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.module.api.TimeModule;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
-import net.daporkchop.pepsimod.totally.not.skidded.BlockUtils;
+import net.daporkchop.pepsimod.the.wurst.pkg.name.BlockUtils;
 import net.daporkchop.pepsimod.util.config.impl.BedBomberTranslator;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.state.IBlockState;

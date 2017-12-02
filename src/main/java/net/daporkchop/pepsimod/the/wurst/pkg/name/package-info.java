@@ -13,45 +13,4 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.totally.not.skidded;
-
-import net.daporkchop.pepsimod.util.misc.Default;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-
-public final class WBlock extends Default {
-    public static IBlockState getState(BlockPos pos) {
-        return mc.world.getBlockState(pos);
-    }
-
-    public static Block getBlock(BlockPos pos) {
-        return getState(pos).getBlock();
-    }
-
-    public static int getId(BlockPos pos) {
-        return Block.getIdFromBlock(getBlock(pos));
-    }
-
-    public static String getName(Block block) {
-        return "" + Block.REGISTRY.getNameForObject(block);
-    }
-
-    public static Material getMaterial(BlockPos pos) {
-        return getState(pos).getMaterial();
-    }
-
-    public static AxisAlignedBB getBoundingBox(BlockPos pos) {
-        return getState(pos).getBoundingBox(mc.world, pos).offset(pos);
-    }
-
-    public static boolean canBeClicked(BlockPos pos) {
-        return getBlock(pos).canCollideCheck(getState(pos), false);
-    }
-
-    public static float getHardness(BlockPos pos) {
-        return getState(pos).getPlayerRelativeBlockHardness(mc.player, mc.world, pos);
-    }
-}
+ackage net.daporkchop.pepsimod.the.wurst.pkg.name;

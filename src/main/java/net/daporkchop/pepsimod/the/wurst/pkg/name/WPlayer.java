@@ -13,44 +13,45 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package net.daporkchop.pepsimod.totally.not.skidded;
+package net.daporkchop.pepsimod.the.wurst.pkg.name;
 
 import net.daporkchop.pepsimod.util.misc.Default;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.PlayerControllerMP;
-import net.minecraft.inventory.ClickType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.entity.Entity;
+import net.minecraft.network.play.client.CPacketAnimation;
+import net.minecraft.network.play.client.CPacketUseEntity;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 
-public final class WPlayerController extends Default {
-    private static PlayerControllerMP getPlayerController() {
-        return Minecraft.getMinecraft().playerController;
+public final class WPlayer extends Default {
+    public static void swingArmClient() {
+        mc.player.swingArm(EnumHand.MAIN_HAND);
     }
 
-    public static ItemStack windowClick_PICKUP(int slot) {
-        return getPlayerController().windowClick(0, slot, 0, ClickType.PICKUP, mc.player);
+    public static void swingArmPacket() {
+        mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
     }
 
-    public static ItemStack windowClick_QUICK_MOVE(int slot) {
-        return getPlayerController().windowClick(0, slot, 0, ClickType.QUICK_MOVE, mc.player);
+    public static void attackEntity(Entity entity) {
+        Minecraft.getMinecraft().playerController.attackEntity(mc.player, entity);
+        swingArmClient();
     }
 
-    public static ItemStack windowClick_THROW(int slot) {
-        return getPlayerController().windowClick(0, slot, 1, ClickType.THROW,
-                mc.player);
+    public static void sendAttackPacket(Entity entity) {
+        mc.player.connection.sendPacket(new CPacketUseEntity(entity, EnumHand.MAIN_HAND));
     }
 
-    public static void processRightClick() {
-        getPlayerController().processRightClick(mc.player,
-                mc.world, EnumHand.MAIN_HAND);
+    public static float getCooldown() {
+        return mc.player.getCooledAttackStrength(0);
     }
 
-    public static void processRightClickBlock(BlockPos pos, EnumFacing side, Vec3d hitVec) {
-        getPlayerController().processRightClickBlock(mc.player,
-                mc.world, pos, side, hitVec, EnumHand.MAIN_HAND);
+    public static void addPotionEffect(Potion potion) {
+        mc.player
+                .addPotionEffect(new PotionEffect(potion, 10801220));
+    }
+
+    public static void removePotionEffect(Potion potion) {
+        mc.player.removePotionEffect(potion);
     }
 }
-

@@ -15,8 +15,8 @@
 
 package net.daporkchop.pepsimod.util.misc.waypoints.pathfind;
 
-import net.daporkchop.pepsimod.totally.not.skidded.RotationUtils;
-import net.daporkchop.pepsimod.totally.not.skidded.WMinecraft;
+import net.daporkchop.pepsimod.the.wurst.pkg.name.RotationUtils;
+import net.daporkchop.pepsimod.the.wurst.pkg.name.WMinecraft;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.misc.Default;

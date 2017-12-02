@@ -19,7 +19,7 @@ import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.impl.movement.FlightMod;
-import net.daporkchop.pepsimod.totally.not.skidded.WPlayerController;
+import net.daporkchop.pepsimod.the.wurst.pkg.name.WPlayerController;
 import net.minecraft.item.ItemBow;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerDigging;

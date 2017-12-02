@@ -18,7 +18,7 @@ package net.daporkchop.pepsimod.module.impl.combat;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.TimeModule;
-import net.daporkchop.pepsimod.totally.not.skidded.WPlayerController;
+import net.daporkchop.pepsimod.the.wurst.pkg.name.WPlayerController;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;

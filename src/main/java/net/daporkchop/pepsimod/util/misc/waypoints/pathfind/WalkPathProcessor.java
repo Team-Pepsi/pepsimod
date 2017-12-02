@@ -17,9 +17,9 @@ package net.daporkchop.pepsimod.util.misc.waypoints.pathfind;
 
 import net.daporkchop.pepsimod.command.impl.GoToCommand;
 import net.daporkchop.pepsimod.module.impl.movement.StepMod;
-import net.daporkchop.pepsimod.totally.not.skidded.RotationUtils;
-import net.daporkchop.pepsimod.totally.not.skidded.WBlock;
-import net.daporkchop.pepsimod.totally.not.skidded.WMinecraft;
+import net.daporkchop.pepsimod.the.wurst.pkg.name.RotationUtils;
+import net.daporkchop.pepsimod.the.wurst.pkg.name.WBlock;
+import net.daporkchop.pepsimod.the.wurst.pkg.name.WMinecraft;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.config.impl.StepTranslator;
 import net.minecraft.block.Block;

@@ -19,7 +19,7 @@ import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
 import net.daporkchop.pepsimod.module.impl.movement.FlightMod;
 import net.daporkchop.pepsimod.module.impl.movement.NoSlowdownMod;
 import net.daporkchop.pepsimod.module.impl.movement.StepMod;
-import net.daporkchop.pepsimod.totally.not.skidded.RotationUtils;
+import net.daporkchop.pepsimod.the.wurst.pkg.name.RotationUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.entity.AbstractClientPlayer;
