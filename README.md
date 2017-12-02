@@ -1,6 +1,6 @@
 # pepsimod
 
-The sequel to pepsimod!
+"The best way to use pepsimod is assume that nothing will work and then be suprised by how well it works"
 
 ![pepsimod logo](https://bytebucket.org/TeamPepsi/pepsimod/raw/4e9f42a870284af48a4813b6dfd74483f5e61e14/src/main/resources/assets/minecraft/textures/gui/pepsimod.png?token=0a0123412d9983b8a7e882b057f7b58fb5e1e8c8)
 
