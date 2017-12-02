@@ -28,11 +28,9 @@ public class PepsiModMixinLoader implements IFMLLoadingPlugin {
     public static boolean isObfuscatedEnvironment = false;
 
     public PepsiModMixinLoader() {
-        FMLLog.log.info("\n\n\nPepsiMod Mixin init \n\n");
         FMLLog.log.info("\n\n\nPepsiMod Mixin init\n\n");
         MixinBootstrap.init();
         Mixins.addConfiguration("mixins.pepsimod.json");
-        Mixins.addConfiguration("mixins.pepsimod.wdl.json");
 
         MixinEnvironment.getDefaultEnvironment().setObfuscationContext("searge");
 

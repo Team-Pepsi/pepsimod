@@ -35,7 +35,6 @@ import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.config.Config;
 import net.daporkchop.pepsimod.util.config.impl.HUDTranslator;
 import net.daporkchop.pepsimod.util.misc.Default;
-import net.daporkchop.pepsimod.wdl.WDL;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Session;
@@ -172,7 +171,6 @@ public class PepsiMod {
         mc = Minecraft.getMinecraft();
         Default.mc = mc;
         Default.pepsiMod = this;
-        new WDL();
     }
 
     @Mod.EventHandler
