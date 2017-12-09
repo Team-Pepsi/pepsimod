@@ -63,7 +63,13 @@ public class Config {
         System.out.println("Loading config!");
         System.out.println(configJson);
 
-        JsonObject object = new JsonParser().parse(configJson).getAsJsonObject();
+        JsonObject object = null;
+        try {
+            object = new JsonParser().parse(configJson).getAsJsonObject();
+        } catch (IllegalStateException e) {
+            //Thrown when the config is an empty string
+            new JsonObject();
+        }
         for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
             translators.getOrDefault(entry.getKey(), NullConfigTranslator.INSTANCE).decode(entry.getKey(), entry.getValue().getAsJsonObject());
         }

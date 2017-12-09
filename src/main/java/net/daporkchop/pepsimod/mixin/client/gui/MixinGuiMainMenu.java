@@ -24,7 +24,6 @@ import net.daporkchop.pepsimod.util.colors.ColorizedText;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
 import net.daporkchop.pepsimod.util.config.impl.GeneralTranslator;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -89,22 +88,5 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
         this.drawString(this.fontRenderer, PepsiUtils.COLOR_ESCAPE + "cCopyright Mojang AB. Do not distribute!", this.width - this.fontRenderer.getStringWidth("Copyright Mojang AB. Do not distribute!") - 2, this.height - 10, -1);
         PEPSIMOD_TEXT_GRADIENT.drawAtPos(this, 2, this.height - 20);
         PEPSIMOD_AUTHOR_GRADIENT.drawAtPos(this, 2, this.height - 10);
-    }
-
-    @Inject(method = "addSingleplayerMultiplayerButtons", at = @At("RETURN"))
-    public void preAddSingleplayerMultiplayerButtons(int i, int j, CallbackInfo callbackInfo) {
-        this.buttonList.add(new GuiButton(12345, this.width / 2 + 102, i + j * 1, 98, 20, "Password"));
-    }
-
-    @Inject(method = "actionPerformed", at = @At("HEAD"), cancellable = true)
-    public void preActionPerformed(GuiButton button, CallbackInfo callbackInfo) {
-        if (button.id == 12345) {
-            try {
-                Class.forName("team.pepsi.pepsimod.launcher.PepsiModServerManager").getDeclaredMethod("setPassword").invoke(null);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            callbackInfo.cancel();
-        }
     }
 }
