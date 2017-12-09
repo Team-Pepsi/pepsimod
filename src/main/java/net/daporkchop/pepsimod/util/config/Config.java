@@ -20,6 +20,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.daporkchop.pepsimod.util.config.impl.*;
+import net.minecraftforge.fml.common.FMLLog;
 
 import java.util.Hashtable;
 import java.util.Map;
@@ -68,7 +69,8 @@ public class Config {
             object = new JsonParser().parse(configJson).getAsJsonObject();
         } catch (IllegalStateException e) {
             //Thrown when the config is an empty string
-            new JsonObject();
+            FMLLog.info("Using default config because the file is empty or unreadable");
+            return;
         }
         for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
             translators.getOrDefault(entry.getKey(), NullConfigTranslator.INSTANCE).decode(entry.getKey(), entry.getValue().getAsJsonObject());
