@@ -69,7 +69,7 @@ public abstract class MixinMinecraft {
 
     @Inject(method = "runGameLoop", at = @At("RETURN"))
     public void postOnClientPreTick(CallbackInfo callbackInfo) {
-        if (mc.player != null) { // is ingame
+        if (mc.player != null && mc.player.movementInput != null) { // is ingame
             for (Module module : ModuleManager.AVALIBLE_MODULES) {
                 if (module.shouldTick()) {
                     module.tick();
