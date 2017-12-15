@@ -31,8 +31,6 @@ import net.daporkchop.pepsimod.util.config.impl.HUDTranslator;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.SPacketCustomPayload;
 
 import java.awt.*;
 
@@ -213,16 +211,6 @@ public class HUDMod extends Module {
                             return HUDTranslator.INSTANCE.b;
                         }, "Blue", new ExtensionSlider(ExtensionType.VALUE_INT, 0, 255, 1))
         };
-    }
-
-    @Override
-    public boolean preRecievePacket(Packet packet)  {
-        if (packet instanceof SPacketCustomPayload) {
-            if (((SPacketCustomPayload) packet).getChannelName().equals("MC|Brand"))    {
-                serverBrand = ((SPacketCustomPayload) packet).getBufferData().readString(32767);
-            }
-        }
-        return false;
     }
 
     public ModuleCategory getCategory() {

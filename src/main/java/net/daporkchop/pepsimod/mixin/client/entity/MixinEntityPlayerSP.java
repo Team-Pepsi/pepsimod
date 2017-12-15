@@ -16,6 +16,7 @@
 package net.daporkchop.pepsimod.mixin.client.entity;
 
 import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
+import net.daporkchop.pepsimod.module.impl.misc.HUDMod;
 import net.daporkchop.pepsimod.module.impl.movement.FlightMod;
 import net.daporkchop.pepsimod.module.impl.movement.NoSlowdownMod;
 import net.daporkchop.pepsimod.module.impl.movement.StepMod;
@@ -27,7 +28,6 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayer;
-import net.minecraft.util.MovementInput;
 import net.minecraft.util.math.AxisAlignedBB;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,6 +36,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EntityPlayerSP.class)
@@ -160,5 +161,11 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
             this.prevOnGround = this.onGround;
             this.autoJumpEnabled = this.mc.gameSettings.autoJump;
         }
+    }
+
+    @Inject(method = "Lnet/minecraft/client/entity/EntityPlayerSP;setServerBrand(Ljava/lang/String;)V",
+            at = @At("HEAD"))
+    public void setHUDBrand(String brand, CallbackInfo callbackInfo) {
+        HUDMod.INSTANCE.serverBrand = brand;
     }
 }
