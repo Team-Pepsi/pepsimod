@@ -229,10 +229,10 @@ public abstract class Module extends Command implements ITickListener {
     public String getSuggestion(String cmd, String[] args) {
         switch (args.length) {
             case 1:
-                return "." + name + " " + completionOptions[0];
+                return "." + name + " " + (completionOptions.length == 0 ? "" : completionOptions[0]);
             case 2:
                 if (args[1].isEmpty()) {
-                    return "." + name + " " + completionOptions[0];
+                    return "." + name + " " + (completionOptions.length == 0 ? "" : completionOptions[0]);
                 }
                 for (String mode : completionOptions) {
                     if (mode.equals(args[1])) {
@@ -379,6 +379,7 @@ public abstract class Module extends Command implements ITickListener {
 
     }
 
+    @Deprecated
     public ModuleLaunchState getLaunchState() {
         return ModuleLaunchState.AUTO;
     }
