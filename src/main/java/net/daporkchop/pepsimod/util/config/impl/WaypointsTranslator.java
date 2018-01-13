@@ -47,9 +47,9 @@ public class WaypointsTranslator extends Default implements IConfigTranslator {
         if (mc.isIntegratedServerRunning()) {
             return mc.getIntegratedServer().getFolderName();
         } else {
-            try {
+            if (mc.getCurrentServerData() != null) {
                 return mc.getCurrentServerData().serverIP;
-            } catch (NullPointerException e) {
+            } else {
                 return "realms";
             }
         }
