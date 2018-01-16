@@ -67,7 +67,6 @@ public class NotificationsMod extends Module {
 
     @Override
     public void tick() {
-        trayIcon.setToolTip("x" + Math.floor(mc.player.posX) + " y" + Math.floor(mc.player.posY) + " z" + Math.floor(mc.player.posZ));
         if (NotificationsTranslator.INSTANCE.death && mc.player.getHealth() <= 0) {
             sendNotification("You died!", TrayIcon.MessageType.WARNING);
         }
