@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Optional;
 
 public class WaypointsTranslator extends Default implements IConfigTranslator {
     public static final WaypointsTranslator INSTANCE = new WaypointsTranslator();
@@ -48,11 +49,9 @@ public class WaypointsTranslator extends Default implements IConfigTranslator {
         if (mc.isIntegratedServerRunning()) {
             return mc.getIntegratedServer().getFolderName();
         } else {
-            try {
-                return mc.getCurrentServerData().serverIP;
-            } catch (NullPointerException e) {
-                return "realms";
-            }
+            return Optional.ofNullable(mc.getCurrentServerData())
+                           .map(current -> current.serverIP)
+                           .orElse("realms");
         }
     }
 
