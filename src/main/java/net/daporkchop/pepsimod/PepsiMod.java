@@ -1,34 +1,104 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017 Team Pepsi
+ * Copyright (c) 2017-2018 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
  *
- * The persons and/or organizations are also disallowed from sub-licensing and/or trademarking this software without explicit permission from Team Pepsi.
+ * The persons and/or organizations are also disallowed from sub-licensing and/or trademarking this software without explicit permission from DaPorkchop_.
  *
- * Any persons and/or organizations using this software must disclose their source code and have it publicly available, include this license, provide sufficient credit to the original authors of the project (IE: Team Pepsi), as well as provide a link to the original project.
+ * Any persons and/or organizations using this software must disclose their source code and have it publicly available, include this license, provide sufficient credit to the original author of the project (IE: DaPorkchop_), as well as provide a link to the original project.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 
 package net.daporkchop.pepsimod;
 
 import net.daporkchop.pepsimod.clickgui.ClickGUI;
 import net.daporkchop.pepsimod.command.CommandRegistry;
-import net.daporkchop.pepsimod.command.impl.*;
-import net.daporkchop.pepsimod.command.impl.waypoint.*;
+import net.daporkchop.pepsimod.command.impl.DamageCommand;
+import net.daporkchop.pepsimod.command.impl.GoToCommand;
+import net.daporkchop.pepsimod.command.impl.HelpCommand;
+import net.daporkchop.pepsimod.command.impl.InvSeeCommand;
+import net.daporkchop.pepsimod.command.impl.ListCommand;
+import net.daporkchop.pepsimod.command.impl.PeekCommand;
+import net.daporkchop.pepsimod.command.impl.SaveCommand;
+import net.daporkchop.pepsimod.command.impl.SetRotCommand;
+import net.daporkchop.pepsimod.command.impl.SortModulesCommand;
+import net.daporkchop.pepsimod.command.impl.ToggleCommand;
+import net.daporkchop.pepsimod.command.impl.waypoint.WaypointAddCommand;
+import net.daporkchop.pepsimod.command.impl.waypoint.WaypointClearCommand;
+import net.daporkchop.pepsimod.command.impl.waypoint.WaypointHardClearCommand;
+import net.daporkchop.pepsimod.command.impl.waypoint.WaypointHideCommand;
+import net.daporkchop.pepsimod.command.impl.waypoint.WaypointListCommand;
+import net.daporkchop.pepsimod.command.impl.waypoint.WaypointRemoveCommand;
+import net.daporkchop.pepsimod.command.impl.waypoint.WaypointShowCommand;
 import net.daporkchop.pepsimod.event.GuiRenderHandler;
 import net.daporkchop.pepsimod.event.MiscEventHandler;
-import net.daporkchop.pepsimod.gui.clickgui.*;
+import net.daporkchop.pepsimod.gui.clickgui.WindowCombat;
+import net.daporkchop.pepsimod.gui.clickgui.WindowMisc;
+import net.daporkchop.pepsimod.gui.clickgui.WindowMovement;
+import net.daporkchop.pepsimod.gui.clickgui.WindowPlayer;
+import net.daporkchop.pepsimod.gui.clickgui.WindowRender;
 import net.daporkchop.pepsimod.key.KeyRegistry;
 import net.daporkchop.pepsimod.module.ModuleManager;
-import net.daporkchop.pepsimod.module.impl.combat.*;
-import net.daporkchop.pepsimod.module.impl.misc.*;
-import net.daporkchop.pepsimod.module.impl.movement.*;
-import net.daporkchop.pepsimod.module.impl.player.*;
-import net.daporkchop.pepsimod.module.impl.render.*;
+import net.daporkchop.pepsimod.module.impl.combat.AuraMod;
+import net.daporkchop.pepsimod.module.impl.combat.AutoArmorMod;
+import net.daporkchop.pepsimod.module.impl.combat.AutoTotemMod;
+import net.daporkchop.pepsimod.module.impl.combat.BedBomberMod;
+import net.daporkchop.pepsimod.module.impl.combat.CriticalsMod;
+import net.daporkchop.pepsimod.module.impl.combat.CrystalAuraMod;
+import net.daporkchop.pepsimod.module.impl.misc.AnnouncerMod;
+import net.daporkchop.pepsimod.module.impl.misc.AntiHungerMod;
+import net.daporkchop.pepsimod.module.impl.misc.AutoFishMod;
+import net.daporkchop.pepsimod.module.impl.misc.AutoToolMod;
+import net.daporkchop.pepsimod.module.impl.misc.ClickGuiMod;
+import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
+import net.daporkchop.pepsimod.module.impl.misc.HUDMod;
+import net.daporkchop.pepsimod.module.impl.misc.NoFallMod;
+import net.daporkchop.pepsimod.module.impl.misc.NotificationsMod;
+import net.daporkchop.pepsimod.module.impl.misc.TimerMod;
+import net.daporkchop.pepsimod.module.impl.misc.WaypointsMod;
+import net.daporkchop.pepsimod.module.impl.movement.AutoRespawnMod;
+import net.daporkchop.pepsimod.module.impl.movement.AutoWalkMod;
+import net.daporkchop.pepsimod.module.impl.movement.BoatFlyMod;
+import net.daporkchop.pepsimod.module.impl.movement.ElytraFlyMod;
+import net.daporkchop.pepsimod.module.impl.movement.EntitySpeedMod;
+import net.daporkchop.pepsimod.module.impl.movement.FastLadderMod;
+import net.daporkchop.pepsimod.module.impl.movement.FlightMod;
+import net.daporkchop.pepsimod.module.impl.movement.HorseJumpPowerMod;
+import net.daporkchop.pepsimod.module.impl.movement.InventoryMoveMod;
+import net.daporkchop.pepsimod.module.impl.movement.JesusMod;
+import net.daporkchop.pepsimod.module.impl.movement.NoClipMod;
+import net.daporkchop.pepsimod.module.impl.movement.NoSlowdownMod;
+import net.daporkchop.pepsimod.module.impl.movement.SafewalkMod;
+import net.daporkchop.pepsimod.module.impl.movement.StepMod;
+import net.daporkchop.pepsimod.module.impl.movement.VelocityMod;
+import net.daporkchop.pepsimod.module.impl.player.AutoEatMod;
+import net.daporkchop.pepsimod.module.impl.player.AutoMineMod;
+import net.daporkchop.pepsimod.module.impl.player.FastPlaceMod;
+import net.daporkchop.pepsimod.module.impl.player.ParalyzeMod;
+import net.daporkchop.pepsimod.module.impl.player.ScaffoldMod;
+import net.daporkchop.pepsimod.module.impl.player.SpeedmineMod;
+import net.daporkchop.pepsimod.module.impl.player.SprintMod;
+import net.daporkchop.pepsimod.module.impl.render.AntiBlindMod;
+import net.daporkchop.pepsimod.module.impl.render.AntiInvisibleMod;
+import net.daporkchop.pepsimod.module.impl.render.AntiTotemAnimationMod;
+import net.daporkchop.pepsimod.module.impl.render.ESPMod;
+import net.daporkchop.pepsimod.module.impl.render.FullbrightMod;
+import net.daporkchop.pepsimod.module.impl.render.HealthTagsMod;
+import net.daporkchop.pepsimod.module.impl.render.NameTagsMod;
+import net.daporkchop.pepsimod.module.impl.render.NoHurtCamMod;
+import net.daporkchop.pepsimod.module.impl.render.NoOverlayMod;
+import net.daporkchop.pepsimod.module.impl.render.NoWeatherMod;
+import net.daporkchop.pepsimod.module.impl.render.StorageESPMod;
+import net.daporkchop.pepsimod.module.impl.render.TracersMod;
+import net.daporkchop.pepsimod.module.impl.render.TrajectoriesMod;
+import net.daporkchop.pepsimod.module.impl.render.UnfocusedCPUMod;
+import net.daporkchop.pepsimod.module.impl.render.XrayMod;
+import net.daporkchop.pepsimod.module.impl.render.ZoomMod;
 import net.daporkchop.pepsimod.util.ImageUtils;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.ReflectionStuff;

@@ -1,20 +1,23 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017 Team Pepsi
+ * Copyright (c) 2017-2018 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
  *
- * The persons and/or organizations are also disallowed from sub-licensing and/or trademarking this software without explicit permission from Team Pepsi.
+ * The persons and/or organizations are also disallowed from sub-licensing and/or trademarking this software without explicit permission from DaPorkchop_.
  *
- * Any persons and/or organizations using this software must disclose their source code and have it publicly available, include this license, provide sufficient credit to the original authors of the project (IE: Team Pepsi), as well as provide a link to the original project.
+ * Any persons and/or organizations using this software must disclose their source code and have it publicly available, include this license, provide sufficient credit to the original author of the project (IE: DaPorkchop_), as well as provide a link to the original project.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
  */
 
 package net.daporkchop.pepsimod.util.misc.waypoints.pathfind;
 
+import it.unimi.dsi.fastutil.objects.Object2FloatMap;
+import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import net.daporkchop.pepsimod.command.impl.GoToCommand;
 import net.daporkchop.pepsimod.module.impl.movement.JesusMod;
 import net.daporkchop.pepsimod.module.impl.movement.NoSlowdownMod;
@@ -22,7 +25,20 @@ import net.daporkchop.pepsimod.the.wurst.pkg.name.WBlock;
 import net.daporkchop.pepsimod.the.wurst.pkg.name.WMinecraft;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.misc.Default;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockFence;
+import net.minecraft.block.BlockFenceGate;
+import net.minecraft.block.BlockLadder;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.BlockMagma;
+import net.minecraft.block.BlockPressurePlate;
+import net.minecraft.block.BlockSign;
+import net.minecraft.block.BlockSlime;
+import net.minecraft.block.BlockSoulSand;
+import net.minecraft.block.BlockTripWire;
+import net.minecraft.block.BlockVine;
+import net.minecraft.block.BlockWall;
+import net.minecraft.block.BlockWeb;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -41,7 +57,7 @@ public class PathFinder extends Default {
     public final boolean noWaterSlowdown = NoSlowdownMod.INSTANCE.state.enabled;
     public final boolean jesus = JesusMod.INSTANCE.state.enabled;
     public final BlockPos goal;
-    public final HashMap<PathPos, Float> costMap = new HashMap<>();
+    public final Object2FloatMap<PathPos> costMap = new Object2FloatOpenHashMap<>();
     public final PathQueue queue = new PathQueue();
     public PathPos start;
     public boolean fallingAllowed = true;
@@ -66,7 +82,6 @@ public class PathFinder extends Default {
 
     public void think() {
         try {
-            int i = 0;
             for (; !goal.equals(current); ) {
                 // get next position from queue
                 current = queue.poll();
@@ -370,14 +385,11 @@ public class PathFinder extends Default {
         PathPos playerPos = new PathPos(new BlockPos(mc.player));
         for (Iterator<PathPos> iterator = prevPosMap.keySet().iterator(); iterator.hasNext(); ) {
             PathPos pos = iterator.next();
-            if (pos.roughEquals(playerPos)) {
-                toRemove.add(pos);
-            }
-            if (!WMinecraft.getWorld().isBlockLoaded(pos)) {
+            if (pos.roughEquals(playerPos) || !mc.world.isBlockLoaded(pos)) {
                 toRemove.add(pos);
             }
         }
-        for (PathPos pos : toRemove) {
+        toRemove.forEach(pos -> {
             if (pos != null) {
                 prevPosMap.remove(pos);
                 costMap.remove(pos);
@@ -387,7 +399,7 @@ public class PathFinder extends Default {
                     queue.removePoint(a);
                 }
             }
-        }
+        });
         toRemove.clear();
 
         // get last position
