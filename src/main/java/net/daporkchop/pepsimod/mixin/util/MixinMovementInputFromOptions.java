@@ -27,10 +27,13 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.MovementInput;
 import net.minecraft.util.MovementInputFromOptions;
 import org.lwjgl.input.Keyboard;
+import org.spongepowered.asm.lib.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static net.daporkchop.pepsimod.util.misc.Default.mc;
 
@@ -40,8 +43,12 @@ public abstract class MixinMovementInputFromOptions extends MovementInput {
     @Final
     private GameSettings gameSettings;
 
-    @Overwrite
-    public void updatePlayerMoveState() {
+    @Inject(method = "updatePlayerMoveState",
+            at = @At(value = "FIELD",
+                    target = "Lnet/minecraft/util/MovementInputFromOptions;moveStrafe:F",
+                    opcode = Opcodes.PUTFIELD),
+            cancellable = true)
+    public void preUpdateMoveState(CallbackInfo ci) {
         this.moveStrafe = 0.0F;
         this.moveForward = 0.0F;
 
@@ -80,6 +87,8 @@ public abstract class MixinMovementInputFromOptions extends MovementInput {
             this.moveStrafe = (float) ((double) this.moveStrafe * 0.3D);
             this.moveForward = (float) ((double) this.moveForward * 0.3D);
         }
+
+        ci.cancel();
     }
 
     public boolean pepsimod_isPressed(KeyBinding keyBinding) {
