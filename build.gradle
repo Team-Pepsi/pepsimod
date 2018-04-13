@@ -45,6 +45,12 @@ compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
 }
 
+configurations.all {
+    resolutionStrategy {
+        force("com.google.guava:guava:21.0")
+    }
+}
+
 minecraft {
     version = "1.12.2-14.23.0.2487"
     runDir = "run"
