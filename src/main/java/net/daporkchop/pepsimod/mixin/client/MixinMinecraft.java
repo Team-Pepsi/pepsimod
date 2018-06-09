@@ -27,11 +27,13 @@ import net.daporkchop.pepsimod.util.config.impl.FriendsTranslator;
 import net.daporkchop.pepsimod.util.misc.ITickListener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLLog;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.spongepowered.asm.mixin.Mixin;
@@ -159,6 +161,15 @@ public abstract class MixinMinecraft {
             }
         } catch (NullPointerException e) {
 
+        }
+    }
+
+    @Inject(method = "processKeyBinds", at = @At("HEAD"))
+    public void preProcessKeyBinds(CallbackInfo ci) {
+        // If . is typed open GuiChat
+        // Bypass the keybind system because the command prefix is not configurable
+        if (mc.currentScreen == null && Keyboard.getEventCharacter() == '.') {
+            mc.displayGuiScreen(new GuiChat("."));
         }
     }
 }
