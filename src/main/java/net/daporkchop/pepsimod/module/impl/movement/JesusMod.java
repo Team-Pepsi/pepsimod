@@ -75,7 +75,7 @@ public class JesusMod extends Module {
 
         Entity entity = mc.player.isRiding() ? mc.player.getRidingEntity() : mc.player;
 
-        return state.enabled && entity.fallDistance <= 3 && !mc.gameSettings.keyBindSneak.isPressed() && !entity.isInWater();
+        return this.state.enabled && entity.fallDistance <= 3 && !mc.gameSettings.keyBindSneak.isPressed() && !entity.isInWater();
     }
 
     @Override
@@ -104,19 +104,19 @@ public class JesusMod extends Module {
         // move up in water
         if (entity.isInWater()) {
             entity.motionY = 0.11;
-            tickTimer = 0;
+            this.tickTimer = 0;
             return;
         }
 
         // simulate jumping out of water
-        if (tickTimer == 0) {
+        if (this.tickTimer == 0) {
             entity.motionY = 0.30;
-        } else if (tickTimer == 1) {
+        } else if (this.tickTimer == 1) {
             entity.motionY = 0;
         }
 
         // update timer
-        tickTimer++;
+        this.tickTimer++;
     }
 
     @Override
@@ -144,7 +144,7 @@ public class JesusMod extends Module {
                 break RETURN;
             }
 
-            if (!isOverLiquid()) {
+            if (!this.isOverLiquid()) {
                 break RETURN;
             }
 
@@ -154,8 +154,8 @@ public class JesusMod extends Module {
             }
 
             // wait for timer
-            packetTimer++;
-            if (packetTimer < 4) {
+            this.packetTimer++;
+            if (this.packetTimer < 4) {
                 break RETURN;
             }
 
@@ -184,7 +184,7 @@ public class JesusMod extends Module {
                 break RETURN;
             }
 
-            if (!isOverLiquid()) {
+            if (!this.isOverLiquid()) {
                 break RETURN;
             }
 
@@ -194,8 +194,8 @@ public class JesusMod extends Module {
             }
 
             // wait for timer
-            packetTimer++;
-            if (packetTimer < 4) {
+            this.packetTimer++;
+            if (this.packetTimer < 4) {
                 break RETURN;
             }
 

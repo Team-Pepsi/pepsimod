@@ -75,10 +75,10 @@ public class NotificationsMod extends Module {
     public void init() {
         try {
             INSTANCE = this;
-            tray = SystemTray.getSystemTray();
-            trayIcon = new TrayIcon(ImageIO.read(new ByteArrayInputStream(Base64.getDecoder().decode("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAACDVBMVEUAAAD////++fneAAD1j5z0+fz0+Pru9PgAWJH//////Pz82+D5uMH3pK/3oa34r7n7ztT+8vT////////84uX2nKjwWW3vSF/0g5L70Nb////////819zzd4f3q7X////////96Orze4v////8/f7////3p7LY5e7k7vP96ezyaXujwte60eH6zNLuQ1uTt9D5u8N9qcf5u8SAq8j6ztTvRVyYu9L96+7ybX8rc6PA1eP////4rLZwocHx9vn/7e7WuMZGha/H2uf////Z6fFuocFLiLG60eH////////l7vObvtRRjLM9f6t/q8jO3+r////////9/v7g6/K70uGjwtegwNawy93T4uz2+fsAWJHtNE3sJ0LsJkHsLkjsKkTrGjfrHDjrGjbsJD/rIj3rHTnrGzftOlL71drtL0nrGzjzfY3/+vv7/f7uPVX709j////9/v7sJUD2nqr//f76/P1yosLtNU7rHzvze4v+8vTf6vE2eqftNU/rIDzzcoP96uz3+vt9qscKXZTsKUT1g5L+7O7n7/WCrckQYpcMX5XtITzyTmP6r7j68/bs9PjL3emQts8/gawHXJQAVY/uP1bqS2Lbh5q+ucuWutJonb8+gKsaaJwEWpIAVpAAV5AFWpJqia0vd6USZZoAWJEAV5EBV5EUZJkAVo8IXJQjbqASY5gQYpgbaZwAAAAprTAwAAAAW3RSTlMAAAAAAAAAAAACKHrA4ufPlUIICWDO+f3jiRsHdu/7qRxW7PyRC8HoT13y/qqZ/ua4/Lf8lf3jWPD+pBm65UhO5/qHBWrp+Z4XBlPD9frbexUBH2mt0te9gjUElCjBbQAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAEDSURBVBjTY2BgYOTk4ubh5eMXEBRiZAACRmERUbHomNg4cQlJKSZGBkZpGdn4hEQgSEqWk1dgZGBWVEpJTAWBtPQMZRVVBgW1zCwwPzUxOydXXYNBUysNwk/Lyy8o1NZh0NWDCCQWFZcUlJbpMxiUg01IrKisKiiorjFkMKoFCSTW1TcUFDQ2NRszmJgCtSS0tLYVFLR3dHaZMZhbpKV19/T29U+YOGnyFEsrBmubqdOmz5g5a/acufPmL7C1Y2Cxd1i4aPHcefPmL1m6zNFJiIHR2cV1+Yp585fOn7fSzd2DFeg5Ty9vn1Wr16z19fMPYAP5lzEwKDgkNCw8ItKZnSMKAAihVlWjuDlCAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE3LTA5LTA5VDE3OjE3OjAyKzAyOjAw4iAIuQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNy0wOS0wOVQxNzoxNzowMiswMjowMJN9sAUAAAAASUVORK5CYII="))),
-                    "pepsimod", menu = new PopupMenu());
-            tray.add(trayIcon);
+            this.tray = SystemTray.getSystemTray();
+            this.trayIcon = new TrayIcon(ImageIO.read(new ByteArrayInputStream(Base64.getDecoder().decode("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAACDVBMVEUAAAD////++fneAAD1j5z0+fz0+Pru9PgAWJH//////Pz82+D5uMH3pK/3oa34r7n7ztT+8vT////////84uX2nKjwWW3vSF/0g5L70Nb////////819zzd4f3q7X////////96Orze4v////8/f7////3p7LY5e7k7vP96ezyaXujwte60eH6zNLuQ1uTt9D5u8N9qcf5u8SAq8j6ztTvRVyYu9L96+7ybX8rc6PA1eP////4rLZwocHx9vn/7e7WuMZGha/H2uf////Z6fFuocFLiLG60eH////////l7vObvtRRjLM9f6t/q8jO3+r////////9/v7g6/K70uGjwtegwNawy93T4uz2+fsAWJHtNE3sJ0LsJkHsLkjsKkTrGjfrHDjrGjbsJD/rIj3rHTnrGzftOlL71drtL0nrGzjzfY3/+vv7/f7uPVX709j////9/v7sJUD2nqr//f76/P1yosLtNU7rHzvze4v+8vTf6vE2eqftNU/rIDzzcoP96uz3+vt9qscKXZTsKUT1g5L+7O7n7/WCrckQYpcMX5XtITzyTmP6r7j68/bs9PjL3emQts8/gawHXJQAVY/uP1bqS2Lbh5q+ucuWutJonb8+gKsaaJwEWpIAVpAAV5AFWpJqia0vd6USZZoAWJEAV5EBV5EUZJkAVo8IXJQjbqASY5gQYpgbaZwAAAAprTAwAAAAW3RSTlMAAAAAAAAAAAACKHrA4ufPlUIICWDO+f3jiRsHdu/7qRxW7PyRC8HoT13y/qqZ/ua4/Lf8lf3jWPD+pBm65UhO5/qHBWrp+Z4XBlPD9frbexUBH2mt0te9gjUElCjBbQAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAEDSURBVBjTY2BgYOTk4ubh5eMXEBRiZAACRmERUbHomNg4cQlJKSZGBkZpGdn4hEQgSEqWk1dgZGBWVEpJTAWBtPQMZRVVBgW1zCwwPzUxOydXXYNBUysNwk/Lyy8o1NZh0NWDCCQWFZcUlJbpMxiUg01IrKisKiiorjFkMKoFCSTW1TcUFDQ2NRszmJgCtSS0tLYVFLR3dHaZMZhbpKV19/T29U+YOGnyFEsrBmubqdOmz5g5a/acufPmL7C1Y2Cxd1i4aPHcefPmL1m6zNFJiIHR2cV1+Yp585fOn7fSzd2DFeg5Ty9vn1Wr16z19fMPYAP5lzEwKDgkNCw8ItKZnSMKAAihVlWjuDlCAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE3LTA5LTA5VDE3OjE3OjAyKzAyOjAw4iAIuQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNy0wOS0wOVQxNzoxNzowMiswMjowMJN9sAUAAAAASUVORK5CYII="))),
+                    "pepsimod", this.menu = new PopupMenu());
+            this.tray.add(this.trayIcon);
         } catch (IOException | AWTException e) {
             e.printStackTrace();
             ModuleManager.unRegister(this);
@@ -139,10 +139,10 @@ public class NotificationsMod extends Module {
             if (!pck.isSystem()) {
                 String message = pck.getChatComponent().getUnformattedText().toLowerCase();
                 if (NotificationsTranslator.INSTANCE.queue && message.startsWith("position in queue")) {
-                    inQueue = true;
-                } else if (inQueue && message.startsWith("connecting to")) {
+                    this.inQueue = true;
+                } else if (this.inQueue && message.startsWith("connecting to")) {
                     sendNotification("Finished going through the queue!", TrayIcon.MessageType.INFO);
-                    inQueue = false;
+                    this.inQueue = false;
                 } else if (NotificationsTranslator.INSTANCE.chat && message.contains(mc.getSession().getUsername().toLowerCase())) {
                     sendNotification("Your name was mentioned in chat!", TrayIcon.MessageType.INFO);
                 }

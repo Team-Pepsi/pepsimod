@@ -51,9 +51,9 @@ public class AutoArmorMod extends TimeModule {
             return;
         }
 
-        updateMS();
-        if (hasTimePassedM(500)) {
-            updateLastMS();
+        this.updateMS();
+        if (this.hasTimePassedM(500)) {
+            this.updateLastMS();
             int[] bestArmorValues = new int[4];
             for (int type = 0; type < 4; type++) {
                 ItemStack oldArmor = mc.player.inventory.armorItemInSlot(type);
@@ -87,7 +87,7 @@ public class AutoArmorMod extends TimeModule {
     @Override
     public void init() {
         INSTANCE = this;
-        updateLastMS();
+        this.updateLastMS();
     }
 
     @Override

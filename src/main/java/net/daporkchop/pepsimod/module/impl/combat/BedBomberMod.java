@@ -64,9 +64,9 @@ public class BedBomberMod extends TimeModule {
 
     @Override
     public void tick() {
-        updateMS();
+        this.updateMS();
 
-        if (hasTimePassedM(BedBomberTranslator.INSTANCE.delay) && (mc.player.dimension == -1 || mc.player.dimension == 1)) {
+        if (this.hasTimePassedM(BedBomberTranslator.INSTANCE.delay) && (mc.player.dimension == -1 || mc.player.dimension == 1)) {
             Iterable<BlockPos> validBlocks = BlockUtils.getValidBlocksByDistance(BedBomberTranslator.INSTANCE.range, false, validator);
 
             for (BlockPos pos : validBlocks) {
@@ -76,11 +76,11 @@ public class BedBomberMod extends TimeModule {
             }
         }
 
-        replaceBed(-1);
+        this.replaceBed(-1);
 
-        if (shouldRestock && BedBomberTranslator.INSTANCE.resupply && itemMoveTick == 3) {
-            if (itemTimer > 0) {
-                itemTimer--;
+        if (this.shouldRestock && BedBomberTranslator.INSTANCE.resupply && this.itemMoveTick == 3) {
+            if (this.itemTimer > 0) {
+                this.itemTimer--;
                 return;
             }
 
@@ -92,12 +92,12 @@ public class BedBomberMod extends TimeModule {
                     if (inventoryIndex != mc.player.inventory.currentItem) {
                         ItemStack stack = inv.get(inventoryIndex);
                         if (!stack.isEmpty() && stack.getItem() instanceof ItemBed) {
-                            replaceBed(inventoryIndex);
+                            this.replaceBed(inventoryIndex);
                             break;
                         }
                     }
                 }
-                shouldRestock = false;
+                this.shouldRestock = false;
             }
         }
     }
@@ -143,15 +143,15 @@ public class BedBomberMod extends TimeModule {
 
     public void replaceBed(int inventoryIndex) {
         if (inventoryIndex == -1) {
-            inventoryIndex = bedSlot;
+            inventoryIndex = this.bedSlot;
         } else {
-            itemMoveTick = 0;
-            bedSlot = inventoryIndex;
+            this.itemMoveTick = 0;
+            this.bedSlot = inventoryIndex;
         }
         if (inventoryIndex == -1) {
             return;
         }
-        switch (itemMoveTick) {
+        switch (this.itemMoveTick) {
             case 0:
                 mc.playerController.windowClick(0, inventoryIndex < 9 ? inventoryIndex + 36 : inventoryIndex, 0, ClickType.PICKUP, mc.player);
                 break;
@@ -160,16 +160,16 @@ public class BedBomberMod extends TimeModule {
                 break;
             case 2:
                 mc.playerController.windowClick(0, inventoryIndex < 9 ? inventoryIndex + 36 : inventoryIndex, 0, ClickType.PICKUP, mc.player);
-                bedSlot = -1;
+                this.bedSlot = -1;
                 break;
         }
-        itemMoveTick++;
+        this.itemMoveTick++;
     }
 
     public void onPlaceBed() {
-        if (state.enabled && BedBomberTranslator.INSTANCE.resupply) {
-            shouldRestock = true;
-            itemTimer = 3;
+        if (this.state.enabled && BedBomberTranslator.INSTANCE.resupply) {
+            this.shouldRestock = true;
+            this.itemTimer = 3;
         }
     }
 }

@@ -41,7 +41,7 @@ public class FreecamMod extends Module {
     public void onEnable() {
         INSTANCE = this;//adding this a bunch because it always seems to be null idk y
         if (pepsiMod.hasInitializedModules) {
-            fakePlayer = new EntityFakePlayer();
+            this.fakePlayer = new EntityFakePlayer();
         }
     }
 
@@ -49,8 +49,8 @@ public class FreecamMod extends Module {
     public void onDisable() {
         INSTANCE = this;//adding this a bunch because it always seems to be null idk y
         if (pepsiMod.hasInitializedModules) {
-            fakePlayer.resetPlayerPosition();
-            fakePlayer.despawn();
+            this.fakePlayer.resetPlayerPosition();
+            this.fakePlayer.despawn();
 
             //PepsiMod.pepsimodInstance.mc.renderGlobal.loadRenderers();
         }

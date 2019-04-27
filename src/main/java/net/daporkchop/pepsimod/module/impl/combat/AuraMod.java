@@ -46,14 +46,12 @@ public class AuraMod extends Module {
     @Override
     public void onEnable() {
         if (mc.player == null) {
-            return;
         }
     }
 
     @Override
     public void onDisable() {
         if (mc.player == null) {
-            return;
         }
     }
 
@@ -85,10 +83,10 @@ public class AuraMod extends Module {
                 }
             }
         } else {
-            lastTick++;
+            this.lastTick++;
 
-            if (lastTick >= TargettingTranslator.INSTANCE.delay) {
-                lastTick = 0;
+            if (this.lastTick >= TargettingTranslator.INSTANCE.delay) {
+                this.lastTick = 0;
 
                 Entity entity = EntityUtils.getBestEntityToAttack(EntityUtils.DEFAULT_SETTINGS);
                 if (entity == null) {
@@ -300,7 +298,7 @@ public class AuraMod extends Module {
                 if (bone == null) {
                     clientMessage("Not a valid bone: " + args[2]);
                 } else {
-                    getOptionByName("bone").setValue(bone);
+                    this.getOptionByName("bone").setValue(bone);
                     clientMessage("Set " + PepsiUtils.COLOR_ESCAPE + "o" + args[1] + PepsiUtils.COLOR_ESCAPE + "r to " + PepsiUtils.COLOR_ESCAPE + "o" + s);
                 }
             } catch (Exception e) {

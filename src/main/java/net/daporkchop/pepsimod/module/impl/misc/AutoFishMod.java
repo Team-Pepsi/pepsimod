@@ -49,13 +49,13 @@ public class AutoFishMod extends Module {
     @Override
     public void onEnable() {
         // reset timer
-        timer = 0;
+        this.timer = 0;
     }
 
     @Override
     public void onDisable() {
         // reset timer
-        timer = 0;
+        this.timer = 0;
     }
 
     @Override
@@ -82,8 +82,8 @@ public class AutoFishMod extends Module {
             }
 
             // wait for timer
-            if (timer > 0) {
-                timer--;
+            if (this.timer > 0) {
+                this.timer--;
                 return;
             }
 
@@ -93,7 +93,7 @@ public class AutoFishMod extends Module {
             }
 
             // cast rod
-            rightClick();
+            this.rightClick();
             return;
         }
 
@@ -171,7 +171,7 @@ public class AutoFishMod extends Module {
         ReflectionStuff.rightClickMouse();
 
         // reset timer
-        timer = 15;
+        this.timer = 15;
     }
 
     @Override
@@ -187,6 +187,6 @@ public class AutoFishMod extends Module {
         }
 
         // catch fish
-        rightClick();
+        this.rightClick();
     }
 }

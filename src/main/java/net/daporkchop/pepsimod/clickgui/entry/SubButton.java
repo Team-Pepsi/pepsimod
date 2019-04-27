@@ -38,29 +38,29 @@ public class SubButton extends EntryImplBase {
     }
 
     public void processMouseClick(int mouseX, int mouseY, int button) {
-        updateIsMouseHovered(mouseX, mouseY);
-        if (isMouseHovered()) {
+        this.updateIsMouseHovered(mouseX, mouseY);
+        if (this.isMouseHovered()) {
             if (button == 0) {
-                option.setValue(!((boolean) option.getValue()));
+                this.option.setValue(!((boolean) this.option.getValue()));
             }
         }
     }
 
     public void processMouseRelease(int mouseX, int mouseY, int button) {
-        updateIsMouseHovered(mouseX, mouseY);
+        this.updateIsMouseHovered(mouseX, mouseY);
     }
 
     public void draw(int mouseX, int mouseY) {
-        y = window.getRenderYButton();
-        x = window.getX() + 4;
-        updateIsMouseHovered(mouseX, mouseY);
-        PepsiUtils.drawRect(getX(), getY(), getX() + getWidth(), getY() + height, getColor());
+        this.y = this.window.getRenderYButton();
+        this.x = this.window.getX() + 4;
+        this.updateIsMouseHovered(mouseX, mouseY);
+        PepsiUtils.drawRect(this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.height, this.getColor());
         GL11.glColor3f(0f, 0f, 0f);
-        mc.fontRenderer.drawString(option.displayName, getX() + 2, getY() + 2, Color.BLACK.getRGB());
+        mc.fontRenderer.drawString(this.option.displayName, this.getX() + 2, this.getY() + 2, Color.BLACK.getRGB());
     }
 
     public int getX() {
-        return x;
+        return this.x;
     }
 
     public void setX(int x) {
@@ -68,7 +68,7 @@ public class SubButton extends EntryImplBase {
     }
 
     public int getY() {
-        return y;
+        return this.y;
     }
 
     public void setY(int y) {
@@ -76,19 +76,19 @@ public class SubButton extends EntryImplBase {
     }
 
     public int getHeight() {
-        return height;
+        return this.height;
     }
 
     public int getWidth() {
-        return width;
+        return this.width;
     }
 
     public int getColor() {
-        return ColorUtils.getColorForGuiEntry(ColorUtils.TYPE_BUTTON, isMouseHovered(), (boolean) option.getValue());
+        return ColorUtils.getColorForGuiEntry(ColorUtils.TYPE_BUTTON, this.isMouseHovered(), (boolean) this.option.getValue());
     }
 
     public boolean shouldRender() {
-        return parent.isOpen && parent.shouldRender();
+        return this.parent.isOpen && this.parent.shouldRender();
     }
 
     public void openGui() {
@@ -96,7 +96,7 @@ public class SubButton extends EntryImplBase {
     }
 
     public String getName() {
-        return option.getName();
+        return this.option.getName();
     }
 
     public boolean isOpen() {

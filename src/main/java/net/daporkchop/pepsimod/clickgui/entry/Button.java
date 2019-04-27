@@ -43,31 +43,31 @@ public class Button extends EntryImplBase {
     }
 
     public void processMouseClick(int mouseX, int mouseY, int button) {
-        updateIsMouseHovered(mouseX, mouseY);
-        if (isMouseHovered()) {
+        this.updateIsMouseHovered(mouseX, mouseY);
+        if (this.isMouseHovered()) {
             if (button == 0) {
-                ModuleManager.toggleModule(module);
+                ModuleManager.toggleModule(this.module);
             } else if (button == 1) {
-                isOpen = !isOpen;
+                this.isOpen = !this.isOpen;
             }
         }
     }
 
     public void processMouseRelease(int mouseX, int mouseY, int button) {
-        updateIsMouseHovered(mouseX, mouseY);
+        this.updateIsMouseHovered(mouseX, mouseY);
     }
 
     public void draw(int mouseX, int mouseY) {
-        y = window.getRenderYButton();
-        x = window.getX() + 2;
-        updateIsMouseHovered(mouseX, mouseY);
-        PepsiUtils.drawRect(getX(), getY(), getX() + getWidth(), getY() + height, getColor());
+        this.y = this.window.getRenderYButton();
+        this.x = this.window.getX() + 2;
+        this.updateIsMouseHovered(mouseX, mouseY);
+        PepsiUtils.drawRect(this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.height, this.getColor());
         GL11.glColor3f(0f, 0f, 0f);
-        drawString(getX() + 2, getY() + 2, module.nameFull, Color.BLACK.getRGB());
+        drawString(this.getX() + 2, this.getY() + 2, this.module.nameFull, Color.BLACK.getRGB());
     }
 
     public int getX() {
-        return x;
+        return this.x;
     }
 
     public void setX(int x) {
@@ -75,7 +75,7 @@ public class Button extends EntryImplBase {
     }
 
     public int getY() {
-        return y;
+        return this.y;
     }
 
     public void setY(int y) {
@@ -83,23 +83,23 @@ public class Button extends EntryImplBase {
     }
 
     public int getHeight() {
-        int i = height;
-        if (isOpen) {
-            i += 13 * subEntries.size(); //13 px for padding
+        int i = this.height;
+        if (this.isOpen) {
+            i += 13 * this.subEntries.size(); //13 px for padding
         }
         return i;
     }
 
     public int getWidth() {
-        return width;
+        return this.width;
     }
 
     public int getColor() {
-        return ColorUtils.getColorForGuiEntry(ColorUtils.TYPE_BUTTON, isMouseHovered(), module.state.enabled);
+        return ColorUtils.getColorForGuiEntry(ColorUtils.TYPE_BUTTON, this.isMouseHovered(), this.module.state.enabled);
     }
 
     public boolean shouldRender() {
-        return window.isOpen;
+        return this.window.isOpen;
     }
 
     public void openGui() {
@@ -107,14 +107,14 @@ public class Button extends EntryImplBase {
     }
 
     public String getName() {
-        return module.name;
+        return this.module.name;
     }
 
     public boolean isOpen() {
-        return isOpen;
+        return this.isOpen;
     }
 
     public void setOpen(boolean val) {
-        isOpen = val;
+        this.isOpen = val;
     }
 }

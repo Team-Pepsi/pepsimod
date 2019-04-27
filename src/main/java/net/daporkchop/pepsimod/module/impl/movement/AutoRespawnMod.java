@@ -24,7 +24,7 @@ public class AutoRespawnMod extends Module {
     public AutoRespawnMod INSTANCE;
 
     {
-        INSTANCE = this;
+        this.INSTANCE = this;
     }
 
     public AutoRespawnMod() {

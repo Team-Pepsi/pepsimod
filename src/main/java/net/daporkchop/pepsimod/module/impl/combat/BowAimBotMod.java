@@ -61,8 +61,8 @@ public class BowAimBotMod extends Module {
 
     @Override
     public void onRenderGUI(float partialTicks, int width, int height, GuiIngame gui) {
-        if (!FastBowMod.INSTANCE.state.enabled && velocity != -1.0f) {
-            if (velocity > 0.0f) {
+        if (!FastBowMod.INSTANCE.state.enabled && this.velocity != -1.0f) {
+            if (this.velocity > 0.0f) {
                 gui.drawCenteredString(mc.fontRenderer, "Ready!", width / 2, height / 2 - 20, 16777215);
             } else {
                 gui.drawCenteredString(mc.fontRenderer, "Charging...", width / 2, height / 2 - 20, 16740352);
@@ -91,7 +91,7 @@ public class BowAimBotMod extends Module {
             if (mc.player.inventory.getCurrentItem().getItem() instanceof ItemBow &&
                     mc.gameSettings.keyBindUseItem.isKeyDown()) {
                 this.target = PepsiUtils.getClosestEntityWithoutReachFactor();
-                aimAtTarget();
+                this.aimAtTarget();
                 return;
             }
         }

@@ -75,7 +75,7 @@ public class VelocityMod extends Module {
 
     @Override
     public String getModeForName() {
-        return String.valueOf((float) getOptionByName("strength").getValue());
+        return String.valueOf((float) this.getOptionByName("strength").getValue());
     }
 
     public float getVelocity() {

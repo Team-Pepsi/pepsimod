@@ -61,7 +61,7 @@ public abstract class PathProcessor extends Default {
     }
 
     protected void facePosition(BlockPos pos) {
-        this.lookedLastTick = this.lookedLastTick ? false : RotationUtils.faceVectorForWalking(new Vec3d(pos).addVector(0.5, 0.5, 0.5));
+        this.lookedLastTick = this.lookedLastTick ? false : RotationUtils.faceVectorForWalking(new Vec3d(pos).add(0.5, 0.5, 0.5));
     }
 
     public void releaseControls() {

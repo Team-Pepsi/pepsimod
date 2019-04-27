@@ -46,7 +46,7 @@ public class GoToCommand extends Command {
         if (PathFindTickListener.INSTANCE == null) {
             new PathFindTickListener();
         }
-        if (enabled) {
+        if (this.enabled) {
             PathFindTickListener.INSTANCE.disable();
             clientMessage("Disabled pathfinder.");
             return;
@@ -57,7 +57,7 @@ public class GoToCommand extends Command {
                 clientMessage("No such waypoint: " + args[1]);
                 return;
             } else {
-                setGoal(new BlockPos(waypoint.x, waypoint.y, waypoint.z));
+                this.setGoal(new BlockPos(waypoint.x, waypoint.y, waypoint.z));
             }
         } else if (args.length == 4) {
             int x, y, z;
@@ -79,34 +79,34 @@ public class GoToCommand extends Command {
                 clientMessage("Invalid integer: " + args[3]);
                 return;
             }
-            setGoal(new BlockPos(x, y, z));
+            this.setGoal(new BlockPos(x, y, z));
         } else {
             clientMessage("Usage: \u00A7o.goto <waypoint>\u00A7r or \u00A7o.goto <x> <y> <z>");
             return;
         }
-        enabled = true;
+        this.enabled = true;
         PepsiUtils.tickListeners.add(PathFindTickListener.INSTANCE);
         PepsiUtils.wurstRenderListeners.add(PathFindTickListener.INSTANCE);
-        clientMessage("Going to position: " + endGoal.getX() + ", " + endGoal.getY() + ", " + endGoal.getZ());
+        clientMessage("Going to position: " + this.endGoal.getX() + ", " + this.endGoal.getY() + ", " + this.endGoal.getZ());
         clientMessage("Run \u00A7o.goto\u00A7r to stop.");
         clientMessage("\u00A7cWARNING! The pathfinder is currently VERY experimental.");
         clientMessage("\u00A7cUse at your own risk.");
     }
 
     public void setGoal(BlockPos goal) {
-        if (endGoal == null) {
-            endGoal = goal;
-            pathFinder = new PathFinder(goal);
+        if (this.endGoal == null) {
+            this.endGoal = goal;
+            this.pathFinder = new PathFinder(goal);
         } else {
             throw new IllegalStateException("Attempted to start pathfinder while endGoal was set");
         }
     }
 
     public boolean hasReachedFinalGoal() {
-        if (endGoal == null) {
+        if (this.endGoal == null) {
             return true;
         }
-        return mc.player.getDistanceSq(endGoal) <= 64;
+        return mc.player.getDistanceSq(this.endGoal) <= 64;
     }
 
     @Override

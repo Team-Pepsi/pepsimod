@@ -65,7 +65,7 @@ public class WalkPathProcessor extends PathProcessor {
         // face next position
         this.facePosition(nextPos);
 
-        if (Math.abs(RotationUtils.getHorizontalAngleToClientRotation(new Vec3d(nextPos).addVector(0.5, 0.5, 0.5))) > 90) {
+        if (Math.abs(RotationUtils.getHorizontalAngleToClientRotation(new Vec3d(nextPos).add(0.5, 0.5, 0.5))) > 90) {
             return;
         }
         if (WMinecraft.getPlayer().isInWater() && pos.getY() <= nextPos.getY()) {

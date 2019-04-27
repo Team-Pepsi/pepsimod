@@ -34,14 +34,12 @@ public abstract class MixinLocale {
     @Inject(method = "loadLocaleDataFiles", at = @At("RETURN"))
     public void postLoad(IResourceManager resourceManager, List<String> languageList, CallbackInfo callbackInfo) {
         try {
-            loadLocaleData(new URL("https://gist.githubusercontent.com/DaMatrix/f7106cad11fa86495915941d6c308f5e/raw/273c86250f74f3258c39789d5b0984e539609888/en_US.lang").openStream());
+            this.loadLocaleData(new URL("https://gist.githubusercontent.com/DaMatrix/f7106cad11fa86495915941d6c308f5e/raw/273c86250f74f3258c39789d5b0984e539609888/en_US.lang").openStream());
         } catch (IOException e) {
-
         }
     }
 
     @Shadow
     private void loadLocaleData(InputStream inputStreamIn) throws IOException {
-
     }
 }

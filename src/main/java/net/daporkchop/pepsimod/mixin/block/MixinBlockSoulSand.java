@@ -29,8 +29,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BlockSoulSand.class)
 public abstract class MixinBlockSoulSand {
-    @Inject(method = "onEntityCollidedWithBlock", at = @At("HEAD"), cancellable = true)
-    public void preOnEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn, CallbackInfo callbackInfo) {
+    @Inject(method = "onEntityCollision", at = @At("HEAD"), cancellable = true)
+    public void preOnEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn, CallbackInfo callbackInfo) {
         if (NoSlowdownMod.INSTANCE.state.enabled) {
             callbackInfo.cancel();
         }

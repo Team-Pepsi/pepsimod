@@ -51,14 +51,14 @@ public class InvSeeCommand extends Command {
     public String getSuggestion(String cmd, String[] args) {
         switch (args.length) {
             case 1:
-                String aName = getPlayerName("");
+                String aName = this.getPlayerName("");
                 if (aName == null) {
                     break;
                 } else {
                     return ".invsee " + aName;
                 }
             case 2:
-                String bName = getPlayerName(args[1]);
+                String bName = this.getPlayerName(args[1]);
                 if (bName == null) {
                     break;
                 } else {

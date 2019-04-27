@@ -50,27 +50,27 @@ public class Window extends EntryImplBase {
 
     public Window(int x, int y, String name, ModuleCategory category) {
         super(x, y, 100, 12);
-        text = name;
+        this.text = name;
         this.category = category;
     }
 
     public void processMouseClick(int mouseX, int mouseY, int button) {
-        updateIsMouseHovered(mouseX, mouseY);
-        if (isMouseHovered()) {
+        this.updateIsMouseHovered(mouseX, mouseY);
+        if (this.isMouseHovered()) {
             ClickGUI.INSTANCE.sendToFront(this);
             if (button == 0) {
                 //drag
-                isDragging = true;
-                dragX = mouseX - getX();
-                dragY = mouseY - getY();
+                this.isDragging = true;
+                this.dragX = mouseX - this.getX();
+                this.dragY = mouseY - this.getY();
             } else if (button == 1) {
-                isOpen = !isOpen;
+                this.isOpen = !this.isOpen;
             } else if (button == 2) {
                 //anything with a middle mouse button (unimplemented)
             }
         }
 
-        for (IEntry entry : entries) {
+        for (IEntry entry : this.entries) {
             if (entry.shouldRender()) {
                 entry.processMouseClick(mouseX, mouseY, button);
             }
@@ -78,12 +78,12 @@ public class Window extends EntryImplBase {
     }
 
     public void processMouseRelease(int mouseX, int mouseY, int button) {
-        updateIsMouseHovered(mouseX, mouseY);
-        if (isDragging) {
-            isDragging = false;
+        this.updateIsMouseHovered(mouseX, mouseY);
+        if (this.isDragging) {
+            this.isDragging = false;
         }
 
-        for (IEntry entry : entries) {
+        for (IEntry entry : this.entries) {
             if (entry.shouldRender()) {
                 entry.processMouseRelease(mouseX, mouseY, button);
             }
@@ -91,34 +91,34 @@ public class Window extends EntryImplBase {
     }
 
     public void draw(int mouseX, int mouseY) {
-        if (isDragging) {
-            setX(mouseX - dragX);
-            setY(mouseY - dragY);
+        if (this.isDragging) {
+            this.setX(mouseX - this.dragX);
+            this.setY(mouseY - this.dragY);
         }
         GL11.glPushMatrix();
         GL11.glPushAttrib(8256);
 
-        scroll = Math.max(0, scroll);
-        scroll = Math.min(getDisplayableCount() - getModulesToDisplay(), scroll);
+        this.scroll = Math.max(0, this.scroll);
+        this.scroll = Math.min(this.getDisplayableCount() - this.getModulesToDisplay(), this.scroll);
 
-        updateIsMouseHovered(mouseX, mouseY);
-        renderYButton = getY();
-        PepsiUtils.drawRect(getX(), getY(), getX() + getWidth(), getY() + getDisplayedHeight(), getColor());
+        this.updateIsMouseHovered(mouseX, mouseY);
+        this.renderYButton = this.getY();
+        PepsiUtils.drawRect(this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.getDisplayedHeight(), this.getColor());
         GL11.glColor3f(0f, 0f, 0f);
-        drawString(getX() + 2, getY() + 2, text, Color.BLACK.getRGB());
-        if (isOpen) {
-            if (shouldScroll()) {
-                int barHeight = getScrollbarHeight();
-                int barY = getScrollbarY();
-                barY = Math.min(barY, getScrollingModuleCount() * 13 - 1 - barHeight);
-                PepsiUtils.drawRect(getX() + 97, getY() + 13 + barY, getX() + 99, Math.min(getY() + 13 + barY + barHeight, getY() + getDisplayedHeight() - 1), HUDTranslator.INSTANCE.getColor());
+        drawString(this.getX() + 2, this.getY() + 2, this.text, Color.BLACK.getRGB());
+        if (this.isOpen) {
+            if (this.shouldScroll()) {
+                int barHeight = this.getScrollbarHeight();
+                int barY = this.getScrollbarY();
+                barY = Math.min(barY, this.getScrollingModuleCount() * 13 - 1 - barHeight);
+                PepsiUtils.drawRect(this.getX() + 97, this.getY() + 13 + barY, this.getX() + 99, Math.min(this.getY() + 13 + barY + barHeight, this.getY() + this.getDisplayedHeight() - 1), HUDTranslator.INSTANCE.getColor());
             } else {
-                PepsiUtils.drawRect(getX() + 97, getY() + 13, getX() + 99, getDisplayedHeight() - 1, HUDTranslator.INSTANCE.getColor());
+                PepsiUtils.drawRect(this.getX() + 97, this.getY() + 13, this.getX() + 99, this.getDisplayedHeight() - 1, HUDTranslator.INSTANCE.getColor());
             }
-            modulesCounted = 0;
-            for (int i = getScroll(); i < getModulesToDisplay() + getScroll(); i++) {
-                IEntry entry = getNextEntry();
-                modulesCounted++;
+            this.modulesCounted = 0;
+            for (int i = this.getScroll(); i < this.getModulesToDisplay() + this.getScroll(); i++) {
+                IEntry entry = this.getNextEntry();
+                this.modulesCounted++;
                 entry.draw(mouseX, mouseY);
             }
         }
@@ -128,22 +128,22 @@ public class Window extends EntryImplBase {
     }
 
     public int getScrollbarHeight() {
-        double maxHeight = maxDisplayHeight();
-        double maxAllowedModules = getScrollingModuleCount();
-        double displayable = getDisplayableCount();
+        double maxHeight = this.maxDisplayHeight();
+        double maxAllowedModules = this.getScrollingModuleCount();
+        double displayable = this.getDisplayableCount();
         int result = (int) Math.floor(maxHeight * (maxAllowedModules / displayable));
         return result;
     }
 
     public int getScrollbarY() {
-        int displayable = getDisplayableCount();
-        int rest = displayable - scroll;
+        int displayable = this.getDisplayableCount();
+        int rest = displayable - this.scroll;
         int resultRaw = displayable - rest;
         return resultRaw * 13;
     }
 
     public int getX() {
-        return x;
+        return this.x;
     }
 
     public void setX(int x) {
@@ -151,7 +151,7 @@ public class Window extends EntryImplBase {
     }
 
     public int getY() {
-        return y;
+        return this.y;
     }
 
     public void setY(int y) {
@@ -159,8 +159,8 @@ public class Window extends EntryImplBase {
     }
 
     public int getHeight() {
-        int i = height + 1; //+
-        for (IEntry entry : entries) {
+        int i = this.height + 1; //+
+        for (IEntry entry : this.entries) {
             if (entry.shouldRender()) {
                 i += 13;
             }
@@ -170,7 +170,7 @@ public class Window extends EntryImplBase {
 
     public int getDisplayableCount() {
         int i = 0;
-        for (IEntry entry : entries) {
+        for (IEntry entry : this.entries) {
             if (entry.shouldRender()) {
                 i++;
             }
@@ -179,32 +179,32 @@ public class Window extends EntryImplBase {
     }
 
     public int getWidth() {
-        return width;
+        return this.width;
     }
 
     public int getColor() {
-        return ColorUtils.getColorForGuiEntry(ColorUtils.TYPE_WINDOW, isMouseHovered(), false);
+        return ColorUtils.getColorForGuiEntry(ColorUtils.TYPE_WINDOW, this.isMouseHovered(), false);
     }
 
     public Button addButton(Button b) {
-        entries.add(b);
+        this.entries.add(b);
         return b;
     }
 
     public SubButton addSubButton(SubButton b) {
-        entries.add(entries.indexOf(b.parent) + 1, b);
+        this.entries.add(this.entries.indexOf(b.parent) + 1, b);
         b.parent.subEntries.add(b);
         return b;
     }
 
     public SubSlider addSubSlider(SubSlider slider) {
-        entries.add(entries.indexOf(slider.parent) + 1, slider);
+        this.entries.add(this.entries.indexOf(slider.parent) + 1, slider);
         slider.parent.subEntries.add(slider);
         return slider;
     }
 
     public int getRenderYButton() {
-        return renderYButton += 13;
+        return this.renderYButton += 13;
     }
 
     public boolean shouldRender() {
@@ -212,14 +212,14 @@ public class Window extends EntryImplBase {
     }
 
     public void openGui() {
-        for (IEntry entry : entries) {
+        for (IEntry entry : this.entries) {
             entry.openGui();
         }
     }
 
     public int getScroll() {
-        if (shouldScroll()) {
-            return scroll;
+        if (this.shouldScroll()) {
+            return this.scroll;
         } else {
             return 0;
         }
@@ -246,15 +246,15 @@ public class Window extends EntryImplBase {
     }
 
     public String getName() {
-        return text;
+        return this.text;
     }
 
     public boolean isOpen() {
-        return isOpen;
+        return this.isOpen;
     }
 
     public void setOpen(boolean val) {
-        isOpen = val;
+        this.isOpen = val;
     }
 
     public int maxDisplayHeight() {
@@ -273,33 +273,33 @@ public class Window extends EntryImplBase {
     }
 
     public int getModulesToDisplay() {
-        if (shouldScroll()) {
-            return getScrollingModuleCount();
+        if (this.shouldScroll()) {
+            return this.getScrollingModuleCount();
         } else {
-            return getDisplayableCount();
+            return this.getDisplayableCount();
         }
     }
 
     public boolean shouldScroll() {
-        boolean val = getScrollingModuleCount() < getDisplayableCount();
+        boolean val = this.getScrollingModuleCount() < this.getDisplayableCount();
         return val;
     }
 
     public int getDisplayedHeight() {
-        int max = maxDisplayHeight();
-        int normal = getHeight();
+        int max = this.maxDisplayHeight();
+        int normal = this.getHeight();
         int toReturn = Math.min(max, normal);
         return toReturn;
     }
 
     public IEntry getNextEntry() {
         int a = 0;
-        int i = scroll;
+        int i = this.scroll;
         for (; ; i++) {
-            IEntry entry = entries.get(i);
+            IEntry entry = this.entries.get(i);
             if (entry.shouldRender()) {
-                if (modulesCounted != 0) {
-                    if (a < modulesCounted) {
+                if (this.modulesCounted != 0) {
+                    if (a < this.modulesCounted) {
                         a++;
                         continue;
                     }
@@ -310,15 +310,15 @@ public class Window extends EntryImplBase {
     }
 
     public void handleScroll(int dWheel, int x, int y) {
-        updateIsMouseHoveredFull(x, y);
-        if (isMouseHovered() && shouldScroll()) {
-            scroll += dWheel;
+        this.updateIsMouseHoveredFull(x, y);
+        if (this.isMouseHovered() && this.shouldScroll()) {
+            this.scroll += dWheel;
         }
     }
 
     protected void updateIsMouseHoveredFull(int mouseX, int mouseY) {
-        int x = getX(), y = getY();
-        int maxX = x + width, maxY = y + getDisplayedHeight();
-        isHoveredCached = (x <= mouseX && mouseX <= maxX && y <= mouseY && mouseY <= maxY);
+        int x = this.getX(), y = this.getY();
+        int maxX = x + this.width, maxY = y + this.getDisplayedHeight();
+        this.isHoveredCached = (x <= mouseX && mouseX <= maxX && y <= mouseY && mouseY <= maxY);
     }
 }

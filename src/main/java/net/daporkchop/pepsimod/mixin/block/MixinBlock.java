@@ -71,8 +71,8 @@ public abstract class MixinBlock extends net.minecraftforge.registries.IForgeReg
         //vanilla code follows
     }
 
-    @Inject(method = "onBlockDestroyedByPlayer", at = @At("HEAD"))
-    public void preOnBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state, CallbackInfo callbackInfo) {
+    @Inject(method = "onPlayerDestroy", at = @At("HEAD"))
+    public void preOnPlayerDestroy(World worldIn, BlockPos pos, IBlockState state, CallbackInfo callbackInfo) {
         if (worldIn.isRemote) {
             AnnouncerMod.INSTANCE.onBreakBlock(state);
         }

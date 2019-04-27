@@ -224,7 +224,7 @@ public class PepsiMod {
         File toBeReturned;
         try {
             if (FMLCommonHandler.instance().getSide().isClient()) {
-                toBeReturned = Minecraft.getMinecraft().mcDataDir;
+                toBeReturned = Minecraft.getMinecraft().gameDir;
             } else {
                 toBeReturned = FMLCommonHandler.instance().getMinecraftServerInstance().getFile("");
             }
@@ -238,8 +238,8 @@ public class PepsiMod {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new KeyRegistry());
-        mc = Minecraft.getMinecraft();
-        Default.mc = mc;
+        this.mc = Minecraft.getMinecraft();
+        Default.mc = this.mc;
         Default.pepsiMod = this;
     }
 
@@ -254,7 +254,7 @@ public class PepsiMod {
                 new WindowPlayer()
         );
 
-        loadConfig();
+        this.loadConfig();
         registerModules(event);
 
         ClickGUI.INSTANCE.initWindows();

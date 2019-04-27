@@ -76,7 +76,7 @@ public class WaypointsMod extends Module {
         GL11.glPushMatrix();
         GL11.glTranslated(-ReflectionStuff.getRenderPosX(mc.getRenderManager()), -ReflectionStuff.getRenderPosY(mc.getRenderManager()), -ReflectionStuff.getRenderPosZ(mc.getRenderManager()));
         // set start position
-        Vec3d start = RotationUtils.getClientLookVec().addVector(0, mc.player.getEyeHeight(), 0).addVector(ReflectionStuff.getRenderPosX(mc.getRenderManager()), ReflectionStuff.getRenderPosY(mc.getRenderManager()), ReflectionStuff.getRenderPosZ(mc.getRenderManager()));
+        Vec3d start = RotationUtils.getClientLookVec().add(0, mc.player.getEyeHeight(), 0).add(ReflectionStuff.getRenderPosX(mc.getRenderManager()), ReflectionStuff.getRenderPosY(mc.getRenderManager()), ReflectionStuff.getRenderPosZ(mc.getRenderManager()));
         GL11.glBegin(GL11.GL_LINES);
 
         RenderColor.glColor(WaypointsTranslator.INSTANCE.r, WaypointsTranslator.INSTANCE.g, WaypointsTranslator.INSTANCE.b);

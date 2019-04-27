@@ -71,7 +71,7 @@ public class CriticalsMod extends Module {
     public boolean preSendPacket(Packet<?> packetIn) {
         if (packetIn instanceof CPacketUseEntity) {
             if (((CPacketUseEntity) packetIn).getAction() == CPacketUseEntity.Action.ATTACK) {
-                doCrit();
+                this.doCrit();
             }
         }
         return false;
@@ -88,7 +88,7 @@ public class CriticalsMod extends Module {
             return;
         }
 
-        if ((boolean) getOptionByName("packet").getValue()) {
+        if ((boolean) this.getOptionByName("packet").getValue()) {
             double x = player.posX;
             double y = player.posY;
             double z = player.posZ;
@@ -111,7 +111,7 @@ public class CriticalsMod extends Module {
 
     @Override
     public String getModeForName() {
-        if ((boolean) getOptionByName("packet").getValue()) {
+        if ((boolean) this.getOptionByName("packet").getValue()) {
             return "Packet";
         } else {
             return "Jump";

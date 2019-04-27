@@ -584,7 +584,7 @@ public class PepsiUtils extends Default {
 
         isSneaking = false;
 
-        double distance = Math.max(1.6, mc.getRenderViewEntity().getDistanceToEntity(mc.player) / 4);
+        double distance = Math.max(1.6, mc.getRenderViewEntity().getDistance(mc.player) / 4);
         distance /= 100;
         GlStateManager.scale(-distance, -distance, distance);
 
@@ -803,7 +803,7 @@ public class PepsiUtils extends Default {
             if ((object instanceof EntityLivingBase)) {
                 EntityLivingBase entity = (EntityLivingBase) object;
                 if (isAttackable(entity)) {
-                    double newDistance = mc.player.getDistanceSqToEntity(entity);
+                    double newDistance = mc.player.getDistanceSq(entity);
                     if (closestEntity != null) {
                         if (distance > newDistance) {
                             closestEntity = entity;

@@ -60,7 +60,7 @@ public class ElytraFlyMod extends TimeModule {
 
     @Override
     public void tick() {
-        updateMS();
+        this.updateMS();
 
         ItemStack chestplate = PepsiUtils.getWearingArmor(1);
         if (chestplate == null || chestplate.getItem() != Items.ELYTRA) {
@@ -92,8 +92,8 @@ public class ElytraFlyMod extends TimeModule {
 
             }
         } else if (ElytraFlyTranslator.INSTANCE.easyStart && ElytraFlyTranslator.INSTANCE.mode != ElytraFlyTranslator.ElytraFlyMode.PACKET && ItemElytra.isUsable(chestplate) && mc.gameSettings.keyBindJump.isPressed()) {
-            if (hasTimePassedM(1000)) {
-                updateLastMS();
+            if (this.hasTimePassedM(1000)) {
+                this.updateLastMS();
                 mc.player.setJumping(false);
                 mc.player.setSprinting(true);
                 mc.player.jump();
@@ -212,7 +212,7 @@ public class ElytraFlyMod extends TimeModule {
                 if (mode == null) {
                     clientMessage("Not a valid mode: " + args[2]);
                 } else {
-                    getOptionByName("mode").setValue(mode);
+                    this.getOptionByName("mode").setValue(mode);
                     clientMessage("Set " + PepsiUtils.COLOR_ESCAPE + "o" + args[1] + PepsiUtils.COLOR_ESCAPE + "r to " + PepsiUtils.COLOR_ESCAPE + "o" + s);
                 }
             } catch (Exception e) {

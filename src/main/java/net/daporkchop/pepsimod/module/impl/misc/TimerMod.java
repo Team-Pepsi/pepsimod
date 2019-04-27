@@ -89,7 +89,7 @@ public class TimerMod extends Module {
 
     @Override
     public String getModeForName() {
-        return TickRate.format.format(getMultiplier());
+        return TickRate.format.format(this.getMultiplier());
     }
 
     public float getMultiplier() {

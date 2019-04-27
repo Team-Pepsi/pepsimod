@@ -50,10 +50,10 @@ public class AutoToolMod extends Module {
 
     @Override
     public void tick() {
-        if (!mc.gameSettings.keyBindAttack.isKeyDown() && digging) {
-            digging = false;
-            mc.player.inventory.currentItem = slot;
-            slot = -1;
+        if (!mc.gameSettings.keyBindAttack.isKeyDown() && this.digging) {
+            this.digging = false;
+            mc.player.inventory.currentItem = this.slot;
+            this.slot = -1;
         }
     }
 
@@ -61,11 +61,11 @@ public class AutoToolMod extends Module {
         if (AutoEatMod.INSTANCE.doneEating && packetIn instanceof CPacketPlayerDigging) {
             CPacketPlayerDigging pck = (CPacketPlayerDigging) packetIn;
             if (mc.playerController.getCurrentGameType() != GameType.CREATIVE && pck.getAction() == CPacketPlayerDigging.Action.START_DESTROY_BLOCK) {
-                digging = true;
+                this.digging = true;
                 int bestIndex = PepsiUtils.getBestTool(mc.world.getBlockState(pck.getPosition()).getBlock());
                 if (bestIndex != -1) {
-                    if (slot == -1) {
-                        slot = mc.player.inventory.currentItem;
+                    if (this.slot == -1) {
+                        this.slot = mc.player.inventory.currentItem;
                     }
                     mc.player.inventory.currentItem = bestIndex;
                 }

@@ -43,90 +43,90 @@ public class SubSlider extends EntryImplBase {
         this.parent = parent;
         this.window = parent.window;
         this.slider = (ExtensionSlider) option.extended;
-        if (isFloat = slider.dataType == ExtensionType.VALUE_FLOAT) {
-            floatValue = (float) option.getValue();
+        if (this.isFloat = this.slider.dataType == ExtensionType.VALUE_FLOAT) {
+            this.floatValue = (float) option.getValue();
         } else {
-            intValue = (int) (Object) option.getValue();
+            this.intValue = (int) (Object) option.getValue();
         }
         this.option = option;
     }
 
     public void processMouseClick(int mouseX, int mouseY, int button) {
-        updateIsMouseHovered(mouseX, mouseY);
-        if (isMouseHovered()) {
+        this.updateIsMouseHovered(mouseX, mouseY);
+        if (this.isMouseHovered()) {
             if (button == 0) {
-                dragging = true;
+                this.dragging = true;
             }
         }
     }
 
     public void processMouseRelease(int mouseX, int mouseY, int button) {
-        updateIsMouseHovered(mouseX, mouseY);
-        if (dragging && button == 0) {
-            dragging = false;
-            getWidthFromValue();
+        this.updateIsMouseHovered(mouseX, mouseY);
+        if (this.dragging && button == 0) {
+            this.dragging = false;
+            this.getWidthFromValue();
         }
     }
 
     public void draw(int mouseX, int mouseY) {
-        if (dragging) {
-            currentWidth = mouseX - getX();
-            if (currentWidth < 0) {
-                currentWidth = 0;
-            } else if (currentWidth > 92) {
-                currentWidth = 92;
+        if (this.dragging) {
+            this.currentWidth = mouseX - this.getX();
+            if (this.currentWidth < 0) {
+                this.currentWidth = 0;
+            } else if (this.currentWidth > 92) {
+                this.currentWidth = 92;
             }
-            updateValueFromWidth();
+            this.updateValueFromWidth();
         }
-        y = window.getRenderYButton();
-        x = window.getX() + 4;
-        updateIsMouseHovered(mouseX, mouseY);
-        PepsiUtils.drawRect(getX(), getY(), getX() + getWidth(), getY() + height, ColorUtils.BACKGROUND);
-        PepsiUtils.drawRect(getX(), getY(), getX() + currentWidth, getY() + height, getColor());
+        this.y = this.window.getRenderYButton();
+        this.x = this.window.getX() + 4;
+        this.updateIsMouseHovered(mouseX, mouseY);
+        PepsiUtils.drawRect(this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.height, ColorUtils.BACKGROUND);
+        PepsiUtils.drawRect(this.getX(), this.getY(), this.getX() + this.currentWidth, this.getY() + this.height, this.getColor());
         GL11.glColor3f(0f, 0f, 0f);
-        mc.fontRenderer.drawString(option.displayName + ": " + (isFloat ? PepsiUtils.roundFloatForSlider(floatValue) : intValue), getX() + 2, getY() + 2, Color.BLACK.getRGB());
+        mc.fontRenderer.drawString(this.option.displayName + ": " + (this.isFloat ? PepsiUtils.roundFloatForSlider(this.floatValue) : this.intValue), this.getX() + 2, this.getY() + 2, Color.BLACK.getRGB());
     }
 
     public void updateValueFromWidth() {
-        float val = (currentWidth / 92f);
-        val *= (getMax() - getMin());
-        val += getMin();
-        val = PepsiUtils.round(val, getStep());
-        val = PepsiUtils.ensureRange(val, getMin(), getMax());
-        if (isFloat) {
-            floatValue = val;
-            option.setValue(val);
+        float val = (this.currentWidth / 92f);
+        val *= (this.getMax() - this.getMin());
+        val += this.getMin();
+        val = PepsiUtils.round(val, this.getStep());
+        val = PepsiUtils.ensureRange(val, this.getMin(), this.getMax());
+        if (this.isFloat) {
+            this.floatValue = val;
+            this.option.setValue(val);
         } else {
-            intValue = (int) val;
-            option.setValue((int) val);
+            this.intValue = (int) val;
+            this.option.setValue((int) val);
         }
     }
 
     public float getMax() {
-        float val = isFloat ? (float) slider.max : ((int) slider.max) + 0.0f;
+        float val = this.isFloat ? (float) this.slider.max : ((int) this.slider.max) + 0.0f;
         return val;
     }
 
     public float getMin() {
-        float val = isFloat ? (float) slider.min : ((int) slider.min) + 0.0f;
+        float val = this.isFloat ? (float) this.slider.min : ((int) this.slider.min) + 0.0f;
         return val;
     }
 
     public float getStep() {
-        float val = isFloat ? (float) slider.step : ((int) slider.step) + 0.0f;
+        float val = this.isFloat ? (float) this.slider.step : ((int) this.slider.step) + 0.0f;
         return val;
     }
 
     public int getWidthFromValue() {
-        float val = isFloat ? floatValue : intValue + 0.0f;
-        val -= getMin();
-        val /= (getMax() - getMin());
+        float val = this.isFloat ? this.floatValue : this.intValue + 0.0f;
+        val -= this.getMin();
+        val /= (this.getMax() - this.getMin());
         val *= 92;
-        return currentWidth = PepsiUtils.ensureRange((int) val, 0, 92);
+        return this.currentWidth = PepsiUtils.ensureRange((int) val, 0, 92);
     }
 
     public int getX() {
-        return x;
+        return this.x;
     }
 
     public void setX(int x) {
@@ -134,7 +134,7 @@ public class SubSlider extends EntryImplBase {
     }
 
     public int getY() {
-        return y;
+        return this.y;
     }
 
     public void setY(int y) {
@@ -142,32 +142,32 @@ public class SubSlider extends EntryImplBase {
     }
 
     public int getHeight() {
-        return height;
+        return this.height;
     }
 
     public int getWidth() {
-        return width;
+        return this.width;
     }
 
     public int getColor() {
-        return ColorUtils.getColorForGuiEntry(ColorUtils.TYPE_SLIDER, isMouseHovered(), false);
+        return ColorUtils.getColorForGuiEntry(ColorUtils.TYPE_SLIDER, this.isMouseHovered(), false);
     }
 
     public boolean shouldRender() {
-        return parent.isOpen && parent.shouldRender();
+        return this.parent.isOpen && this.parent.shouldRender();
     }
 
     public void openGui() {
-        if (isFloat) {
-            floatValue = (float) option.getValue();
+        if (this.isFloat) {
+            this.floatValue = (float) this.option.getValue();
         } else {
-            intValue = (int) (Object) option.getValue();
+            this.intValue = (int) (Object) this.option.getValue();
         }
-        getWidthFromValue();
+        this.getWidthFromValue();
     }
 
     public String getName() {
-        return option.getName();
+        return this.option.getName();
     }
 
     public boolean isOpen() {

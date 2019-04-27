@@ -43,11 +43,13 @@ public abstract class MixinMovementInputFromOptions extends MovementInput {
     @Final
     private GameSettings gameSettings;
 
-    @Inject(method = "updatePlayerMoveState",
+    @Inject(
+            method = "updatePlayerMoveState",
             at = @At(value = "FIELD",
                     target = "Lnet/minecraft/util/MovementInputFromOptions;moveStrafe:F",
                     opcode = Opcodes.PUTFIELD),
-            cancellable = true)
+            cancellable = true
+    )
     public void preUpdateMoveState(CallbackInfo ci) {
         this.moveStrafe = 0.0F;
         this.moveForward = 0.0F;

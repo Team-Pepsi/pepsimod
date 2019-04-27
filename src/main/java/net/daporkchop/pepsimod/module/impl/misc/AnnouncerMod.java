@@ -66,12 +66,12 @@ public class AnnouncerMod extends TimeModule {
     @Override
     public void tick() {
         if (mc.world != null && mc.world.isRemote) {
-            updateMS();
-            if (hasTimePassedM(AnnouncerTranslator.INSTANCE.delay)) {
-                updateLastMS();
+            this.updateMS();
+            if (this.hasTimePassedM(AnnouncerTranslator.INSTANCE.delay)) {
+                this.updateLastMS();
                 MAINLOOP:
-                while (toSend.size() > 0) {
-                    QueuedTask task = toSend.poll();
+                while (this.toSend.size() > 0) {
+                    QueuedTask task = this.toSend.poll();
                     if (task != null) {
                         String msg = task.getMessage();
                         if (msg != null) {
@@ -89,7 +89,7 @@ public class AnnouncerMod extends TimeModule {
             }
 
             if (AnnouncerTranslator.INSTANCE.walk) {
-                Iterator<QueuedTask> iterator = toSend.iterator();
+                Iterator<QueuedTask> iterator = this.toSend.iterator();
                 boolean hasMoveValue = false;
                 while (iterator.hasNext()) {
                     if (iterator.next() instanceof TaskMove) {
@@ -97,7 +97,7 @@ public class AnnouncerMod extends TimeModule {
                     }
                 }
                 if (!hasMoveValue) {
-                    toSend.add(new TaskMove(TaskType.WALK));
+                    this.toSend.add(new TaskMove(TaskType.WALK));
                 }
             }
         }
@@ -107,7 +107,7 @@ public class AnnouncerMod extends TimeModule {
     public void init() {
         INSTANCE = this;
         MinecraftForge.EVENT_BUS.register(this);
-        updateLastMS();
+        this.updateLastMS();
     }
 
     @Override
@@ -186,7 +186,7 @@ public class AnnouncerMod extends TimeModule {
 
     public void onBreakBlock(IBlockState state) {
         if (this.state.enabled && AnnouncerTranslator.INSTANCE.mine) {
-            Iterator<QueuedTask> iterator = toSend.iterator();
+            Iterator<QueuedTask> iterator = this.toSend.iterator();
             while (iterator.hasNext()) {
                 QueuedTask task = iterator.next();
                 if (task.type == TaskType.BREAK) {
@@ -197,14 +197,14 @@ public class AnnouncerMod extends TimeModule {
                     }
                 }
             }
-            toSend.add(new TaskBlock(TaskType.BREAK, state.getBlock()));
-            tick();
+            this.toSend.add(new TaskBlock(TaskType.BREAK, state.getBlock()));
+            this.tick();
         }
     }
 
     public void onPlaceBlock(Block block) {
         if (this.state.enabled && AnnouncerTranslator.INSTANCE.place) {
-            Iterator<QueuedTask> iterator = toSend.iterator();
+            Iterator<QueuedTask> iterator = this.toSend.iterator();
             while (iterator.hasNext()) {
                 QueuedTask task = iterator.next();
                 if (task.type == TaskType.PLACE) {
@@ -215,16 +215,16 @@ public class AnnouncerMod extends TimeModule {
                     }
                 }
             }
-            toSend.add(new TaskBlock(TaskType.PLACE, block));
-            tick();
+            this.toSend.add(new TaskBlock(TaskType.PLACE, block));
+            this.tick();
         }
     }
 
     public void onPlayerJoin(String name) {
         if (this.state.enabled && AnnouncerTranslator.INSTANCE.join) {
             QueuedTask task = new TaskBasic(TaskType.JOIN, MessagePrefixes.getMessage(TaskType.JOIN, name));
-            if (hasTimePassedM(2000)) {
-                updateLastMS();
+            if (this.hasTimePassedM(2000)) {
+                this.updateLastMS();
                 String msg = task.getMessage();
                 if (msg != null) {
                     if (AnnouncerTranslator.INSTANCE.clientSide) {
@@ -232,7 +232,6 @@ public class AnnouncerMod extends TimeModule {
                     } else {
                         mc.player.sendChatMessage(msg);
                     }
-                    return;
                 }
             }
         }
@@ -241,8 +240,8 @@ public class AnnouncerMod extends TimeModule {
     public void onPlayerLeave(String name) {
         if (this.state.enabled && AnnouncerTranslator.INSTANCE.leave) {
             QueuedTask task = new TaskBasic(TaskType.LEAVE, MessagePrefixes.getMessage(TaskType.LEAVE, name));
-            if (hasTimePassedM(2000)) {
-                updateLastMS();
+            if (this.hasTimePassedM(2000)) {
+                this.updateLastMS();
                 String msg = task.getMessage();
                 if (msg != null) {
                     if (AnnouncerTranslator.INSTANCE.clientSide) {
@@ -250,7 +249,6 @@ public class AnnouncerMod extends TimeModule {
                     } else {
                         mc.player.sendChatMessage(msg);
                     }
-                    return;
                 }
             }
         }
@@ -258,6 +256,6 @@ public class AnnouncerMod extends TimeModule {
 
     @SubscribeEvent
     public void onDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
-        toSend.clear();
+        this.toSend.clear();
     }
 }

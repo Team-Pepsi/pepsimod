@@ -35,8 +35,8 @@ public class ZoomMod extends Module {
 
     @Override
     public void onEnable() {
-        if (fov == -1f || mc.gameSettings.fovSetting == fov) {
-            fov = mc.gameSettings.fovSetting;
+        if (this.fov == -1f || mc.gameSettings.fovSetting == this.fov) {
+            this.fov = mc.gameSettings.fovSetting;
         }
     }
 
@@ -55,7 +55,7 @@ public class ZoomMod extends Module {
                     }
                 }
             }
-        } else if (mc.gameSettings.fovSetting < fov) {
+        } else if (mc.gameSettings.fovSetting < this.fov) {
             for (int i = 0; i < 100; i++) {
                 mc.gameSettings.fovSetting += 0.1F;
             }

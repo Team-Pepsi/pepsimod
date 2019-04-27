@@ -58,14 +58,14 @@ public class CrystalAuraMod extends Module {
     public void tick() {
         EntityPlayerSP player = mc.player;
 
-        currentMS = System.nanoTime() / 1000000;
-        if (hasDelayRun((long) (1000 / CrystalAuraTranslator.INSTANCE.speed))) {
+        this.currentMS = System.nanoTime() / 1000000;
+        if (this.hasDelayRun((long) (1000 / CrystalAuraTranslator.INSTANCE.speed))) {
             for (Entity e : mc.world.loadedEntityList) {
-                if (player.getDistanceToEntity(e) < CrystalAuraTranslator.INSTANCE.range) {
+                if (player.getDistance(e) < CrystalAuraTranslator.INSTANCE.range) {
                     if (e instanceof EntityEnderCrystal) {
                         mc.playerController.attackEntity(player, e);
                         player.swingArm(EnumHand.MAIN_HAND);
-                        lastMS = System.nanoTime() / 1000000;
+                        this.lastMS = System.nanoTime() / 1000000;
                         break;
                     }
                 }
@@ -105,6 +105,6 @@ public class CrystalAuraMod extends Module {
     }
 
     public boolean hasDelayRun(long time) {
-        return (currentMS - lastMS) >= time;
+        return (this.currentMS - this.lastMS) >= time;
     }
 }

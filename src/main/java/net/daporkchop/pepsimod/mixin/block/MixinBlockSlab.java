@@ -42,7 +42,6 @@ public abstract class MixinBlockSlab extends Block {
         if (pepsiMod.hasInitializedModules) {
             if (FreecamMod.INSTANCE.state.enabled) {
                 callbackInfoReturnable.setReturnValue(false);
-                return;
             }
         }
     }

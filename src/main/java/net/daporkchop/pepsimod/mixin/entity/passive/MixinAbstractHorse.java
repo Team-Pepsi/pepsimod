@@ -16,10 +16,12 @@
 
 package net.daporkchop.pepsimod.mixin.entity.passive;
 
+import net.daporkchop.pepsimod.module.impl.movement.EntitySpeedMod;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityAnimal;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(AbstractHorse.class)
 public abstract class MixinAbstractHorse extends EntityAnimal {
@@ -27,8 +29,11 @@ public abstract class MixinAbstractHorse extends EntityAnimal {
         super(null);
     }
 
+    @Shadow
+    protected abstract boolean getHorseWatchableBoolean(int p_110233_1_);
+
     @Overwrite
     public boolean isHorseSaddled() {
-        return true; //make the horse be controllable even without a saddle
+        return this.getHorseWatchableBoolean(4) || EntitySpeedMod.INSTANCE.state.enabled; //make the horse be controllable even without a saddle
     }
 }

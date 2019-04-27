@@ -42,7 +42,6 @@ public abstract class MixinTabCompleter {
             }
             this.textField.setText(completed);
             callbackInfo.cancel();
-            return;
         }
     }
 }

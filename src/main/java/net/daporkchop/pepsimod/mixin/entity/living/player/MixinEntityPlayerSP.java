@@ -35,12 +35,12 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
 
     @Overwrite
     public void move(MoverType type, double x, double y, double z) {
-        event.x = x;
-        event.y = y;
-        event.z = z;
+        this.event.x = x;
+        this.event.y = y;
+        this.event.z = z;
         for (Module module : ModuleManager.ENABLED_MODULES) {
-            module.onPlayerMove(event);
+            module.onPlayerMove(this.event);
         }
-        super.move(type, event.x, event.y, event.z);
+        super.move(type, this.event.x, this.event.y, this.event.z);
     }
 }

@@ -62,7 +62,7 @@ public abstract class MixinEntity {
     }
 
     @Inject(method = "move", at = @At("HEAD"))
-    public void move(MoverType type, double x, double y, double z, CallbackInfo callbackInfo) {
+    public void preMove(MoverType type, double x, double y, double z, CallbackInfo callbackInfo) {
         Entity thisAsEntity = Entity.class.cast(this);
         if ((FreecamMod.INSTANCE.state.enabled || NoClipMod.INSTANCE.state.enabled) && thisAsEntity instanceof EntityPlayer) {
             if (thisAsEntity == mc.player) {
@@ -81,18 +81,16 @@ public abstract class MixinEntity {
 
     @Shadow
     public void setEntityBoundingBox(AxisAlignedBB bb) {
-
     }
 
     @Shadow
     public void resetPositionToBB() {
-
     }
 
     @Inject(method = "isInvisibleToPlayer", at = @At("HEAD"), cancellable = true)
     public void preIsInvisibleToPlayer(EntityPlayer player, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (AntiInvisibleMod.INSTANCE.state.enabled) {
-            callbackInfoReturnable.setReturnValue(true);
+            callbackInfoReturnable.setReturnValue(false);
             callbackInfoReturnable.cancel();
         }
     }

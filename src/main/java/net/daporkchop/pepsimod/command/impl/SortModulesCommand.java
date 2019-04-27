@@ -40,7 +40,6 @@ public class SortModulesCommand extends Command {
         if (resulttype == null) {
             clientMessage("Invalid type: " + args[1]);
             clientMessage("Valid types are: alphabetical, default, size, random");
-            return;
         } else {
             switch (resulttype) {
                 case "alphabetical":

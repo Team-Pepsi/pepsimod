@@ -40,7 +40,6 @@ public abstract class MixinScoreboard {
                 playerTeam.getMembershipCollection().remove(username);
             }
         } catch (NullPointerException e) {
-
         }
     }
 

@@ -52,7 +52,7 @@ public abstract class MixinRender<T extends Entity> {
 
     @Overwrite
     protected void renderLivingLabel(T entityIn, String str, double x, double y, double z, int maxDistance) {
-        double d0 = entityIn.getDistanceSqToEntity(this.renderManager.renderViewEntity);
+        double d0 = entityIn.getDistanceSq(this.renderManager.renderViewEntity);
 
         if (d0 <= (double) (maxDistance * maxDistance)) {
             boolean flag = entityIn.isSneaking();

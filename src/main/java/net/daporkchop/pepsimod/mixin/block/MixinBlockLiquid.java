@@ -42,7 +42,6 @@ public abstract class MixinBlockLiquid extends Block {
         if (pepsiMod.hasInitializedModules) {
             if (XrayMod.INSTANCE.state.enabled) {
                 callbackInfoReturnable.setReturnValue(true);
-                return;
             }
         }
     }

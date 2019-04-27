@@ -58,7 +58,7 @@ public class FastLadderMod extends Module {
             if (!mc.player.isOnLadder() || !mc.player.collidedHorizontally || !mc.player.onGround) {
                 return;
             }
-            int ladders = getAboveLadders();
+            int ladders = this.getAboveLadders();
             if (ladders == 0) {
                 return;
             }

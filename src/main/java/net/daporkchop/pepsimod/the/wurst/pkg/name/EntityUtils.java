@@ -50,7 +50,7 @@ public class EntityUtils extends Default {
         }
 
         // entities outside the range
-        if (mc.player.getDistanceToEntity(en) > settings.getRange()) {
+        if (mc.player.getDistance(en) > settings.getRange()) {
             return false;
         }
 
@@ -191,8 +191,8 @@ public class EntityUtils extends Default {
         for (Entity entity : mc.world.loadedEntityList)
             if (isCorrectEntity(entity, settings)
                     && (closestEntity == null || mc.player
-                    .getDistanceToEntity(entity) < mc.player
-                    .getDistanceToEntity(closestEntity)))
+                    .getDistance(entity) < mc.player
+                    .getDistance(closestEntity)))
                 closestEntity = entity;
 
         return closestEntity;
@@ -224,8 +224,8 @@ public class EntityUtils extends Default {
         for (Entity entity : mc.world.loadedEntityList)
             if (isCorrectEntity(entity, settings) && entity != otherEntity
                     && (closestEnemy == null || mc.player
-                    .getDistanceToEntity(entity) < mc.player
-                    .getDistanceToEntity(closestEnemy)))
+                    .getDistance(entity) < mc.player
+                    .getDistance(closestEnemy)))
                 closestEnemy = entity;
 
         return closestEnemy;
@@ -242,8 +242,8 @@ public class EntityUtils extends Default {
                 continue;
 
             if (closestEntity == null || mc.player
-                    .getDistanceSqToEntity(entity) < mc.player
-                    .getDistanceSqToEntity(closestEntity))
+                    .getDistanceSq(entity) < mc.player
+                    .getDistanceSq(closestEntity))
                 closestEntity = entity;
         }
 

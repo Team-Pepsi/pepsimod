@@ -35,7 +35,7 @@ public class BlockUtils {
 
     public static boolean placeBlockLegit(BlockPos pos) {
         Vec3d eyesPos = RotationUtils.getEyesPos();
-        Vec3d posVec = new Vec3d(pos).addVector(0.5, 0.5, 0.5);
+        Vec3d posVec = new Vec3d(pos).add(0.5, 0.5, 0.5);
         double distanceSqPosVec = eyesPos.squareDistanceTo(posVec);
 
         for (EnumFacing side : EnumFacing.values()) {
@@ -84,16 +84,16 @@ public class BlockUtils {
 
             // check if side is visible (facing away from player)
             if (eyesPos.squareDistanceTo(
-                    new Vec3d(pos).addVector(0.5, 0.5, 0.5)) >= eyesPos
+                    new Vec3d(pos).add(0.5, 0.5, 0.5)) >= eyesPos
                     .squareDistanceTo(
-                            new Vec3d(neighbor).addVector(0.5, 0.5, 0.5)))
+                            new Vec3d(neighbor).add(0.5, 0.5, 0.5)))
                 continue;
 
             // check if neighbor can be right clicked
             if (!WBlock.canBeClicked(neighbor))
                 continue;
 
-            Vec3d hitVec = new Vec3d(neighbor).addVector(0.5, 0.5, 0.5)
+            Vec3d hitVec = new Vec3d(neighbor).add(0.5, 0.5, 0.5)
                     .add(new Vec3d(side2.getDirectionVec()).scale(0.5));
 
             // check if hitVec is within range (4.25 blocks)
@@ -114,7 +114,7 @@ public class BlockUtils {
 
     public static boolean placeBlockSimple(BlockPos pos) {
         Vec3d eyesPos = RotationUtils.getEyesPos();
-        Vec3d posVec = new Vec3d(pos).addVector(0.5, 0.5, 0.5);
+        Vec3d posVec = new Vec3d(pos).add(0.5, 0.5, 0.5);
 
         for (EnumFacing side : EnumFacing.values()) {
             BlockPos neighbor = pos.offset(side);
@@ -142,7 +142,7 @@ public class BlockUtils {
 
     public static boolean prepareToBreakBlockLegit(BlockPos pos) {
         Vec3d eyesPos = RotationUtils.getEyesPos();
-        Vec3d posVec = new Vec3d(pos).addVector(0.5, 0.5, 0.5);
+        Vec3d posVec = new Vec3d(pos).add(0.5, 0.5, 0.5);
         double distanceSqPosVec = eyesPos.squareDistanceTo(posVec);
 
         for (EnumFacing side : EnumFacing.values()) {
@@ -175,7 +175,7 @@ public class BlockUtils {
 
     public static boolean breakBlockLegit(BlockPos pos) {
         Vec3d eyesPos = RotationUtils.getEyesPos();
-        Vec3d posVec = new Vec3d(pos).addVector(0.5, 0.5, 0.5);
+        Vec3d posVec = new Vec3d(pos).add(0.5, 0.5, 0.5);
         double distanceSqPosVec = eyesPos.squareDistanceTo(posVec);
 
         for (EnumFacing side : EnumFacing.values()) {
@@ -211,7 +211,7 @@ public class BlockUtils {
 
     public static boolean breakBlockExtraLegit(BlockPos pos) {
         Vec3d eyesPos = RotationUtils.getEyesPos();
-        Vec3d posVec = new Vec3d(pos).addVector(0.5, 0.5, 0.5);
+        Vec3d posVec = new Vec3d(pos).add(0.5, 0.5, 0.5);
         double distanceSqPosVec = eyesPos.squareDistanceTo(posVec);
 
         for (EnumFacing side : EnumFacing.values()) {
@@ -255,7 +255,7 @@ public class BlockUtils {
 
     public static boolean breakBlockSimple(BlockPos pos) {
         Vec3d eyesPos = RotationUtils.getEyesPos();
-        Vec3d posVec = new Vec3d(pos).addVector(0.5, 0.5, 0.5);
+        Vec3d posVec = new Vec3d(pos).add(0.5, 0.5, 0.5);
         double distanceSqPosVec = eyesPos.squareDistanceTo(posVec);
 
         for (EnumFacing side : EnumFacing.values()) {
@@ -289,7 +289,7 @@ public class BlockUtils {
 
     public static void breakBlockPacketSpam(BlockPos pos) {
         Vec3d eyesPos = RotationUtils.getEyesPos();
-        Vec3d posVec = new Vec3d(pos).addVector(0.5, 0.5, 0.5);
+        Vec3d posVec = new Vec3d(pos).add(0.5, 0.5, 0.5);
         double distanceSqPosVec = eyesPos.squareDistanceTo(posVec);
 
         for (EnumFacing side : EnumFacing.values()) {
@@ -312,7 +312,7 @@ public class BlockUtils {
 
     public static boolean rightClickBlockLegit(BlockPos pos) {
         Vec3d eyesPos = RotationUtils.getEyesPos();
-        Vec3d posVec = new Vec3d(pos).addVector(0.5, 0.5, 0.5);
+        Vec3d posVec = new Vec3d(pos).add(0.5, 0.5, 0.5);
         double distanceSqPosVec = eyesPos.squareDistanceTo(posVec);
 
         for (EnumFacing side : EnumFacing.values()) {
@@ -350,7 +350,7 @@ public class BlockUtils {
 
     public static boolean rightClickBlockSimple(BlockPos pos) {
         Vec3d eyesPos = RotationUtils.getEyesPos();
-        Vec3d posVec = new Vec3d(pos).addVector(0.5, 0.5, 0.5);
+        Vec3d posVec = new Vec3d(pos).add(0.5, 0.5, 0.5);
         double distanceSqPosVec = eyesPos.squareDistanceTo(posVec);
 
         for (EnumFacing side : EnumFacing.values()) {

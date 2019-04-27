@@ -63,7 +63,7 @@ public abstract class MixinEntityLivingBase extends Entity {
     public void preOnLivingUpdate(CallbackInfo callbackInfo) {
         EntityLivingBase thisAsEntity = EntityLivingBase.class.cast(this);
         if (thisAsEntity == mc.player && ElytraFlyMod.INSTANCE.state.enabled && ElytraFlyTranslator.INSTANCE.mode == ElytraFlyTranslator.ElytraFlyMode.PACKET) {
-            motionY = 0;
+            this.motionY = 0;
         }
         if (FreecamMod.INSTANCE.state.enabled) {
             if (mc.gameSettings.keyBindJump.isKeyDown()) {
@@ -85,7 +85,7 @@ public abstract class MixinEntityLivingBase extends Entity {
     public void preTravel(float x, float y, float z, CallbackInfo callbackInfo) {
         EntityLivingBase thisAsEntity = EntityLivingBase.class.cast(this);
         if (thisAsEntity == mc.player && ElytraFlyMod.INSTANCE.state.enabled && ElytraFlyTranslator.INSTANCE.mode == ElytraFlyTranslator.ElytraFlyMode.PACKET) {
-            motionY = 0;
+            this.motionY = 0;
         }
     }
 

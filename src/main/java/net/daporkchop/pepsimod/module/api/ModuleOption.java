@@ -48,10 +48,10 @@ public class ModuleOption<T> {
     }
 
     public ModuleOption(T defaultValue, String name, String[] defaultCompletions, Function<T, Boolean> set, Supplier<T> get, String displayName) {
-        DEFAULT_COMPLETIONS = defaultCompletions;
-        DEFAULT_VALUE = defaultValue;
-        SET = set;
-        GET = get;
+        this.DEFAULT_COMPLETIONS = defaultCompletions;
+        this.DEFAULT_VALUE = defaultValue;
+        this.SET = set;
+        this.GET = get;
         this.value = defaultValue;
         this.name = name;
         this.displayName = displayName;
@@ -62,19 +62,19 @@ public class ModuleOption<T> {
     }
 
     public boolean setValue(T value) {
-        return SET.apply(value);
+        return this.SET.apply(value);
     }
 
     public T getValue() {
-        T toReturn = GET.get();
-        return toReturn == null ? getDefaultValue() : toReturn;
+        T toReturn = this.GET.get();
+        return toReturn == null ? this.getDefaultValue() : toReturn;
     }
 
     public T getDefaultValue() {
-        return DEFAULT_VALUE;
+        return this.DEFAULT_VALUE;
     }
 
     public String[] defaultCompletions() {
-        return DEFAULT_COMPLETIONS;
+        return this.DEFAULT_COMPLETIONS;
     }
 }

@@ -36,6 +36,6 @@ public abstract class Command extends Default {
     public abstract String getSuggestion(String cmd, String[] args);
 
     public String[] aliases() {
-        return new String[]{name};
+        return new String[]{this.name};
     }
 }

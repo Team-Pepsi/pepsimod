@@ -44,7 +44,7 @@ public class AutoTotemMod extends Module {
 
     @Override
     public void onEnable() {
-        timer = 0;
+        this.timer = 0;
     }
 
     @Override
@@ -56,8 +56,8 @@ public class AutoTotemMod extends Module {
     public void tick() {
         EntityPlayerSP player = mc.player;
 
-        if (timer > 0) {
-            timer--;
+        if (this.timer > 0) {
+            this.timer--;
             return;
         }
 
@@ -72,12 +72,12 @@ public class AutoTotemMod extends Module {
             for (inventoryIndex = 0; inventoryIndex < inv.size(); inventoryIndex++) {
                 if (inv.get(inventoryIndex) != ItemStack.EMPTY) {
                     if (inv.get(inventoryIndex).getItem() == Items.TOTEM_OF_UNDYING) {
-                        replaceTotem(inventoryIndex);
+                        this.replaceTotem(inventoryIndex);
                         break;
                     }
                 }
             }
-            timer = 3;
+            this.timer = 3;
         }
     }
 

@@ -40,9 +40,6 @@ public abstract class MixinTimer {
     @Shadow
     private float tickLength;
 
-    /**
-     * this hides a stupid warning
-     */
     @Overwrite
     public void updateTimer() {
         float timerSpeed = (TimerMod.INSTANCE == null ?

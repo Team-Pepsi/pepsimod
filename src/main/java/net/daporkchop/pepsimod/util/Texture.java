@@ -57,6 +57,6 @@ public class Texture {
 
     @Override
     public String toString() {
-        return this.texture.getResourcePath();
+        return this.texture.getPath();
     }
 }

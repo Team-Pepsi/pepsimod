@@ -54,12 +54,12 @@ public abstract class Module extends Command implements ITickListener {
 
     public Module(boolean def, String name, int keybind, boolean hide) {
         super(name.toLowerCase());
-        nameFull = name;
-        this.options = getDefaultOptions();
-        registerKeybind(name, keybind);
-        state = GeneralTranslator.INSTANCE.getState(name, new GeneralTranslator.ModuleState(def, hide));
-        if (state == null) {
-            GeneralTranslator.INSTANCE.states.put(name, state = new GeneralTranslator.ModuleState(def, hide));
+        this.nameFull = name;
+        this.options = this.getDefaultOptions();
+        this.registerKeybind(name, keybind);
+        this.state = GeneralTranslator.INSTANCE.getState(name, new GeneralTranslator.ModuleState(def, hide));
+        if (this.state == null) {
+            GeneralTranslator.INSTANCE.states.put(name, this.state = new GeneralTranslator.ModuleState(def, hide));
         }
     }
 
@@ -100,7 +100,7 @@ public abstract class Module extends Command implements ITickListener {
         } else {
             this.onDisable();
         }
-        return state.enabled;
+        return this.state.enabled;
     }
 
     /**
@@ -108,18 +108,18 @@ public abstract class Module extends Command implements ITickListener {
      */
     public final void doInit() {
         this.init();
-        if (hasModeInName()) {
-            updateName();
+        if (this.hasModeInName()) {
+            this.updateName();
         } else {
             this.text = new RainbowText(this.nameFull);
         }
         CommandRegistry.registerCommand(this);
         ArrayList<String> temp = new ArrayList<>();
-        for (ModuleOption option : options) {
+        for (ModuleOption option : this.options) {
             temp.add(option.getName());
         }
         //temp.add("list"); is this really needed? get opinions
-        completionOptions = temp.toArray(new String[temp.size()]);
+        this.completionOptions = temp.toArray(new String[temp.size()]);
     }
 
     /**
@@ -139,7 +139,7 @@ public abstract class Module extends Command implements ITickListener {
     }
 
     public boolean shouldTick() {
-        return state.enabled;
+        return this.state.enabled;
     }
 
     /**
@@ -219,11 +219,11 @@ public abstract class Module extends Command implements ITickListener {
      * Does nothing if the module has no custom name
      */
     public void updateName() {
-        if (pepsiMod.isInitialized && hasModeInName()) {
+        if (pepsiMod.isInitialized && this.hasModeInName()) {
             if (HUDTranslator.INSTANCE.rainbow) {
-                text = new RainbowText(nameFull + PepsiUtils.COLOR_ESCAPE + "customa8a8a8 [" + getModeForName() + "]");
+                this.text = new RainbowText(this.nameFull + PepsiUtils.COLOR_ESCAPE + "customa8a8a8 [" + this.getModeForName() + "]");
             } else {
-                text = new RainbowText(nameFull + PepsiUtils.COLOR_ESCAPE + "7 [" + getModeForName() + "]");
+                this.text = new RainbowText(this.nameFull + PepsiUtils.COLOR_ESCAPE + "7 [" + this.getModeForName() + "]");
             }
         }
     }
@@ -231,34 +231,34 @@ public abstract class Module extends Command implements ITickListener {
     public String getSuggestion(String cmd, String[] args) {
         switch (args.length) {
             case 1:
-                return "." + name + " " + (completionOptions.length == 0 ? "" : completionOptions[0]);
+                return "." + this.name + " " + (this.completionOptions.length == 0 ? "" : this.completionOptions[0]);
             case 2:
                 if (args[1].isEmpty()) {
-                    return "." + name + " " + (completionOptions.length == 0 ? "" : completionOptions[0]);
+                    return "." + this.name + " " + (this.completionOptions.length == 0 ? "" : this.completionOptions[0]);
                 }
-                for (String mode : completionOptions) {
+                for (String mode : this.completionOptions) {
                     if (mode.equals(args[1])) {
-                        ModuleOption option = getOptionByName(args[1]);
+                        ModuleOption option = this.getOptionByName(args[1]);
                         if (option == null) {
                             return "";
                         } else {
                             return args[0] + " " + args[1] + " " + option.getDefaultValue();
                         }
                     } else if (mode.startsWith(args[1])) {
-                        return "." + name + " " + mode;
+                        return "." + this.name + " " + mode;
                     }
                 }
                 return "";
             case 3:
                 if (args[2].isEmpty()) {
-                    ModuleOption option = getOptionByName(args[1].trim());
+                    ModuleOption option = this.getOptionByName(args[1].trim());
                     if (option == null) {
                         return "";
                     } else {
                         return args[0] + " " + args[1] + " " + option.getDefaultValue();
                     }
                 }
-                ModuleOption option = getOptionByName(args[1]);
+                ModuleOption option = this.getOptionByName(args[1]);
                 if (option == null) {
                     return "";
                 } else {
@@ -275,28 +275,28 @@ public abstract class Module extends Command implements ITickListener {
                 }
         }
 
-        return "." + name;
+        return "." + this.name;
     }
 
     public void execute(String cmd, String[] args) {
         switch (args.length) {
             case 1:
                 String commands = "";
-                for (int i = 0; i < completionOptions.length; i++) {
-                    commands += PepsiUtils.COLOR_ESCAPE + "o" + completionOptions[i] + PepsiUtils.COLOR_ESCAPE + "r" + (i + 1 == completionOptions.length ? "" : ", ");
+                for (int i = 0; i < this.completionOptions.length; i++) {
+                    commands += PepsiUtils.COLOR_ESCAPE + "o" + this.completionOptions[i] + PepsiUtils.COLOR_ESCAPE + "r" + (i + 1 == this.completionOptions.length ? "" : ", ");
                 }
                 clientMessage(commands);
                 break;
             case 2:
                 if (args[1].isEmpty()) {
                     String cmds = "";
-                    for (int i = 0; i < completionOptions.length; i++) {
-                        cmds += PepsiUtils.COLOR_ESCAPE + "o" + completionOptions[i] + PepsiUtils.COLOR_ESCAPE + "r" + (i + 1 == completionOptions.length ? "" : ", ");
+                    for (int i = 0; i < this.completionOptions.length; i++) {
+                        cmds += PepsiUtils.COLOR_ESCAPE + "o" + this.completionOptions[i] + PepsiUtils.COLOR_ESCAPE + "r" + (i + 1 == this.completionOptions.length ? "" : ", ");
                     }
                     clientMessage(cmds);
                     break;
                 }
-                ModuleOption option = getOptionByName(args[1]);
+                ModuleOption option = this.getOptionByName(args[1]);
                 if (option == null) {
                     clientMessage("Unknown option: " + PepsiUtils.COLOR_ESCAPE + "o" + args[1]);
                     break;
@@ -306,7 +306,7 @@ public abstract class Module extends Command implements ITickListener {
                 }
             case 3:
                 if (args[2].isEmpty()) {
-                    ModuleOption opt = getOptionByName(args[1]);
+                    ModuleOption opt = this.getOptionByName(args[1]);
                     if (opt == null) {
                         clientMessage("Unknown option: " + PepsiUtils.COLOR_ESCAPE + "o" + args[1]);
                         break;
@@ -315,7 +315,7 @@ public abstract class Module extends Command implements ITickListener {
                         break;
                     }
                 }
-                ModuleOption opt = getOptionByName(args[1]);
+                ModuleOption opt = this.getOptionByName(args[1]);
                 if (opt == null) {
                     clientMessage("Unknown option: " + PepsiUtils.COLOR_ESCAPE + "o" + args[1]);
                     break;
@@ -361,10 +361,8 @@ public abstract class Module extends Command implements ITickListener {
                                 break;
                         }
                         clientMessage("Set " + PepsiUtils.COLOR_ESCAPE + "o" + args[1] + PepsiUtils.COLOR_ESCAPE + "r to " + PepsiUtils.COLOR_ESCAPE + "o" + opt.getValue());
-                        return;
                     } catch (NumberFormatException e) {
                         clientMessage("Invalid number: " + PepsiUtils.COLOR_ESCAPE + "o" + args[2]);
-                        return;
                     }
                 }
         }

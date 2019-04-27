@@ -34,12 +34,12 @@ public class NoSlowdownMod extends Module {
 
     @Override
     public void onEnable() {
-        fastIce();
+        this.fastIce();
     }
 
     @Override
     public void onDisable() {
-        normalIce();
+        this.normalIce();
     }
 
     @Override

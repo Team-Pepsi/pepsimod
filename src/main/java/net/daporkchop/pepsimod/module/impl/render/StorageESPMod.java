@@ -75,11 +75,11 @@ public class StorageESPMod extends Module {
 
     @Override
     public void tick() {
-        basic.clear();
-        trapped.clear();
-        ender.clear();
-        hopper.clear();
-        furnace.clear();
+        this.basic.clear();
+        this.trapped.clear();
+        this.ender.clear();
+        this.hopper.clear();
+        this.furnace.clear();
 
         for (TileEntity te : mc.world.loadedTileEntityList) {
             if ((ESPTranslator.INSTANCE.basic || ESPTranslator.INSTANCE.trapped) && te instanceof TileEntityChest) {
@@ -99,19 +99,19 @@ public class StorageESPMod extends Module {
 
                 if (chestTe.getChestType() == BlockChest.Type.TRAP) {
                     if (ESPTranslator.INSTANCE.trapped) {
-                        trapped.add(bb);
+                        this.trapped.add(bb);
                     }
                 } else {
                     if (ESPTranslator.INSTANCE.basic) {
-                        basic.add(bb);
+                        this.basic.add(bb);
                     }
                 }
             } else if (ESPTranslator.INSTANCE.ender && te instanceof TileEntityEnderChest) {
-                ender.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(mc.world, te.getPos())), te.getPos()));
+                this.ender.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(mc.world, te.getPos())), te.getPos()));
             } else if (ESPTranslator.INSTANCE.furnace && te instanceof TileEntityFurnace) {
-                furnace.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(mc.world, te.getPos())), te.getPos()));
+                this.furnace.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(mc.world, te.getPos())), te.getPos()));
             } else if (ESPTranslator.INSTANCE.hopper && te instanceof TileEntityHopper) {
-                hopper.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(mc.world, te.getPos())), te.getPos()));
+                this.hopper.add(PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(mc.world, te.getPos())), te.getPos()));
             }
         }
     }
@@ -183,7 +183,7 @@ public class StorageESPMod extends Module {
         if (ESPTranslator.INSTANCE.basic) {
             GL11.glColor4b(chestColor.r, chestColor.g, chestColor.b, chestColor.a);
 
-            basic.forEach((entry) -> {
+            this.basic.forEach((entry) -> {
                 RenderUtils.drawOutlinedBox(entry);
             });
         }
@@ -191,7 +191,7 @@ public class StorageESPMod extends Module {
         if (ESPTranslator.INSTANCE.trapped) {
             GL11.glColor4b(trappedColor.r, trappedColor.g, trappedColor.b, trappedColor.a);
 
-            trapped.forEach((entry) -> {
+            this.trapped.forEach((entry) -> {
                 RenderUtils.drawOutlinedBox(entry);
             });
         }
@@ -199,7 +199,7 @@ public class StorageESPMod extends Module {
         if (ESPTranslator.INSTANCE.ender) {
             GL11.glColor4b(enderColor.r, enderColor.g, enderColor.b, enderColor.a);
 
-            ender.forEach((entry) -> {
+            this.ender.forEach((entry) -> {
                 RenderUtils.drawOutlinedBox(entry);
             });
         }
@@ -207,7 +207,7 @@ public class StorageESPMod extends Module {
         if (ESPTranslator.INSTANCE.hopper) {
             GL11.glColor4b(hopperColor.r, hopperColor.g, hopperColor.b, hopperColor.a);
 
-            hopper.forEach((entry) -> {
+            this.hopper.forEach((entry) -> {
                 RenderUtils.drawOutlinedBox(entry);
             });
         }
@@ -215,7 +215,7 @@ public class StorageESPMod extends Module {
         if (ESPTranslator.INSTANCE.furnace) {
             GL11.glColor4b(furnaceColor.r, furnaceColor.g, furnaceColor.b, furnaceColor.a);
 
-            furnace.forEach((entry) -> {
+            this.furnace.forEach((entry) -> {
                 RenderUtils.drawOutlinedBox(entry);
             });
         }

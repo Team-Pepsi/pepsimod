@@ -56,21 +56,21 @@ public class AutoEatMod extends Module {
         if (mc.world != null) {
             ReflectionStuff.setPressed(mc.gameSettings.keyBindUseItem, false);
         }
-        doneEating = true;
+        this.doneEating = true;
     }
 
     @Override
     public void tick() {
-        if (!shouldEat()) {
+        if (!this.shouldEat()) {
             ReflectionStuff.setPressed(mc.gameSettings.keyBindUseItem, false);
-            doneEating = true;
+            this.doneEating = true;
             return;
         }
 
         FoodStats foodStats = mc.player.getFoodStats();
-        if (foodStats.getFoodLevel() <= AutoEatTranslator.INSTANCE.threshold && shouldEat()) {
-            doneEating = false;
-            eatFood();
+        if (foodStats.getFoodLevel() <= AutoEatTranslator.INSTANCE.threshold && this.shouldEat()) {
+            this.doneEating = false;
+            this.eatFood();
         }
     }
 

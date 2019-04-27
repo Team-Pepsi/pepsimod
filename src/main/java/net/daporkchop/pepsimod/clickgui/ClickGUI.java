@@ -37,7 +37,7 @@ public class ClickGUI extends GuiScreen {
     }
 
     public void initWindows() {
-        for (Window window : windows) {
+        for (Window window : this.windows) {
             window.init(window.category);
         }
     }
@@ -55,22 +55,22 @@ public class ClickGUI extends GuiScreen {
     }
 
     public synchronized void sendToFront(Window window) {
-        if (containsWindow(window)) {
+        if (this.containsWindow(window)) {
             int panelIndex = 0;
-            for (int i = 0; i < windows.length; i++) {
-                if (windows[i] == window) {
+            for (int i = 0; i < this.windows.length; i++) {
+                if (this.windows[i] == window) {
                     panelIndex = i;
                     break;
                 }
             }
-            Window t = windows[0];
-            windows[0] = windows[panelIndex];
-            windows[panelIndex] = t;
+            Window t = this.windows[0];
+            this.windows[0] = this.windows[panelIndex];
+            this.windows[panelIndex] = t;
         }
     }
 
     public void mouseClicked(int x, int y, int b) throws IOException {
-        for (Window window : windows) {
+        for (Window window : this.windows) {
             window.processMouseClick(x, y, b);
         }
 
@@ -78,7 +78,7 @@ public class ClickGUI extends GuiScreen {
     }
 
     public void mouseReleased(int x, int y, int state) {
-        for (Window window : windows) {
+        for (Window window : this.windows) {
             window.processMouseRelease(x, y, state);
         }
 
@@ -86,7 +86,7 @@ public class ClickGUI extends GuiScreen {
     }
 
     public void drawScreen(int x, int y, float ticks) {
-        for (Window window : windows) {
+        for (Window window : this.windows) {
             window.draw(x, y);
         }
 
@@ -99,7 +99,7 @@ public class ClickGUI extends GuiScreen {
     }
 
     public boolean containsWindow(Window window) {
-        for (Window window1 : windows) {
+        for (Window window1 : this.windows) {
             if (window == window1) {
                 return true;
             }
@@ -116,7 +116,7 @@ public class ClickGUI extends GuiScreen {
             dWheel *= -1;
             int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
             int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
-            for (Window window : windows) {
+            for (Window window : this.windows) {
                 window.handleScroll(dWheel, x, y);
             }
         }

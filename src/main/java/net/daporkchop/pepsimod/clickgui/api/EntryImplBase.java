@@ -37,12 +37,12 @@ public abstract class EntryImplBase extends Default implements IEntry {
     }
 
     public boolean isMouseHovered() {
-        return isHoveredCached;
+        return this.isHoveredCached;
     }
 
     protected void updateIsMouseHovered(int mouseX, int mouseY) {
-        int x = getX(), y = getY();
-        int maxX = x + width, maxY = y + height;
-        isHoveredCached = (x <= mouseX && mouseX <= maxX && y <= mouseY && mouseY <= maxY);
+        int x = this.getX(), y = this.getY();
+        int maxX = x + this.width, maxY = y + this.height;
+        this.isHoveredCached = (x <= mouseX && mouseX <= maxX && y <= mouseY && mouseY <= maxY);
     }
 }

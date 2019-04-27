@@ -41,7 +41,6 @@ public abstract class MixinNetworkManager {
     public void preSend(final Packet<?> inPacket, @Nullable final GenericFutureListener<? extends Future<? super Void>>[] futureListeners, CallbackInfo callbackInfo) {
         if (ModuleManager.preSendPacket(inPacket)) {
             callbackInfo.cancel();
-            return;
         }
     }
 
@@ -55,7 +54,6 @@ public abstract class MixinNetworkManager {
         TickRate.update(p_channelRead0_2_);
         if (ModuleManager.preRecievePacket(p_channelRead0_2_)) {
             callbackInfo.cancel();
-            return;
         }
     }
 

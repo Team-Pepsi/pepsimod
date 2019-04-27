@@ -169,7 +169,7 @@ public class TracersMod extends Module {
         GL11.glTranslated(-ReflectionStuff.getRenderPosX(mc.getRenderManager()), -ReflectionStuff.getRenderPosY(mc.getRenderManager()), -ReflectionStuff.getRenderPosZ(mc.getRenderManager()));
 
         // set start position
-        Vec3d start = RotationUtils.getClientLookVec().addVector(0, mc.player.getEyeHeight(), 0).addVector(ReflectionStuff.getRenderPosX(mc.getRenderManager()), ReflectionStuff.getRenderPosY(mc.getRenderManager()), ReflectionStuff.getRenderPosZ(mc.getRenderManager()));
+        Vec3d start = RotationUtils.getClientLookVec().add(0, mc.player.getEyeHeight(), 0).add(ReflectionStuff.getRenderPosX(mc.getRenderManager()), ReflectionStuff.getRenderPosY(mc.getRenderManager()), ReflectionStuff.getRenderPosZ(mc.getRenderManager()));
 
         GL11.glBegin(GL11.GL_LINES);
 
@@ -195,7 +195,7 @@ public class TracersMod extends Module {
                 if (TracersTranslator.INSTANCE.friendColors && FriendsTranslator.INSTANCE.friends.contains(entity.getUniqueID().toString())) {
                     color = friendColor;
                 } else if (TracersTranslator.INSTANCE.distanceColor) {
-                    double dist = mc.player.getDistanceSqToEntity(entity);
+                    double dist = mc.player.getDistanceSq(entity);
                     if (dist >= 625) {
                         color = distSafe;
                     } else if (dist >= 400) {
@@ -210,7 +210,7 @@ public class TracersMod extends Module {
                 }
             } else if ((TracersTranslator.INSTANCE.monsters || TracersTranslator.INSTANCE.everything) && entity instanceof EntityMob) {
                 if (TracersTranslator.INSTANCE.distanceColor) {
-                    double dist = mc.player.getDistanceSqToEntity(entity);
+                    double dist = mc.player.getDistanceSq(entity);
                     if (dist >= 625) {
                         color = distSafe;
                     } else if (dist >= 400) {

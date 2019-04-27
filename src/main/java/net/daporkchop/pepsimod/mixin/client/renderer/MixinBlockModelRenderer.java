@@ -31,7 +31,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BlockModelRenderer.class)
 public abstract class MixinBlockModelRenderer {
-    @Inject(method = "renderModel", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/client/renderer/BlockModelRenderer;renderModel(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/client/renderer/block/model/IBakedModel;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/renderer/BufferBuilder;Z)Z",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preRenderModel(IBlockAccess blockAccessIn, IBakedModel modelIn, IBlockState blockStateIn, BlockPos blockPosIn, BufferBuilder buffer, boolean checkSides, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (XrayMod.INSTANCE.state.enabled) {
             if (!XrayTranslator.INSTANCE.isTargeted(blockStateIn.getBlock())) {
@@ -42,7 +46,11 @@ public abstract class MixinBlockModelRenderer {
         //vanilla code follows
     }
 
-    @Inject(method = "renderModelSmooth", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/client/renderer/BlockModelRenderer;renderModelSmooth(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/client/renderer/block/model/IBakedModel;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/renderer/BufferBuilder;ZJ)Z",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preRenderQuadsSmooth(IBlockAccess access, IBakedModel model, IBlockState stateIn, BlockPos pos, BufferBuilder bufferBuilder, boolean idk, long ok, CallbackInfoReturnable<Boolean> returnable) {
         if (XrayMod.INSTANCE.state.enabled) {
             if (!XrayTranslator.INSTANCE.isTargeted(stateIn.getBlock())) {

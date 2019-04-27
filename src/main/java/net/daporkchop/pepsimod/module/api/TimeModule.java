@@ -25,18 +25,18 @@ public abstract class TimeModule extends Module {
     }
 
     public final void updateMS() {
-        currentMS = System.currentTimeMillis();
+        this.currentMS = System.currentTimeMillis();
     }
 
     public final void updateLastMS() {
-        lastMS = System.currentTimeMillis();
+        this.lastMS = System.currentTimeMillis();
     }
 
     public final boolean hasTimePassedM(long MS) {
-        return currentMS >= lastMS + MS;
+        return this.currentMS >= this.lastMS + MS;
     }
 
     public final boolean hasTimePassedS(float speed) {
-        return currentMS >= lastMS + (long) (1000 / speed);
+        return this.currentMS >= this.lastMS + (long) (1000 / speed);
     }
 }
