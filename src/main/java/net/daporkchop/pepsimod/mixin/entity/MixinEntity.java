@@ -36,7 +36,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static net.daporkchop.pepsimod.util.misc.Default.mc;
+import static net.daporkchop.pepsimod.util.PepsiConstants.mc;
 
 @Mixin(Entity.class)
 public abstract class MixinEntity {

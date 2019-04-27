@@ -30,7 +30,7 @@ import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 
-import static net.daporkchop.pepsimod.util.misc.Default.pepsiMod;
+import static net.daporkchop.pepsimod.util.PepsiConstants.pepsiMod;
 
 public class GuiScreenMCLeaks extends GuiScreen {
     public Minecraft mc;

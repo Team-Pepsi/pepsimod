@@ -104,13 +104,14 @@ import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.config.Config;
 import net.daporkchop.pepsimod.util.config.impl.HUDTranslator;
-import net.daporkchop.pepsimod.util.misc.Default;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Session;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -133,7 +134,6 @@ public class PepsiMod {
     public Session originalSession = null;
     public boolean hasInitializedModules = false;
     public boolean isInitialized = false;
-    private Minecraft mc;
 
     public static void registerModules(FMLStateEvent event) {
         ModuleManager.registerModule(new NoFallMod());
@@ -236,11 +236,14 @@ public class PepsiMod {
     }
 
     @Mod.EventHandler
+    public void construction(FMLConstructionEvent event)    {
+        PepsiConstants.mc = Minecraft.getMinecraft();
+        PepsiConstants.pepsiMod = this;
+    }
+
+    @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new KeyRegistry());
-        this.mc = Minecraft.getMinecraft();
-        Default.mc = this.mc;
-        Default.pepsiMod = this;
     }
 
     @Mod.EventHandler
@@ -278,7 +281,7 @@ public class PepsiMod {
         PepsiUtils.timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                Default.pepsiMod.saveConfig();
+                PepsiConstants.pepsiMod.saveConfig();
             }
         }, 360000, 360000);
     }

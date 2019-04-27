@@ -16,10 +16,9 @@
 
 package net.daporkchop.pepsimod.util;
 
-import net.daporkchop.pepsimod.util.misc.Default;
 import net.minecraft.util.math.MathHelper;
 
-public class BetterScaledResolution extends Default {
+public class BetterScaledResolution extends PepsiConstants {
     public static BetterScaledResolution INSTANCE;
 
     public int scaledWidth;

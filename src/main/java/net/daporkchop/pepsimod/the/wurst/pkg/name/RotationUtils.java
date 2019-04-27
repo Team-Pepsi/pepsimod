@@ -17,14 +17,14 @@
 package net.daporkchop.pepsimod.the.wurst.pkg.name;
 
 import net.daporkchop.pepsimod.util.PepsiUtils;
-import net.daporkchop.pepsimod.util.misc.Default;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
-public class RotationUtils extends Default {
+public class RotationUtils extends PepsiConstants {
     private static boolean fakeRotation;
     private static float serverYaw;
     private static float serverPitch;

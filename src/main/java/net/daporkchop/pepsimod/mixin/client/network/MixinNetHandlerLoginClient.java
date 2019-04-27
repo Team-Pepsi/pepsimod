@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static net.daporkchop.pepsimod.util.misc.Default.pepsiMod;
+import static net.daporkchop.pepsimod.util.PepsiConstants.pepsiMod;
 
 @Mixin(NetHandlerLoginClient.class)
 public abstract class MixinNetHandlerLoginClient implements INetHandlerLoginClient {

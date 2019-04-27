@@ -16,14 +16,14 @@
 
 package net.daporkchop.pepsimod.the.wurst.pkg.name;
 
-import net.daporkchop.pepsimod.util.misc.Default;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
-public class WBlock extends Default {
+public class WBlock extends PepsiConstants {
     public static IBlockState getState(BlockPos pos) {
         return mc.world.getBlockState(pos);
     }

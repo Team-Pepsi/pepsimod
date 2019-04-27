@@ -24,7 +24,7 @@ import net.daporkchop.pepsimod.module.impl.movement.NoSlowdownMod;
 import net.daporkchop.pepsimod.the.wurst.pkg.name.WBlock;
 import net.daporkchop.pepsimod.the.wurst.pkg.name.WMinecraft;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
-import net.daporkchop.pepsimod.util.misc.Default;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
@@ -49,10 +49,9 @@ import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map.Entry;
 
-public class PathFinder extends Default {
+public class PathFinder extends PepsiConstants {
     public final HashMap<PathPos, PathPos> prevPosMap = new HashMap<>();
     public final boolean noWaterSlowdown = NoSlowdownMod.INSTANCE.state.enabled;
     public final boolean jesus = JesusMod.INSTANCE.state.enabled;

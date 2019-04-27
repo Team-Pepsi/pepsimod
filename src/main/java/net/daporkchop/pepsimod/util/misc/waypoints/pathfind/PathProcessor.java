@@ -20,7 +20,7 @@ import net.daporkchop.pepsimod.the.wurst.pkg.name.RotationUtils;
 import net.daporkchop.pepsimod.the.wurst.pkg.name.WMinecraft;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
-import net.daporkchop.pepsimod.util.misc.Default;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.math.BlockPos;
@@ -28,7 +28,7 @@ import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
 
-public abstract class PathProcessor extends Default {
+public abstract class PathProcessor extends PepsiConstants {
 
     protected final ArrayList<PathPos> path;
     public boolean lookedLastTick = false;

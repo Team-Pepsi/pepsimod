@@ -5,7 +5,7 @@
     "description": "A hacked client for Forge\nMade by DaPorkchop_, for Team Pepsi",
     "version": "11.1",
     "mcversion": "1.12.2",
-    "url": "",
+    "url": "https://github.com/Team-Pepsi/pepsimod",
     "updateUrl": "https://raw.githubusercontent.com/Team-Pepsi/pepsimod/master/update.json",
     "authorList": [
       "DaPorkchop_"

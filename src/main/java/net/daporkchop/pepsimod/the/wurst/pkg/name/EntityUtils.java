@@ -19,7 +19,7 @@ package net.daporkchop.pepsimod.the.wurst.pkg.name;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.config.impl.FriendsTranslator;
 import net.daporkchop.pepsimod.util.config.impl.TargettingTranslator;
-import net.daporkchop.pepsimod.util.misc.Default;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityFlying;
@@ -34,7 +34,7 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.ArrayList;
 
-public class EntityUtils extends Default {
+public class EntityUtils extends PepsiConstants {
     public static final TargetSettings DEFAULT_SETTINGS = new TargetSettings();
     public static final String[] colors = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
 

@@ -40,7 +40,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.*;
 
-import static net.daporkchop.pepsimod.util.misc.Default.pepsiMod;
+import static net.daporkchop.pepsimod.util.PepsiConstants.pepsiMod;
 
 @Mixin(GuiMainMenu.class)
 public abstract class MixinGuiMainMenu extends GuiScreen {

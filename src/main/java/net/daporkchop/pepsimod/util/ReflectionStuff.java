@@ -17,7 +17,6 @@
 package net.daporkchop.pepsimod.util;
 
 import com.google.common.collect.ImmutableSet;
-import net.daporkchop.pepsimod.util.misc.Default;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -46,7 +45,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Set;
 
-public class ReflectionStuff extends Default {
+//TODO: replace this with Unsafe or access transformers
+public class ReflectionStuff extends PepsiConstants {
     public static Field renderPosX;
     public static Field renderPosY;
     public static Field renderPosZ;

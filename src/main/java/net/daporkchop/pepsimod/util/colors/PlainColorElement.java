@@ -16,7 +16,7 @@
 
 package net.daporkchop.pepsimod.util.colors;
 
-import static net.daporkchop.pepsimod.util.misc.Default.mc;
+import static net.daporkchop.pepsimod.util.PepsiConstants.mc;
 
 public class PlainColorElement extends ColorizedElement {
     public PlainColorElement(String text) {

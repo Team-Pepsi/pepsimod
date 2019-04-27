@@ -19,13 +19,13 @@ package net.daporkchop.pepsimod.command;
 import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.api.Command;
 import net.daporkchop.pepsimod.util.PepsiUtils;
-import net.daporkchop.pepsimod.util.misc.Default;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.minecraft.util.text.TextComponentString;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class CommandRegistry extends Default {
+public class CommandRegistry extends PepsiConstants {
     /**
      * All registered commands are here :P
      */

@@ -19,7 +19,7 @@ package net.daporkchop.pepsimod.util.config.impl;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.daporkchop.pepsimod.util.config.IConfigTranslator;
-import net.daporkchop.pepsimod.util.misc.Default;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.misc.waypoints.DimensionWaypoints;
 import net.daporkchop.pepsimod.util.misc.waypoints.ServerWaypoints;
 import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.Optional;
 
-public class WaypointsTranslator extends Default implements IConfigTranslator {
+public class WaypointsTranslator extends PepsiConstants implements IConfigTranslator {
     public static final WaypointsTranslator INSTANCE = new WaypointsTranslator();
     public boolean tracers = false;
     public int r = 0;

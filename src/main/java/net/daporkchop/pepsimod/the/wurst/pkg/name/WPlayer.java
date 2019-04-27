@@ -16,7 +16,7 @@
 
 package net.daporkchop.pepsimod.the.wurst.pkg.name;
 
-import net.daporkchop.pepsimod.util.misc.Default;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.play.client.CPacketAnimation;
@@ -25,7 +25,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumHand;
 
-public class WPlayer extends Default {
+public class WPlayer extends PepsiConstants {
     public static void swingArmClient() {
         mc.player.swingArm(EnumHand.MAIN_HAND);
     }

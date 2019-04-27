@@ -16,9 +16,9 @@
 
 package net.daporkchop.pepsimod.clickgui.api;
 
-import net.daporkchop.pepsimod.util.misc.Default;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 
-public abstract class EntryImplBase extends Default implements IEntry {
+public abstract class EntryImplBase extends PepsiConstants implements IEntry {
     public final int width;
     public final int height;
     public int x;

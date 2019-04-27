@@ -19,13 +19,13 @@ package net.daporkchop.pepsimod.event;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.util.BetterScaledResolution;
-import net.daporkchop.pepsimod.util.misc.Default;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class GuiRenderHandler extends Default {
+public class GuiRenderHandler extends PepsiConstants {
     public static GuiRenderHandler INSTANCE;
 
     {

@@ -26,7 +26,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static net.daporkchop.pepsimod.util.misc.Default.pepsiMod;
+import static net.daporkchop.pepsimod.util.PepsiConstants.pepsiMod;
 
 @Mixin(BlockSlab.class)
 public abstract class MixinBlockSlab extends Block {

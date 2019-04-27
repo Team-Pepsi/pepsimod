@@ -14,12 +14,12 @@
  *
  */
 
-package net.daporkchop.pepsimod.util.misc;
+package net.daporkchop.pepsimod.util;
 
 import net.daporkchop.pepsimod.PepsiMod;
 import net.minecraft.client.Minecraft;
 
-public abstract class Default {
+public abstract class PepsiConstants {
     public static Minecraft mc = null;
     public static PepsiMod pepsiMod = null;
 }

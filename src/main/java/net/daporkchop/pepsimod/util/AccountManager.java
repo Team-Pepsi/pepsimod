@@ -21,14 +21,13 @@ import com.mojang.authlib.AuthenticationService;
 import com.mojang.authlib.UserAuthentication;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.util.UUIDTypeAdapter;
-import net.daporkchop.pepsimod.util.misc.Default;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
 
 import java.lang.reflect.Field;
 import java.util.UUID;
 
-public class AccountManager extends Default {
+public class AccountManager extends PepsiConstants {
 
     private final UserAuthentication auth;
 

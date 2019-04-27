@@ -17,10 +17,10 @@
 package net.daporkchop.pepsimod.command.api;
 
 import net.daporkchop.pepsimod.PepsiMod;
-import net.daporkchop.pepsimod.util.misc.Default;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.minecraft.util.text.TextComponentString;
 
-public abstract class Command extends Default {
+public abstract class Command extends PepsiConstants {
     public String name;
 
     public Command(String name) {

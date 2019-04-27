@@ -16,11 +16,11 @@
 
 package net.daporkchop.pepsimod.the.wurst.pkg.name;
 
-import net.daporkchop.pepsimod.util.misc.Default;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
 
-public class WMinecraft extends Default {
+public class WMinecraft extends PepsiConstants {
     public static EntityPlayerSP getPlayer() {
         return mc.player;
     }

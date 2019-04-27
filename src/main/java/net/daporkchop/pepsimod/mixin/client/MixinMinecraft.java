@@ -50,8 +50,8 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Base64;
 
-import static net.daporkchop.pepsimod.util.misc.Default.mc;
-import static net.daporkchop.pepsimod.util.misc.Default.pepsiMod;
+import static net.daporkchop.pepsimod.util.PepsiConstants.mc;
+import static net.daporkchop.pepsimod.util.PepsiConstants.pepsiMod;
 
 @Mixin(Minecraft.class)
 public abstract class MixinMinecraft {

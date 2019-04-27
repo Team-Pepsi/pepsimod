@@ -25,7 +25,6 @@ import net.daporkchop.pepsimod.util.colors.rainbow.RainbowCycle;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
 import net.daporkchop.pepsimod.util.config.impl.GeneralTranslator;
 import net.daporkchop.pepsimod.util.config.impl.TargettingTranslator;
-import net.daporkchop.pepsimod.util.misc.Default;
 import net.daporkchop.pepsimod.util.misc.ITickListener;
 import net.daporkchop.pepsimod.util.misc.IWurstRenderListener;
 import net.minecraft.block.Block;
@@ -74,7 +73,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class PepsiUtils extends Default {
+public class PepsiUtils extends PepsiConstants {
     public static final char COLOR_ESCAPE = '\u00A7';
     public static final String[] colorCodes = {"c", "9", "f", "1", "4"};
     public static final Timer timer = new Timer();

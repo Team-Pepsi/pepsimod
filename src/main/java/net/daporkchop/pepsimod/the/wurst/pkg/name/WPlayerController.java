@@ -16,7 +16,7 @@
 
 package net.daporkchop.pepsimod.the.wurst.pkg.name;
 
-import net.daporkchop.pepsimod.util.misc.Default;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.inventory.ClickType;
@@ -26,7 +26,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-public class WPlayerController extends Default {
+public class WPlayerController extends PepsiConstants {
     private static PlayerControllerMP getPlayerController() {
         return Minecraft.getMinecraft().playerController;
     }
