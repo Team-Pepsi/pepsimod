@@ -23,7 +23,7 @@ import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.colors.ColorUtils;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class SubButton extends EntryImplBase {
     public final Button parent;

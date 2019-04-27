@@ -32,7 +32,7 @@ import net.daporkchop.pepsimod.util.colors.ColorUtils;
 import net.daporkchop.pepsimod.util.config.impl.HUDTranslator;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

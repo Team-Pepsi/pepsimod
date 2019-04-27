@@ -16,7 +16,7 @@
 
 package net.daporkchop.pepsimod.util.colors;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class ColorUtils {
     public static final int BUTTON_OFF_OFF = new Color(255, 32, 32).getRGB();

@@ -32,6 +32,10 @@ import net.minecraft.network.play.server.SPacketSoundEffect;
 
 public class AutoFishMod extends Module {
     public static AutoFishMod INSTANCE;
+
+    public static boolean isBobberSplash(SPacketSoundEffect soundEffect) {
+        return SoundEvents.ENTITY_BOBBER_SPLASH.equals(soundEffect.getSound());
+    }
     public int timer;
 
     {
@@ -40,10 +44,6 @@ public class AutoFishMod extends Module {
 
     public AutoFishMod() {
         super("AutoFish");
-    }
-
-    public static boolean isBobberSplash(SPacketSoundEffect soundEffect) {
-        return SoundEvents.ENTITY_BOBBER_SPLASH.equals(soundEffect.getSound());
     }
 
     @Override
@@ -103,8 +103,9 @@ public class AutoFishMod extends Module {
             // skip non-rod items
             ItemStack stack =
                     WMinecraft.getPlayer().inventory.getStackInSlot(i);
-            if (stack.isEmpty() || !(stack.getItem() instanceof ItemFishingRod))
+            if (stack.isEmpty() || !(stack.getItem() instanceof ItemFishingRod)) {
                 continue;
+            }
 
             rodInInventory = i;
             break;

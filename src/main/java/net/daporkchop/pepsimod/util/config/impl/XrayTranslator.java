@@ -25,7 +25,6 @@ import net.daporkchop.pepsimod.util.config.IConfigTranslator;
 import net.minecraft.block.Block;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class XrayTranslator implements IConfigTranslator {
     public static final XrayTranslator INSTANCE = new XrayTranslator();

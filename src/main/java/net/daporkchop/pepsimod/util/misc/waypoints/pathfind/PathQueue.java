@@ -37,8 +37,9 @@ public class PathQueue {
         PathPos[] array = new PathPos[this.size()];
         Iterator itr = this.queue.iterator();
 
-        for (int i = 0; i < this.size() && itr.hasNext(); i++)
+        for (int i = 0; i < this.size() && itr.hasNext(); i++) {
             array[i] = ((Entry) itr.next()).pos;
+        }
 
         return array;
     }

@@ -29,7 +29,7 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.util.math.AxisAlignedBB;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class BowAimBotMod extends Module {
     public static BowAimBotMod INSTANCE;

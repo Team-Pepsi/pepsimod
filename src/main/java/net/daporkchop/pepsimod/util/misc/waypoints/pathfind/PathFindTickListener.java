@@ -22,7 +22,7 @@ import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.misc.ITickListener;
 import net.daporkchop.pepsimod.util.misc.IWurstRenderListener;
 
-import java.awt.*;
+import java.awt.TrayIcon;
 
 public class PathFindTickListener implements ITickListener, IWurstRenderListener {
     public static PathFindTickListener INSTANCE = null;

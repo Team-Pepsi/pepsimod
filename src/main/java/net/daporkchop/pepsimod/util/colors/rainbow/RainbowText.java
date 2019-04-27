@@ -25,7 +25,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class RainbowText extends ColorizedText {
     private final ColorizedElement[] elements;

@@ -100,11 +100,11 @@ import net.daporkchop.pepsimod.module.impl.render.UnfocusedCPUMod;
 import net.daporkchop.pepsimod.module.impl.render.XrayMod;
 import net.daporkchop.pepsimod.module.impl.render.ZoomMod;
 import net.daporkchop.pepsimod.util.ImageUtils;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.config.Config;
 import net.daporkchop.pepsimod.util.config.impl.HUDTranslator;
-import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Session;
@@ -130,10 +130,6 @@ import java.util.TimerTask;
 public class PepsiMod {
     public static final String VERSION = "11.1";
     public static final String chatPrefix = PepsiUtils.COLOR_ESCAPE + "0" + PepsiUtils.COLOR_ESCAPE + "l[" + PepsiUtils.COLOR_ESCAPE + "c" + PepsiUtils.COLOR_ESCAPE + "lpepsi" + PepsiUtils.COLOR_ESCAPE + "9" + PepsiUtils.COLOR_ESCAPE + "lmod" + PepsiUtils.COLOR_ESCAPE + "0" + PepsiUtils.COLOR_ESCAPE + "l]" + PepsiUtils.COLOR_ESCAPE + "r ";
-    public boolean isMcLeaksAccount = false;
-    public Session originalSession = null;
-    public boolean hasInitializedModules = false;
-    public boolean isInitialized = false;
 
     public static void registerModules(FMLStateEvent event) {
         ModuleManager.registerModule(new NoFallMod());
@@ -235,8 +231,13 @@ public class PepsiMod {
         return null;
     }
 
+    public boolean isMcLeaksAccount = false;
+    public Session originalSession = null;
+    public boolean hasInitializedModules = false;
+    public boolean isInitialized = false;
+
     @Mod.EventHandler
-    public void construction(FMLConstructionEvent event)    {
+    public void construction(FMLConstructionEvent event) {
         PepsiConstants.mc = Minecraft.getMinecraft();
         PepsiConstants.pepsiMod = this;
     }

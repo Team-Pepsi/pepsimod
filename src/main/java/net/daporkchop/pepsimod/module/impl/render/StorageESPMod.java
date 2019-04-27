@@ -45,6 +45,10 @@ public class StorageESPMod extends Module {
     public static final RenderColor hopperColor = new RenderColor(45, 45, 45, 128);
     public static final RenderColor furnaceColor = new RenderColor(151, 151, 151, 128);
     public static StorageESPMod INSTANCE;
+
+    public static AxisAlignedBB getBoundingBox(World world, BlockPos pos) {
+        return world.getBlockState(pos).getBoundingBox(world, pos);
+    }
     public final ArrayList<AxisAlignedBB> basic = new ArrayList<>();
     public final ArrayList<AxisAlignedBB> trapped = new ArrayList<>();
     public final ArrayList<AxisAlignedBB> ender = new ArrayList<>();
@@ -57,10 +61,6 @@ public class StorageESPMod extends Module {
 
     public StorageESPMod() {
         super("StorageESP");
-    }
-
-    public static AxisAlignedBB getBoundingBox(World world, BlockPos pos) {
-        return world.getBlockState(pos).getBoundingBox(world, pos);
     }
 
     @Override

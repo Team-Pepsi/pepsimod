@@ -18,9 +18,9 @@ package net.daporkchop.pepsimod.util.misc.waypoints.pathfind;
 
 import net.daporkchop.pepsimod.the.wurst.pkg.name.RotationUtils;
 import net.daporkchop.pepsimod.the.wurst.pkg.name.WMinecraft;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
-import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.math.BlockPos;
@@ -35,8 +35,9 @@ public abstract class PathProcessor extends PepsiConstants {
     protected int index;
 
     public PathProcessor(ArrayList<PathPos> path) {
-        if (path.isEmpty())
+        if (path.isEmpty()) {
             throw new IllegalStateException("There is no path!");
+        }
 
         this.path = path;
     }
@@ -49,12 +50,14 @@ public abstract class PathProcessor extends PepsiConstants {
 
     public void lockControls() {
         // disable keys
-        for (KeyBinding key : PepsiUtils.controls)
+        for (KeyBinding key : PepsiUtils.controls) {
             ReflectionStuff.setPressed(key, false);
+        }
 
         // face next position
-        if (this.index < this.path.size())
+        if (this.index < this.path.size()) {
             this.facePosition(this.path.get(this.index));
+        }
 
         // disable sprinting
         WMinecraft.getPlayer().setSprinting(false);

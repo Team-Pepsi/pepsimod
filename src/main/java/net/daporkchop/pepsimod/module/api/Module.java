@@ -41,6 +41,15 @@ import java.util.ArrayList;
  * gl understanding my overly complicated class heirachy
  */
 public abstract class Module extends Command implements ITickListener {
+    public static boolean shouldBeEnabled(boolean in, ModuleLaunchState state) {
+        if (state == ModuleLaunchState.ENABLED) {
+            return true;
+        } else if (state == ModuleLaunchState.DISABLED) {
+            return false;
+        } else {
+            return in;
+        }
+    }
     public KeyBinding keybind;
     public ColorizedText text;
     public ModuleOption[] options;
@@ -60,16 +69,6 @@ public abstract class Module extends Command implements ITickListener {
         this.state = GeneralTranslator.INSTANCE.getState(name, new GeneralTranslator.ModuleState(def, hide));
         if (this.state == null) {
             GeneralTranslator.INSTANCE.states.put(name, this.state = new GeneralTranslator.ModuleState(def, hide));
-        }
-    }
-
-    public static boolean shouldBeEnabled(boolean in, ModuleLaunchState state) {
-        if (state == ModuleLaunchState.ENABLED) {
-            return true;
-        } else if (state == ModuleLaunchState.DISABLED) {
-            return false;
-        } else {
-            return in;
         }
     }
 

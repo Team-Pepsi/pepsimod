@@ -89,14 +89,16 @@ public abstract class MixinGuiBossOverlay extends Gui {
         this.counted_cache.clear();
         ArrayList<String> known = new ArrayList<>();
         for (BossInfoClient infoLerping : this.mapBossInfos.values()) {
-            if (known.contains(infoLerping.getName().getFormattedText()))
+            if (known.contains(infoLerping.getName().getFormattedText())) {
                 continue;
+            }
             String formattedText = infoLerping.getName().getFormattedText();
             BossinfoCounted counted = new BossinfoCounted();
             counted.info = infoLerping;
             for (BossInfoClient infoLerping2 : this.mapBossInfos.values()) {
-                if (infoLerping2.getName().getFormattedText().equals(formattedText))
+                if (infoLerping2.getName().getFormattedText().equals(formattedText)) {
                     counted.count++;
+                }
             }
             known.add(formattedText);
             this.counted_cache.add(counted);

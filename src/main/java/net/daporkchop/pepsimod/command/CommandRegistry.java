@@ -18,8 +18,8 @@ package net.daporkchop.pepsimod.command;
 
 import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.command.api.Command;
-import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.PepsiConstants;
+import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.minecraft.util.text.TextComponentString;
 
 import java.util.HashMap;

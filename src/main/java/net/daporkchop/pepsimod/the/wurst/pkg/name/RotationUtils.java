@@ -16,8 +16,8 @@
 
 package net.daporkchop.pepsimod.the.wurst.pkg.name;
 
-import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.PepsiConstants;
+import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -138,8 +138,9 @@ public class RotationUtils extends PepsiConstants {
 
         // try to face center of boundingBox
         AxisAlignedBB bb = entity.getEntityBoundingBox();
-        if (faceVectorClient(PepsiUtils.adjustVectorForBone(bb.getCenter(), entity, EntityUtils.DEFAULT_SETTINGS.getTargetBone())))
+        if (faceVectorClient(PepsiUtils.adjustVectorForBone(bb.getCenter(), entity, EntityUtils.DEFAULT_SETTINGS.getTargetBone()))) {
             return true;
+        }
 
         // if not facing center, check if facing anything in boundingBox
         return bb.calculateIntercept(eyesPos,
@@ -153,8 +154,9 @@ public class RotationUtils extends PepsiConstants {
 
         // try to face center of boundingBox
         AxisAlignedBB bb = entity.getEntityBoundingBox();
-        if (faceVectorPacket(PepsiUtils.adjustVectorForBone(bb.getCenter(), entity, EntityUtils.DEFAULT_SETTINGS.getTargetBone())))
+        if (faceVectorPacket(PepsiUtils.adjustVectorForBone(bb.getCenter(), entity, EntityUtils.DEFAULT_SETTINGS.getTargetBone()))) {
             return true;
+        }
 
         // if not facing center, check if facing anything in boundingBox
         return bb.calculateIntercept(eyesPos,

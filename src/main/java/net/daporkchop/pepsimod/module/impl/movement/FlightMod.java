@@ -31,7 +31,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import org.lwjgl.input.Keyboard;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class FlightMod extends Module {
     public static FlightMod INSTANCE;

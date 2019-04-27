@@ -16,12 +16,8 @@
 
 package net.daporkchop.pepsimod.util;
 
-import com.google.common.base.Charsets;
-import com.google.common.base.Throwables;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.login.client.CPacketEncryptionResponse;
@@ -32,12 +28,10 @@ import net.minecraftforge.fml.common.FMLLog;
 
 import javax.annotation.Nullable;
 import javax.crypto.SecretKey;
-import javax.swing.*;
+import javax.swing.JOptionPane;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 
 public class MCLeaks {

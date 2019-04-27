@@ -23,8 +23,8 @@ import net.daporkchop.pepsimod.module.impl.movement.JesusMod;
 import net.daporkchop.pepsimod.module.impl.movement.NoSlowdownMod;
 import net.daporkchop.pepsimod.the.wurst.pkg.name.WBlock;
 import net.daporkchop.pepsimod.the.wurst.pkg.name.WMinecraft;
-import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.PepsiConstants;
+import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
@@ -401,10 +401,12 @@ public class PathFinder extends PepsiConstants {
             pos = this.current;
         } else {
             pos = this.start;
-            for (PathPos next : this.prevPosMap.keySet())
+            for (PathPos next : this.prevPosMap.keySet()) {
                 if (this.getHeuristic(next) < this.getHeuristic(pos)
-                        && (this.canFlyAt(next) || this.canBeSolid(next.down())))
+                        && (this.canFlyAt(next) || this.canBeSolid(next.down()))) {
                     pos = next;
+                }
+            }
         }
 
         // get positions

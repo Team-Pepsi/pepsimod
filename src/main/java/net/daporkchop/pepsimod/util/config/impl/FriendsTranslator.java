@@ -23,7 +23,6 @@ import com.google.gson.JsonPrimitive;
 import net.daporkchop.pepsimod.util.config.IConfigTranslator;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class FriendsTranslator implements IConfigTranslator {
     public static final FriendsTranslator INSTANCE = new FriendsTranslator();

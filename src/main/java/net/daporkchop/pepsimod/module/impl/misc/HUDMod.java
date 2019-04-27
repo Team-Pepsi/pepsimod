@@ -33,7 +33,7 @@ import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.item.ItemStack;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class HUDMod extends Module {
     public static HUDMod INSTANCE;

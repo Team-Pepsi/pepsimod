@@ -19,6 +19,9 @@ package net.daporkchop.pepsimod.clickgui.api;
 import net.daporkchop.pepsimod.util.PepsiConstants;
 
 public abstract class EntryImplBase extends PepsiConstants implements IEntry {
+    public static void drawString(int x, int y, String text, int color) {
+        mc.fontRenderer.drawString(text, x, y, color, false);
+    }
     public final int width;
     public final int height;
     public int x;
@@ -30,10 +33,6 @@ public abstract class EntryImplBase extends PepsiConstants implements IEntry {
         this.y = y;
         this.width = width;
         this.height = height;
-    }
-
-    public static void drawString(int x, int y, String text, int color) {
-        mc.fontRenderer.drawString(text, x, y, color, false);
     }
 
     public boolean isMouseHovered() {

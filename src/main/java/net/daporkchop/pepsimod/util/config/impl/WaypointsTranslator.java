@@ -18,8 +18,8 @@ package net.daporkchop.pepsimod.util.config.impl;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.daporkchop.pepsimod.util.config.IConfigTranslator;
 import net.daporkchop.pepsimod.util.PepsiConstants;
+import net.daporkchop.pepsimod.util.config.IConfigTranslator;
 import net.daporkchop.pepsimod.util.misc.waypoints.DimensionWaypoints;
 import net.daporkchop.pepsimod.util.misc.waypoints.ServerWaypoints;
 import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
@@ -27,11 +27,17 @@ import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.UUID;
 import java.util.Optional;
+import java.util.UUID;
 
 public class WaypointsTranslator extends PepsiConstants implements IConfigTranslator {
     public static final WaypointsTranslator INSTANCE = new WaypointsTranslator();
+
+    public static String getCurrentServerIdentifier() {
+        return mc.isIntegratedServerRunning() ? mc.getIntegratedServer().getFolderName() : Optional.ofNullable(mc.getCurrentServerData())
+                                                                                                   .map(current -> current.serverIP)
+                                                                                                   .orElse("realms");
+    }
     public boolean tracers = false;
     public int r = 0;
     public int g = 0;
@@ -43,12 +49,6 @@ public class WaypointsTranslator extends PepsiConstants implements IConfigTransl
 
     private WaypointsTranslator() {
 
-    }
-
-    public static String getCurrentServerIdentifier() {
-        return mc.isIntegratedServerRunning() ? mc.getIntegratedServer().getFolderName() : Optional.ofNullable(mc.getCurrentServerData())
-                                                                                                   .map(current -> current.serverIP)
-                                                                                                   .orElse("realms");
     }
 
     public void encode(JsonObject json) {

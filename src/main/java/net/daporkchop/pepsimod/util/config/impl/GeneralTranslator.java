@@ -63,17 +63,17 @@ public class GeneralTranslator implements IConfigTranslator {
 
     public static class ModuleState {
         public static ModuleState DEFAULT = new ModuleState(false, false);
+
+        public static ModuleState fromString(String from) {
+            String[] split = from.split(" ");
+            return new ModuleState(Boolean.parseBoolean(split[0]), Boolean.parseBoolean(split[1]));
+        }
         public boolean enabled;
         public boolean hidden;
 
         public ModuleState(boolean a, boolean b) {
             this.enabled = a;
             this.hidden = b;
-        }
-
-        public static ModuleState fromString(String from) {
-            String[] split = from.split(" ");
-            return new ModuleState(Boolean.parseBoolean(split[0]), Boolean.parseBoolean(split[1]));
         }
 
         @Override

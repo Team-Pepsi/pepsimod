@@ -21,10 +21,6 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.network.play.client.CPacketPlayer;
 
 public class DamageCommand extends Command {
-    public DamageCommand() {
-        super("damage");
-    }
-
     public static void damage(int damage) {
         boolean bypass = true;
 
@@ -44,6 +40,10 @@ public class DamageCommand extends Command {
             mc.getConnection().sendPacket(new CPacketPlayer.Position(x, y + 0.1D, z, false));
             mc.getConnection().sendPacket(new CPacketPlayer.Position(x, y - damage - 3.0D, z, false));
         }
+    }
+
+    public DamageCommand() {
+        super("damage");
     }
 
     @Override

@@ -18,14 +18,7 @@ package net.daporkchop.pepsimod.util.misc.waypoints.pathfind;
 
 import net.minecraft.util.math.BlockPos;
 
-import static org.lwjgl.opengl.GL11.GL_LINES;
-import static org.lwjgl.opengl.GL11.glBegin;
-import static org.lwjgl.opengl.GL11.glEnd;
-import static org.lwjgl.opengl.GL11.glPopMatrix;
-import static org.lwjgl.opengl.GL11.glPushMatrix;
-import static org.lwjgl.opengl.GL11.glScaled;
-import static org.lwjgl.opengl.GL11.glTranslated;
-import static org.lwjgl.opengl.GL11.glVertex3d;
+import static org.lwjgl.opengl.GL11.*;
 
 public class PathRenderer {
     public static void renderArrow(BlockPos start, BlockPos end) {

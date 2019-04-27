@@ -83,7 +83,8 @@ public class WalkPathProcessor extends PathProcessor {
             }
             // vertical movement
         } else if (pos.getY() != nextPos.getY())
-            // go up
+        // go up
+        {
             if (pos.getY() < nextPos.getY()) {
                 // climb up
                 Block block = WBlock.getBlock(pos);
@@ -116,6 +117,7 @@ public class WalkPathProcessor extends PathProcessor {
                     ReflectionStuff.setPressed(mc.gameSettings.keyBindForward, true);
                 }
             }
+        }
     }
 
     @Override

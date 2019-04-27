@@ -45,35 +45,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityRenderer.class)
 public abstract class MixinEntityRenderer {
-    @Shadow
-    private float farPlaneDistance;
-
-    @Shadow
-    @Final
-    private Minecraft mc;
-
-    @Shadow
-    private double cameraZoom;
-
-    @Shadow
-    private double cameraYaw;
-
-    @Shadow
-    private double cameraPitch;
-
-    @Shadow
-    private int rendererUpdateCount;
-
-    @Shadow
-    private int debugViewDirection;
-
-    @Shadow
-    private boolean debugView;
-    @Shadow
-    private int frameCount;
-    @Shadow
-    private boolean renderHand = true;
-
     @Inject(method = "drawNameplate", at = @At("HEAD"), cancellable = true)
     private static void preDrawNameplate(FontRenderer fontRendererIn, String str, float x, float y, float z, int verticalShift, float viewerYaw, float viewerPitch, boolean isThirdPersonFrontal, boolean isSneaking, CallbackInfo callbackInfo) {
         if (NameTagsMod.INSTANCE.state.enabled) {
@@ -81,6 +52,27 @@ public abstract class MixinEntityRenderer {
             callbackInfo.cancel();
         }
     }
+    @Shadow
+    private float farPlaneDistance;
+    @Shadow
+    @Final
+    private Minecraft mc;
+    @Shadow
+    private double cameraZoom;
+    @Shadow
+    private double cameraYaw;
+    @Shadow
+    private double cameraPitch;
+    @Shadow
+    private int rendererUpdateCount;
+    @Shadow
+    private int debugViewDirection;
+    @Shadow
+    private boolean debugView;
+    @Shadow
+    private int frameCount;
+    @Shadow
+    private boolean renderHand = true;
 
     @Shadow
     private boolean isDrawBlockOutline() {

@@ -16,10 +16,10 @@
 
 package net.daporkchop.pepsimod.the.wurst.pkg.name;
 
+import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.config.impl.FriendsTranslator;
 import net.daporkchop.pepsimod.util.config.impl.TargettingTranslator;
-import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityFlying;
@@ -84,10 +84,11 @@ public class EntityUtils extends PepsiConstants {
                 }
 
                 // invisible players
-            } else if (!settings.targetInvisiblePlayers())
+            } else if (!settings.targetInvisiblePlayers()) {
                 if (en.isInvisible()) {
                     return false;
                 }
+            }
 
             // team players
             if (settings.targetTeams() && !checkName(
@@ -103,7 +104,7 @@ public class EntityUtils extends PepsiConstants {
 
             // Freecam entity
             if (en.getName()
-                    .equals(mc.player.getName())) {
+                  .equals(mc.player.getName())) {
                 return false;
             }
 
@@ -159,13 +160,14 @@ public class EntityUtils extends PepsiConstants {
     private static boolean checkName(String name, boolean[] teamColors) {
         // check colors
         boolean hasKnownColor = false;
-        for (int i = 0; i < 16; i++)
+        for (int i = 0; i < 16; i++) {
             if (name.contains('\u00A7' + colors[i])) {
                 hasKnownColor = true;
                 if (teamColors[i]) {
                     return true;
                 }
             }
+        }
 
         // no known color => white
         return !hasKnownColor && teamColors[15];
@@ -175,11 +177,13 @@ public class EntityUtils extends PepsiConstants {
         ArrayList<Entity> validEntities = new ArrayList<>();
 
         for (Entity entity : mc.world.loadedEntityList) {
-            if (isCorrectEntity(entity, settings))
+            if (isCorrectEntity(entity, settings)) {
                 validEntities.add(entity);
+            }
 
-            if (validEntities.size() >= 64)
+            if (validEntities.size() >= 64) {
                 break;
+            }
         }
 
         return validEntities;
@@ -188,12 +192,14 @@ public class EntityUtils extends PepsiConstants {
     public static Entity getClosestEntity(TargetSettings settings) {
         Entity closestEntity = null;
 
-        for (Entity entity : mc.world.loadedEntityList)
+        for (Entity entity : mc.world.loadedEntityList) {
             if (isCorrectEntity(entity, settings)
                     && (closestEntity == null || mc.player
                     .getDistance(entity) < mc.player
-                    .getDistance(closestEntity)))
+                    .getDistance(closestEntity))) {
                 closestEntity = entity;
+            }
+        }
 
         return closestEntity;
     }
@@ -203,8 +209,9 @@ public class EntityUtils extends PepsiConstants {
         float bestAngle = Float.POSITIVE_INFINITY;
 
         for (Entity entity : mc.world.loadedEntityList) {
-            if (!isCorrectEntity(entity, settings))
+            if (!isCorrectEntity(entity, settings)) {
                 continue;
+            }
 
             float angle = RotationUtils.getAngleToServerRotation(PepsiUtils.adjustVectorForBone(entity.getEntityBoundingBox().getCenter(), entity, settings.getTargetBone()));
 
@@ -221,12 +228,14 @@ public class EntityUtils extends PepsiConstants {
                                                    TargetSettings settings) {
         Entity closestEnemy = null;
 
-        for (Entity entity : mc.world.loadedEntityList)
+        for (Entity entity : mc.world.loadedEntityList) {
             if (isCorrectEntity(entity, settings) && entity != otherEntity
                     && (closestEnemy == null || mc.player
                     .getDistance(entity) < mc.player
-                    .getDistance(closestEnemy)))
+                    .getDistance(closestEnemy))) {
                 closestEnemy = entity;
+            }
+        }
 
         return closestEnemy;
     }
@@ -236,15 +245,18 @@ public class EntityUtils extends PepsiConstants {
         Entity closestEntity = null;
 
         for (Entity entity : mc.world.loadedEntityList) {
-            if (!isCorrectEntity(entity, settings))
+            if (!isCorrectEntity(entity, settings)) {
                 continue;
-            if (!entity.getName().equalsIgnoreCase(name))
+            }
+            if (!entity.getName().equalsIgnoreCase(name)) {
                 continue;
+            }
 
             if (closestEntity == null || mc.player
                     .getDistanceSq(entity) < mc.player
-                    .getDistanceSq(closestEntity))
+                    .getDistanceSq(closestEntity)) {
                 closestEntity = entity;
+            }
         }
 
         return closestEntity;

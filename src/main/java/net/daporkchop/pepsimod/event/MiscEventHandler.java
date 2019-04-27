@@ -23,7 +23,7 @@ import net.daporkchop.pepsimod.util.misc.waypoints.pathfind.PathFindTickListener
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
-import java.awt.*;
+import java.awt.TrayIcon;
 
 public class MiscEventHandler extends PepsiConstants {
     public static MiscEventHandler INSTANCE;

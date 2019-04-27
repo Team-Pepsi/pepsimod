@@ -42,24 +42,28 @@ public class BlockUtils {
             BlockPos neighbor = pos.offset(side);
 
             // check if neighbor can be right clicked
-            if (!WBlock.canBeClicked(neighbor))
+            if (!WBlock.canBeClicked(neighbor)) {
                 continue;
+            }
 
             Vec3d dirVec = new Vec3d(side.getDirectionVec());
             Vec3d hitVec = posVec.add(dirVec.scale(0.5));
 
             // check if hitVec is within range (4.25 blocks)
-            if (eyesPos.squareDistanceTo(hitVec) > 18.0625)
+            if (eyesPos.squareDistanceTo(hitVec) > 18.0625) {
                 continue;
+            }
 
             // check if side is visible (facing away from player)
-            if (distanceSqPosVec > eyesPos.squareDistanceTo(posVec.add(dirVec)))
+            if (distanceSqPosVec > eyesPos.squareDistanceTo(posVec.add(dirVec))) {
                 continue;
+            }
 
             // check line of sight
             if (mc.world.rayTraceBlocks(eyesPos, hitVec, false,
-                    true, false) != null)
+                    true, false) != null) {
                 continue;
+            }
 
             // face block
             RotationUtils.faceVectorPacketInstant(hitVec);
@@ -86,19 +90,22 @@ public class BlockUtils {
             if (eyesPos.squareDistanceTo(
                     new Vec3d(pos).add(0.5, 0.5, 0.5)) >= eyesPos
                     .squareDistanceTo(
-                            new Vec3d(neighbor).add(0.5, 0.5, 0.5)))
+                            new Vec3d(neighbor).add(0.5, 0.5, 0.5))) {
                 continue;
+            }
 
             // check if neighbor can be right clicked
-            if (!WBlock.canBeClicked(neighbor))
+            if (!WBlock.canBeClicked(neighbor)) {
                 continue;
+            }
 
             Vec3d hitVec = new Vec3d(neighbor).add(0.5, 0.5, 0.5)
-                    .add(new Vec3d(side2.getDirectionVec()).scale(0.5));
+                                              .add(new Vec3d(side2.getDirectionVec()).scale(0.5));
 
             // check if hitVec is within range (4.25 blocks)
-            if (eyesPos.squareDistanceTo(hitVec) > 18.0625)
+            if (eyesPos.squareDistanceTo(hitVec) > 18.0625) {
                 continue;
+            }
 
             // place block
             RotationUtils.faceVectorPacketInstant(hitVec);
@@ -120,15 +127,17 @@ public class BlockUtils {
             BlockPos neighbor = pos.offset(side);
 
             // check if neighbor can be right clicked
-            if (!WBlock.canBeClicked(neighbor))
+            if (!WBlock.canBeClicked(neighbor)) {
                 continue;
+            }
 
             Vec3d hitVec =
                     posVec.add(new Vec3d(side.getDirectionVec()).scale(0.5));
 
             // check if hitVec is within range (6 blocks)
-            if (eyesPos.squareDistanceTo(hitVec) > 36)
+            if (eyesPos.squareDistanceTo(hitVec) > 36) {
                 continue;
+            }
 
             // place block
             WPlayerController.processRightClickBlock(neighbor,
@@ -151,21 +160,25 @@ public class BlockUtils {
             double distanceSqHitVec = eyesPos.squareDistanceTo(hitVec);
 
             // check if hitVec is within range (4.25 blocks)
-            if (distanceSqHitVec > 18.0625)
+            if (distanceSqHitVec > 18.0625) {
                 continue;
+            }
 
             // check if side is facing towards player
-            if (distanceSqHitVec >= distanceSqPosVec)
+            if (distanceSqHitVec >= distanceSqPosVec) {
                 continue;
+            }
 
             // check line of sight
             if (mc.world.rayTraceBlocks(eyesPos, hitVec, false,
-                    true, false) != null)
+                    true, false) != null) {
                 continue;
+            }
 
             // face block
-            if (!RotationUtils.faceVectorPacket(hitVec))
+            if (!RotationUtils.faceVectorPacket(hitVec)) {
                 return true;
+            }
 
             return true;
         }
@@ -184,21 +197,25 @@ public class BlockUtils {
             double distanceSqHitVec = eyesPos.squareDistanceTo(hitVec);
 
             // check if hitVec is within range (4.25 blocks)
-            if (distanceSqHitVec > 18.0625)
+            if (distanceSqHitVec > 18.0625) {
                 continue;
+            }
 
             // check if side is facing towards player
-            if (distanceSqHitVec >= distanceSqPosVec)
+            if (distanceSqHitVec >= distanceSqPosVec) {
                 continue;
+            }
 
             // check line of sight
             if (mc.world.rayTraceBlocks(eyesPos, hitVec, false,
-                    true, false) != null)
+                    true, false) != null) {
                 continue;
+            }
 
             // damage block
-            if (!mc.playerController.onPlayerDamageBlock(pos, side))
+            if (!mc.playerController.onPlayerDamageBlock(pos, side)) {
                 return false;
+            }
 
             // swing arm
             WPlayer.swingArmPacket();
@@ -220,21 +237,25 @@ public class BlockUtils {
             double distanceSqHitVec = eyesPos.squareDistanceTo(hitVec);
 
             // check if hitVec is within range (4.25 blocks)
-            if (distanceSqHitVec > 18.0625)
+            if (distanceSqHitVec > 18.0625) {
                 continue;
+            }
 
             // check if side is facing towards player
-            if (distanceSqHitVec >= distanceSqPosVec)
+            if (distanceSqHitVec >= distanceSqPosVec) {
                 continue;
+            }
 
             // check line of sight
             if (mc.world.rayTraceBlocks(eyesPos, hitVec, false,
-                    true, false) != null)
+                    true, false) != null) {
                 continue;
+            }
 
             // face block
-            if (!RotationUtils.faceVectorClient(hitVec))
+            if (!RotationUtils.faceVectorClient(hitVec)) {
                 return true;
+            }
 
             // if attack key is down but nothing happens, release it for one
             // tick
@@ -264,19 +285,22 @@ public class BlockUtils {
             double distanceSqHitVec = eyesPos.squareDistanceTo(hitVec);
 
             // check if hitVec is within range (6 blocks)
-            if (distanceSqHitVec > 36)
+            if (distanceSqHitVec > 36) {
                 continue;
+            }
 
             // check if side is facing towards player
-            if (distanceSqHitVec >= distanceSqPosVec)
+            if (distanceSqHitVec >= distanceSqPosVec) {
                 continue;
+            }
 
             // face block
             RotationUtils.faceVectorPacket(hitVec);
 
             // damage block
-            if (!mc.playerController.onPlayerDamageBlock(pos, side))
+            if (!mc.playerController.onPlayerDamageBlock(pos, side)) {
                 return false;
+            }
 
             // swing arm
             WPlayer.swingArmPacket();
@@ -297,8 +321,9 @@ public class BlockUtils {
                     posVec.add(new Vec3d(side.getDirectionVec()).scale(0.5));
 
             // check if side is facing towards player
-            if (eyesPos.squareDistanceTo(hitVec) >= distanceSqPosVec)
+            if (eyesPos.squareDistanceTo(hitVec) >= distanceSqPosVec) {
                 continue;
+            }
 
             // break block
             mc.player.connection.sendPacket(new CPacketPlayerDigging(
@@ -321,21 +346,25 @@ public class BlockUtils {
             double distanceSqHitVec = eyesPos.squareDistanceTo(hitVec);
 
             // check if hitVec is within range (4.25 blocks)
-            if (distanceSqHitVec > 18.0625)
+            if (distanceSqHitVec > 18.0625) {
                 continue;
+            }
 
             // check if side is facing towards player
-            if (distanceSqHitVec >= distanceSqPosVec)
+            if (distanceSqHitVec >= distanceSqPosVec) {
                 continue;
+            }
 
             // check line of sight
             if (mc.world.rayTraceBlocks(eyesPos, hitVec, false,
-                    true, false) != null)
+                    true, false) != null) {
                 continue;
+            }
 
             // face block
-            if (!RotationUtils.faceVectorPacket(hitVec))
+            if (!RotationUtils.faceVectorPacket(hitVec)) {
                 return true;
+            }
 
             // place block
             WPlayerController.processRightClickBlock(pos, side, hitVec);
@@ -359,12 +388,14 @@ public class BlockUtils {
             double distanceSqHitVec = eyesPos.squareDistanceTo(hitVec);
 
             // check if hitVec is within range (6 blocks)
-            if (distanceSqHitVec > 36)
+            if (distanceSqHitVec > 36) {
                 continue;
+            }
 
             // check if side is facing towards player
-            if (distanceSqHitVec >= distanceSqPosVec)
+            if (distanceSqHitVec >= distanceSqPosVec) {
                 continue;
+            }
 
             // place block
             WPlayerController.processRightClickBlock(pos, side, hitVec);
@@ -396,26 +427,31 @@ public class BlockUtils {
                     BlockPos current = this.queue.pop();
 
                     // check range
-                    if (eyesPos.squareDistanceTo(new Vec3d(current)) > rangeSq)
+                    if (eyesPos.squareDistanceTo(new Vec3d(current)) > rangeSq) {
                         continue;
+                    }
 
                     boolean canBeClicked = WBlock.canBeClicked(current);
 
                     if (ignoreVisibility || !canBeClicked)
-                        // add neighbors
+                    // add neighbors
+                    {
                         for (EnumFacing facing : EnumFacing.values()) {
                             BlockPos next = current.offset(facing);
 
-                            if (this.visited.contains(next))
+                            if (this.visited.contains(next)) {
                                 continue;
+                            }
 
                             this.queue.add(next);
                             this.visited.add(next);
                         }
+                    }
 
                     // check if block is valid
-                    if (canBeClicked && validator.isValid(current))
+                    if (canBeClicked && validator.isValid(current)) {
                         return current;
+                    }
                 }
 
                 return this.endOfData();
@@ -428,7 +464,7 @@ public class BlockUtils {
         ArrayDeque<BlockPos> validBlocks = new ArrayDeque<>();
 
         BlockUtils.getValidBlocksByDistance(range, ignoreVisibility, validator)
-                .forEach(validBlocks::push);
+                  .forEach(validBlocks::push);
 
         return validBlocks;
     }
@@ -442,8 +478,9 @@ public class BlockUtils {
         return getValidBlocks((int) Math.ceil(range), (pos) -> {
 
             // check range
-            if (eyesPos.squareDistanceTo(new Vec3d(pos)) > rangeSq)
+            if (eyesPos.squareDistanceTo(new Vec3d(pos)) > rangeSq) {
                 return false;
+            }
 
             // check if block is valid
             return validator.isValid(pos);
@@ -470,17 +507,18 @@ public class BlockUtils {
                 int y = this.last.getY();
                 int z = this.last.getZ();
 
-                if (z < max.getZ())
+                if (z < max.getZ()) {
                     z++;
-                else if (x < max.getX()) {
+                } else if (x < max.getX()) {
                     z = min.getZ();
                     x++;
                 } else if (y < max.getY()) {
                     z = min.getZ();
                     x = min.getX();
                     y++;
-                } else
+                } else {
                     return null;
+                }
 
                 this.last = new BlockPos(x, y, z);
                 return this.last;
@@ -491,12 +529,14 @@ public class BlockUtils {
                 BlockPos pos;
                 while ((pos = this.computeNextUnchecked()) != null) {
                     // skip air blocks
-                    if (WBlock.getMaterial(pos) == Material.AIR)
+                    if (WBlock.getMaterial(pos) == Material.AIR) {
                         continue;
+                    }
 
                     // check if block is valid
-                    if (!validator.isValid(pos))
+                    if (!validator.isValid(pos)) {
                         continue;
+                    }
 
                     return pos;
                 }

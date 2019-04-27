@@ -21,14 +21,13 @@ import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.minecraft.util.text.TextComponentString;
 
 public abstract class Command extends PepsiConstants {
+    public static void clientMessage(String toSend) {
+        mc.player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + toSend));
+    }
     public String name;
 
     public Command(String name) {
         this.name = name;
-    }
-
-    public static void clientMessage(String toSend) {
-        mc.player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + toSend));
     }
 
     public abstract void execute(String cmd, String[] args);

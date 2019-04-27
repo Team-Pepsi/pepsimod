@@ -31,7 +31,7 @@ import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.Collection;
 
 public class WaypointsMod extends Module {
