@@ -25,13 +25,16 @@ public class LineRenderer implements AutoCloseable {
     protected final double y;
     protected final double z;
 
-    public LineRenderer(double startX, double startY, double startZ, double x, double y, double z) {
+    protected final float partialTicks;
+
+    public LineRenderer(double startX, double startY, double startZ, double x, double y, double z, float partialTicks) {
         this.startX = startX;
         this.startY = startY;
         this.startZ = startZ;
         this.x = x;
         this.y = y;
         this.z = z;
+        this.partialTicks = partialTicks;
 
         glEnable(GL11.GL_BLEND);
         glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -44,12 +47,12 @@ public class LineRenderer implements AutoCloseable {
         GL11.glBegin(GL11.GL_LINES);
     }
 
-    public LineRenderer(Vec3d start, double x, double y, double z) {
-        this(start.x, start.y, start.z, x, y, z);
+    public LineRenderer(Vec3d start, double x, double y, double z, float partialTicks) {
+        this(start.x, start.y, start.z, x, y, z, partialTicks);
     }
 
-    public LineRenderer(Vec3d start, Vec3d pos) {
-        this(start.x, start.y, start.z, pos.x, pos.y, pos.z);
+    public LineRenderer(Vec3d start, Vec3d pos, float partialTicks) {
+        this(start.x, start.y, start.z, pos.x, pos.y, pos.z, partialTicks);
     }
 
     public LineRenderer color(float r, float g, float b) {
@@ -83,7 +86,9 @@ public class LineRenderer implements AutoCloseable {
     }
 
     public LineRenderer width(float width)  {
+        glEnd();
         glLineWidth(width);
+        glBegin(GL11.GL_LINES);
         return this;
     }
 
@@ -127,8 +132,19 @@ public class LineRenderer implements AutoCloseable {
         return this.lineFromEyes(pos.x, pos.y, pos.z);
     }
 
-    public LineRenderer lineFromEyes(Entity pos)  {
-        return this.lineFromEyes(pos.posX, pos.posY, pos.posZ);
+    public LineRenderer lineFromEyes(Entity entity, float partialTicks)  {
+        if (partialTicks == 1.0F) {
+            return this.lineFromEyes(entity.posX, entity.posY, entity.posZ);
+        } else {
+            double x = entity.prevPosX + (entity.posX - entity.prevPosX) * partialTicks;
+            double y = entity.prevPosY + (entity.posY - entity.prevPosY) * partialTicks;
+            double z = entity.prevPosZ + (entity.posZ - entity.prevPosZ) * partialTicks;
+            return this.lineFromEyes(x, y, z);
+        }
+    }
+
+    public LineRenderer lineFromEyes(Entity entity)  {
+        return this.lineFromEyes(entity, this.partialTicks);
     }
 
     @Override

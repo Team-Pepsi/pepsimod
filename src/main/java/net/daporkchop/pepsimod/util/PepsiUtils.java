@@ -831,4 +831,19 @@ public class PepsiUtils extends PepsiConstants {
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
         GL11.glPopMatrix();
     }
+
+    public static Vec3d getPlayerPos(float partialTicks)    {
+        return getEntityPos(partialTicks, mc.player);
+    }
+
+    public static Vec3d getEntityPos(float partialTicks, Entity entity)    {
+        if (partialTicks == 1.0F) {
+            return new Vec3d(entity.posX, entity.posY, entity.posZ);
+        } else {
+            double x = entity.prevPosX + (entity.posX - entity.prevPosX) * partialTicks;
+            double y = entity.prevPosY + (entity.posY - entity.prevPosY) * partialTicks;
+            double z = entity.prevPosZ + (entity.posZ - entity.prevPosZ) * partialTicks;
+            return new Vec3d(x, y, z);
+        }
+    }
 }

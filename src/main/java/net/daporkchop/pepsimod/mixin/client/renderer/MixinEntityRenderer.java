@@ -20,6 +20,7 @@ import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.impl.render.AntiBlindMod;
 import net.daporkchop.pepsimod.module.impl.render.AntiTotemAnimationMod;
+import net.daporkchop.pepsimod.module.impl.render.FullbrightMod;
 import net.daporkchop.pepsimod.module.impl.render.NameTagsMod;
 import net.daporkchop.pepsimod.module.impl.render.NoHurtCamMod;
 import net.daporkchop.pepsimod.module.impl.render.NoOverlayMod;
@@ -31,6 +32,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
@@ -187,7 +189,7 @@ public abstract class MixinEntityRenderer {
 
         glPushMatrix();
         this.setupCameraTransform(partialTicks, pass);
-        try (LineRenderer renderer = new LineRenderer(RotationUtils.getClientLookVec(), this.mc.player.getPositionVector()))    {
+        try (LineRenderer renderer = new LineRenderer(RotationUtils.getClientLookVec(), PepsiUtils.getPlayerPos(partialTicks), partialTicks))    {
             for (Module module : ModuleManager.ENABLED_MODULES) {
                 module.renderLines(renderer);
             }
@@ -209,6 +211,16 @@ public abstract class MixinEntityRenderer {
         if (AntiTotemAnimationMod.INSTANCE.state.enabled) {
             callbackInfo.cancel();
         }
+    }
+
+    @Redirect(
+            method = "Lnet/minecraft/client/renderer/EntityRenderer;updateLightmap(F)V",
+            at = @At(
+                    value = "FIELD",
+                    target = "Lnet/minecraft/client/settings/GameSettings;gammaSetting:F"
+            ))
+    public float redirectGammaSetting(GameSettings settings)    {
+        return Math.max(FullbrightMod.INSTANCE.level * 0.5f, settings.gammaSetting);
     }
 
     @Shadow

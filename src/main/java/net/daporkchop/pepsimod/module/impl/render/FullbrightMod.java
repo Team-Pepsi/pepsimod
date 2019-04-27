@@ -23,6 +23,8 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 public class FullbrightMod extends Module {
     public static FullbrightMod INSTANCE;
 
+    public int level = 0;
+
     {
         INSTANCE = this;
     }
@@ -42,21 +44,23 @@ public class FullbrightMod extends Module {
     @Override
     public void tick() {
         if (this.state.enabled || XrayMod.INSTANCE.state.enabled) {
-            if (mc.gameSettings.gammaSetting < 16f) {
-                mc.gameSettings.gammaSetting += 0.5f;
+            final int max = 6;
+            if (this.level < max)    {
+                this.level++;
+            } else if (this.level > max) {
+                this.level = max;
             }
-        } else if (mc.gameSettings.gammaSetting > 0.5f) {
-            if (mc.gameSettings.gammaSetting < 1F) {
-                mc.gameSettings.gammaSetting = 0.5F;
-            } else {
-                mc.gameSettings.gammaSetting -= 0.5F;
+        } else {
+            if (this.level > 0) {
+                this.level--;
+            } else if (this.level < 0) {
+                this.level = 0;
             }
         }
     }
 
     @Override
     public void init() {
-
     }
 
     @Override
