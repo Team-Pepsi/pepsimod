@@ -252,7 +252,7 @@ public class HUDMod extends Module {
                     }
                 }
             } else {
-                if (!(mc.currentScreen instanceof GuiChat)) {
+                if (!(mc.currentScreen instanceof GuiChat)) { //TODO: fix this
                     for (int i = 0, j = 0; i < ModuleManager.ENABLED_MODULES.size(); i++) {
                         Module module = ModuleManager.ENABLED_MODULES.get(i);
                         if (module.state.hidden) {
@@ -277,27 +277,26 @@ public class HUDMod extends Module {
 
         int i = 0;
         if (HUDTranslator.INSTANCE.arrayListTop) {
-            if (!(mc.currentScreen instanceof GuiChat)) {
-                if (HUDTranslator.INSTANCE.serverBrand) {
-                    String text = PepsiUtils.COLOR_ESCAPE + "7Server brand: " + PepsiUtils.COLOR_ESCAPE + "r" + HUDMod.INSTANCE.serverBrand;
-                    gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("Server brand: " + HUDMod.INSTANCE.serverBrand) + 2), height - 2 - ++i * 10, Color.white.getRGB());
+            i = mc.currentScreen instanceof GuiChat ? 14 : 0;
+            if (HUDTranslator.INSTANCE.serverBrand) {
+                String text = PepsiUtils.COLOR_ESCAPE + "7Server brand: " + PepsiUtils.COLOR_ESCAPE + "r" + HUDMod.INSTANCE.serverBrand;
+                gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("Server brand: " + HUDMod.INSTANCE.serverBrand) + 2), height - 2 - (i += 10), Color.white.getRGB());
+            }
+            if (HUDTranslator.INSTANCE.ping) {
+                try {
+                    int ping = mc.getConnection().getPlayerInfo(mc.getConnection().getGameProfile().getId()).getResponseTime();
+                    String text = PepsiUtils.COLOR_ESCAPE + "7Ping: " + PepsiUtils.COLOR_ESCAPE + "r" + ping;
+                    gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("Ping: " + ping) + 2), height - 2 - (i += 10), Color.white.getRGB());
+                } catch (NullPointerException e) {
                 }
-                if (HUDTranslator.INSTANCE.ping) {
-                    try {
-                        int ping = mc.getConnection().getPlayerInfo(mc.getConnection().getGameProfile().getId()).getResponseTime();
-                        String text = PepsiUtils.COLOR_ESCAPE + "7Ping: " + PepsiUtils.COLOR_ESCAPE + "r" + ping;
-                        gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("Ping: " + ping) + 2), height - 2 - ++i * 10, Color.white.getRGB());
-                    } catch (NullPointerException e) {
-                    }
-                }
-                if (HUDTranslator.INSTANCE.TPS) {
-                    String text = PepsiUtils.COLOR_ESCAPE + "7TPS: " + PepsiUtils.COLOR_ESCAPE + "r" + TickRate.TPS;
-                    gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("TPS: " + TickRate.TPS) + 2), height - 2 - ++i * 10, Color.white.getRGB());
-                }
-                if (HUDTranslator.INSTANCE.fps) {
-                    String text = PepsiUtils.COLOR_ESCAPE + "7FPS: " + PepsiUtils.COLOR_ESCAPE + "r" + ReflectionStuff.getDebugFps();
-                    gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("FPS: " + ReflectionStuff.getDebugFps()) + 2), height - 2 - ++i * 10, Color.white.getRGB());
-                }
+            }
+            if (HUDTranslator.INSTANCE.TPS) {
+                String text = PepsiUtils.COLOR_ESCAPE + "7TPS: " + PepsiUtils.COLOR_ESCAPE + "r" + TickRate.TPS;
+                gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("TPS: " + TickRate.TPS) + 2), height - 2 - (i += 10), Color.white.getRGB());
+            }
+            if (HUDTranslator.INSTANCE.fps) {
+                String text = PepsiUtils.COLOR_ESCAPE + "7FPS: " + PepsiUtils.COLOR_ESCAPE + "r" + ReflectionStuff.getDebugFps();
+                gui.drawString(mc.fontRenderer, text, width - (mc.fontRenderer.getStringWidth("FPS: " + ReflectionStuff.getDebugFps()) + 2), height - 2 - (i += 10), Color.white.getRGB());
             }
         } else {
             if (HUDTranslator.INSTANCE.serverBrand) {
