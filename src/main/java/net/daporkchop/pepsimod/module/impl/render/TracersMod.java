@@ -20,6 +20,8 @@ import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
+import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
+import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 import net.daporkchop.pepsimod.the.wurst.pkg.name.RotationUtils;
 import net.daporkchop.pepsimod.util.EntityFakePlayer;
 import net.daporkchop.pepsimod.util.PepsiUtils;
@@ -27,6 +29,7 @@ import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.RenderColor;
 import net.daporkchop.pepsimod.util.config.impl.FriendsTranslator;
 import net.daporkchop.pepsimod.util.config.impl.TracersTranslator;
+import net.daporkchop.pepsimod.util.render.LineRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
@@ -59,22 +62,18 @@ public class TracersMod extends Module {
 
     @Override
     public void onEnable() {
-
     }
 
     @Override
     public void onDisable() {
-
     }
 
     @Override
     public void tick() {
-
     }
 
     @Override
     public void init() {
-
     }
 
     @Override
@@ -151,27 +150,22 @@ public class TracersMod extends Module {
                         },
                         () -> {
                             return TracersTranslator.INSTANCE.distanceColor;
-                        }, "DistanceColor")
+                        }, "DistanceColor"),
+                new ModuleOption<>(2.0f, "width", new String[]{"0.5", "1.0", "1.5", "2.0", "2.5"},
+                        val -> {
+                            TracersTranslator.INSTANCE.width = val;
+                            return true;
+                        },
+                        () -> {
+                            return TracersTranslator.INSTANCE.width;
+                        }, "Width", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.0f, 10.0f, 0.1f))
         };
     }
 
-    public void drawLines(float partialTicks) {
-        // GL settings
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glEnable(GL11.GL_LINE_SMOOTH);
-        GL11.glLineWidth(2);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-        GL11.glPushMatrix();
-        GL11.glTranslated(-ReflectionStuff.getRenderPosX(mc.getRenderManager()), -ReflectionStuff.getRenderPosY(mc.getRenderManager()), -ReflectionStuff.getRenderPosZ(mc.getRenderManager()));
-
-        // set start position
-        Vec3d start = RotationUtils.getClientLookVec().add(0, mc.player.getEyeHeight(), 0).add(ReflectionStuff.getRenderPosX(mc.getRenderManager()), ReflectionStuff.getRenderPosY(mc.getRenderManager()), ReflectionStuff.getRenderPosZ(mc.getRenderManager()));
-
-        GL11.glBegin(GL11.GL_LINES);
+    @Override
+    public void renderLines(LineRenderer renderer) {
+        renderer.width(TracersTranslator.INSTANCE.width);
 
         RenderColor color = null;
         for (Entity entity : mc.world.getLoadedEntityList()) {
@@ -233,20 +227,8 @@ public class TracersMod extends Module {
                 continue;
             }
 
-            PepsiUtils.glColor(color);
-
-            GL11.glVertex3d(start.x, start.y, start.z);
-            GL11.glVertex3d(entity.posX, entity.posY, entity.posZ);
+            renderer.color(color).lineFromEyes(entity);
         }
-        GL11.glEnd();
-
-        GL11.glPopMatrix();
-
-        // GL resets
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_LINE_SMOOTH);
     }
 
     public ModuleCategory getCategory() {

@@ -28,6 +28,7 @@ import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.RenderColor;
 import net.daporkchop.pepsimod.util.config.impl.WaypointsTranslator;
 import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
+import net.daporkchop.pepsimod.util.render.LineRenderer;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
@@ -47,71 +48,19 @@ public class WaypointsMod extends Module {
 
     @Override
     public void onEnable() {
-
     }
 
     @Override
     public void onDisable() {
-
     }
 
     @Override
     public void tick() {
-
     }
 
     @Override
     public void init() {
         INSTANCE = this;
-    }
-
-    public void drawLines(float partialTicks) {
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glEnable(GL11.GL_LINE_SMOOTH);
-        GL11.glLineWidth(2);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glPushMatrix();
-        GL11.glTranslated(-ReflectionStuff.getRenderPosX(mc.getRenderManager()), -ReflectionStuff.getRenderPosY(mc.getRenderManager()), -ReflectionStuff.getRenderPosZ(mc.getRenderManager()));
-        // set start position
-        Vec3d start = RotationUtils.getClientLookVec().add(0, mc.player.getEyeHeight(), 0).add(ReflectionStuff.getRenderPosX(mc.getRenderManager()), ReflectionStuff.getRenderPosY(mc.getRenderManager()), ReflectionStuff.getRenderPosZ(mc.getRenderManager()));
-        GL11.glBegin(GL11.GL_LINES);
-
-        RenderColor.glColor(WaypointsTranslator.INSTANCE.r, WaypointsTranslator.INSTANCE.g, WaypointsTranslator.INSTANCE.b);
-
-        Collection<Waypoint> toRender = WaypointsTranslator.INSTANCE.getWaypoints();
-        for (Waypoint waypoint : toRender) {
-            GL11.glVertex3d(start.x, start.y, start.z);
-            GL11.glVertex3i(waypoint.x, waypoint.y, waypoint.z);
-        }
-
-        GL11.glEnd();
-
-        GL11.glPopMatrix();
-
-        // GL resets
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_LINE_SMOOTH);
-
-        if (WaypointsTranslator.INSTANCE.nametag) {
-            for (Waypoint waypoint : toRender) {
-                String text = waypoint.name;
-                if (WaypointsTranslator.INSTANCE.coords) {
-                    text += " \u00A77" + waypoint.x + "\u00A7f, \u00A77" + waypoint.y + "\u00A7f, \u00A77" + waypoint.z;
-                }
-                if (WaypointsTranslator.INSTANCE.dist) {
-                    text += " \u00A7f (\u00A7b" + PepsiUtils.roundFloatForSlider((float) mc.player.getDistance(waypoint.x, waypoint.y, waypoint.z)) + "\u00A7f)";
-                }
-                PepsiUtils.renderFloatingText(text,
-                        waypoint.x, waypoint.y + 1, waypoint.z,
-                        Color.white.getRGB(),
-                        true, partialTicks);
-            }
-        }
     }
 
     @Override
@@ -174,6 +123,31 @@ public class WaypointsMod extends Module {
                             return WaypointsTranslator.INSTANCE.b;
                         }, "Blue", new ExtensionSlider(ExtensionType.VALUE_INT, 0, 255, 1))
         };
+    }
+
+    @Override
+    public void renderLines(LineRenderer renderer) {
+        renderer.color(WaypointsTranslator.INSTANCE.r, WaypointsTranslator.INSTANCE.g, WaypointsTranslator.INSTANCE.b);
+        for (Waypoint waypoint : WaypointsTranslator.INSTANCE.getWaypoints())   {
+            renderer.lineFromEyes(waypoint.x, waypoint.y, waypoint.z);
+        }
+
+        //TODO
+        /*if (WaypointsTranslator.INSTANCE.nametag) {
+            for (Waypoint waypoint : toRender) {
+                String text = waypoint.name;
+                if (WaypointsTranslator.INSTANCE.coords) {
+                    text += " \u00A77" + waypoint.x + "\u00A7f, \u00A77" + waypoint.y + "\u00A7f, \u00A77" + waypoint.z;
+                }
+                if (WaypointsTranslator.INSTANCE.dist) {
+                    text += " \u00A7f (\u00A7b" + PepsiUtils.roundFloatForSlider((float) mc.player.getDistance(waypoint.x, waypoint.y, waypoint.z)) + "\u00A7f)";
+                }
+                PepsiUtils.renderFloatingText(text,
+                        waypoint.x, waypoint.y + 1, waypoint.z,
+                        Color.white.getRGB(),
+                        true, partialTicks);
+            }
+        }*/
     }
 
     public ModuleCategory getCategory() {

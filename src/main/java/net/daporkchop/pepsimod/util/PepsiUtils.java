@@ -446,27 +446,11 @@ public class PepsiUtils extends PepsiConstants {
         return bb1;
     }
 
-    public static Vector3d vector3d(BlockPos pos) {
-        Vector3d v3d = new Vector3d();
-        v3d.x = pos.getX();
-        v3d.y = pos.getY();
-        v3d.z = pos.getZ();
-        return v3d;
-    }
-
     public static Vector3d sub(Vector3d in, Vector3d with) {
         in.x -= with.x;
         in.y -= with.y;
         in.z -= with.z;
         return in;
-    }
-
-    public static int toRGBA(int r, int g, int b, int a) {
-        return (r << 16) + (g << 8) + (b) + (a << 24);
-    }
-
-    public static Vec3d getInterpolatedPos(Entity entity, float ticks) {
-        return new Vec3d(entity.lastTickPosX, entity.lastTickPosY, entity.lastTickPosZ).add(getInterpolatedAmount(entity, ticks));
     }
 
     public static Vec3d getInterpolatedAmount(Entity entity, double x, double y, double z) {
@@ -475,10 +459,6 @@ public class PepsiUtils extends PepsiConstants {
                 (entity.posY - entity.lastTickPosY) * y,
                 (entity.posZ - entity.lastTickPosZ) * z
         );
-    }
-
-    public static Vec3d getInterpolatedAmount(Entity entity, Vec3d vec) {
-        return getInterpolatedAmount(entity, vec.x, vec.y, vec.z);
     }
 
     public static Vec3d getInterpolatedAmount(Entity entity, double ticks) {

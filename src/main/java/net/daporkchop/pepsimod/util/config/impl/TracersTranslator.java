@@ -30,9 +30,9 @@ public class TracersTranslator implements IConfigTranslator {
     public boolean items = false;
     public boolean everything = false;
     public boolean distanceColor = true;
+    public float width = 2.0f;
 
     private TracersTranslator() {
-
     }
 
     public void encode(JsonObject json) {
@@ -45,6 +45,7 @@ public class TracersTranslator implements IConfigTranslator {
         json.addProperty("items", this.items);
         json.addProperty("everything", this.everything);
         json.addProperty("distanceColor", this.distanceColor);
+        json.addProperty("width", this.width);
     }
 
     public void decode(String fieldName, JsonObject json) {
@@ -57,6 +58,7 @@ public class TracersTranslator implements IConfigTranslator {
         this.items = this.getBoolean(json, "items", this.items);
         this.everything = this.getBoolean(json, "everything", this.everything);
         this.distanceColor = this.getBoolean(json, "distanceColor", this.distanceColor);
+        this.width = this.getFloat(json, "width", this.width);
     }
 
     public String name() {

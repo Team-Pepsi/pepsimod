@@ -44,7 +44,7 @@ public class RotationUtils extends PepsiConstants {
                 -MathHelper.cos(-mc.player.rotationPitch * 0.017453292F);
         float f3 =
                 MathHelper.sin(-mc.player.rotationPitch * 0.017453292F);
-        return new Vec3d(f1 * f2, f3, f * f2);
+        return new Vec3d(f1 * f2, f3 + mc.player.getEyeHeight(), f * f2);
     }
 
     public static Vec3d getServerLookVec() {

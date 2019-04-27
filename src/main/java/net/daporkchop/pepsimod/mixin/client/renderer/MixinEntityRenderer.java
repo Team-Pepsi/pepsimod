@@ -16,15 +16,16 @@
 
 package net.daporkchop.pepsimod.mixin.client.renderer;
 
-import net.daporkchop.pepsimod.module.impl.misc.WaypointsMod;
+import net.daporkchop.pepsimod.module.ModuleManager;
+import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.impl.render.AntiBlindMod;
 import net.daporkchop.pepsimod.module.impl.render.AntiTotemAnimationMod;
 import net.daporkchop.pepsimod.module.impl.render.NameTagsMod;
 import net.daporkchop.pepsimod.module.impl.render.NoHurtCamMod;
 import net.daporkchop.pepsimod.module.impl.render.NoOverlayMod;
-import net.daporkchop.pepsimod.module.impl.render.TracersMod;
+import net.daporkchop.pepsimod.the.wurst.pkg.name.RotationUtils;
 import net.daporkchop.pepsimod.util.PepsiUtils;
-import net.daporkchop.pepsimod.util.config.impl.WaypointsTranslator;
+import net.daporkchop.pepsimod.util.render.LineRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.EntityRenderer;
@@ -33,6 +34,7 @@ import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.util.glu.Project;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -43,6 +45,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+
 @Mixin(EntityRenderer.class)
 public abstract class MixinEntityRenderer {
     @Inject(method = "drawNameplate", at = @At("HEAD"), cancellable = true)
@@ -52,6 +57,7 @@ public abstract class MixinEntityRenderer {
             callbackInfo.cancel();
         }
     }
+
     @Shadow
     private float farPlaneDistance;
     @Shadow
@@ -74,16 +80,6 @@ public abstract class MixinEntityRenderer {
     @Shadow
     private boolean renderHand = true;
 
-    @Shadow
-    private boolean isDrawBlockOutline() {
-        return true;
-    }
-
-    @Shadow
-    private void updateFogColor(float partialTicks) {
-
-    }
-
     @Inject(method = "renderWorldPass",
             at = @At(value = "INVOKE_ASSIGN",
                     target = "Lnet/minecraft/profiler/Profiler;endStartSection(Ljava/lang/String;)V",
@@ -92,36 +88,6 @@ public abstract class MixinEntityRenderer {
         PepsiUtils.toRemoveWurstRenderListeners.forEach(PepsiUtils.wurstRenderListeners::remove);
         PepsiUtils.toRemoveWurstRenderListeners.clear();
         PepsiUtils.wurstRenderListeners.forEach(listener -> listener.render(partialTicks));
-    }
-
-    @Shadow
-    public void enableLightmap() {
-
-    }
-
-    @Shadow
-    public void disableLightmap() {
-
-    }
-
-    @Shadow
-    protected void renderRainSnow(float partialTicks) {
-
-    }
-
-    @Shadow
-    private void setupFog(int startCoords, float partialTicks) {
-
-    }
-
-    @Shadow
-    private void renderCloudsCheck(RenderGlobal renderGlobalIn, float partialTicks, int pass, double x, double y, double z) {
-
-    }
-
-    @Shadow
-    private void renderHand(float partialTicks, int pass) {
-
     }
 
     @Overwrite
@@ -192,31 +158,11 @@ public abstract class MixinEntityRenderer {
         }
     }
 
-    @Shadow
-    private float getFOVModifier(float partialTicks, boolean useFOVSetting) {
-        return 0.0f;
-    }
-
-    @Shadow
-    private void hurtCameraEffect(float partialTicks) {
-
-    }
-
     @Inject(method = "hurtCameraEffect", at = @At("HEAD"), cancellable = true)
     public void preHurtCameraEffect(float partialTicks, CallbackInfo callbackInfo) {
         if (NoHurtCamMod.INSTANCE.state.enabled) {
             callbackInfo.cancel();
         }
-    }
-
-    @Shadow
-    private void applyBobbing(float partialTicks) {
-
-    }
-
-    @Shadow
-    private void orientCamera(float partialTicks) {
-
     }
 
     @Redirect(method = "setupFog", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;setFogDensity(F)V"))
@@ -228,14 +174,27 @@ public abstract class MixinEntityRenderer {
         }
     }
 
-    @Inject(method = "renderWorldPass", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/EntityRenderer;renderHand:Z", shift = At.Shift.BEFORE))
+    @Inject(
+            method = "renderWorldPass",
+            at = @At(
+                    value = "FIELD",
+                    target = "Lnet/minecraft/client/renderer/EntityRenderer;renderHand:Z",
+                    shift = At.Shift.BEFORE
+            ))
     public void renderLines(int pass, float partialTicks, long finishTimeNano, CallbackInfo ci) {
-        if (TracersMod.INSTANCE.state.enabled) {
-            TracersMod.INSTANCE.drawLines(partialTicks);
+        boolean oldBobbing = this.mc.gameSettings.viewBobbing;
+        this.mc.gameSettings.viewBobbing = false;
+
+        glPushMatrix();
+        this.setupCameraTransform(partialTicks, pass);
+        try (LineRenderer renderer = new LineRenderer(RotationUtils.getClientLookVec(), this.mc.player.getPositionVector()))    {
+            for (Module module : ModuleManager.ENABLED_MODULES) {
+                module.renderLines(renderer);
+            }
         }
-        if (WaypointsTranslator.INSTANCE.tracers && WaypointsMod.INSTANCE.state.enabled) {
-            WaypointsMod.INSTANCE.drawLines(partialTicks);
-        }
+        glPopMatrix();
+
+        this.mc.gameSettings.viewBobbing = oldBobbing;
     }
 
     @Inject(method = "displayItemActivation", at = @At("HEAD"), cancellable = true)
@@ -250,5 +209,55 @@ public abstract class MixinEntityRenderer {
         if (AntiTotemAnimationMod.INSTANCE.state.enabled) {
             callbackInfo.cancel();
         }
+    }
+
+    @Shadow
+    public void enableLightmap() {
+    }
+
+    @Shadow
+    public void disableLightmap() {
+    }
+
+    @Shadow
+    protected void renderRainSnow(float partialTicks) {
+    }
+
+    @Shadow
+    private void setupFog(int startCoords, float partialTicks) {
+    }
+
+    @Shadow
+    private void renderCloudsCheck(RenderGlobal renderGlobalIn, float partialTicks, int pass, double x, double y, double z) {
+    }
+
+    @Shadow
+    private void renderHand(float partialTicks, int pass) {
+    }
+
+    @Shadow
+    private float getFOVModifier(float partialTicks, boolean useFOVSetting) {
+        return 0.0f;
+    }
+
+    @Shadow
+    private void hurtCameraEffect(float partialTicks) {
+    }
+
+    @Shadow
+    private void applyBobbing(float partialTicks) {
+    }
+
+    @Shadow
+    private void orientCamera(float partialTicks) {
+    }
+
+    @Shadow
+    private boolean isDrawBlockOutline() {
+        return true;
+    }
+
+    @Shadow
+    private void updateFogColor(float partialTicks) {
     }
 }

@@ -27,9 +27,11 @@ import net.daporkchop.pepsimod.util.config.impl.GeneralTranslator;
 import net.daporkchop.pepsimod.util.config.impl.HUDTranslator;
 import net.daporkchop.pepsimod.util.event.MoveEvent;
 import net.daporkchop.pepsimod.util.misc.ITickListener;
+import net.daporkchop.pepsimod.util.render.LineRenderer;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.network.Packet;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.lwjgl.input.Keyboard;
 
@@ -174,7 +176,6 @@ public abstract class Module extends Command implements ITickListener {
      * Called after a packet is recieved, after it's been processed
      */
     public void postRecievePacket(Packet<?> packetIn) {
-
     }
 
     /**
@@ -190,7 +191,6 @@ public abstract class Module extends Command implements ITickListener {
      * Called after a packet is sent
      */
     public void postSendPacket(Packet<?> packetIn) {
-
     }
 
     /**
@@ -371,11 +371,12 @@ public abstract class Module extends Command implements ITickListener {
      * called every frame
      */
     public void onRender(float partialTicks) {
-
     }
 
     public void onRenderGUI(float partialTicks, int width, int height, GuiIngame gui) {
+    }
 
+    public void renderLines(LineRenderer renderer)   {
     }
 
     @Deprecated
