@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -40,7 +40,7 @@ public class FreecamMod extends Module {
     @Override
     public void onEnable() {
         INSTANCE = this;//adding this a bunch because it always seems to be null idk y
-        if (pepsiMod.hasInitializedModules) {
+        if (pepsimod.hasInitializedModules) {
             this.fakePlayer = new EntityFakePlayer();
         }
     }
@@ -48,7 +48,7 @@ public class FreecamMod extends Module {
     @Override
     public void onDisable() {
         INSTANCE = this;//adding this a bunch because it always seems to be null idk y
-        if (pepsiMod.hasInitializedModules) {
+        if (pepsimod.hasInitializedModules) {
             this.fakePlayer.resetPlayerPosition();
             this.fakePlayer.despawn();
 

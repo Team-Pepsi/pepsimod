@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -30,7 +30,7 @@ import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 
-import static net.daporkchop.pepsimod.util.PepsiConstants.pepsiMod;
+import static net.daporkchop.pepsimod.util.PepsiConstants.pepsimod;
 
 public class GuiScreenMCLeaks extends GuiScreen {
     public Minecraft mc;
@@ -93,12 +93,12 @@ public class GuiScreenMCLeaks extends GuiScreen {
                     this.tokenField.setText("");
                 }
 
-                pepsiMod.isMcLeaksAccount = true;
+                pepsimod.isMcLeaksAccount = true;
             } else if (button.id == 2) {
-                if (pepsiMod.originalSession != null) {
+                if (pepsimod.originalSession != null) {
                     try {
-                        new AccountManager().setSession(pepsiMod.originalSession);
-                        pepsiMod.isMcLeaksAccount = false;
+                        new AccountManager().setSession(pepsimod.originalSession);
+                        pepsimod.isMcLeaksAccount = false;
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

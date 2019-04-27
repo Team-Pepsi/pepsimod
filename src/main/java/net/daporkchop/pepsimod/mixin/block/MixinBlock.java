@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -33,7 +33,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static net.daporkchop.pepsimod.util.PepsiConstants.pepsiMod;
+import static net.daporkchop.pepsimod.util.PepsiConstants.pepsimod;
 
 @Mixin(Block.class)
 public abstract class MixinBlock extends net.minecraftforge.registries.IForgeRegistryEntry.Impl<Block> {
@@ -44,7 +44,7 @@ public abstract class MixinBlock extends net.minecraftforge.registries.IForgeReg
 
     @Inject(method = "isFullCube", at = @At("HEAD"), cancellable = true)
     public void preIsFullCube(IBlockState state, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (pepsiMod.hasInitializedModules) {
+        if (pepsimod.hasInitializedModules) {
             if (XrayMod.INSTANCE.state.enabled) {
                 callbackInfoReturnable.setReturnValue(XrayTranslator.INSTANCE.isTargeted(Block.class.cast(this)));
             } else if (FreecamMod.INSTANCE.state.enabled || NoClipMod.INSTANCE.state.enabled) {
@@ -62,7 +62,7 @@ public abstract class MixinBlock extends net.minecraftforge.registries.IForgeReg
 
     @Inject(method = "shouldSideBeRendered", at = @At("HEAD"), cancellable = true)
     public void preShouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side, CallbackInfoReturnable<Boolean> callbackInfo) {
-        if (pepsiMod.hasInitializedModules) {
+        if (pepsimod.hasInitializedModules) {
             if (XrayMod.INSTANCE.state.enabled) {
                 callbackInfo.setReturnValue(true);
                 callbackInfo.cancel();

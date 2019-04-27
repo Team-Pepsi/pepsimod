@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -40,7 +40,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.Color;
 
-import static net.daporkchop.pepsimod.util.PepsiConstants.pepsiMod;
+import static net.daporkchop.pepsimod.util.PepsiConstants.pepsimod;
 
 @Mixin(GuiMainMenu.class)
 public abstract class MixinGuiMainMenu extends GuiScreen {
@@ -52,13 +52,13 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
 
     @Inject(method = "initGui", at = @At("RETURN"))
     public void addPepsiIconAndChangeSplash(CallbackInfo ci) {
-        pepsiMod.isInitialized = true;
-        if (!pepsiMod.hasInitializedModules) {
+        pepsimod.isInitialized = true;
+        if (!pepsimod.hasInitializedModules) {
             for (Module module : ModuleManager.AVALIBLE_MODULES) {
                 module.doInit();
             }
             PepsiUtils.setBlockIdFields();
-            pepsiMod.hasInitializedModules = true;
+            pepsimod.hasInitializedModules = true;
         }
         this.TITLE = new Texture(ImageUtils.imgs.get(1));
         this.splashText = PepsiUtils.COLOR_ESCAPE + "c" + PepsiUtils.COLOR_ESCAPE + "lpepsi" + PepsiUtils.COLOR_ESCAPE + '9' + PepsiUtils.COLOR_ESCAPE + "lmod";

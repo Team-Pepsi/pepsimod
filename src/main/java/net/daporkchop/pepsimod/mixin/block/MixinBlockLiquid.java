@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static net.daporkchop.pepsimod.util.PepsiConstants.pepsiMod;
+import static net.daporkchop.pepsimod.util.PepsiConstants.pepsimod;
 
 @Mixin(BlockLiquid.class)
 public abstract class MixinBlockLiquid extends Block {
@@ -39,7 +39,7 @@ public abstract class MixinBlockLiquid extends Block {
 
     @Inject(method = "isPassable", at = @At("HEAD"), cancellable = true)
     public void preIsPassable(IBlockAccess worldIn, BlockPos pos, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (pepsiMod.hasInitializedModules) {
+        if (pepsimod.hasInitializedModules) {
             if (XrayMod.INSTANCE.state.enabled) {
                 callbackInfoReturnable.setReturnValue(true);
             }
@@ -48,7 +48,7 @@ public abstract class MixinBlockLiquid extends Block {
 
     @Inject(method = "getCollisionBoundingBox", at = @At("HEAD"), cancellable = true)
     public void preGetCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos, CallbackInfoReturnable<AxisAlignedBB> callbackInfoReturnable) {
-        if (pepsiMod.hasInitializedModules) {
+        if (pepsimod.hasInitializedModules) {
             if (JesusMod.INSTANCE.shouldBeSolid()) {
                 callbackInfoReturnable.setReturnValue(FULL_BLOCK_AABB);
             }
