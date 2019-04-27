@@ -29,13 +29,13 @@ public class TimerTranslator implements IConfigTranslator {
     }
 
     public void encode(JsonObject json) {
-        json.addProperty("multiplier", multiplier);
-        json.addProperty("tpsSync", tpsSync);
+        json.addProperty("multiplier", this.multiplier);
+        json.addProperty("tpsSync", this.tpsSync);
     }
 
     public void decode(String fieldName, JsonObject json) {
-        multiplier = getFloat(json, "multiplier", multiplier);
-        tpsSync = getBoolean(json, "tpsSync", tpsSync);
+        this.multiplier = this.getFloat(json, "multiplier", this.multiplier);
+        this.tpsSync = this.getBoolean(json, "tpsSync", this.tpsSync);
     }
 
     public String name() {

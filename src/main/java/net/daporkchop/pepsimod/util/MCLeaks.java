@@ -73,7 +73,7 @@ public class MCLeaks {
             String request = "{ \"session\": \"" + Minecraft.getMinecraft().getSession().getToken() + "\", " +
                     "\"mcname\": \"" + Minecraft.getMinecraft().getSession().getUsername() + "\", " +
                     "\"serverhash\": \"" + serverhash + "\", \"server\": " +
-                    "\"" + (Minecraft.getMinecraft().getCurrentServerData().serverIP.split(":").length == 1 ? Minecraft.getMinecraft().getCurrentServerData().serverIP + ":25565" : Minecraft.getMinecraft().getCurrentServerData().serverIP) + "\" }";
+                    '"' + (Minecraft.getMinecraft().getCurrentServerData().serverIP.split(":").length == 1 ? Minecraft.getMinecraft().getCurrentServerData().serverIP + ":25565" : Minecraft.getMinecraft().getCurrentServerData().serverIP) + "\" }";
 
             FMLLog.log.info(request);
 
@@ -86,11 +86,7 @@ public class MCLeaks {
                 mgr.closeChannel(new TextComponentString("\u00A7c\u00A7lError validating \u00A79MCLeaks \u00A7ckey!"));
             }
 
-            mgr.sendPacket(new CPacketEncryptionResponse(secretkey, publickey, pck.getVerifyToken()), new GenericFutureListener<Future<? super Void>>() {
-                public void operationComplete(Future<? super Void> p_operationComplete_1_) throws Exception {
-                    mgr.enableEncryption(secretkey);
-                }
-            });
+            mgr.sendPacket(new CPacketEncryptionResponse(secretkey, publickey, pck.getVerifyToken()), p_operationComplete_1_ -> mgr.enableEncryption(secretkey));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -98,28 +94,7 @@ public class MCLeaks {
         }
     }
 
-    public static String hash(String str) {
-        try {
-            byte[] digest = digest(str, "SHA-1");
-            return new BigInteger(digest).toString(16);
-        } catch (NoSuchAlgorithmException e) {
-            // Guava version
-            throw Throwables.propagate(e);
-            // Vanilla Java version
-            // throw new RuntimeException(e);
-        }
-    }
-
-    private static byte[] digest(String str, String algorithm) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance(algorithm);
-        // Guava version
-        byte[] strBytes = str.getBytes(Charsets.UTF_8);
-        // Vanilla Java 7+ version
-        // byte[] strBytes = str.getBytes(StandardCharsets.UTF_8);
-        return md.digest(strBytes);
-    }
-
-    public static final class RedeemResponse {
+    public static class RedeemResponse {
 
         public boolean success;
 
@@ -130,21 +105,21 @@ public class MCLeaks {
         private String session;
 
         public RedeemResponse() { //welp
-            success = false;
+            this.success = false;
         }
 
         public RedeemResponse(String n, String s) {
-            success = true;
+            this.success = true;
             this.name = n;
             this.session = s;
         }
 
         public String getName() {
-            return name;
+            return this.name;
         }
 
         public String getSession() {
-            return session;
+            return this.session;
         }
     }
 }

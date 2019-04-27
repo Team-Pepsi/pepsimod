@@ -34,12 +34,12 @@ public class Texture {
     private final ResourceLocation texture;
 
     public Texture(ResourceLocation textureURL) {
-        texture = textureURL;
-        Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+        this.texture = textureURL;
+        Minecraft.getMinecraft().getTextureManager().bindTexture(this.texture);
     }
 
     public void render(float x, float y, float width, float height) {
-        bindTexture();
+        this.bindTexture();
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder renderer = tessellator.getBuffer();
         renderer.begin(GL_QUADS, DefaultVertexFormats.POSITION_TEX);
@@ -51,12 +51,12 @@ public class Texture {
     }
 
     public void bindTexture() {
-        Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(this.texture);
         GlStateManager.enableTexture2D();
     }
 
     @Override
     public String toString() {
-        return texture.getResourcePath();
+        return this.texture.getResourcePath();
     }
 }

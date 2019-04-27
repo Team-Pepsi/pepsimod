@@ -23,7 +23,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
-public final class WBlock extends Default {
+public class WBlock extends Default {
     public static IBlockState getState(BlockPos pos) {
         return mc.world.getBlockState(pos);
     }

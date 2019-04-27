@@ -28,11 +28,11 @@ public class AutoEatTranslator implements IConfigTranslator {
     }
 
     public void encode(JsonObject json) {
-        json.addProperty("threshold", threshold);
+        json.addProperty("threshold", this.threshold);
     }
 
     public void decode(String fieldName, JsonObject json) {
-        threshold = getFloat(json, "threshold", threshold);
+        this.threshold = this.getFloat(json, "threshold", this.threshold);
     }
 
     public String name() {

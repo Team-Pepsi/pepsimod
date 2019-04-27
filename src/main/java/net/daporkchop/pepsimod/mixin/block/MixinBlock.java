@@ -57,7 +57,7 @@ public abstract class MixinBlock extends net.minecraftforge.registries.IForgeReg
      * called on pepsimod init
      */
     public void setPepsimod_id() {
-        pepsimod_id = Block.REGISTRY.getIDForObject(Block.class.cast(this));
+        this.pepsimod_id = Block.REGISTRY.getIDForObject(Block.class.cast(this));
     }
 
     @Inject(method = "shouldSideBeRendered", at = @At("HEAD"), cancellable = true)

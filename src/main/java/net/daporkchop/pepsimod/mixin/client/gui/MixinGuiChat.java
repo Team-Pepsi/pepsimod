@@ -38,16 +38,16 @@ public abstract class MixinGuiChat extends GuiScreen {
 
     @Inject(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiTextField;drawTextBox()V"))
     public void drawSemiTransparentText(CallbackInfo ci) {
-        if (inputField.getText().startsWith(".")) {
+        if (this.inputField.getText().startsWith(".")) {
             GL11.glPushMatrix();
             GL11.glEnable(GL11.GL_BLEND);
-            int x = inputField.x;
-            int y = inputField.y;
-            if (!prevText.equals(inputField.getText())) {
-                prevText = inputField.getText();
-                prevSuggestion = CommandRegistry.getSuggestionFor(prevText);
+            int x = this.inputField.x;
+            int y = this.inputField.y;
+            if (!this.prevText.equals(this.inputField.getText())) {
+                this.prevText = this.inputField.getText();
+                this.prevSuggestion = CommandRegistry.getSuggestionFor(this.prevText);
             }
-            fontRenderer.drawString(prevSuggestion, x, y, 0x5FFFFFFF, false);
+            this.fontRenderer.drawString(this.prevSuggestion, x, y, 0x5FFFFFFF, false);
             GL11.glDisable(GL11.GL_BLEND);
             GL11.glPopMatrix();
         }

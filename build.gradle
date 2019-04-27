@@ -75,9 +75,15 @@ repositories {
 }
 
 dependencies {
-    compile("org.spongepowered:mixin:0.7.10-SNAPSHOT") {
-        exclude module: "launchwrapper"
+    compile("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
+        exclude module: 'launchwrapper'
+        exclude module: 'guava'
+        exclude module: 'gson'
+        exclude module: 'commons-io'
+        exclude module: 'log4j-core'
     }
+
+    compile "net.daporkchop.lib:hash:0.3.0-SNAPSHOT"
 }
 
 processResources {

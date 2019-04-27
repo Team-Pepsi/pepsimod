@@ -23,30 +23,30 @@ import static net.daporkchop.pepsimod.util.misc.Default.mc;
 public class EntityFakePlayer extends EntityOtherPlayerMP {
     public EntityFakePlayer() {
         super(mc.world, mc.player.getGameProfile());
-        copyLocationAndAnglesFrom(mc.player);
+        this.copyLocationAndAnglesFrom(mc.player);
 
         // fix inventory
-        inventory.copyInventory(mc.player.inventory);
+        this.inventory.copyInventory(mc.player.inventory);
         PepsiUtils.copyPlayerModel(mc.player, this);
 
         // fix rotation
-        rotationYawHead = mc.player.rotationYawHead;
-        renderYawOffset = mc.player.renderYawOffset;
+        this.rotationYawHead = mc.player.rotationYawHead;
+        this.renderYawOffset = mc.player.renderYawOffset;
 
         // fix cape movement
-        chasingPosX = posX;
-        chasingPosY = posY;
-        chasingPosZ = posZ;
+        this.chasingPosX = this.posX;
+        this.chasingPosY = this.posY;
+        this.chasingPosZ = this.posZ;
 
         // spawn
-        mc.world.addEntityToWorld(getEntityId(), this);
+        mc.world.addEntityToWorld(this.getEntityId(), this);
     }
 
     public void resetPlayerPosition() {
-        mc.player.setPositionAndRotation(posX, posY, posZ, rotationYaw, rotationPitch);
+        mc.player.setPositionAndRotation(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
     }
 
     public void despawn() {
-        mc.world.removeEntityFromWorld(getEntityId());
+        mc.world.removeEntityFromWorld(this.getEntityId());
     }
 }

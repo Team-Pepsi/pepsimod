@@ -29,13 +29,13 @@ public class CrystalAuraTranslator implements IConfigTranslator {
     }
 
     public void encode(JsonObject json) {
-        json.addProperty("speed", speed);
-        json.addProperty("range", range);
+        json.addProperty("speed", this.speed);
+        json.addProperty("range", this.range);
     }
 
     public void decode(String fieldName, JsonObject json) {
-        speed = getFloat(json, "speed", speed);
-        range = getFloat(json, "range", range);
+        this.speed = this.getFloat(json, "speed", this.speed);
+        this.range = this.getFloat(json, "range", this.range);
     }
 
     public String name() {

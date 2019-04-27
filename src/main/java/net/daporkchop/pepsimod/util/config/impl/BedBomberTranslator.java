@@ -30,15 +30,15 @@ public class BedBomberTranslator implements IConfigTranslator {
     }
 
     public void encode(JsonObject json) {
-        json.addProperty("range", range);
-        json.addProperty("delay", delay);
-        json.addProperty("resupply", resupply);
+        json.addProperty("range", this.range);
+        json.addProperty("delay", this.delay);
+        json.addProperty("resupply", this.resupply);
     }
 
     public void decode(String fieldName, JsonObject json) {
-        range = getFloat(json, "range", range);
-        delay = getInt(json, "delay", delay);
-        resupply = getBoolean(json, "resupply", resupply);
+        this.range = this.getFloat(json, "range", this.range);
+        this.delay = this.getInt(json, "delay", this.delay);
+        this.resupply = this.getBoolean(json, "resupply", this.resupply);
     }
 
     public String name() {

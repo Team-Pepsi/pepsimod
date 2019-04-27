@@ -160,7 +160,7 @@ public class EntityUtils extends Default {
         // check colors
         boolean hasKnownColor = false;
         for (int i = 0; i < 16; i++)
-            if (name.contains("\u00A7" + colors[i])) {
+            if (name.contains('\u00A7' + colors[i])) {
                 hasKnownColor = true;
                 if (teamColors[i]) {
                     return true;
@@ -251,7 +251,7 @@ public class EntityUtils extends Default {
     }
 
     public static class TargetSettings {
-        public static final boolean[] team_colors = new boolean[]{true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true};
+        public static final boolean[] team_colors = {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true};
 
         public boolean targetFriends() {
             return TargettingTranslator.INSTANCE.friends;

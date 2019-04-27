@@ -34,13 +34,13 @@ public abstract class MixinTabCompleter {
 
     @Inject(method = "complete", at = @At("HEAD"), cancellable = true)
     public void preComplete(CallbackInfo callbackInfo) {
-        if (textField.getText().startsWith(".")) {
-            String completed = CommandRegistry.getSuggestionFor(textField.getText());
-            if (completed == null || completed.isEmpty() || completed.length() <= textField.getText().length()) {
+        if (this.textField.getText().startsWith(".")) {
+            String completed = CommandRegistry.getSuggestionFor(this.textField.getText());
+            if (completed == null || completed.isEmpty() || completed.length() <= this.textField.getText().length()) {
                 return;
                 //run vanilla code
             }
-            textField.setText(completed);
+            this.textField.setText(completed);
             callbackInfo.cancel();
             return;
         }

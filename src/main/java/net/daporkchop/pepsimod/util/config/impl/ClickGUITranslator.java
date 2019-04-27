@@ -36,19 +36,19 @@ public class ClickGUITranslator implements IConfigTranslator {
             json.addProperty(window.text + ".open", window.isOpen());
 
             for (IEntry entry : window.entries) {
-                json.addProperty(window.text + "." + entry.getName() + ".open", entry.isOpen());
+                json.addProperty(window.text + '.' + entry.getName() + ".open", entry.isOpen());
             }
         }
     }
 
     public void decode(String fieldName, JsonObject json) {
         for (Window window : ClickGUI.INSTANCE.windows) {
-            window.setX(getInt(json, window.text + ".x", window.x));
-            window.setY(getInt(json, window.text + ".y", window.y));
-            window.setOpen(getBoolean(json, window.text + ".open", window.isOpen()));
+            window.setX(this.getInt(json, window.text + ".x", window.x));
+            window.setY(this.getInt(json, window.text + ".y", window.y));
+            window.setOpen(this.getBoolean(json, window.text + ".open", window.isOpen()));
 
             for (IEntry entry : window.entries) {
-                entry.setOpen(getBoolean(json, window.text + "." + entry.getName() + ".open", entry.isOpen()));
+                entry.setOpen(this.getBoolean(json, window.text + '.' + entry.getName() + ".open", entry.isOpen()));
             }
         }
     }

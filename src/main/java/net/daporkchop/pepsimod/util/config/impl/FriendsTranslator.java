@@ -35,16 +35,16 @@ public class FriendsTranslator implements IConfigTranslator {
 
     public void encode(JsonObject json) {
         JsonArray array = new JsonArray();
-        for (String s : friends) {
+        for (String s : this.friends) {
             array.add(new JsonPrimitive(s));
         }
         json.add("friends", array);
     }
 
     public void decode(String fieldName, JsonObject json) {
-        JsonArray array = getArray(json, "friends", new JsonArray());
-        for (Iterator<JsonElement> iterator = array.iterator(); iterator.hasNext(); ) {
-            friends.add(iterator.next().getAsString());
+        JsonArray array = this.getArray(json, "friends", new JsonArray());
+        for (JsonElement anArray : array) {
+            this.friends.add(anArray.getAsString());
         }
     }
 

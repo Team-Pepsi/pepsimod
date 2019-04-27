@@ -77,7 +77,7 @@ public class GuiScreenMCLeaks extends GuiScreen {
             if (button.id == 1) {
                 this.mc.displayGuiScreen(this.prevScreen);
             } else if (button.id == 0) {
-                MCLeaks.RedeemResponse response = MCLeaks.redeemToken(tokenField.getText());
+                MCLeaks.RedeemResponse response = MCLeaks.redeemToken(this.tokenField.getText());
                 if (response.success) {
                     String idJson = HTTPUtils.performGetRequest(HTTPUtils.constantURL("https://api.mojang.com/users/profiles/minecraft/" + response.getName()));
                     JsonObject json = (new JsonParser()).parse(idJson).getAsJsonObject();
@@ -90,7 +90,7 @@ public class GuiScreenMCLeaks extends GuiScreen {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    tokenField.setText("");
+                    this.tokenField.setText("");
                 }
 
                 pepsiMod.isMcLeaksAccount = true;
@@ -139,8 +139,8 @@ public class GuiScreenMCLeaks extends GuiScreen {
         this.buttonList.get(0).enabled = !this.tokenField.getText().isEmpty();
         this.drawDefaultBackground();
         this.drawCenteredString(this.fontRenderer, "\u00A79\u00A7lMCLeaks login", this.width / 2, 17, 16777215);
-        this.drawCenteredString(this.fontRenderer, "Username: " + mc.getSession().getUsername(), this.width / 2, 27, 10526880);
-        this.drawCenteredString(this.fontRenderer, "UUID: " + mc.getSession().getPlayerID(), this.width / 2, 37, 10526880);
+        this.drawCenteredString(this.fontRenderer, "Username: " + this.mc.getSession().getUsername(), this.width / 2, 27, 10526880);
+        this.drawCenteredString(this.fontRenderer, "UUID: " + this.mc.getSession().getPlayerID(), this.width / 2, 37, 10526880);
         this.tokenField.drawTextBox();
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

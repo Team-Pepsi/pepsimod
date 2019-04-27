@@ -25,7 +25,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumHand;
 
-public final class WPlayer extends Default {
+public class WPlayer extends Default {
     public static void swingArmClient() {
         mc.player.swingArm(EnumHand.MAIN_HAND);
     }

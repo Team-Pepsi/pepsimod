@@ -54,7 +54,7 @@ public abstract class MixinGuiDisconnected extends GuiScreen {
     public void preDrawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo callbackInfo) {
         if (ZoomMod.INSTANCE.state.enabled) {
             ModuleManager.disableModule(ZoomMod.INSTANCE);
-            mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
+            this.mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
         }
     }
 
@@ -71,9 +71,9 @@ public abstract class MixinGuiDisconnected extends GuiScreen {
     @Inject(method = "actionPerformed", at = @At("HEAD"), cancellable = true)
     public void preActionPerformed(GuiButton button, CallbackInfo callbackInfo) {
         if (button.id == 1) {
-            ServerData data = new ServerData("", PepsiUtils.lastIp + ":" + PepsiUtils.lastPort, false);
+            ServerData data = new ServerData("", PepsiUtils.lastIp + ':' + PepsiUtils.lastPort, false);
             data.setResourceMode(ServerData.ServerResourceMode.PROMPT);
-            FMLClientHandler.instance().connectToServer(mc.currentScreen, data);
+            FMLClientHandler.instance().connectToServer(this.mc.currentScreen, data);
             callbackInfo.cancel();
         } else if (button.id == 2) {
             GeneralTranslator.INSTANCE.autoReconnect = !GeneralTranslator.INSTANCE.autoReconnect;

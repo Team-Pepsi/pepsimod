@@ -60,16 +60,17 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
             PepsiUtils.setBlockIdFields();
             pepsiMod.hasInitializedModules = true;
         }
-        TITLE = new Texture(ImageUtils.imgs.get(1));
-        this.splashText = PepsiUtils.COLOR_ESCAPE + "c" + PepsiUtils.COLOR_ESCAPE + "lpepsi" + PepsiUtils.COLOR_ESCAPE + "9" + PepsiUtils.COLOR_ESCAPE + "lmod";
+        this.TITLE = new Texture(ImageUtils.imgs.get(1));
+        this.splashText = PepsiUtils.COLOR_ESCAPE + "c" + PepsiUtils.COLOR_ESCAPE + "lpepsi" + PepsiUtils.COLOR_ESCAPE + '9' + PepsiUtils.COLOR_ESCAPE + "lmod";
         ModuleManager.sortModules(GeneralTranslator.INSTANCE.sortType);
     }
 
     @Redirect(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/texture/TextureManager;bindTexture(Lnet/minecraft/util/ResourceLocation;)V", ordinal = 0))
     public void removeMenuLogoInit(TextureManager textureManager, ResourceLocation resource) {
-        int titleX = width / 2 - 150, titleY = 20;
+        int titleX = this.width / 2 - 150;
+        int titleY = 20;
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        TITLE.render(titleX, titleY + 10, 300, 100);
+        this.TITLE.render(titleX, titleY + 10, 300, 100);
     }
 
     @Redirect(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiMainMenu;drawTexturedModalRect(IIIIII)V"))
@@ -87,7 +88,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
     @Inject(method = "drawScreen", at = @At("RETURN"))
     public void addDrawPepsiStuff(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
         this.drawString(this.fontRenderer, PepsiUtils.COLOR_ESCAPE + "cCopyright Mojang AB. Do not distribute!", this.width - this.fontRenderer.getStringWidth("Copyright Mojang AB. Do not distribute!") - 2, this.height - 10, -1);
-        PEPSIMOD_TEXT_GRADIENT.drawAtPos(this, 2, this.height - 20);
-        PEPSIMOD_AUTHOR_GRADIENT.drawAtPos(this, 2, this.height - 10);
+        this.PEPSIMOD_TEXT_GRADIENT.drawAtPos(this, 2, this.height - 20);
+        this.PEPSIMOD_AUTHOR_GRADIENT.drawAtPos(this, 2, this.height - 10);
     }
 }

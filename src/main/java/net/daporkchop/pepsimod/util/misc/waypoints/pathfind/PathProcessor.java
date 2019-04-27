@@ -44,7 +44,7 @@ public abstract class PathProcessor extends Default {
     public abstract void process();
 
     public void stop() {
-        releaseControls();
+        this.releaseControls();
     }
 
     public void lockControls() {
@@ -53,22 +53,18 @@ public abstract class PathProcessor extends Default {
             ReflectionStuff.setPressed(key, false);
 
         // face next position
-        if (index < path.size())
-            facePosition(path.get(index));
+        if (this.index < this.path.size())
+            this.facePosition(this.path.get(this.index));
 
         // disable sprinting
         WMinecraft.getPlayer().setSprinting(false);
     }
 
     protected void facePosition(BlockPos pos) {
-        if (lookedLastTick) {
-            lookedLastTick = false;
-        } else {
-            lookedLastTick = RotationUtils.faceVectorForWalking(new Vec3d(pos).addVector(0.5, 0.5, 0.5));
-        }
+        this.lookedLastTick = this.lookedLastTick ? false : RotationUtils.faceVectorForWalking(new Vec3d(pos).addVector(0.5, 0.5, 0.5));
     }
 
-    public final void releaseControls() {
+    public void releaseControls() {
         // reset keys
         for (KeyBinding key : PepsiUtils.controls) {
             ReflectionStuff.setPressed(key, GameSettings.isKeyDown(key));

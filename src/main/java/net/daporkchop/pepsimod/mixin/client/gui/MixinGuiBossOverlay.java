@@ -43,7 +43,7 @@ import java.util.UUID;
  */
 @Mixin(GuiBossOverlay.class)
 public abstract class MixinGuiBossOverlay extends Gui {
-    private final ArrayList<BossinfoCounted> counted_cache = new ArrayList<BossinfoCounted>();
+    private final ArrayList<BossinfoCounted> counted_cache = new ArrayList<>();
     public ResourceLocation GUI_BARS_TEXTURES_ALT = new ResourceLocation("textures/gui/bars.png");
     @Shadow
     @Final
@@ -61,9 +61,9 @@ public abstract class MixinGuiBossOverlay extends Gui {
             for (BossinfoCounted counted : this.counted_cache) {
                 int k = i / 2 - 91;
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-                this.client.getTextureManager().bindTexture(GUI_BARS_TEXTURES_ALT);
+                this.client.getTextureManager().bindTexture(this.GUI_BARS_TEXTURES_ALT);
                 this.render(k, j, counted.info);
-                String s = counted.info.getName().getFormattedText() + (counted.count > 1 ? " (x" + counted.count + ")" : "");
+                String s = counted.info.getName().getFormattedText() + (counted.count > 1 ? " (x" + counted.count + ')' : "");
                 this.client.fontRenderer.drawStringWithShadow(s, (float) (i / 2 - this.client.fontRenderer.getStringWidth(s) / 2), (float) (j - 9), 16777215);
                 j += 10 + this.client.fontRenderer.FONT_HEIGHT;
 
@@ -82,24 +82,24 @@ public abstract class MixinGuiBossOverlay extends Gui {
 
     @Inject(method = "read", at = @At("HEAD"))
     public void read(SPacketUpdateBossInfo packetIn, CallbackInfo callbackInfo) {
-        updateCounter();
+        this.updateCounter();
     }
 
     public void updateCounter() {
-        counted_cache.clear();
+        this.counted_cache.clear();
         ArrayList<String> known = new ArrayList<>();
-        for (BossInfoClient infoLerping : mapBossInfos.values()) {
+        for (BossInfoClient infoLerping : this.mapBossInfos.values()) {
             if (known.contains(infoLerping.getName().getFormattedText()))
                 continue;
             String formattedText = infoLerping.getName().getFormattedText();
             BossinfoCounted counted = new BossinfoCounted();
             counted.info = infoLerping;
-            for (BossInfoClient infoLerping2 : mapBossInfos.values()) {
+            for (BossInfoClient infoLerping2 : this.mapBossInfos.values()) {
                 if (infoLerping2.getName().getFormattedText().equals(formattedText))
                     counted.count++;
             }
             known.add(formattedText);
-            counted_cache.add(counted);
+            this.counted_cache.add(counted);
         }
     }
 }

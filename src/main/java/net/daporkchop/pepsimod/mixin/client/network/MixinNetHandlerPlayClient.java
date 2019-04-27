@@ -62,7 +62,7 @@ public abstract class MixinNetHandlerPlayClient {
                 } else if (listItem.getAction() == SPacketPlayerListItem.Action.REMOVE_PLAYER) {
                     for (SPacketPlayerListItem.AddPlayerData data : listItem.getEntries()) {
                         if (!data.getProfile().getId().equals(mc.player.getGameProfile().getId())) {
-                            AnnouncerMod.INSTANCE.onPlayerLeave(playerInfoMap.get(data.getProfile().getId()).getGameProfile().getName());
+                            AnnouncerMod.INSTANCE.onPlayerLeave(this.playerInfoMap.get(data.getProfile().getId()).getGameProfile().getName());
                         }
                     }
 

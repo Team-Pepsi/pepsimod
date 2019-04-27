@@ -28,11 +28,11 @@ public class CpuLimitTranslator implements IConfigTranslator {
     }
 
     public void encode(JsonObject json) {
-        json.addProperty("limit", limit);
+        json.addProperty("limit", this.limit);
     }
 
     public void decode(String fieldName, JsonObject json) {
-        limit = getInt(json, "limit", limit);
+        this.limit = this.getInt(json, "limit", this.limit);
     }
 
     public String name() {

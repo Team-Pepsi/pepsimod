@@ -30,7 +30,7 @@ import java.util.Map;
 public class ImageUtils {
     public static HashMap<Integer, ResourceLocation> imgs = null;
 
-    public static String[] names = new String[]{
+    public static String[] names = {
             "gui/pepsibuttons.png",
             "gui/pepsimod.png",
             "gui/pepsimodBackground.png",

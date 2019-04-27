@@ -43,41 +43,41 @@ public class TargettingTranslator implements IConfigTranslator {
     }
 
     public void encode(JsonObject json) {
-        json.addProperty("players", players);
-        json.addProperty("animals", animals);
-        json.addProperty("monsters", monsters);
-        json.addProperty("golems", golems);
-        json.addProperty("sleeping", sleeping);
-        json.addProperty("invisible", invisible);
-        json.addProperty("teams", teams);
-        json.addProperty("friends", friends);
-        json.addProperty("through_walls", through_walls);
-        json.addProperty("use_cooldown", use_cooldown);
-        json.addProperty("silent", silent);
-        json.addProperty("rotate", rotate);
-        json.addProperty("bone", targetBone.ordinal());
-        json.addProperty("fov", fov);
-        json.addProperty("reach", reach);
-        json.addProperty("delay", delay);
+        json.addProperty("players", this.players);
+        json.addProperty("animals", this.animals);
+        json.addProperty("monsters", this.monsters);
+        json.addProperty("golems", this.golems);
+        json.addProperty("sleeping", this.sleeping);
+        json.addProperty("invisible", this.invisible);
+        json.addProperty("teams", this.teams);
+        json.addProperty("friends", this.friends);
+        json.addProperty("through_walls", this.through_walls);
+        json.addProperty("use_cooldown", this.use_cooldown);
+        json.addProperty("silent", this.silent);
+        json.addProperty("rotate", this.rotate);
+        json.addProperty("bone", this.targetBone.ordinal());
+        json.addProperty("fov", this.fov);
+        json.addProperty("reach", this.reach);
+        json.addProperty("delay", this.delay);
     }
 
     public void decode(String fieldName, JsonObject json) {
-        players = getBoolean(json, "players", players);
-        animals = getBoolean(json, "animals", animals);
-        monsters = getBoolean(json, "monsters", monsters);
-        golems = getBoolean(json, "golems", golems);
-        sleeping = getBoolean(json, "sleeping", sleeping);
-        invisible = getBoolean(json, "invisible", invisible);
-        teams = getBoolean(json, "teams", teams);
-        friends = getBoolean(json, "friends", friends);
-        through_walls = getBoolean(json, "through_walls", through_walls);
-        use_cooldown = getBoolean(json, "use_cooldown", use_cooldown);
-        silent = getBoolean(json, "silent", silent);
-        rotate = getBoolean(json, "rotate", rotate);
-        targetBone = TargetBone.getBone(getInt(json, "bone", targetBone.ordinal()));
-        fov = getFloat(json, "fov", fov);
-        reach = getFloat(json, "reach", reach);
-        delay = getInt(json, "delay", delay);
+        this.players = this.getBoolean(json, "players", this.players);
+        this.animals = this.getBoolean(json, "animals", this.animals);
+        this.monsters = this.getBoolean(json, "monsters", this.monsters);
+        this.golems = this.getBoolean(json, "golems", this.golems);
+        this.sleeping = this.getBoolean(json, "sleeping", this.sleeping);
+        this.invisible = this.getBoolean(json, "invisible", this.invisible);
+        this.teams = this.getBoolean(json, "teams", this.teams);
+        this.friends = this.getBoolean(json, "friends", this.friends);
+        this.through_walls = this.getBoolean(json, "through_walls", this.through_walls);
+        this.use_cooldown = this.getBoolean(json, "use_cooldown", this.use_cooldown);
+        this.silent = this.getBoolean(json, "silent", this.silent);
+        this.rotate = this.getBoolean(json, "rotate", this.rotate);
+        this.targetBone = TargetBone.getBone(this.getInt(json, "bone", this.targetBone.ordinal()));
+        this.fov = this.getFloat(json, "fov", this.fov);
+        this.reach = this.getFloat(json, "reach", this.reach);
+        this.delay = this.getInt(json, "delay", this.delay);
     }
 
     public String name() {

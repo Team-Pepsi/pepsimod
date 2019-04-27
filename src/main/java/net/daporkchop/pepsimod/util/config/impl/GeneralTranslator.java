@@ -39,19 +39,19 @@ public class GeneralTranslator implements IConfigTranslator {
         for (Module module : ModuleManager.AVALIBLE_MODULES) {
             json.addProperty("module.enabled." + module.nameFull, module.state.toString());
         }
-        json.addProperty("autoReconnect", autoReconnect);
-        json.addProperty("sortType", sortType.ordinal());
+        json.addProperty("autoReconnect", this.autoReconnect);
+        json.addProperty("sortType", this.sortType.ordinal());
     }
 
     public void decode(String fieldName, JsonObject json) {
         this.json = json;
-        autoReconnect = getBoolean(json, "autoReconnect", autoReconnect);
-        sortType = ModuleSortType.fromOrdinal(getInt(json, "sortType", sortType.ordinal()));
+        this.autoReconnect = this.getBoolean(json, "autoReconnect", this.autoReconnect);
+        this.sortType = ModuleSortType.fromOrdinal(this.getInt(json, "sortType", this.sortType.ordinal()));
     }
 
     public ModuleState getState(String name, ModuleState fallback) {
-        if (json.has("module.enabled." + name)) {
-            return ModuleState.fromString(json.get("module.enabled." + name).getAsString());
+        if (this.json.has("module.enabled." + name)) {
+            return ModuleState.fromString(this.json.get("module.enabled." + name).getAsString());
         }
 
         return fallback;
@@ -67,8 +67,8 @@ public class GeneralTranslator implements IConfigTranslator {
         public boolean hidden;
 
         public ModuleState(boolean a, boolean b) {
-            enabled = a;
-            hidden = b;
+            this.enabled = a;
+            this.hidden = b;
         }
 
         public static ModuleState fromString(String from) {
@@ -78,7 +78,7 @@ public class GeneralTranslator implements IConfigTranslator {
 
         @Override
         public String toString() {
-            return enabled + " " + hidden;
+            return this.enabled + " " + this.hidden;
         }
     }
 }

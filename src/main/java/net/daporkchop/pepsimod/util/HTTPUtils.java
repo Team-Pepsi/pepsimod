@@ -241,11 +241,7 @@ public class HTTPUtils {
      */
     public static URL concatenateURL(final URL url, final String query) {
         try {
-            if (url.getQuery() != null && url.getQuery().length() > 0) {
-                return new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile() + "&" + query);
-            } else {
-                return new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile() + "?" + query);
-            }
+            return url.getQuery() != null && !url.getQuery().isEmpty() ? new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile() + "&" + query) : new URL(url.getProtocol(), url.getHost(), url.getPort(), url.getFile() + "?" + query);
         } catch (final MalformedURLException ex) {
             throw new IllegalArgumentException("Could not concatenate given URL with GET arguments!", ex);
         }

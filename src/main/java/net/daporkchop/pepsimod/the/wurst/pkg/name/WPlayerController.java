@@ -26,7 +26,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-public final class WPlayerController extends Default {
+public class WPlayerController extends Default {
     private static PlayerControllerMP getPlayerController() {
         return Minecraft.getMinecraft().playerController;
     }

@@ -30,15 +30,15 @@ public class NoWeatherTranslator implements IConfigTranslator {
     }
 
     public void encode(JsonObject json) {
-        json.addProperty("disableRain", disableRain);
-        json.addProperty("changeTime", changeTime);
-        json.addProperty("time", time);
+        json.addProperty("disableRain", this.disableRain);
+        json.addProperty("changeTime", this.changeTime);
+        json.addProperty("time", this.time);
     }
 
     public void decode(String fieldName, JsonObject json) {
-        disableRain = getBoolean(json, "disableRain", disableRain);
-        changeTime = getBoolean(json, "changeTime", changeTime);
-        time = getInt(json, "time", time);
+        this.disableRain = this.getBoolean(json, "disableRain", this.disableRain);
+        this.changeTime = this.getBoolean(json, "changeTime", this.changeTime);
+        this.time = this.getInt(json, "time", this.time);
     }
 
     public String name() {

@@ -37,17 +37,16 @@ public class XrayTranslator implements IConfigTranslator {
 
     public void encode(JsonObject json) {
         JsonArray array = new JsonArray();
-        for (Integer integer : target_blocks) {
+        for (Integer integer : this.target_blocks) {
             array.add(new JsonPrimitive(integer));
         }
         json.add("targetBlocks", array);
     }
 
     public void decode(String fieldName, JsonObject json) {
-        JsonArray array = getArray(json, "targetBlocks", new JsonArray());
-        Iterator<JsonElement> iterator = array.iterator();
-        while (iterator.hasNext()) {
-            target_blocks.add(iterator.next().getAsInt());
+        JsonArray array = this.getArray(json, "targetBlocks", new JsonArray());
+        for (JsonElement anArray : array) {
+            this.target_blocks.add(anArray.getAsInt());
         }
     }
 
@@ -57,7 +56,7 @@ public class XrayTranslator implements IConfigTranslator {
 
     public boolean isTargeted(Block block) {
         int id = PepsiUtils.getBlockId(block);
-        for (Integer i : target_blocks) {
+        for (Integer i : this.target_blocks) {
             if (i == id) {
                 return true;
             }

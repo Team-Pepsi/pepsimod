@@ -28,6 +28,6 @@ public class TaskBasic extends QueuedTask {
     }
 
     public String getMessage() {
-        return message;
+        return this.message;
     }
 }

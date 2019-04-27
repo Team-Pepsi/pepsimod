@@ -28,11 +28,11 @@ public class EntitySpeedTranslator implements IConfigTranslator {
     }
 
     public void encode(JsonObject json) {
-        json.addProperty("speed", speed);
+        json.addProperty("speed", this.speed);
     }
 
     public void decode(String fieldName, JsonObject json) {
-        speed = getFloat(json, "speed", speed);
+        this.speed = this.getFloat(json, "speed", this.speed);
     }
 
     public String name() {

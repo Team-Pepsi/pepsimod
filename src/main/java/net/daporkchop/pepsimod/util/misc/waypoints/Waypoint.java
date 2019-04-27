@@ -48,6 +48,6 @@ public class Waypoint {
     }
 
     public Vec3d getPosition() {
-        return new Vec3d(x, y, z);
+        return new Vec3d(this.x, this.y, this.z);
     }
 }

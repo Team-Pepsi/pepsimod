@@ -48,6 +48,6 @@ public class RenderColor {
     }
 
     public int getIntColor() {
-        return (a & 255) << 24 | (r & 255) << 16 | (g & 255) << 8 | (b & 255) << 0;
+        return (this.a & 255) << 24 | (this.r & 255) << 16 | (this.g & 255) << 8 | (this.b & 255);
     }
 }

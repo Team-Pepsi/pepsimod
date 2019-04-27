@@ -35,25 +35,25 @@ public class AnnouncerTranslator implements IConfigTranslator {
     }
 
     public void encode(JsonObject json) {
-        json.addProperty("clientSide", clientSide);
-        json.addProperty("join", join);
-        json.addProperty("leave", leave);
-        json.addProperty("eat", eat);
-        json.addProperty("walk", walk);
-        json.addProperty("mine", mine);
-        json.addProperty("place", place);
-        json.addProperty("delay", delay);
+        json.addProperty("clientSide", this.clientSide);
+        json.addProperty("join", this.join);
+        json.addProperty("leave", this.leave);
+        json.addProperty("eat", this.eat);
+        json.addProperty("walk", this.walk);
+        json.addProperty("mine", this.mine);
+        json.addProperty("place", this.place);
+        json.addProperty("delay", this.delay);
     }
 
     public void decode(String fieldName, JsonObject json) {
-        clientSide = getBoolean(json, "clientSide", clientSide);
-        join = getBoolean(json, "join", join);
-        leave = getBoolean(json, "leave", leave);
-        eat = getBoolean(json, "eat", eat);
-        walk = getBoolean(json, "walk", walk);
-        mine = getBoolean(json, "mine", mine);
-        place = getBoolean(json, "place", place);
-        delay = getInt(json, "delay", delay);
+        this.clientSide = this.getBoolean(json, "clientSide", this.clientSide);
+        this.join = this.getBoolean(json, "join", this.join);
+        this.leave = this.getBoolean(json, "leave", this.leave);
+        this.eat = this.getBoolean(json, "eat", this.eat);
+        this.walk = this.getBoolean(json, "walk", this.walk);
+        this.mine = this.getBoolean(json, "mine", this.mine);
+        this.place = this.getBoolean(json, "place", this.place);
+        this.delay = this.getInt(json, "delay", this.delay);
     }
 
     public String name() {

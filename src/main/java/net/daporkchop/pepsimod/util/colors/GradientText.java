@@ -28,13 +28,13 @@ public class GradientText extends ColorizedText {
         this.elements = elements;
         this.width = width;
         for (FixedColorElement element : elements) {
-            text += element.text;
+            this.text += element.text;
         }
     }
 
     public void drawAtPos(Gui screen, int x, int y) {
         int i = 0;
-        for (FixedColorElement element : elements) {
+        for (FixedColorElement element : this.elements) {
             screen.drawString(Minecraft.getMinecraft().fontRenderer, element.text, x + i, y, element.color);
             i += element.width;
         }
@@ -42,20 +42,20 @@ public class GradientText extends ColorizedText {
 
     public void drawWithEndAtPos(Gui screen, int x, int y) {
         int i = 0;
-        for (FixedColorElement element : elements) {
+        for (FixedColorElement element : this.elements) {
             i -= element.width;
         }
-        for (FixedColorElement element : elements) {
+        for (FixedColorElement element : this.elements) {
             screen.drawString(Minecraft.getMinecraft().fontRenderer, element.text, x + i, y, element.color);
             i += element.width;
         }
     }
 
     public int width() {
-        return width;
+        return this.width;
     }
 
     public String getRawText() {
-        return text;
+        return this.text;
     }
 }

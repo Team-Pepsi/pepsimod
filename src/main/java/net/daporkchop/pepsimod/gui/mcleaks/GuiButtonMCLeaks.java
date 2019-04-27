@@ -41,18 +41,18 @@ public class GuiButtonMCLeaks extends GuiButton {
 
     @Override
     public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-        if (location == null) {
-            location = ImageUtils.imgs.get(0);
+        if (this.location == null) {
+            this.location = ImageUtils.imgs.get(0);
         }
         if (this.visible) {
-            mc.getTextureManager().bindTexture(location);
+            mc.getTextureManager().bindTexture(this.location);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             int k = this.getHoverState(this.hovered);
             GlStateManager.enableBlend();
             GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
             GlStateManager.blendFunc(770, 771);
-            this.drawTexturedModalRect(this.x, this.y, 0, (hovered ? 20 : 0), this.width, this.height);
+            this.drawTexturedModalRect(this.x, this.y, 0, (this.hovered ? 20 : 0), this.width, this.height);
             this.drawTexturedModalRect(this.x + this.width, this.y, 200 - this.width, k * 20, this.width, this.height);
             this.mouseDragged(mc, mouseX, mouseY);
         }

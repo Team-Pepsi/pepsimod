@@ -69,46 +69,42 @@ public class PathFinder extends Default {
     public boolean goesToGoal = true;
 
     public PathFinder(BlockPos goal) {
-        if (WMinecraft.getPlayer().onGround) {
-            start = new PathPos(new BlockPos(WMinecraft.getPlayer().posX, WMinecraft.getPlayer().posY + 0.5, WMinecraft.getPlayer().posZ));
-        } else {
-            start = new PathPos(new BlockPos(WMinecraft.getPlayer()));
-        }
+        this.start = WMinecraft.getPlayer().onGround ? new PathPos(new BlockPos(WMinecraft.getPlayer().posX, WMinecraft.getPlayer().posY + 0.5, WMinecraft.getPlayer().posZ)) : new PathPos(new BlockPos(WMinecraft.getPlayer()));
         this.goal = goal;
 
-        costMap.put(start, 0F);
-        queue.add(start, getHeuristic(start));
+        this.costMap.put(this.start, 0F);
+        this.queue.add(this.start, this.getHeuristic(this.start));
     }
 
     public void think() {
         try {
-            for (; !goal.equals(current); ) {
+            for (; !this.goal.equals(this.current); ) {
                 // get next position from queue
-                current = queue.poll();
+                this.current = this.queue.poll();
 
                 // check if path is found
-                if (goal.equals(current)) {
+                if (this.goal.equals(this.current)) {
                     return;
                 }
 
                 // add neighbors to queue
-                for (PathPos next : getNeighbors(current)) {
+                for (PathPos next : this.getNeighbors(this.current)) {
                     // check cost
-                    float newCost = costMap.get(current) + getCost(current, next);
-                    if (costMap.containsKey(next) && costMap.get(next) <= newCost) {
+                    float newCost = this.costMap.get(this.current) + this.getCost(this.current, next);
+                    if (this.costMap.containsKey(next) && this.costMap.get(next) <= newCost) {
                         continue;
                     }
 
                     // add to queue
-                    costMap.put(next, newCost);
-                    prevPosMap.put(next, current);
-                    queue.add(next, newCost + getHeuristic(next));
+                    this.costMap.put(next, newCost);
+                    this.prevPosMap.put(next, this.current);
+                    this.queue.add(next, newCost + this.getHeuristic(next));
                 }
             }
         } catch (OutOfWorldException | NullPointerException e) {
-            done = true;
-            goesToGoal = false;
-            queue.cancelledPositions.add(current);
+            this.done = true;
+            this.goesToGoal = false;
+            this.queue.cancelledPositions.add(this.current);
         }
     }
 
@@ -116,7 +112,7 @@ public class PathFinder extends Default {
         ArrayList<PathPos> neighbors = new ArrayList<>();
 
         // abort if too far away
-        if (Math.abs(start.getX() - pos.getX()) > 256 || Math.abs(start.getZ() - pos.getZ()) > 256) {
+        if (Math.abs(this.start.getX() - pos.getX()) > 256 || Math.abs(this.start.getZ() - pos.getZ()) > 256) {
             return neighbors;
         }
 
@@ -135,62 +131,62 @@ public class PathFinder extends Default {
         BlockPos down = pos.down();
 
         // flying
-        boolean flying = canFlyAt(pos);
+        boolean flying = this.canFlyAt(pos);
         // walking
-        boolean onGround = canBeSolid(down);
+        boolean onGround = this.canBeSolid(down);
 
         // player can move sideways if flying, standing on the ground, jumping,
         // or inside of a block that allows sideways movement (ladders, webs,
         // etc.)
-        if (flying || onGround || pos.jumping || canMoveSidewaysInMidairAt(pos) || canClimbUpAt(pos.down())) {
+        if (flying || onGround || pos.jumping || this.canMoveSidewaysInMidairAt(pos) || this.canClimbUpAt(pos.down())) {
             // north
-            if (checkHorizontalMovement(pos, north)) {
+            if (this.checkHorizontalMovement(pos, north)) {
                 neighbors.add(new PathPos(north));
             }
 
             // east
-            if (checkHorizontalMovement(pos, east)) {
+            if (this.checkHorizontalMovement(pos, east)) {
                 neighbors.add(new PathPos(east));
             }
 
             // south
-            if (checkHorizontalMovement(pos, south)) {
+            if (this.checkHorizontalMovement(pos, south)) {
                 neighbors.add(new PathPos(south));
             }
 
             // west
-            if (checkHorizontalMovement(pos, west)) {
+            if (this.checkHorizontalMovement(pos, west)) {
                 neighbors.add(new PathPos(west));
             }
 
             // north-east
-            if (checkDiagonalMovement(pos, EnumFacing.NORTH, EnumFacing.EAST)) {
+            if (this.checkDiagonalMovement(pos, EnumFacing.NORTH, EnumFacing.EAST)) {
                 neighbors.add(new PathPos(northEast));
             }
 
             // south-east
-            if (checkDiagonalMovement(pos, EnumFacing.SOUTH, EnumFacing.EAST)) {
+            if (this.checkDiagonalMovement(pos, EnumFacing.SOUTH, EnumFacing.EAST)) {
                 neighbors.add(new PathPos(southEast));
             }
 
             // south-west
-            if (checkDiagonalMovement(pos, EnumFacing.SOUTH, EnumFacing.WEST)) {
+            if (this.checkDiagonalMovement(pos, EnumFacing.SOUTH, EnumFacing.WEST)) {
                 neighbors.add(new PathPos(southWest));
             }
 
             // north-west
-            if (checkDiagonalMovement(pos, EnumFacing.NORTH, EnumFacing.WEST)) {
+            if (this.checkDiagonalMovement(pos, EnumFacing.NORTH, EnumFacing.WEST)) {
                 neighbors.add(new PathPos(northWest));
             }
         }
 
         // up
-        if (pos.getY() < 256 && canGoThrough(up.up()) && (flying || onGround || canClimbUpAt(pos)) && (flying || canClimbUpAt(pos) || goal.equals(up) || canSafelyStandOn(north) || canSafelyStandOn(east) || canSafelyStandOn(south) || canSafelyStandOn(west)) && (divingAllowed || WBlock.getMaterial(up.up()) != Material.WATER)) {
+        if (pos.getY() < 256 && this.canGoThrough(up.up()) && (flying || onGround || this.canClimbUpAt(pos)) && (flying || this.canClimbUpAt(pos) || this.goal.equals(up) || this.canSafelyStandOn(north) || this.canSafelyStandOn(east) || this.canSafelyStandOn(south) || this.canSafelyStandOn(west)) && (this.divingAllowed || WBlock.getMaterial(up.up()) != Material.WATER)) {
             neighbors.add(new PathPos(up, onGround));
         }
 
         // down
-        if (pos.getY() > 0 && canGoThrough(down) && canGoAbove(down.down()) && (flying || canFallBelow(pos)) && (divingAllowed || WBlock.getMaterial(pos) != Material.WATER)) {
+        if (pos.getY() > 0 && this.canGoThrough(down) && this.canGoAbove(down.down()) && (flying || this.canFallBelow(pos)) && (this.divingAllowed || WBlock.getMaterial(pos) != Material.WATER)) {
             neighbors.add(new PathPos(down));
         }
 
@@ -202,7 +198,7 @@ public class PathFinder extends Default {
             throw new OutOfWorldException();
         }
 
-        return isPassable(next) && (canFlyAt(current) || canGoThrough(next.down()) || canSafelyStandOn(next.down()));
+        return this.isPassable(next) && (this.canFlyAt(current) || this.canGoThrough(next.down()) || this.canSafelyStandOn(next.down()));
 
     }
 
@@ -215,18 +211,18 @@ public class PathFinder extends Default {
         BlockPos horizontal2 = current.offset(direction2);
         BlockPos next = horizontal1.offset(direction2);
 
-        return isPassable(horizontal1) && isPassable(horizontal2) && checkHorizontalMovement(current, next);
+        return this.isPassable(horizontal1) && this.isPassable(horizontal2) && this.checkHorizontalMovement(current, next);
 
     }
 
     public boolean isPassable(BlockPos pos) {
-        return canGoThrough(pos) && canGoThrough(pos.up()) && canGoAbove(pos.down()) && (divingAllowed || WBlock.getMaterial(pos.up()) != Material.WATER);
+        return this.canGoThrough(pos) && this.canGoThrough(pos.up()) && this.canGoAbove(pos.down()) && (this.divingAllowed || WBlock.getMaterial(pos.up()) != Material.WATER);
     }
 
     public boolean canBeSolid(BlockPos pos) {
         Material material = WBlock.getMaterial(pos);
         Block block = WBlock.getBlock(pos);
-        return material.blocksMovement() && !(block instanceof BlockSign) || block instanceof BlockLadder || jesus && (material == Material.WATER || material == Material.LAVA);
+        return material.blocksMovement() && !(block instanceof BlockSign) || block instanceof BlockLadder || this.jesus && (material == Material.WATER || material == Material.LAVA);
     }
 
     public boolean canGoThrough(BlockPos pos) {
@@ -260,36 +256,35 @@ public class PathFinder extends Default {
     public boolean canSafelyStandOn(BlockPos pos) {
         // check if solid
         IBlockState state = WBlock.getState(pos);
-        Block block = state.getBlock();
-        Material material = block.getMaterial(state);
-        if (!canBeSolid(pos)) {
+        Material material = state.getMaterial();
+        if (!this.canBeSolid(pos)) {
             return false;
         }
 
         // check if safe
-        return !(material == Material.CACTUS || material == Material.LAVA || block instanceof BlockMagma);
+        return !(material == Material.CACTUS || material == Material.LAVA || state.getBlock() instanceof BlockMagma);
     }
 
     public boolean canFallBelow(PathPos pos) {
         // check if player can keep falling
         BlockPos down2 = pos.down(2);
-        if (fallingAllowed && canGoThrough(down2)) {
+        if (this.fallingAllowed && this.canGoThrough(down2)) {
             return true;
         }
 
         // check if player can stand below
-        if (!canSafelyStandOn(down2)) {
+        if (!this.canSafelyStandOn(down2)) {
             return false;
         }
 
         // check if fall ends with slime block
-        if (WBlock.getBlock(down2) instanceof BlockSlime && fallingAllowed) {
+        if (WBlock.getBlock(down2) instanceof BlockSlime && this.fallingAllowed) {
             return true;
         }
 
         // check fall damage
         BlockPos prevPos = pos;
-        for (int i = 0; i <= (fallingAllowed ? 3 : 1); i++) {
+        for (int i = 0; i <= (this.fallingAllowed ? 3 : 1); i++) {
             // check if prevPos does not exist, meaning that the pathfinding
             // started during the fall and fall damage should be ignored because
             // it cannot be prevented
@@ -309,14 +304,14 @@ public class PathFinder extends Default {
                 return true;
             }
 
-            prevPos = prevPosMap.get(prevPos);
+            prevPos = this.prevPosMap.get(prevPos);
         }
 
         return false;
     }
 
     public boolean canFlyAt(BlockPos pos) {
-        return !noWaterSlowdown && WBlock.getMaterial(pos) == Material.WATER;
+        return !this.noWaterSlowdown && WBlock.getMaterial(pos) == Material.WATER;
     }
 
     public boolean canClimbUpAt(BlockPos pos) {
@@ -328,7 +323,7 @@ public class PathFinder extends Default {
 
         // check if any adjacent block is solid
         BlockPos up = pos.up();
-        return !(!canBeSolid(pos.north()) && !canBeSolid(pos.east()) && !canBeSolid(pos.south()) && !canBeSolid(pos.west()) && !canBeSolid(up.north()) && !canBeSolid(up.east()) && !canBeSolid(up.south()) && !canBeSolid(up.west()));
+        return !(!this.canBeSolid(pos.north()) && !this.canBeSolid(pos.east()) && !this.canBeSolid(pos.south()) && !this.canBeSolid(pos.west()) && !this.canBeSolid(up.north()) && !this.canBeSolid(up.east()) && !this.canBeSolid(up.south()) && !this.canBeSolid(up.west()));
     }
 
     public boolean canMoveSidewaysInMidairAt(BlockPos pos) {
@@ -345,20 +340,20 @@ public class PathFinder extends Default {
 
     public float getCost(BlockPos current, BlockPos next) {
         float[] costs = {0.5F, 0.5F};
-        BlockPos[] positions = new BlockPos[]{current, next};
+        BlockPos[] positions = {current, next};
 
         for (int i = 0; i < positions.length; i++) {
             Material material = WBlock.getMaterial(positions[i]);
 
             // liquids
-            if (material == Material.WATER && !noWaterSlowdown) {
+            if (material == Material.WATER && !this.noWaterSlowdown) {
                 costs[i] *= 1.5F;
             } else if (material == Material.LAVA) {
                 costs[i] *= 100F;
             }
 
             // soul sand
-            if (!canFlyAt(positions[i]) && WBlock.getBlock(positions[i].down()) instanceof BlockSoulSand) {
+            if (!this.canFlyAt(positions[i]) && WBlock.getBlock(positions[i].down()) instanceof BlockSoulSand) {
                 costs[i] *= 2.5F;
             }
         }
@@ -374,50 +369,49 @@ public class PathFinder extends Default {
     }
 
     public float getHeuristic(BlockPos pos) {
-        float dx = Math.abs(pos.getX() - goal.getX());
-        float dy = Math.abs(pos.getY() - goal.getY());
-        float dz = Math.abs(pos.getZ() - goal.getZ());
+        float dx = Math.abs(pos.getX() - this.goal.getX());
+        float dy = Math.abs(pos.getY() - this.goal.getY());
+        float dz = Math.abs(pos.getZ() - this.goal.getZ());
         return 1.001F * (dx + dy + dz - 0.5857864376269049F * Math.min(dx, dz));
     }
 
     public ArrayList<PathPos> formatPath() {
         GoToCommand.INSTANCE.path.clear();
         PathPos playerPos = new PathPos(new BlockPos(mc.player));
-        for (Iterator<PathPos> iterator = prevPosMap.keySet().iterator(); iterator.hasNext(); ) {
-            PathPos pos = iterator.next();
+        for (PathPos pos : this.prevPosMap.keySet()) {
             if (pos.roughEquals(playerPos) || !mc.world.isBlockLoaded(pos)) {
-                toRemove.add(pos);
+                this.toRemove.add(pos);
             }
         }
-        toRemove.forEach(pos -> {
+        this.toRemove.forEach(pos -> {
             if (pos != null) {
-                prevPosMap.remove(pos);
-                costMap.remove(pos);
-                queue.removePoint(pos);
-                ArrayList<PathPos> list = getNeighbors(pos);
+                this.prevPosMap.remove(pos);
+                this.costMap.remove(pos);
+                this.queue.removePoint(pos);
+                ArrayList<PathPos> list = this.getNeighbors(pos);
                 for (PathPos a : list) {
-                    queue.removePoint(a);
+                    this.queue.removePoint(a);
                 }
             }
         });
-        toRemove.clear();
+        this.toRemove.clear();
 
         // get last position
-        PathPos pos = start = current;
-        if (!failed) {
-            pos = current;
+        PathPos pos = this.start = this.current;
+        if (!this.failed) {
+            pos = this.current;
         } else {
-            pos = start;
-            for (PathPos next : prevPosMap.keySet())
-                if (getHeuristic(next) < getHeuristic(pos)
-                        && (canFlyAt(next) || canBeSolid(next.down())))
+            pos = this.start;
+            for (PathPos next : this.prevPosMap.keySet())
+                if (this.getHeuristic(next) < this.getHeuristic(pos)
+                        && (this.canFlyAt(next) || this.canBeSolid(next.down())))
                     pos = next;
         }
 
         // get positions
         while (pos != null) {
             GoToCommand.INSTANCE.path.add(pos);
-            pos = prevPosMap.get(pos);
+            pos = this.prevPosMap.get(pos);
         }
 
         // reverse path
@@ -448,7 +442,7 @@ public class PathFinder extends Default {
             // queue (yellow)
             GL11.glLineWidth(2);
             GL11.glColor4f(1, 1, 0, 0.75F);
-            for (PathPos element : queue.toArray()) {
+            for (PathPos element : this.queue.toArray()) {
                 if (renderedThings >= 5000) {
                     break;
                 }
@@ -459,7 +453,7 @@ public class PathFinder extends Default {
 
             // processed (red)
             GL11.glLineWidth(2);
-            for (Entry<PathPos, PathPos> entry : prevPosMap.entrySet()) {
+            for (Entry<PathPos, PathPos> entry : this.prevPosMap.entrySet()) {
                 if (renderedThings >= 5000) {
                     break;
                 }

@@ -28,11 +28,11 @@ public class VelocityTranslator implements IConfigTranslator {
     }
 
     public void encode(JsonObject json) {
-        json.addProperty("multiplier", multiplier);
+        json.addProperty("multiplier", this.multiplier);
     }
 
     public void decode(String fieldName, JsonObject json) {
-        multiplier = getFloat(json, "multiplier", multiplier);
+        this.multiplier = this.getFloat(json, "multiplier", this.multiplier);
     }
 
     public String name() {

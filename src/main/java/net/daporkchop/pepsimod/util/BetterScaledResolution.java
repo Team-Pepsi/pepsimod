@@ -22,10 +22,12 @@ import net.minecraft.util.math.MathHelper;
 public class BetterScaledResolution extends Default {
     public static BetterScaledResolution INSTANCE;
 
-    public int scaledWidth, scaledHeight, scaleFactor;
+    public int scaledWidth;
+    public int scaledHeight;
+    public int scaleFactor;
 
     public BetterScaledResolution() {
-        update();
+        this.update();
         INSTANCE = this;
     }
 

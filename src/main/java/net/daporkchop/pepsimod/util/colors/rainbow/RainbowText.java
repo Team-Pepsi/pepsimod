@@ -43,14 +43,14 @@ public class RainbowText extends ColorizedText {
         this.offset = offset;
         String[] split = text.split(PepsiUtils.COLOR_ESCAPE + "custom");
         String[] split2 = split[0].split("");
-        elements = new ColorizedElement[split2.length + (split.length > 1 ? 1 : 0)];
+        this.elements = new ColorizedElement[split2.length + (split.length > 1 ? 1 : 0)];
         for (int i = 0; i < split2.length; i++) {
-            elements[i] = new PlainColorElement(split2[i]);
+            this.elements[i] = new PlainColorElement(split2[i]);
         }
         if (split.length > 1) {
-            elements[elements.length - 1] = new FixedColorElement(Integer.parseInt(split[1].substring(0, Math.min(split[1].length(), 6)), 16), split[1].substring(6));
+            this.elements[this.elements.length - 1] = new FixedColorElement(Integer.parseInt(split[1].substring(0, Math.min(split[1].length(), 6)), 16), split[1].substring(6));
             int i = 0;
-            for (ColorizedElement element : elements) {
+            for (ColorizedElement element : this.elements) {
                 i += element.width;
             }
             this.width = i;
@@ -64,9 +64,8 @@ public class RainbowText extends ColorizedText {
     //int debug = 0;
     public void drawAtPos(Gui screen, int x, int y) {
         int i = 0;
-        RainbowCycle cycle = PepsiUtils.rainbowCycle(offset, PepsiUtils.rainbowCycle.clone());
-        for (int j = 0; j < elements.length; j++) {
-            ColorizedElement element = elements[j];
+        RainbowCycle cycle = PepsiUtils.rainbowCycle(this.offset, PepsiUtils.rainbowCycle.clone());
+        for (ColorizedElement element : this.elements) {
             if (element instanceof FixedColorElement) {
                 screen.drawString(Minecraft.getMinecraft().fontRenderer, element.text, x + i, y, ((FixedColorElement) element).color);
                 return;
@@ -86,10 +85,10 @@ public class RainbowText extends ColorizedText {
     }
 
     public int width() {
-        return width;
+        return this.width;
     }
 
     public String getRawText() {
-        return text;
+        return this.text;
     }
 }

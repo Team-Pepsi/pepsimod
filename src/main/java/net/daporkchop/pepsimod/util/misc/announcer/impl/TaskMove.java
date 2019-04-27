@@ -23,19 +23,20 @@ import net.daporkchop.pepsimod.util.misc.announcer.QueuedTask;
 import net.daporkchop.pepsimod.util.misc.announcer.TaskType;
 
 public class TaskMove extends QueuedTask {
-    public double posX, posZ;
+    public double posX;
+    public double posZ;
 
     public TaskMove(TaskType type) {
         super(type);
-        posX = mc.player.posX;
-        posZ = mc.player.posZ;
+        this.posX = mc.player.posX;
+        this.posZ = mc.player.posZ;
     }
 
     public String getMessage() {
-        if (!AnnouncerMod.INSTANCE.state.enabled || (mc.player.posX == posX && mc.player.posZ == posZ)) {
+        if (!AnnouncerMod.INSTANCE.state.enabled || (mc.player.posX == this.posX && mc.player.posZ == this.posZ)) {
             return null;
         }
 
-        return MessagePrefixes.getMessage(TaskType.WALK, PepsiUtils.roundCoords(Math.abs(mc.player.posX - posX) + Math.abs(mc.player.posZ - posZ)));
+        return MessagePrefixes.getMessage(TaskType.WALK, PepsiUtils.roundCoords(Math.abs(mc.player.posX - this.posX) + Math.abs(mc.player.posZ - this.posZ)));
     }
 }

@@ -36,27 +36,27 @@ public class TracersTranslator implements IConfigTranslator {
     }
 
     public void encode(JsonObject json) {
-        json.addProperty("sleeping", sleeping);
-        json.addProperty("invisible", invisible);
-        json.addProperty("friendColors", friendColors);
-        json.addProperty("animals", animals);
-        json.addProperty("monsters", monsters);
-        json.addProperty("players", players);
-        json.addProperty("items", items);
-        json.addProperty("everything", everything);
-        json.addProperty("distanceColor", distanceColor);
+        json.addProperty("sleeping", this.sleeping);
+        json.addProperty("invisible", this.invisible);
+        json.addProperty("friendColors", this.friendColors);
+        json.addProperty("animals", this.animals);
+        json.addProperty("monsters", this.monsters);
+        json.addProperty("players", this.players);
+        json.addProperty("items", this.items);
+        json.addProperty("everything", this.everything);
+        json.addProperty("distanceColor", this.distanceColor);
     }
 
     public void decode(String fieldName, JsonObject json) {
-        sleeping = getBoolean(json, "sleeping", sleeping);
-        invisible = getBoolean(json, "invisible", invisible);
-        friendColors = getBoolean(json, "friendColors", friendColors);
-        animals = getBoolean(json, "animals", animals);
-        monsters = getBoolean(json, "monsters", monsters);
-        players = getBoolean(json, "players", players);
-        items = getBoolean(json, "items", items);
-        everything = getBoolean(json, "everything", everything);
-        distanceColor = getBoolean(json, "distanceColor", distanceColor);
+        this.sleeping = this.getBoolean(json, "sleeping", this.sleeping);
+        this.invisible = this.getBoolean(json, "invisible", this.invisible);
+        this.friendColors = this.getBoolean(json, "friendColors", this.friendColors);
+        this.animals = this.getBoolean(json, "animals", this.animals);
+        this.monsters = this.getBoolean(json, "monsters", this.monsters);
+        this.players = this.getBoolean(json, "players", this.players);
+        this.items = this.getBoolean(json, "items", this.items);
+        this.everything = this.getBoolean(json, "everything", this.everything);
+        this.distanceColor = this.getBoolean(json, "distanceColor", this.distanceColor);
     }
 
     public String name() {

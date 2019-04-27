@@ -52,7 +52,7 @@ public abstract class MixinTimer {
         long i = Minecraft.getSystemTime();
         this.elapsedPartialTicks = (float) (i - this.lastSyncSysClock) / this.tickLength * timerSpeed;
         this.lastSyncSysClock = i;
-        this.renderPartialTicks += elapsedPartialTicks;
+        this.renderPartialTicks += this.elapsedPartialTicks;
         this.elapsedTicks = (int) this.renderPartialTicks;
         this.renderPartialTicks -= this.elapsedTicks;
     }

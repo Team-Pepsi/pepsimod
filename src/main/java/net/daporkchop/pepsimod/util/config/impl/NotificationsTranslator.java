@@ -31,17 +31,17 @@ public class NotificationsTranslator implements IConfigTranslator {
     }
 
     public void encode(JsonObject json) {
-        json.addProperty("queue", queue);
-        json.addProperty("death", death);
-        json.addProperty("chat", chat);
-        json.addProperty("player", player);
+        json.addProperty("queue", this.queue);
+        json.addProperty("death", this.death);
+        json.addProperty("chat", this.chat);
+        json.addProperty("player", this.player);
     }
 
     public void decode(String fieldName, JsonObject json) {
-        queue = getBoolean(json, "queue", queue);
-        death = getBoolean(json, "death", death);
-        chat = getBoolean(json, "chat", chat);
-        player = getBoolean(json, "player", player);
+        this.queue = this.getBoolean(json, "queue", this.queue);
+        this.death = this.getBoolean(json, "death", this.death);
+        this.chat = this.getBoolean(json, "chat", this.chat);
+        this.player = this.getBoolean(json, "player", this.player);
     }
 
     public String name() {

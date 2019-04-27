@@ -32,19 +32,19 @@ public class ElytraFlyTranslator implements IConfigTranslator {
     }
 
     public void encode(JsonObject json) {
-        json.addProperty("easyStart", easyStart);
-        json.addProperty("stopInWater", stopInWater);
-        json.addProperty("fly", fly);
-        json.addProperty("speed", speed);
-        json.addProperty("mode", mode.ordinal());
+        json.addProperty("easyStart", this.easyStart);
+        json.addProperty("stopInWater", this.stopInWater);
+        json.addProperty("fly", this.fly);
+        json.addProperty("speed", this.speed);
+        json.addProperty("mode", this.mode.ordinal());
     }
 
     public void decode(String fieldName, JsonObject json) {
-        easyStart = getBoolean(json, "easyStart", easyStart);
-        stopInWater = getBoolean(json, "stopInWater", stopInWater);
-        fly = getBoolean(json, "fly", fly);
-        speed = getFloat(json, "speed", speed);
-        mode = ElytraFlyMode.getMode(getInt(json, "mode", mode.ordinal()));
+        this.easyStart = this.getBoolean(json, "easyStart", this.easyStart);
+        this.stopInWater = this.getBoolean(json, "stopInWater", this.stopInWater);
+        this.fly = this.getBoolean(json, "fly", this.fly);
+        this.speed = this.getFloat(json, "speed", this.speed);
+        this.mode = ElytraFlyMode.getMode(this.getInt(json, "mode", this.mode.ordinal()));
     }
 
     public String name() {

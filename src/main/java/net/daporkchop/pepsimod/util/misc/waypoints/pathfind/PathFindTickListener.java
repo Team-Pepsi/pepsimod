@@ -55,7 +55,7 @@ public class PathFindTickListener implements ITickListener, IWurstRenderListener
         if (GoToCommand.INSTANCE.hasReachedFinalGoal()) {
             PepsiUtils.toRemoveTickListeners.add(this);
             PepsiUtils.toRemoveWurstRenderListeners.add(this);
-            disable();
+            this.disable();
         }
     }
 

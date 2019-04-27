@@ -52,36 +52,36 @@ public abstract class MixinMovementInputFromOptions extends MovementInput {
         this.moveStrafe = 0.0F;
         this.moveForward = 0.0F;
 
-        if (pepsimod_isPressed(this.gameSettings.keyBindForward)) {
+        if (this.pepsimod_isPressed(this.gameSettings.keyBindForward)) {
             ++this.moveForward;
             this.forwardKeyDown = true;
         } else {
             this.forwardKeyDown = false;
         }
 
-        if (pepsimod_isPressed(this.gameSettings.keyBindBack)) {
+        if (this.pepsimod_isPressed(this.gameSettings.keyBindBack)) {
             --this.moveForward;
             this.backKeyDown = true;
         } else {
             this.backKeyDown = false;
         }
 
-        if (pepsimod_isPressed(this.gameSettings.keyBindLeft)) {
+        if (this.pepsimod_isPressed(this.gameSettings.keyBindLeft)) {
             ++this.moveStrafe;
             this.leftKeyDown = true;
         } else {
             this.leftKeyDown = false;
         }
 
-        if (pepsimod_isPressed(this.gameSettings.keyBindRight)) {
+        if (this.pepsimod_isPressed(this.gameSettings.keyBindRight)) {
             --this.moveStrafe;
             this.rightKeyDown = true;
         } else {
             this.rightKeyDown = false;
         }
 
-        this.jump = pepsimod_isPressed(this.gameSettings.keyBindJump);
-        this.sneak = pepsimod_isPressed(this.gameSettings.keyBindSneak);
+        this.jump = this.pepsimod_isPressed(this.gameSettings.keyBindJump);
+        this.sneak = this.pepsimod_isPressed(this.gameSettings.keyBindSneak);
 
         if (this.sneak) {
             this.moveStrafe = (float) ((double) this.moveStrafe * 0.3D);

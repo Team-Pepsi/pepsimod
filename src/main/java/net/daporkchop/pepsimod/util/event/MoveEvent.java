@@ -17,5 +17,7 @@
 package net.daporkchop.pepsimod.util.event;
 
 public class MoveEvent {
-    public double x = 0, y = 0, z = 0;
+    public double x = 0;
+    public double y = 0;
+    public double z = 0;
 }

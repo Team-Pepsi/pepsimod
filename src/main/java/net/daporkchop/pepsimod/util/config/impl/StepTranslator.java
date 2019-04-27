@@ -29,13 +29,13 @@ public class StepTranslator implements IConfigTranslator {
     }
 
     public void encode(JsonObject json) {
-        json.addProperty("legit", legit);
-        json.addProperty("height", height);
+        json.addProperty("legit", this.legit);
+        json.addProperty("height", this.height);
     }
 
     public void decode(String fieldName, JsonObject json) {
-        legit = getBoolean(json, "legit", legit);
-        height = getInt(json, "height", height);
+        this.legit = this.getBoolean(json, "legit", this.legit);
+        this.height = this.getInt(json, "height", this.height);
     }
 
     public String name() {

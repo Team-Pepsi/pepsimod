@@ -22,46 +22,44 @@ import java.util.PriorityQueue;
 
 public class PathQueue {
     private final PriorityQueue<PathQueue.Entry> queue =
-            new PriorityQueue<>((e1, e2) -> {
-                return Float.compare(e1.priority, e2.priority);
-            });
+            new PriorityQueue<>((e1, e2) -> Float.compare(e1.priority, e2.priority));
     public ArrayList<PathPos> cancelledPositions = new ArrayList<>();
 
     public boolean isEmpty() {
-        return queue.isEmpty();
+        return this.queue.isEmpty();
     }
 
     public boolean add(PathPos pos, float priority) {
-        return queue.add(new Entry(pos, priority));
+        return this.queue.add(new Entry(pos, priority));
     }
 
     public PathPos[] toArray() {
-        PathPos[] array = new PathPos[size()];
-        Iterator itr = queue.iterator();
+        PathPos[] array = new PathPos[this.size()];
+        Iterator itr = this.queue.iterator();
 
-        for (int i = 0; i < size() && itr.hasNext(); i++)
+        for (int i = 0; i < this.size() && itr.hasNext(); i++)
             array[i] = ((Entry) itr.next()).pos;
 
         return array;
     }
 
     public int size() {
-        return queue.size();
+        return this.queue.size();
     }
 
     public PathPos poll() {
-        if (cancelledPositions.size() > 0) {
-            return cancelledPositions.remove(0);
+        if (!this.cancelledPositions.isEmpty()) {
+            return this.cancelledPositions.remove(0);
         }
-        return queue.poll().pos;
+        return this.queue.poll().pos;
     }
 
     public PathPos get(int index) {
-        if (index >= queue.size()) {
+        if (index >= this.queue.size()) {
             throw new ArrayIndexOutOfBoundsException(String.valueOf(index));
         }
 
-        Iterator<Entry> itr = queue.iterator();
+        Iterator<Entry> itr = this.queue.iterator();
         index--;
         for (int i = 0; i < index && itr.hasNext(); i++) {
         }
@@ -69,7 +67,7 @@ public class PathQueue {
     }
 
     public void removePoint(PathPos pos) {
-        Iterator<Entry> itr = queue.iterator();
+        Iterator<Entry> itr = this.queue.iterator();
         while (itr.hasNext()) {
             if (pos.equals(itr.next())) {
                 itr.remove();

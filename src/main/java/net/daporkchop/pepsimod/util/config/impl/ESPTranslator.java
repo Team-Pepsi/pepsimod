@@ -38,33 +38,33 @@ public class ESPTranslator implements IConfigTranslator {
     }
 
     public void encode(JsonObject json) {
-        json.addProperty("basic", basic);
-        json.addProperty("trapped", trapped);
-        json.addProperty("ender", ender);
-        json.addProperty("hopper", hopper);
-        json.addProperty("furnace", furnace);
+        json.addProperty("basic", this.basic);
+        json.addProperty("trapped", this.trapped);
+        json.addProperty("ender", this.ender);
+        json.addProperty("hopper", this.hopper);
+        json.addProperty("furnace", this.furnace);
 
-        json.addProperty("monsters", monsters);
-        json.addProperty("animals", animals);
-        json.addProperty("players", players);
-        json.addProperty("golems", golems);
-        json.addProperty("invisible", invisible);
-        json.addProperty("friendColors", friendColors);
+        json.addProperty("monsters", this.monsters);
+        json.addProperty("animals", this.animals);
+        json.addProperty("players", this.players);
+        json.addProperty("golems", this.golems);
+        json.addProperty("invisible", this.invisible);
+        json.addProperty("friendColors", this.friendColors);
     }
 
     public void decode(String fieldName, JsonObject json) {
-        basic = getBoolean(json, "basic", basic);
-        trapped = getBoolean(json, "trapped", trapped);
-        ender = getBoolean(json, "ender", ender);
-        hopper = getBoolean(json, "hopper", hopper);
-        furnace = getBoolean(json, "furnace", furnace);
+        this.basic = this.getBoolean(json, "basic", this.basic);
+        this.trapped = this.getBoolean(json, "trapped", this.trapped);
+        this.ender = this.getBoolean(json, "ender", this.ender);
+        this.hopper = this.getBoolean(json, "hopper", this.hopper);
+        this.furnace = this.getBoolean(json, "furnace", this.furnace);
 
-        monsters = getBoolean(json, "monsters", monsters);
-        animals = getBoolean(json, "animals", animals);
-        players = getBoolean(json, "players", players);
-        golems = getBoolean(json, "golems", golems);
-        invisible = getBoolean(json, "invisible", invisible);
-        friendColors = getBoolean(json, "friendColors", friendColors);
+        this.monsters = this.getBoolean(json, "monsters", this.monsters);
+        this.animals = this.getBoolean(json, "animals", this.animals);
+        this.players = this.getBoolean(json, "players", this.players);
+        this.golems = this.getBoolean(json, "golems", this.golems);
+        this.invisible = this.getBoolean(json, "invisible", this.invisible);
+        this.friendColors = this.getBoolean(json, "friendColors", this.friendColors);
     }
 
     public String name() {

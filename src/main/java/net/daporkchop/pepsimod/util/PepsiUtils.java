@@ -76,10 +76,10 @@ import java.util.TimerTask;
 
 public class PepsiUtils extends Default {
     public static final char COLOR_ESCAPE = '\u00A7';
-    public static final String[] colorCodes = new String[]{"c", "9", "f", "1", "4"};
+    public static final String[] colorCodes = {"c", "9", "f", "1", "4"};
     public static final Timer timer = new Timer();
     public static final ServerData TOOBEETOOTEE_DATA = new ServerData("toobeetootee", "2b2t.org", false);
-    public static final String[] PEPSI_MEMBERS = new String[]{
+    public static final String[] PEPSI_MEMBERS = {
             "8f8cef60-1f3a-4778-849d-5dab58c46639",
             "a4f77739-d15e-4dc2-b957-219a2f6f9244",
             "2f8731ca-c2a7-454e-85b6-6d072ed199c1",
@@ -114,7 +114,7 @@ public class PepsiUtils extends Default {
             "4495eebb-7a4e-43aa-9784-02ea86f705ed",
             "1e8c7d13-9118-41e2-b334-fdb213970135"
     };
-    public static final KeyBinding[] controls = new KeyBinding[]{
+    public static final KeyBinding[] controls = {
             mc.gameSettings.keyBindForward, mc.gameSettings.keyBindBack,
             mc.gameSettings.keyBindRight, mc.gameSettings.keyBindLeft,
             mc.gameSettings.keyBindJump, mc.gameSettings.keyBindSneak};
@@ -128,7 +128,8 @@ public class PepsiUtils extends Default {
     public static ArrayList<ITickListener> toRemoveTickListeners = new ArrayList<>();
     public static ArrayList<IWurstRenderListener> wurstRenderListeners = new ArrayList<>();
     public static ArrayList<IWurstRenderListener> toRemoveWurstRenderListeners = new ArrayList<>();
-    public static GuiButton reconnectButton, autoReconnectButton;
+    public static GuiButton reconnectButton;
+    public static GuiButton autoReconnectButton;
     public static int autoReconnectWaitTime = 5;
     public static String lastIp;
     public static int lastPort;
@@ -149,7 +150,7 @@ public class PepsiUtils extends Default {
                 if (mc.currentScreen != null && mc.currentScreen instanceof GuiDisconnected && autoReconnectButton != null && GeneralTranslator.INSTANCE.autoReconnect) {
                     autoReconnectButton.displayString = "AutoReconnect (\u00A7a" + --autoReconnectWaitTime + "\u00A7r)";
                     if (autoReconnectWaitTime == 0) {
-                        ServerData data = new ServerData("", lastIp + ":" + lastPort, false);
+                        ServerData data = new ServerData("", lastIp + ':' + lastPort, false);
                         data.setResourceMode(ServerData.ServerResourceMode.PROMPT);
                         FMLClientHandler.instance().connectToServer(mc.currentScreen, data);
                         autoReconnectWaitTime = 5;
@@ -240,7 +241,8 @@ public class PepsiUtils extends Default {
     public static ColorizedText getGradientFromStringThroughColor(String text, Color color1, Color color2, Color through) {
         int charCount = text.length();
         String[] letters = text.split("");
-        int colorCountPart1 = Math.floorDiv(charCount, 2), colorCountPart2 = ceilDiv(charCount, 2);
+        int colorCountPart1 = Math.floorDiv(charCount, 2);
+        int colorCountPart2 = ceilDiv(charCount, 2);
         Color[] colorsPart1 = new Color[colorCountPart1];
         Color[] colorsPart2 = new Color[colorCountPart2];
         int rDiffStep = (color1.getRed() - through.getRed()) / colorCountPart1;
@@ -461,7 +463,7 @@ public class PepsiUtils extends Default {
     }
 
     public static int toRGBA(int r, int g, int b, int a) {
-        return (r << 16) + (g << 8) + (b << 0) + (a << 24);
+        return (r << 16) + (g << 8) + (b) + (a << 24);
     }
 
     public static Vec3d getInterpolatedPos(Entity entity, float ticks) {
@@ -776,11 +778,7 @@ public class PepsiUtils extends Default {
     }
 
     public static double getDimensionCoord(double coord) {
-        if (mc.player.dimension == 0) {
-            return coord / 8;
-        } else {
-            return coord * 8;
-        }
+        return mc.player.dimension == 0 ? coord / 8 : coord * 8;
     }
 
     public static int getArmorType(ItemArmor armor) {

@@ -30,7 +30,7 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.HashSet;
 
-public final class BlockUtils {
+public class BlockUtils {
     private static final Minecraft mc = Minecraft.getMinecraft();
 
     public static boolean placeBlockLegit(BlockPos pos) {
@@ -392,8 +392,8 @@ public final class BlockUtils {
             @Override
             protected BlockPos computeNext() {
                 // find block using breadth first search
-                while (!queue.isEmpty()) {
-                    BlockPos current = queue.pop();
+                while (!this.queue.isEmpty()) {
+                    BlockPos current = this.queue.pop();
 
                     // check range
                     if (eyesPos.squareDistanceTo(new Vec3d(current)) > rangeSq)
@@ -406,11 +406,11 @@ public final class BlockUtils {
                         for (EnumFacing facing : EnumFacing.values()) {
                             BlockPos next = current.offset(facing);
 
-                            if (visited.contains(next))
+                            if (this.visited.contains(next))
                                 continue;
 
-                            queue.add(next);
-                            visited.add(next);
+                            this.queue.add(next);
+                            this.visited.add(next);
                         }
 
                     // check if block is valid
@@ -418,7 +418,7 @@ public final class BlockUtils {
                         return current;
                 }
 
-                return endOfData();
+                return this.endOfData();
             }
         };
     }
@@ -428,7 +428,7 @@ public final class BlockUtils {
         ArrayDeque<BlockPos> validBlocks = new ArrayDeque<>();
 
         BlockUtils.getValidBlocksByDistance(range, ignoreVisibility, validator)
-                .forEach((p) -> validBlocks.push(p));
+                .forEach(validBlocks::push);
 
         return validBlocks;
     }
@@ -461,14 +461,14 @@ public final class BlockUtils {
             private BlockPos last;
 
             private BlockPos computeNextUnchecked() {
-                if (last == null) {
-                    last = min;
-                    return last;
+                if (this.last == null) {
+                    this.last = min;
+                    return this.last;
                 }
 
-                int x = last.getX();
-                int y = last.getY();
-                int z = last.getZ();
+                int x = this.last.getX();
+                int y = this.last.getY();
+                int z = this.last.getZ();
 
                 if (z < max.getZ())
                     z++;
@@ -482,14 +482,14 @@ public final class BlockUtils {
                 } else
                     return null;
 
-                last = new BlockPos(x, y, z);
-                return last;
+                this.last = new BlockPos(x, y, z);
+                return this.last;
             }
 
             @Override
             protected BlockPos computeNext() {
                 BlockPos pos;
-                while ((pos = computeNextUnchecked()) != null) {
+                while ((pos = this.computeNextUnchecked()) != null) {
                     // skip air blocks
                     if (WBlock.getMaterial(pos) == Material.AIR)
                         continue;
@@ -501,7 +501,7 @@ public final class BlockUtils {
                     return pos;
                 }
 
-                return endOfData();
+                return this.endOfData();
             }
         };
     }

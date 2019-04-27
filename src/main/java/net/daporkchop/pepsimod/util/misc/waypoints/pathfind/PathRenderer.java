@@ -27,7 +27,7 @@ import static org.lwjgl.opengl.GL11.glScaled;
 import static org.lwjgl.opengl.GL11.glTranslated;
 import static org.lwjgl.opengl.GL11.glVertex3d;
 
-public final class PathRenderer {
+public class PathRenderer {
     public static void renderArrow(BlockPos start, BlockPos end) {
         int startX = start.getX();
         int startY = start.getY();

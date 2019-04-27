@@ -40,16 +40,13 @@ public class WalkPathProcessor extends PathProcessor {
     public void process() {
         // get positions
         BlockPos pos;
-        if (WMinecraft.getPlayer().onGround)
-            pos = new BlockPos(WMinecraft.getPlayer().posX,
-                    WMinecraft.getPlayer().posY + 0.5, WMinecraft.getPlayer().posZ);
-        else
-            pos = new BlockPos(WMinecraft.getPlayer());
-        index = 1;
+        pos = WMinecraft.getPlayer().onGround ? new BlockPos(WMinecraft.getPlayer().posX,
+                WMinecraft.getPlayer().posY + 0.5, WMinecraft.getPlayer().posZ) : new BlockPos(WMinecraft.getPlayer());
+        this.index = 1;
         PathPos nextPos = null;
         boolean forceNext = false;
         try {
-            nextPos = path.get(index);
+            nextPos = this.path.get(this.index);
         } catch (IndexOutOfBoundsException e) {
             forceNext = true;
         }
@@ -58,15 +55,15 @@ public class WalkPathProcessor extends PathProcessor {
         if (forceNext || pos.equals(nextPos)) {
             GoToCommand.INSTANCE.pathFinder.toRemove.add(nextPos);
             return;
-        } else if (WMinecraft.getPlayer().getDistanceSq(nextPos) >= 16 || (!GoToCommand.INSTANCE.pathFinder.goesToGoal && path.size() <= 15)) {
+        } else if (WMinecraft.getPlayer().getDistanceSq(nextPos) >= 16 || (!GoToCommand.INSTANCE.pathFinder.goesToGoal && this.path.size() <= 15)) {
             GoToCommand.INSTANCE.pathFinder = new PathFinder(GoToCommand.INSTANCE.pathFinder.goal);
             return;
         }
 
-        lockControls();
+        this.lockControls();
 
         // face next position
-        facePosition(nextPos);
+        this.facePosition(nextPos);
 
         if (Math.abs(RotationUtils.getHorizontalAngleToClientRotation(new Vec3d(nextPos).addVector(0.5, 0.5, 0.5))) > 90) {
             return;
@@ -79,7 +76,7 @@ public class WalkPathProcessor extends PathProcessor {
         if (pos.getX() != nextPos.getX() || pos.getZ() != nextPos.getZ()) {
             ReflectionStuff.setPressed(mc.gameSettings.keyBindForward, true);
 
-            if (index > 0 && path.get(index - 1).jumping || pos.getY() < nextPos.getY()) {
+            if (this.index > 0 && this.path.get(this.index - 1).jumping || pos.getY() < nextPos.getY()) {
                 if (!(StepMod.INSTANCE.state.enabled && (StepTranslator.INSTANCE.legit || StepTranslator.INSTANCE.height == 1))) {
                     ReflectionStuff.setPressed(mc.gameSettings.keyBindJump, true);
                 }
@@ -95,7 +92,7 @@ public class WalkPathProcessor extends PathProcessor {
                     ReflectionStuff.setPressed(mc.gameSettings.keyBindForward, true);
                 } else {
                     // directional jump
-                    if (index < path.size() - 1 && !nextPos.up().equals(path.get(index + 1))) {
+                    if (this.index < this.path.size() - 1 && !nextPos.up().equals(this.path.get(this.index + 1))) {
                         GoToCommand.INSTANCE.pathFinder.toRemove.add(nextPos);
                     }
 
@@ -107,12 +104,12 @@ public class WalkPathProcessor extends PathProcessor {
                 // go down
             } else {
                 // skip mid-air nodes and go straight to the bottom
-                int i = index;
-                while (i < path.size() - 1 && path.get(i).down().equals(path.get(i + 1))) {
+                int i = this.index;
+                while (i < this.path.size() - 1 && this.path.get(i).down().equals(this.path.get(i + 1))) {
                     i++;
                 }
                 GoToCommand.INSTANCE.pathFinder = new PathFinder(GoToCommand.INSTANCE.pathFinder.goal);
-                GoToCommand.INSTANCE.pathFinder.toRemove.add(path.get(i));
+                GoToCommand.INSTANCE.pathFinder.toRemove.add(this.path.get(i));
 
                 // walk off the edge
                 if (WMinecraft.getPlayer().onGround) {

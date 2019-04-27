@@ -16,11 +16,13 @@
 
 package net.daporkchop.pepsimod.util.misc.announcer;
 
+import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class MessagePrefixes {
-    private static HashMap<TaskType, MessageMaker> messageMakers = new HashMap<>();
+    private static Map<TaskType, MessageMaker> messageMakers = new EnumMap<>(TaskType.class);
 
     static {
         messageMakers.put(TaskType.JOIN, new MessageMaker(new String[]{
@@ -63,7 +65,7 @@ public class MessagePrefixes {
         }
 
         public String getMessage(String... values) {
-            String toReturn = messages[new Random().nextInt(messages.length)];
+            String toReturn = this.messages[new Random().nextInt(this.messages.length)];
 
             for (int i = 0; i < values.length; i++) {
                 toReturn = toReturn.replace("%s" + i, values[i]);

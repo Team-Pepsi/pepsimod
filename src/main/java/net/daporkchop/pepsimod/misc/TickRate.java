@@ -50,9 +50,7 @@ public class TickRate {
         if (tps > 20.0f) {
             tps = 20.0f;
         }
-        for (int i = tpsCounts.length - 1; i > 0; i--) {
-            tpsCounts[i] = tpsCounts[i - 1]; //move everything over 1
-        }
+        System.arraycopy(tpsCounts, 0, tpsCounts, 1, tpsCounts.length - 1);
         tpsCounts[0] = tps;
 
         double total = 0.0;

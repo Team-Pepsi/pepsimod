@@ -31,6 +31,6 @@ public class TaskBlock extends QueuedTask {
     }
 
     public String getMessage() {
-        return MessagePrefixes.getMessage(type, block.getLocalizedName(), String.valueOf(count));
+        return MessagePrefixes.getMessage(this.type, this.block.getLocalizedName(), String.valueOf(this.count));
     }
 }

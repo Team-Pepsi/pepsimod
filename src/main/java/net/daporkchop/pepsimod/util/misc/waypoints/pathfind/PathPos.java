@@ -41,15 +41,15 @@ public class PathPos extends BlockPos {
         }
 
         PathPos node = (PathPos) obj;
-        return getX() == node.getX() && getY() == node.getY() && getZ() == node.getZ() && jumping == node.jumping;
+        return this.getX() == node.getX() && this.getY() == node.getY() && this.getZ() == node.getZ() && this.jumping == node.jumping;
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode() * 2 + (jumping ? 1 : 0);
+        return super.hashCode() * 2 + (this.jumping ? 1 : 0);
     }
 
     public boolean roughEquals(BlockPos otherPos) {
-        return getX() == otherPos.getX() && getY() == otherPos.getY() && getZ() == otherPos.getZ();
+        return this.getX() == otherPos.getX() && this.getY() == otherPos.getY() && this.getZ() == otherPos.getZ();
     }
 }

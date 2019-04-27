@@ -28,11 +28,11 @@ public class CriticalsTranslator implements IConfigTranslator {
     }
 
     public void encode(JsonObject json) {
-        json.addProperty("packet", packet);
+        json.addProperty("packet", this.packet);
     }
 
     public void decode(String fieldName, JsonObject json) {
-        packet = getBoolean(json, "packet", packet);
+        this.packet = this.getBoolean(json, "packet", this.packet);
     }
 
     public String name() {

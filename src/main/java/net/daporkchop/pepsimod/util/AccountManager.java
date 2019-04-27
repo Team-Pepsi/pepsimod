@@ -35,7 +35,7 @@ public class AccountManager extends Default {
     public AccountManager() {
         UUID uuid = UUID.randomUUID();
         AuthenticationService authService = new YggdrasilAuthenticationService(Minecraft.getMinecraft().getProxy(), uuid.toString());
-        auth = authService.createUserAuthentication(Agent.MINECRAFT);
+        this.auth = authService.createUserAuthentication(Agent.MINECRAFT);
         authService.createMinecraftSessionService();
     }
 
@@ -81,7 +81,7 @@ public class AccountManager extends Default {
      * @return
      */
     public void setUser(String username, String password) {
-        if (Minecraft.getMinecraft().getSession().getUsername() != username || Minecraft.getMinecraft().getSession().getToken().equals("0")) {
+        if (Minecraft.getMinecraft().getSession().getUsername() != username || "0".equals(Minecraft.getMinecraft().getSession().getToken())) {
             /*for (Config.AccountEntry data : PepsiMod.pepsimodInstance.getConfig().getAccounts()) {
                 if (data.getUsername().equals(Minecraft.getMinecraft().getSession().getUsername()) && data.getUsername().equals(username)) {
                     return;
@@ -92,8 +92,8 @@ public class AccountManager extends Default {
             this.auth.setPassword(password);
             try {
                 this.auth.logIn();
-                Session session = new Session(this.auth.getSelectedProfile().getName(), UUIDTypeAdapter.fromUUID(auth.getSelectedProfile().getId()), this.auth.getAuthenticatedToken(), this.auth.getUserType().getName());
-                setSession(session);
+                Session session = new Session(this.auth.getSelectedProfile().getName(), UUIDTypeAdapter.fromUUID(this.auth.getSelectedProfile().getId()), this.auth.getAuthenticatedToken(), this.auth.getUserType().getName());
+                this.setSession(session);
                 /*for (int i = 0; i < PepsiMod.pepsimodInstance.getConfig().getAccounts().size(); i++) {
                     Config.AccountEntry data = PepsiMod.pepsimodInstance.getConfig().getAccounts().get(i);
                     if (data.getUsername().equals(username) && data.getPassword().equals(password)) {

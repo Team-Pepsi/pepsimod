@@ -46,22 +46,22 @@ public class HUDTranslator implements IConfigTranslator {
     }
 
     public void encode(JsonObject json) {
-        json.addProperty("drawLogo", drawLogo);
-        json.addProperty("arrayList", arrayList);
-        json.addProperty("tps", TPS);
-        json.addProperty("coords", coords);
-        json.addProperty("netherCoords", netherCoords);
-        json.addProperty("arrayListTop", arrayListTop);
-        json.addProperty("serverBrand", serverBrand);
-        json.addProperty("rainbow", rainbow);
-        json.addProperty("r", r);
-        json.addProperty("g", g);
-        json.addProperty("b", b);
-        json.addProperty("direction", direction);
-        json.addProperty("armor", armor);
-        json.addProperty("effects", effects);
-        json.addProperty("fps", fps);
-        json.addProperty("ping", ping);
+        json.addProperty("drawLogo", this.drawLogo);
+        json.addProperty("arrayList", this.arrayList);
+        json.addProperty("tps", this.TPS);
+        json.addProperty("coords", this.coords);
+        json.addProperty("netherCoords", this.netherCoords);
+        json.addProperty("arrayListTop", this.arrayListTop);
+        json.addProperty("serverBrand", this.serverBrand);
+        json.addProperty("rainbow", this.rainbow);
+        json.addProperty("r", this.r);
+        json.addProperty("g", this.g);
+        json.addProperty("b", this.b);
+        json.addProperty("direction", this.direction);
+        json.addProperty("armor", this.armor);
+        json.addProperty("effects", this.effects);
+        json.addProperty("fps", this.fps);
+        json.addProperty("ping", this.ping);
     }
 
     public void decode(String fieldName, JsonObject json) {
@@ -69,22 +69,22 @@ public class HUDTranslator implements IConfigTranslator {
     }
 
     public void parseConfigLate() {
-        drawLogo = getBoolean(json, "drawLogo", drawLogo);
-        arrayList = getBoolean(json, "arrayList", arrayList);
-        TPS = getBoolean(json, "tps", TPS);
-        coords = getBoolean(json, "coords", coords);
-        netherCoords = getBoolean(json, "netherCoords", netherCoords);
-        arrayListTop = getBoolean(json, "arrayListTop", arrayListTop);
-        serverBrand = getBoolean(json, "serverBrand", serverBrand);
-        rainbow = getBoolean(json, "rainbow", rainbow);
-        r = getInt(json, "r", r);
-        g = getInt(json, "g", g);
-        b = getInt(json, "b", b);
-        direction = getBoolean(json, "direction", direction);
-        armor = getBoolean(json, "armor", armor);
-        effects = getBoolean(json, "effects", effects);
-        fps = getBoolean(json, "fps", fps);
-        ping = getBoolean(json, "ping", ping);
+        this.drawLogo = this.getBoolean(this.json, "drawLogo", this.drawLogo);
+        this.arrayList = this.getBoolean(this.json, "arrayList", this.arrayList);
+        this.TPS = this.getBoolean(this.json, "tps", this.TPS);
+        this.coords = this.getBoolean(this.json, "coords", this.coords);
+        this.netherCoords = this.getBoolean(this.json, "netherCoords", this.netherCoords);
+        this.arrayListTop = this.getBoolean(this.json, "arrayListTop", this.arrayListTop);
+        this.serverBrand = this.getBoolean(this.json, "serverBrand", this.serverBrand);
+        this.rainbow = this.getBoolean(this.json, "rainbow", this.rainbow);
+        this.r = this.getInt(this.json, "r", this.r);
+        this.g = this.getInt(this.json, "g", this.g);
+        this.b = this.getInt(this.json, "b", this.b);
+        this.direction = this.getBoolean(this.json, "direction", this.direction);
+        this.armor = this.getBoolean(this.json, "armor", this.armor);
+        this.effects = this.getBoolean(this.json, "effects", this.effects);
+        this.fps = this.getBoolean(this.json, "fps", this.fps);
+        this.ping = this.getBoolean(this.json, "ping", this.ping);
     }
 
     public String name() {
@@ -99,6 +99,6 @@ public class HUDTranslator implements IConfigTranslator {
     }
 
     public int getColor() {
-        return (255 & 255) << 24 | (r & 255) << 16 | (g & 255) << 8 | (b & 255) << 0;
+        return (255) << 24 | (this.r & 255) << 16 | (this.g & 255) << 8 | (this.b & 255);
     }
 }
