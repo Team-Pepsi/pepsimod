@@ -24,6 +24,8 @@ import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 import net.daporkchop.pepsimod.util.EntityFakePlayer;
 import net.daporkchop.pepsimod.util.config.impl.FreecamTranslator;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.client.CPacketPlayer;
 
 public class FreecamMod extends Module {
     public static FreecamMod INSTANCE;
@@ -47,21 +49,46 @@ public class FreecamMod extends Module {
 
     @Override
     public void onDisable() {
-        INSTANCE = this;//adding this a bunch because it always seems to be null idk y
+        INSTANCE = this; //adding this a bunch because it always seems to be null idk y
         if (pepsimod.hasInitializedModules) {
             this.fakePlayer.resetPlayerPosition();
             this.fakePlayer.despawn();
-
-            //PepsiMod.pepsimodInstance.mc.renderGlobal.loadRenderers();
         }
     }
 
     @Override
     public void tick() {
-        mc.player.motionX = 0;
-        mc.player.motionZ = 0;
+        float speed = FreecamTranslator.INSTANCE.speed;
+        mc.player.motionX = 0.0d;
+        mc.player.motionY = 0.0d;
+        mc.player.motionZ = 0.0d;
 
-        mc.player.jumpMovementFactor = FreecamTranslator.INSTANCE.speed / 10;
+        if (mc.gameSettings.keyBindJump.isKeyDown())    {
+            mc.player.motionY += speed;
+        }
+        if (mc.gameSettings.keyBindSneak.isKeyDown())    {
+            mc.player.motionY -= speed;
+        }
+
+        float forward = 0.0f;
+        if (mc.gameSettings.keyBindForward.isKeyDown())    {
+            forward += speed;
+        }
+        if (mc.gameSettings.keyBindBack.isKeyDown())    {
+            forward -= speed;
+        }
+
+        float strafe = 0.0f;
+        if (mc.gameSettings.keyBindLeft.isKeyDown())    {
+            strafe += speed;
+        }
+        if (mc.gameSettings.keyBindRight.isKeyDown())    {
+            strafe -= speed;
+        }
+
+        float yaw = mc.player.rotationYaw;
+        mc.player.motionX = (forward * Math.cos(Math.toRadians(yaw + 90.0F)) + strafe * Math.sin(Math.toRadians(yaw + 90.0F)));
+        mc.player.motionZ = (forward * Math.sin(Math.toRadians(yaw + 90.0F)) - strafe * Math.cos(Math.toRadians(yaw + 90.0F)));
     }
 
     @Override
@@ -85,6 +112,11 @@ public class FreecamMod extends Module {
                             return FreecamTranslator.INSTANCE.speed;
                         }, "Speed", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.0f, 1.0f, 0.1f))
         };
+    }
+
+    @Override
+    public boolean preSendPacket(Packet<?> packetIn) {
+        return packetIn instanceof CPacketPlayer;
     }
 
     @Override

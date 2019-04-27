@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -64,15 +64,6 @@ public abstract class MixinEntityLivingBase extends Entity {
         EntityLivingBase thisAsEntity = EntityLivingBase.class.cast(this);
         if (thisAsEntity == mc.player && ElytraFlyMod.INSTANCE.state.enabled && ElytraFlyTranslator.INSTANCE.mode == ElytraFlyTranslator.ElytraFlyMode.PACKET) {
             this.motionY = 0;
-        }
-        if (FreecamMod.INSTANCE.state.enabled) {
-            if (mc.gameSettings.keyBindJump.isKeyDown()) {
-                mc.player.motionY = FreecamTranslator.INSTANCE.speed;
-            } else if (mc.gameSettings.keyBindSneak.isKeyDown()) {
-                mc.player.motionY = -FreecamTranslator.INSTANCE.speed;
-            } else {
-                mc.player.motionY = 0;
-            }
         }
     }
 

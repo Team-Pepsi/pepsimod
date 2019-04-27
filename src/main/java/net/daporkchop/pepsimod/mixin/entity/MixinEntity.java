@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -24,6 +24,7 @@ import net.daporkchop.pepsimod.module.impl.render.ESPMod;
 import net.daporkchop.pepsimod.util.config.impl.ESPTranslator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -35,6 +36,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.ArrayList;
 
 import static net.daporkchop.pepsimod.util.PepsiConstants.mc;
 
@@ -61,16 +64,17 @@ public abstract class MixinEntity {
         callbackInfo.cancel();
     }
 
-    @Inject(method = "move", at = @At("HEAD"))
+    @Inject(
+            method = "move",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preMove(MoverType type, double x, double y, double z, CallbackInfo callbackInfo) {
         Entity thisAsEntity = Entity.class.cast(this);
         if ((FreecamMod.INSTANCE.state.enabled || NoClipMod.INSTANCE.state.enabled) && thisAsEntity instanceof EntityPlayer) {
-            if (thisAsEntity == mc.player) {
-                this.setEntityBoundingBox(this.getEntityBoundingBox().offset(x * 10, y, z * 10));
-            } else {
-                this.setEntityBoundingBox(this.getEntityBoundingBox().offset(x, y, z));
-            }
+            this.setEntityBoundingBox(this.getEntityBoundingBox().offset(x, y, z));
             this.resetPositionToBB();
+            callbackInfo.cancel();
         }
     }
 
@@ -86,6 +90,8 @@ public abstract class MixinEntity {
     @Shadow
     public void resetPositionToBB() {
     }
+
+    @Shadow public ArrayList<EntityItem> capturedDrops;
 
     @Inject(method = "isInvisibleToPlayer", at = @At("HEAD"), cancellable = true)
     public void preIsInvisibleToPlayer(EntityPlayer player, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {

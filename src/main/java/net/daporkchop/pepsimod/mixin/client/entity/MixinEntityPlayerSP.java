@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -88,79 +88,6 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
     public void preisAutoJumpEnabled(CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (StepMod.INSTANCE.state.enabled) {
             callbackInfoReturnable.setReturnValue(false);
-        }
-    }
-
-    @Overwrite
-    private void onUpdateWalkingPlayer() {
-        boolean flag = this.isSprinting();
-
-        if (flag != this.serverSprintState) {
-            if (flag) {
-                this.connection.sendPacket(new CPacketEntityAction(this, CPacketEntityAction.Action.START_SPRINTING));
-            } else {
-                this.connection.sendPacket(new CPacketEntityAction(this, CPacketEntityAction.Action.STOP_SPRINTING));
-            }
-
-            this.serverSprintState = flag;
-        }
-
-        boolean flag1 = this.isSneaking();
-
-        if (flag1 != this.serverSneakState) {
-            if (flag1) {
-                this.connection.sendPacket(new CPacketEntityAction(this, CPacketEntityAction.Action.START_SNEAKING));
-            } else {
-                this.connection.sendPacket(new CPacketEntityAction(this, CPacketEntityAction.Action.STOP_SNEAKING));
-            }
-
-            this.serverSneakState = flag1;
-        }
-
-        if (this.isCurrentViewEntity()) {
-            RotationUtils.updateServerRotation();
-            float yaw = RotationUtils.getServerYaw();
-            float pitch = RotationUtils.getServerPitch();
-
-            AxisAlignedBB axisalignedbb = this.getEntityBoundingBox();
-            double d0 = this.posX - this.lastReportedPosX;
-            double d1 = axisalignedbb.minY - this.lastReportedPosY;
-            double d2 = this.posZ - this.lastReportedPosZ;
-            double d3 = (double) (yaw - this.lastReportedYaw);
-            double d4 = (double) (pitch - this.lastReportedPitch);
-            ++this.positionUpdateTicks;
-            boolean flag2 = d0 * d0 + d1 * d1 + d2 * d2 > 9.0E-4D || this.positionUpdateTicks >= 20;
-            boolean flag3 = d3 != 0.0D || d4 != 0.0D;
-
-            if (FlightMod.INSTANCE.state.enabled || FreecamMod.INSTANCE.state.enabled) {
-
-            } else if (this.isRiding()) {
-                this.connection.sendPacket(new CPacketPlayer.PositionRotation(this.motionX, -999.0D, this.motionZ, this.rotationYaw, this.rotationPitch, this.onGround));
-                flag2 = false;
-            } else if (flag2 && flag3) {
-                this.connection.sendPacket(new CPacketPlayer.PositionRotation(this.posX, axisalignedbb.minY, this.posZ, this.rotationYaw, this.rotationPitch, this.onGround));
-            } else if (flag2) {
-                this.connection.sendPacket(new CPacketPlayer.Position(this.posX, axisalignedbb.minY, this.posZ, this.onGround));
-            } else if (flag3) {
-                this.connection.sendPacket(new CPacketPlayer.Rotation(this.rotationYaw, this.rotationPitch, this.onGround));
-            } else if (this.prevOnGround != this.onGround) {
-                this.connection.sendPacket(new CPacketPlayer(this.onGround));
-            }
-
-            if (flag2) {
-                this.lastReportedPosX = this.posX;
-                this.lastReportedPosY = axisalignedbb.minY;
-                this.lastReportedPosZ = this.posZ;
-                this.positionUpdateTicks = 0;
-            }
-
-            if (flag3) {
-                this.lastReportedYaw = this.rotationYaw;
-                this.lastReportedPitch = this.rotationPitch;
-            }
-
-            this.prevOnGround = this.onGround;
-            this.autoJumpEnabled = this.mc.gameSettings.autoJump;
         }
     }
 

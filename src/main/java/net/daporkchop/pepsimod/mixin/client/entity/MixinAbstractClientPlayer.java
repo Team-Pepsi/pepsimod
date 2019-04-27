@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -33,18 +33,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MixinAbstractClientPlayer extends EntityPlayer {
     public MixinAbstractClientPlayer() {
         super(null, null);
-    }
-
-    @Inject(method = "isSpectator", at = @At("HEAD"), cancellable = true)
-    public void preIsSpectator(CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (FreecamMod.INSTANCE == null) {
-            System.out.println("Freecam instance was null!!!");
-        } else {
-            if (FreecamMod.INSTANCE.state.enabled) {
-                callbackInfoReturnable.setReturnValue(true);
-                callbackInfoReturnable.cancel();
-            }
-        }
     }
 
     @Inject(method = "getLocationCape", at = @At("HEAD"), cancellable = true)

@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -39,15 +39,6 @@ import static net.daporkchop.pepsimod.util.PepsiConstants.mc;
 public abstract class MixinNetHandlerPlayClient {
     @Shadow
     private final Map<UUID, NetworkPlayerInfo> playerInfoMap = Maps.newHashMap();
-
-    @Inject(method = "sendPacket", at = @At("HEAD"), cancellable = true)
-    public void preSendPacket(Packet<?> packet, CallbackInfo callbackInfo) {
-        if (FreecamMod.INSTANCE.state.enabled) {
-            if (packet instanceof CPacketPlayer) {
-                callbackInfo.cancel();
-            }
-        }
-    }
 
     @Inject(method = "handlePlayerListItem", at = @At("HEAD"))
     public void preHandlePlayerListItem(SPacketPlayerListItem listItem, CallbackInfo callbackInfo) {
