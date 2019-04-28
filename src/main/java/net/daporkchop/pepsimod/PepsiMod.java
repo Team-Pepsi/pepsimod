@@ -79,7 +79,6 @@ import net.daporkchop.pepsimod.module.impl.movement.VelocityMod;
 import net.daporkchop.pepsimod.module.impl.player.AutoEatMod;
 import net.daporkchop.pepsimod.module.impl.player.AutoMineMod;
 import net.daporkchop.pepsimod.module.impl.player.FastPlaceMod;
-import net.daporkchop.pepsimod.module.impl.player.ParalyzeMod;
 import net.daporkchop.pepsimod.module.impl.player.ScaffoldMod;
 import net.daporkchop.pepsimod.module.impl.player.SpeedmineMod;
 import net.daporkchop.pepsimod.module.impl.player.SprintMod;
@@ -185,10 +184,7 @@ public class PepsiMod {
         ModuleManager.registerModule(new AutoFishMod());
         ModuleManager.registerModule(new AutoToolMod());
         ModuleManager.registerModule(new AutoArmorMod());
-        //ModuleManager.registerModule(new FastBowMod());
-        //ModuleManager.registerModule(new BowAimBotMod());
         ModuleManager.registerModule(new FastLadderMod());
-        ModuleManager.registerModule(new ParalyzeMod());
     }
 
     public static void registerCommands(FMLStateEvent event) {
