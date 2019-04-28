@@ -42,7 +42,6 @@ public class StepMod extends Module {
 
     @Override
     public void onEnable() {
-
     }
 
     @Override
@@ -75,8 +74,16 @@ public class StepMod extends Module {
                 return;
             }
 
-            AxisAlignedBB bb = player.getEntityBoundingBox().offset(0, 0.05d, 0).expand(0.05, 0.05, 0.05).expand(-0.05, -0.05, -0.05);
-            if (!mc.world.getCollisionBoxes(player, bb.offset(0, 1, 0)).isEmpty()) {
+            AxisAlignedBB bb = player.getEntityBoundingBox().offset(0, 0.05d * 0, 0).expand(0.05, 0.05 * 0, 0.05).expand(-0.05, -0.05 * 0, -0.05);
+            boolean found = false;
+            for (double d = 1.0d; d > 0.0d; d -= 1.0d / 16.0d)  {
+                if (mc.world.getCollisionBoxes(player, bb.offset(0, d, 0)).isEmpty())   {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
                 return;
             }
 
@@ -90,6 +97,7 @@ public class StepMod extends Module {
 
             stepHeight -= player.posY;
 
+            System.out.printf("Step height: %f", stepHeight);
             if (stepHeight < 0 || stepHeight > 1) {
                 return;
             }
