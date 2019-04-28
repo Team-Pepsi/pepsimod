@@ -28,6 +28,7 @@ import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
 import net.daporkchop.pepsimod.util.render.LineRenderer;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class WaypointsMod extends Module {
@@ -124,7 +125,7 @@ public class WaypointsMod extends Module {
 
     @Override
     public void renderLines(LineRenderer renderer) {
-        this.renderCache = WaypointsTranslator.INSTANCE.getWaypoints();
+        this.renderCache = new ArrayList<>(WaypointsTranslator.INSTANCE.getWaypoints());
 
         renderer.color(WaypointsTranslator.INSTANCE.r, WaypointsTranslator.INSTANCE.g, WaypointsTranslator.INSTANCE.b);
         for (Waypoint waypoint : this.renderCache) {
@@ -146,10 +147,11 @@ public class WaypointsMod extends Module {
                     text += " \u00A7f (\u00A7b" + PepsiUtils.roundFloatForSlider((float) mc.player.getDistance(waypoint.x, waypoint.y, waypoint.z)) + "\u00A7f)";
                 }
                 PepsiUtils.renderFloatingText(text,
-                        waypoint.x, waypoint.y, waypoint.z,
+                        waypoint.x, waypoint.y + 1, waypoint.z,
                         Color.white.getRGB(),
                         true, 1.0f);
             }
+            this.renderCache.clear();
         }
     }
 

@@ -559,15 +559,18 @@ public class PepsiUtils extends PepsiConstants {
         GlStateManager.pushMatrix();
 
         double dist = new Vec3d(x, y + offset, z).length();
-        {
+        /*{
             offset *= dist / 4.0d;
             Vec3d vec = new Vec3d(x, y + offset, z).normalize().scale(4.0d);
             GlStateManager.translate(vec.x, vec.y, vec.z);
-        }
+        }*/
+        GlStateManager.translate(x, y + offset, z);
+
         GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(-viewerYaw, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate((float)(isThirdPersonFrontal ? -1 : 1) * viewerPitch, 1.0F, 0.0F, 0.0F);
-        if (dist > 4.0d)    {
+        if (true || dist > 4.0d)    {
+            size *= dist * 0.3d;
             GlStateManager.scale(-0.025F * size, -0.025F * size, 0.025F * size);
         } else {
             double scale = (4.0d / dist) * size;
@@ -585,76 +588,25 @@ public class PepsiUtils extends PepsiConstants {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-        bufferbuilder.pos((double)(-i - 1), (double)(-1 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-        bufferbuilder.pos((double)(-i - 1), (double)(8 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-        bufferbuilder.pos((double)(i + 1), (double)(8 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-        bufferbuilder.pos((double)(i + 1), (double)(-1 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        bufferbuilder.pos((double)(-i - 1), (double)(-8 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        bufferbuilder.pos((double)(-i - 1), (double)(1 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        bufferbuilder.pos((double)(i + 1), (double)(1 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        bufferbuilder.pos((double)(i + 1), (double)(-8 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
         tessellator.draw();
         GlStateManager.enableTexture2D();
 
         int color = 0x20FFFFFF;
         color = 0xFFFFFFFF;
-        fontRendererIn.drawString(str, -fontRendererIn.getStringWidth(str) / 2, verticalShift, color);
+        //fontRendererIn.drawString(str, -fontRendererIn.getStringWidth(str) / 2, verticalShift - 7, color);
         GlStateManager.enableDepth();
 
         GlStateManager.depthMask(true);
-        fontRendererIn.drawString(str, -fontRendererIn.getStringWidth(str) / 2, verticalShift, color);
+        fontRendererIn.drawString(str, -fontRendererIn.getStringWidth(str) / 2, verticalShift - 7, color);
         GlStateManager.enableLighting();
         GlStateManager.disableBlend();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.popMatrix();
 
-        /*GlStateManager.pushMatrix();
-        //GlStateManager.translate(x, y, z);
-        {
-            final double mult = 100.0f;
-
-            double renderX = ReflectionStuff.getRenderPosX(mc.getRenderManager());
-            double renderY = ReflectionStuff.getRenderPosY(mc.getRenderManager());
-            double renderZ = ReflectionStuff.getRenderPosZ(mc.getRenderManager());
-
-            //Vec3d vec = new Vec3d(renderX, renderY, renderZ).subtract(x, y, z).normalize();
-            //Vec3d vec = new Vec3d(x, y, z).subtract(renderX, renderY, renderZ).normalize();
-            Vec3d vec = new Vec3d(x, y, z).normalize();
-            GlStateManager.translate(vec.x * mult, vec.y * mult, vec.z * mult);
-        }
-        GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(-viewerYaw, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate((float) (isThirdPersonFrontal ? -1 : 1) * viewerPitch, 1.0F, 0.0F, 0.0F);
-
-        isSneaking = false;
-
-        //GlStateManager.scale(-0.1F, -0.1F, -0.1F);
-
-        GlStateManager.scale(-0.025F, -0.025F, 0.025F);
-        GlStateManager.disableLighting();
-        GlStateManager.depthMask(false);
-
-        GlStateManager.disableDepth();
-
-        GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        int i = fontRendererIn.getStringWidth(str) / 2;
-        GlStateManager.disableTexture2D();
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-        bufferbuilder.pos((double) (-i - 1), (double) (-1 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-        bufferbuilder.pos((double) (-i - 1), (double) (8 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-        bufferbuilder.pos((double) (i + 1), (double) (8 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-        bufferbuilder.pos((double) (i + 1), (double) (-1 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-        tessellator.draw();
-        GlStateManager.enableTexture2D();
-
-        fontRendererIn.drawString(str, -fontRendererIn.getStringWidth(str) / 2, verticalShift, 553648127);
-        GlStateManager.enableDepth();
-
-        GlStateManager.depthMask(true);
-        fontRendererIn.drawString(str, -fontRendererIn.getStringWidth(str) / 2, verticalShift, isSneaking ? 553648127 : -1);
-        GlStateManager.enableLighting();
-        GlStateManager.disableBlend();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.popMatrix();*/
         //TODO: draw items in name tag
     }
 
@@ -680,7 +632,7 @@ public class PepsiUtils extends PepsiConstants {
                 mc.getRenderManager().playerViewY,
                 mc.getRenderManager().playerViewX,
                 false,
-                1.0f,
+                0.0f,
                 scale
         );
 
