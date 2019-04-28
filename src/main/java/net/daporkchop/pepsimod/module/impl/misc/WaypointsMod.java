@@ -22,21 +22,18 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
-import net.daporkchop.pepsimod.the.wurst.pkg.name.RotationUtils;
 import net.daporkchop.pepsimod.util.PepsiUtils;
-import net.daporkchop.pepsimod.util.ReflectionStuff;
-import net.daporkchop.pepsimod.util.RenderColor;
 import net.daporkchop.pepsimod.util.config.impl.WaypointsTranslator;
 import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
 import net.daporkchop.pepsimod.util.render.LineRenderer;
-import net.minecraft.util.math.Vec3d;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
 import java.util.Collection;
 
 public class WaypointsMod extends Module {
     public static WaypointsMod INSTANCE;
+
+    protected Collection<Waypoint> renderCache;
 
     {
         INSTANCE = this;
@@ -127,14 +124,20 @@ public class WaypointsMod extends Module {
 
     @Override
     public void renderLines(LineRenderer renderer) {
+        this.renderCache = WaypointsTranslator.INSTANCE.getWaypoints();
+
         renderer.color(WaypointsTranslator.INSTANCE.r, WaypointsTranslator.INSTANCE.g, WaypointsTranslator.INSTANCE.b);
-        for (Waypoint waypoint : WaypointsTranslator.INSTANCE.getWaypoints())   {
+        for (Waypoint waypoint : this.renderCache) {
             renderer.lineFromEyes(waypoint.x, waypoint.y, waypoint.z);
         }
+    }
 
-        //TODO
-        /*if (WaypointsTranslator.INSTANCE.nametag) {
-            for (Waypoint waypoint : toRender) {
+    public void renderText() {
+        if (this.state.enabled && WaypointsTranslator.INSTANCE.nametag) {
+            if (this.renderCache == null) {
+                this.renderCache = WaypointsTranslator.INSTANCE.getWaypoints();
+            }
+            for (Waypoint waypoint : this.renderCache) {
                 String text = waypoint.name;
                 if (WaypointsTranslator.INSTANCE.coords) {
                     text += " \u00A77" + waypoint.x + "\u00A7f, \u00A77" + waypoint.y + "\u00A7f, \u00A77" + waypoint.z;
@@ -143,11 +146,11 @@ public class WaypointsMod extends Module {
                     text += " \u00A7f (\u00A7b" + PepsiUtils.roundFloatForSlider((float) mc.player.getDistance(waypoint.x, waypoint.y, waypoint.z)) + "\u00A7f)";
                 }
                 PepsiUtils.renderFloatingText(text,
-                        waypoint.x, waypoint.y + 1, waypoint.z,
+                        waypoint.x, waypoint.y, waypoint.z,
                         Color.white.getRGB(),
-                        true, partialTicks);
+                        true, 1.0f);
             }
-        }*/
+        }
     }
 
     public ModuleCategory getCategory() {

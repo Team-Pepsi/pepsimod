@@ -669,7 +669,22 @@ public class PepsiUtils extends PepsiConstants {
      * @param renderBlackBackground render a pretty black border behind the text?
      * @param partialTickTime       Usually taken from RenderWorldLastEvent.partialTicks variable
      */
-    public static void renderFloatingText(String text, float x, float y, float z, int color, boolean renderBlackBackground, float partialTickTime) {
+    public static void renderFloatingText(String text, float x, float y, float z, int color, boolean renderBlackBackground, float scale) {
+        drawNameplateNoScale(
+                mc.fontRenderer,
+                text,
+                (float) (x - ReflectionStuff.getRenderPosX(mc.getRenderManager())),
+                (float) (y - ReflectionStuff.getRenderPosY(mc.getRenderManager())),
+                (float) (z - ReflectionStuff.getRenderPosZ(mc.getRenderManager())),
+                0,
+                mc.getRenderManager().playerViewY,
+                mc.getRenderManager().playerViewX,
+                false,
+                1.0f,
+                scale
+        );
+
+        /*
         RenderManager renderManager = mc.getRenderManager();
 
         float playerX = (float) (mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * partialTickTime);
@@ -683,7 +698,7 @@ public class PepsiUtils extends PepsiConstants {
         dx *= distanceRatio;
         dy *= distanceRatio;
         dz *= distanceRatio;
-        float scale = 0.03f;
+        scale = 0.03f;
 
         GL11.glColor4f(1f, 1f, 1f, 0.5f);
         GL11.glPushMatrix();
@@ -724,7 +739,7 @@ public class PepsiUtils extends PepsiConstants {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glDepthMask(true);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glPopMatrix();
+        GL11.glPopMatrix();*/
     }
 
     /**
