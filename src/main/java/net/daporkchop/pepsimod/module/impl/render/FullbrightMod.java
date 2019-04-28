@@ -44,14 +44,17 @@ public class FullbrightMod extends Module {
     @Override
     public void tick() {
         if (this.state.enabled || XrayMod.INSTANCE.state.enabled) {
-            final int max = 6;
+            final int max = 32;
             if (this.level < max)    {
                 this.level++;
             } else if (this.level > max) {
                 this.level = max;
             }
         } else {
-            if (this.level > 0) {
+            final int min = 8;
+            if (this.level > min) {
+                this.level = min;
+            } else if (this.level > 0) {
                 this.level--;
             } else if (this.level < 0) {
                 this.level = 0;

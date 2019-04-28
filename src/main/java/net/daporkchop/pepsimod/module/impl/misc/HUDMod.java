@@ -252,24 +252,22 @@ public class HUDMod extends Module {
                     }
                 }
             } else {
-                if (!(mc.currentScreen instanceof GuiChat)) { //TODO: fix this
-                    for (int i = 0, j = 0; i < ModuleManager.ENABLED_MODULES.size(); i++) {
-                        Module module = ModuleManager.ENABLED_MODULES.get(i);
-                        if (module.state.hidden) {
-                            continue;
-                        }
+                int j = mc.currentScreen instanceof GuiChat ? 14 : 0;
+                for (int i = 0; i < ModuleManager.ENABLED_MODULES.size(); i++) {
+                    Module module = ModuleManager.ENABLED_MODULES.get(i);
+                    if (module.state.hidden) {
+                        continue;
+                    }
 
-                        if (HUDTranslator.INSTANCE.rainbow) {
-                            if (module.text instanceof RainbowText) {
-                                ((RainbowText) module.text).drawAtPos(gui, width - 2 - module.text.width(), height - 2 - j * 10, ++j * 8);
-                            } else {
-                                module.text.drawAtPos(gui, width - 2 - module.text.width(), height - 2 - ++j * -10);
-                            }
+                    if (HUDTranslator.INSTANCE.rainbow) {
+                        if (module.text instanceof RainbowText) {
+                            ((RainbowText) module.text).drawAtPos(gui, width - 2 - module.text.width(), height - (j += 10), j / 10 * 8);
                         } else {
-                            HUDTranslator.INSTANCE.bindColor();
-                            mc.fontRenderer.drawString(module.text.getRawText(), width - 2 - module.text.width(), height - 12 - j * 10, HUDTranslator.INSTANCE.getColor());
-                            j++;
+                            module.text.drawAtPos(gui, width - 2 - module.text.width(), height - (j += 10));
                         }
+                    } else {
+                        HUDTranslator.INSTANCE.bindColor();
+                        mc.fontRenderer.drawString(module.text.getRawText(), width - 2 - module.text.width(), height - (j += 10), HUDTranslator.INSTANCE.getColor());
                     }
                 }
             }
