@@ -17,6 +17,7 @@
 package net.daporkchop.pepsimod.util;
 
 import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.the.wurst.pkg.name.RotationUtils;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
 import net.daporkchop.pepsimod.util.colors.FixedColorElement;
 import net.daporkchop.pepsimod.util.colors.GradientText;
@@ -554,19 +555,78 @@ public class PepsiUtils extends PepsiConstants {
         return mc.player.inventoryContainer.getSlot(5 + armorType).getStack();
     }
 
-    public static void drawNameplateNoScale(FontRenderer fontRendererIn, String str, float x, float y, float z, int verticalShift, float viewerYaw, float viewerPitch, boolean isThirdPersonFrontal, boolean isSneaking) {
+    public static void drawNameplateNoScale(FontRenderer fontRendererIn, String str, float x, float y, float z, int verticalShift, float viewerYaw, float viewerPitch, boolean isThirdPersonFrontal, float offset, float size) {
         GlStateManager.pushMatrix();
-        GlStateManager.translate(x, y, z);
+
+        double dist = new Vec3d(x, y + offset, z).length();
+        {
+            offset *= dist / 4.0d;
+            Vec3d vec = new Vec3d(x, y + offset, z).normalize().scale(4.0d);
+            GlStateManager.translate(vec.x, vec.y, vec.z);
+        }
+        GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(-viewerYaw, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate((float)(isThirdPersonFrontal ? -1 : 1) * viewerPitch, 1.0F, 0.0F, 0.0F);
+        if (dist > 4.0d)    {
+            GlStateManager.scale(-0.025F * size, -0.025F * size, 0.025F * size);
+        } else {
+            double scale = (4.0d / dist) * size;
+            GlStateManager.scale(-0.025F * scale, -0.025F * scale, 0.025F * scale);
+        }
+        GlStateManager.disableLighting();
+        GlStateManager.depthMask(false);
+
+        GlStateManager.disableDepth();
+
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        int i = fontRendererIn.getStringWidth(str) / 2;
+        GlStateManager.disableTexture2D();
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        bufferbuilder.pos((double)(-i - 1), (double)(-1 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        bufferbuilder.pos((double)(-i - 1), (double)(8 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        bufferbuilder.pos((double)(i + 1), (double)(8 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        bufferbuilder.pos((double)(i + 1), (double)(-1 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        tessellator.draw();
+        GlStateManager.enableTexture2D();
+
+        int color = 0x20FFFFFF;
+        color = 0xFFFFFFFF;
+        fontRendererIn.drawString(str, -fontRendererIn.getStringWidth(str) / 2, verticalShift, color);
+        GlStateManager.enableDepth();
+
+        GlStateManager.depthMask(true);
+        fontRendererIn.drawString(str, -fontRendererIn.getStringWidth(str) / 2, verticalShift, color);
+        GlStateManager.enableLighting();
+        GlStateManager.disableBlend();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.popMatrix();
+
+        /*GlStateManager.pushMatrix();
+        //GlStateManager.translate(x, y, z);
+        {
+            final double mult = 100.0f;
+
+            double renderX = ReflectionStuff.getRenderPosX(mc.getRenderManager());
+            double renderY = ReflectionStuff.getRenderPosY(mc.getRenderManager());
+            double renderZ = ReflectionStuff.getRenderPosZ(mc.getRenderManager());
+
+            //Vec3d vec = new Vec3d(renderX, renderY, renderZ).subtract(x, y, z).normalize();
+            //Vec3d vec = new Vec3d(x, y, z).subtract(renderX, renderY, renderZ).normalize();
+            Vec3d vec = new Vec3d(x, y, z).normalize();
+            GlStateManager.translate(vec.x * mult, vec.y * mult, vec.z * mult);
+        }
         GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(-viewerYaw, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate((float) (isThirdPersonFrontal ? -1 : 1) * viewerPitch, 1.0F, 0.0F, 0.0F);
 
         isSneaking = false;
 
-        double distance = Math.max(1.6, mc.getRenderViewEntity().getDistance(mc.player) / 4);
-        distance /= 100;
-        GlStateManager.scale(-distance, -distance, distance);
+        //GlStateManager.scale(-0.1F, -0.1F, -0.1F);
 
+        GlStateManager.scale(-0.025F, -0.025F, 0.025F);
         GlStateManager.disableLighting();
         GlStateManager.depthMask(false);
 
@@ -594,7 +654,7 @@ public class PepsiUtils extends PepsiConstants {
         GlStateManager.enableLighting();
         GlStateManager.disableBlend();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.popMatrix();
+        GlStateManager.popMatrix();*/
         //TODO: draw items in name tag
     }
 

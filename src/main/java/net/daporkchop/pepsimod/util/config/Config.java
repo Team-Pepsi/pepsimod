@@ -35,6 +35,7 @@ import net.daporkchop.pepsimod.util.config.impl.FreecamTranslator;
 import net.daporkchop.pepsimod.util.config.impl.FriendsTranslator;
 import net.daporkchop.pepsimod.util.config.impl.GeneralTranslator;
 import net.daporkchop.pepsimod.util.config.impl.HUDTranslator;
+import net.daporkchop.pepsimod.util.config.impl.NameTagsTranslator;
 import net.daporkchop.pepsimod.util.config.impl.NoWeatherTranslator;
 import net.daporkchop.pepsimod.util.config.impl.NotificationsTranslator;
 import net.daporkchop.pepsimod.util.config.impl.SpeedmineTranslator;
@@ -69,6 +70,7 @@ public class Config {
         registerConfigTranslator(FriendsTranslator.INSTANCE);
         registerConfigTranslator(GeneralTranslator.INSTANCE);
         registerConfigTranslator(HUDTranslator.INSTANCE);
+        registerConfigTranslator(NameTagsTranslator.INSTANCE);
         registerConfigTranslator(NotificationsTranslator.INSTANCE);
         registerConfigTranslator(NoWeatherTranslator.INSTANCE);
         registerConfigTranslator(SpeedmineTranslator.INSTANCE);

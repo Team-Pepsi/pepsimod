@@ -19,6 +19,9 @@ package net.daporkchop.pepsimod.module.impl.render;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
+import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
+import net.daporkchop.pepsimod.module.api.option.ExtensionType;
+import net.daporkchop.pepsimod.util.config.impl.NameTagsTranslator;
 
 public class NameTagsMod extends Module {
     public static NameTagsMod INSTANCE;
@@ -33,17 +36,14 @@ public class NameTagsMod extends Module {
 
     @Override
     public void onEnable() {
-
     }
 
     @Override
     public void onDisable() {
-
     }
 
     @Override
     public void tick() {
-
     }
 
     @Override
@@ -53,7 +53,15 @@ public class NameTagsMod extends Module {
 
     @Override
     public ModuleOption[] getDefaultOptions() {
-        return new ModuleOption[0];
+        return new ModuleOption[]   {
+                new ModuleOption<>(1.0f, "scale", new String[]{"0.5", "1.0", "1.5", "2.0"},
+                        val -> {
+                            NameTagsTranslator.INSTANCE.scale = val;
+                            return true;
+                        },
+                        () -> NameTagsTranslator.INSTANCE.scale,
+                        "Scale", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.1f, 5.0f, 0.1f))
+        };
     }
 
     public ModuleCategory getCategory() {

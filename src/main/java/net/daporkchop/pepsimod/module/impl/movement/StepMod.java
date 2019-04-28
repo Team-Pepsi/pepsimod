@@ -97,7 +97,6 @@ public class StepMod extends Module {
 
             stepHeight -= player.posY;
 
-            System.out.printf("Step height: %f", stepHeight);
             if (stepHeight < 0 || stepHeight > 1) {
                 return;
             }

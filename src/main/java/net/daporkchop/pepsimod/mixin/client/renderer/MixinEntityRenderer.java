@@ -52,14 +52,6 @@ import static org.lwjgl.opengl.GL11.glPushMatrix;
 
 @Mixin(EntityRenderer.class)
 public abstract class MixinEntityRenderer {
-    @Inject(method = "drawNameplate", at = @At("HEAD"), cancellable = true)
-    private static void preDrawNameplate(FontRenderer fontRendererIn, String str, float x, float y, float z, int verticalShift, float viewerYaw, float viewerPitch, boolean isThirdPersonFrontal, boolean isSneaking, CallbackInfo callbackInfo) {
-        if (NameTagsMod.INSTANCE.state.enabled) {
-            PepsiUtils.drawNameplateNoScale(fontRendererIn, str, x, y, z, verticalShift, viewerYaw, viewerPitch, isThirdPersonFrontal, isSneaking);
-            callbackInfo.cancel();
-        }
-    }
-
     @Shadow
     private float farPlaneDistance;
     @Shadow

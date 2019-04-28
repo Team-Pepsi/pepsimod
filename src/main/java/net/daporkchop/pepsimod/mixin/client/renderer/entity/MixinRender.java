@@ -18,9 +18,11 @@ package net.daporkchop.pepsimod.mixin.client.renderer.entity;
 
 import net.daporkchop.pepsimod.module.impl.render.ESPMod;
 import net.daporkchop.pepsimod.module.impl.render.HealthTagsMod;
+import net.daporkchop.pepsimod.module.impl.render.NameTagsMod;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.config.impl.ESPTranslator;
 import net.daporkchop.pepsimod.util.config.impl.FriendsTranslator;
+import net.daporkchop.pepsimod.util.config.impl.NameTagsTranslator;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.entity.Render;
@@ -83,7 +85,11 @@ public abstract class MixinRender<T extends Entity> {
                 }
             }
 
-            EntityRenderer.drawNameplate(this.getFontRendererFromRenderManager(), str, (float) x, (float) y + f2, (float) z, i, f, f1, flag1, flag);
+            if (NameTagsMod.INSTANCE.state.enabled) {
+                PepsiUtils.drawNameplateNoScale(this.getFontRendererFromRenderManager(), str, (float) x, (float) y , (float) z, i, f, f1, flag1, f2, NameTagsTranslator.INSTANCE.scale);
+            } else {
+                EntityRenderer.drawNameplate(this.getFontRendererFromRenderManager(), str, (float) x, (float) y + f2, (float) z, i, f, f1, flag1, flag);
+            }
         }
     }
 
