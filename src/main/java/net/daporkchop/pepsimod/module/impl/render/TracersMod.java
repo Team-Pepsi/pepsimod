@@ -22,21 +22,17 @@ import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
-import net.daporkchop.pepsimod.the.wurst.pkg.name.RotationUtils;
 import net.daporkchop.pepsimod.util.EntityFakePlayer;
-import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.RenderColor;
 import net.daporkchop.pepsimod.util.config.impl.FriendsTranslator;
 import net.daporkchop.pepsimod.util.config.impl.TracersTranslator;
-import net.daporkchop.pepsimod.util.render.LineRenderer;
+import net.daporkchop.pepsimod.util.render.Renderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.Vec3d;
-import org.lwjgl.opengl.GL11;
 
 public class TracersMod extends Module {
     public static final RenderColor friendColor = new RenderColor(76, 144, 255, 255);
@@ -164,7 +160,7 @@ public class TracersMod extends Module {
 
 
     @Override
-    public void renderLines(LineRenderer renderer) {
+    public void renderOverlay(Renderer renderer) {
         renderer.width(TracersTranslator.INSTANCE.width);
 
         RenderColor color = null;

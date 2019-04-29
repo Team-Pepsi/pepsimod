@@ -21,14 +21,12 @@ import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.impl.render.AntiBlindMod;
 import net.daporkchop.pepsimod.module.impl.render.AntiTotemAnimationMod;
 import net.daporkchop.pepsimod.module.impl.render.FullbrightMod;
-import net.daporkchop.pepsimod.module.impl.render.NameTagsMod;
 import net.daporkchop.pepsimod.module.impl.render.NoHurtCamMod;
 import net.daporkchop.pepsimod.module.impl.render.NoOverlayMod;
 import net.daporkchop.pepsimod.the.wurst.pkg.name.RotationUtils;
 import net.daporkchop.pepsimod.util.PepsiUtils;
-import net.daporkchop.pepsimod.util.render.LineRenderer;
+import net.daporkchop.pepsimod.util.render.Renderer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -36,7 +34,6 @@ import net.minecraft.client.settings.GameSettings;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import org.lwjgl.util.glu.Project;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -176,19 +173,36 @@ public abstract class MixinEntityRenderer {
                     shift = At.Shift.BEFORE
             ))
     public void renderLines(int pass, float partialTicks, long finishTimeNano, CallbackInfo ci) {
-        boolean oldBobbing = this.mc.gameSettings.viewBobbing;
-        this.mc.gameSettings.viewBobbing = false;
+        if (this.mc.gameSettings.viewBobbing) {
+            this.mc.gameSettings.viewBobbing = false;
 
-        glPushMatrix();
-        this.setupCameraTransform(partialTicks, pass);
-        try (LineRenderer renderer = new LineRenderer(RotationUtils.getClientLookVec(), PepsiUtils.getPlayerPos(partialTicks), partialTicks))    {
-            for (Module module : ModuleManager.ENABLED_MODULES) {
-                module.renderLines(renderer);
+            glPushMatrix();
+            this.setupCameraTransform(partialTicks, pass);
+            try (Renderer renderer = new Renderer(RotationUtils.getClientLookVec(), PepsiUtils.getPlayerPos(partialTicks), partialTicks)) {
+                for (Module module : ModuleManager.ENABLED_MODULES) {
+                    module.renderOverlay(renderer);
+                }
+            }
+            glPopMatrix();
+
+            this.mc.gameSettings.viewBobbing = true;
+
+            glPushMatrix();
+            this.setupCameraTransform(partialTicks, pass);
+            try (Renderer renderer = new Renderer(RotationUtils.getClientLookVec(), PepsiUtils.getPlayerPos(partialTicks), partialTicks)) {
+                for (Module module : ModuleManager.ENABLED_MODULES) {
+                    module.renderWorld(renderer);
+                }
+            }
+            glPopMatrix();
+        } else {
+            try (Renderer renderer = new Renderer(RotationUtils.getClientLookVec(), PepsiUtils.getPlayerPos(partialTicks), partialTicks)) {
+                for (Module module : ModuleManager.ENABLED_MODULES) {
+                    module.renderOverlay(renderer);
+                    module.renderWorld(renderer);
+                }
             }
         }
-        glPopMatrix();
-
-        this.mc.gameSettings.viewBobbing = oldBobbing;
     }
 
     @Inject(method = "displayItemActivation", at = @At("HEAD"), cancellable = true)
@@ -211,7 +225,7 @@ public abstract class MixinEntityRenderer {
                     value = "FIELD",
                     target = "Lnet/minecraft/client/settings/GameSettings;gammaSetting:F"
             ))
-    public float redirectGammaSetting(GameSettings settings)    {
+    public float redirectGammaSetting(GameSettings settings) {
         return Math.max(FullbrightMod.INSTANCE.level * 0.5f, settings.gammaSetting);
     }
 

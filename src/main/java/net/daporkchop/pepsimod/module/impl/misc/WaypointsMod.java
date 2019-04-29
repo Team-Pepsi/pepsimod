@@ -25,7 +25,7 @@ import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.config.impl.WaypointsTranslator;
 import net.daporkchop.pepsimod.util.misc.waypoints.Waypoint;
-import net.daporkchop.pepsimod.util.render.LineRenderer;
+import net.daporkchop.pepsimod.util.render.Renderer;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -124,7 +124,7 @@ public class WaypointsMod extends Module {
     }
 
     @Override
-    public void renderLines(LineRenderer renderer) {
+    public void renderOverlay(Renderer renderer) {
         this.renderCache = new ArrayList<>(WaypointsTranslator.INSTANCE.getWaypoints());
 
         renderer.color(WaypointsTranslator.INSTANCE.r, WaypointsTranslator.INSTANCE.g, WaypointsTranslator.INSTANCE.b);

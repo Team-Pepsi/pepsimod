@@ -20,11 +20,12 @@ import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
-import net.daporkchop.pepsimod.the.wurst.pkg.name.RenderUtils;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.RenderColor;
 import net.daporkchop.pepsimod.util.config.impl.ESPTranslator;
+import net.daporkchop.pepsimod.util.config.impl.TracersTranslator;
+import net.daporkchop.pepsimod.util.render.Renderer;
 import net.minecraft.block.BlockChest;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
@@ -34,7 +35,6 @@ import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 
@@ -49,6 +49,7 @@ public class StorageESPMod extends Module {
     public static AxisAlignedBB getBoundingBox(World world, BlockPos pos) {
         return world.getBlockState(pos).getBoundingBox(world, pos);
     }
+
     public final ArrayList<AxisAlignedBB> basic = new ArrayList<>();
     public final ArrayList<AxisAlignedBB> trapped = new ArrayList<>();
     public final ArrayList<AxisAlignedBB> ender = new ArrayList<>();
@@ -65,12 +66,10 @@ public class StorageESPMod extends Module {
 
     @Override
     public void onEnable() {
-
     }
 
     @Override
     public void onDisable() {
-
     }
 
     @Override
@@ -92,9 +91,11 @@ public class StorageESPMod extends Module {
                 AxisAlignedBB bb = PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(mc.world, te.getPos())), te.getPos());
 
                 if (chestTe.adjacentChestXNeg != null) {
-                    PepsiUtils.unionBB(bb, PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(mc.world, chestTe.adjacentChestXNeg.getPos())), chestTe.adjacentChestXNeg.getPos()));
+                    ReflectionStuff.setMinX(bb, bb.minX - 1);
+                    //PepsiUtils.unionBB(bb, PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(mc.world, chestTe.adjacentChestXNeg.getPos())), chestTe.adjacentChestXNeg.getPos()));
                 } else if (chestTe.adjacentChestZNeg != null) {
-                    PepsiUtils.unionBB(bb, PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(mc.world, chestTe.adjacentChestZNeg.getPos())), chestTe.adjacentChestZNeg.getPos()));
+                    ReflectionStuff.setMinZ(bb, bb.minZ - 1);
+                    //PepsiUtils.unionBB(bb, PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(mc.world, chestTe.adjacentChestZNeg.getPos())), chestTe.adjacentChestZNeg.getPos()));
                 }
 
                 if (chestTe.getChestType() == BlockChest.Type.TRAP) {
@@ -168,65 +169,34 @@ public class StorageESPMod extends Module {
     }
 
     @Override
-    public void onRender(float partialTicks) {
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glEnable(GL11.GL_LINE_SMOOTH);
-        GL11.glLineWidth(2);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-
-        GL11.glPushMatrix();
-        GL11.glTranslated(-ReflectionStuff.getRenderPosX(mc.getRenderManager()), -ReflectionStuff.getRenderPosY(mc.getRenderManager()), -ReflectionStuff.getRenderPosZ(mc.getRenderManager()));
+    public void renderWorld(Renderer renderer) {
+        renderer.width(TracersTranslator.INSTANCE.width);
 
         if (ESPTranslator.INSTANCE.basic) {
-            GL11.glColor4b(chestColor.r, chestColor.g, chestColor.b, chestColor.a);
-
-            this.basic.forEach((entry) -> {
-                RenderUtils.drawOutlinedBox(entry);
-            });
+            renderer.color(chestColor);
+            //this.basic.forEach(bb -> renderer.line(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ));
+            this.basic.forEach(renderer::outline);
         }
 
         if (ESPTranslator.INSTANCE.trapped) {
-            GL11.glColor4b(trappedColor.r, trappedColor.g, trappedColor.b, trappedColor.a);
-
-            this.trapped.forEach((entry) -> {
-                RenderUtils.drawOutlinedBox(entry);
-            });
+            renderer.color(trappedColor);
+            this.trapped.forEach(renderer::outline);
         }
 
         if (ESPTranslator.INSTANCE.ender) {
-            GL11.glColor4b(enderColor.r, enderColor.g, enderColor.b, enderColor.a);
-
-            this.ender.forEach((entry) -> {
-                RenderUtils.drawOutlinedBox(entry);
-            });
+            renderer.color(enderColor);
+            this.ender.forEach(renderer::outline);
         }
 
         if (ESPTranslator.INSTANCE.hopper) {
-            GL11.glColor4b(hopperColor.r, hopperColor.g, hopperColor.b, hopperColor.a);
-
-            this.hopper.forEach((entry) -> {
-                RenderUtils.drawOutlinedBox(entry);
-            });
+            renderer.color(hopperColor);
+            this.hopper.forEach(renderer::outline);
         }
 
         if (ESPTranslator.INSTANCE.furnace) {
-            GL11.glColor4b(furnaceColor.r, furnaceColor.g, furnaceColor.b, furnaceColor.a);
-
-            this.furnace.forEach((entry) -> {
-                RenderUtils.drawOutlinedBox(entry);
-            });
+            renderer.color(furnaceColor);
+            this.furnace.forEach(renderer::outline);
         }
-
-        GL11.glPopMatrix();
-
-        // GL resets
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_LINE_SMOOTH);
     }
 
     public ModuleCategory getCategory() {
