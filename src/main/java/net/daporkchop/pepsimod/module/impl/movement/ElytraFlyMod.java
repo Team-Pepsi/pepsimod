@@ -161,7 +161,7 @@ public class ElytraFlyMod extends TimeModule {
                         },
                         () -> {
                             return ElytraFlyTranslator.INSTANCE.speed;
-                        }, "Speed", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0f, 1.0f, 0.005f))
+                        }, "Speed", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0f, 0.5f, 0.005f))
         };
     }
 

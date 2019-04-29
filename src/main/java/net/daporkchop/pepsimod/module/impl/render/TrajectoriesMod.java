@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -29,6 +29,8 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemFishingRod;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
@@ -46,22 +48,18 @@ public class TrajectoriesMod extends Module {
 
     @Override
     public void onEnable() {
-
     }
 
     @Override
     public void onDisable() {
-
     }
 
     @Override
     public void tick() {
-
     }
 
     @Override
     public void init() {
-
     }
 
     @Override
@@ -132,6 +130,8 @@ public class TrajectoriesMod extends Module {
 
         RenderManager renderManager = mc.getRenderManager();
 
+        boolean hitEntity = false;
+
         // draw trajectory line
         double gravity = usingBow ? 0.05D : stack.getItem() instanceof ItemPotion ? 0.4D : stack.getItem() instanceof ItemFishingRod ? 0.15D : 0.03D;
         Vec3d playerVector = new Vec3d(player.posX, player.posY + player.getEyeHeight(), player.posZ);
@@ -148,7 +148,14 @@ public class TrajectoriesMod extends Module {
             arrowMotionZ *= 0.999D;
             arrowMotionY -= gravity * 0.1;
 
-            if (mc.world.rayTraceBlocks(playerVector, new Vec3d(arrowPosX, arrowPosY, arrowPosZ)) != null) {
+            RayTraceResult result = mc.world.rayTraceBlocks(playerVector, new Vec3d(arrowPosX, arrowPosY, arrowPosZ));
+            if (result != null) {
+                break;
+            } else if (!mc.world.checkNoEntityCollision(new AxisAlignedBB(
+                    arrowPosX - 0.25d, arrowPosY - 0.25d, arrowPosZ - 0.25d,
+                    arrowPosX + 0.25d, arrowPosY + 0.25d, arrowPosZ + 0.25d
+            ), mc.player)) {
+                hitEntity = true;
                 break;
             }
         }
@@ -162,9 +169,17 @@ public class TrajectoriesMod extends Module {
         GL11.glPushMatrix();
         GL11.glTranslated(renderX - 0.5, renderY - 0.5, renderZ - 0.5);
 
-        GL11.glColor4f(0F, 1F, 0F, 0.25F);
+        if (hitEntity)  {
+            GL11.glColor4f(1F, 0F, 0F, 0.25F);
+        } else {
+            GL11.glColor4f(0F, 1F, 0F, 0.25F);
+        }
         RenderUtils.drawSolidBox();
-        GL11.glColor4f(0, 1, 0, 0.75F);
+        if (hitEntity)  {
+            GL11.glColor4f(1F, 0F, 0F, 0.75F);
+        } else {
+            GL11.glColor4f(0F, 1F, 0F, 0.75F);
+        }
         RenderUtils.drawOutlinedBox();
 
         GL11.glPopMatrix();
