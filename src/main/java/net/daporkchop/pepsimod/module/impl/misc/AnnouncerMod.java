@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -55,12 +55,10 @@ public class AnnouncerMod extends TimeModule {
 
     @Override
     public void onEnable() {
-
     }
 
     @Override
     public void onDisable() {
-
     }
 
     @Override
@@ -88,16 +86,19 @@ public class AnnouncerMod extends TimeModule {
                 }
             }
 
-            if (AnnouncerTranslator.INSTANCE.walk) {
+            if (AnnouncerTranslator.INSTANCE.walk && !FreecamMod.INSTANCE.state.enabled) {
                 Iterator<QueuedTask> iterator = this.toSend.iterator();
-                boolean hasMoveValue = false;
+                TaskMove task = null;
                 while (iterator.hasNext()) {
-                    if (iterator.next() instanceof TaskMove) {
-                        hasMoveValue = true;
+                    QueuedTask curr = iterator.next();
+                    if (curr instanceof TaskMove) {
+                        task = (TaskMove) curr;
                     }
                 }
-                if (!hasMoveValue) {
+                if (task == null) {
                     this.toSend.add(new TaskMove(TaskType.WALK));
+                } else {
+                    task.update(mc.player.getPositionVector());
                 }
             }
         }

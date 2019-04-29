@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -55,7 +55,6 @@ public class ElytraFlyMod extends TimeModule {
 
     @Override
     public void onDisable() {
-
     }
 
     @Override
@@ -75,9 +74,9 @@ public class ElytraFlyMod extends TimeModule {
 
             if (ElytraFlyTranslator.INSTANCE.fly && ElytraFlyTranslator.INSTANCE.mode == ElytraFlyTranslator.ElytraFlyMode.NORMAL) {
                 if (ReflectionStuff.getPressed(mc.gameSettings.keyBindJump)) {
-                    mc.player.motionY += 0.08;
+                    mc.player.motionY += 0.08 * ElytraFlyTranslator.INSTANCE.speed;
                 } else if (ReflectionStuff.getPressed(mc.gameSettings.keyBindSneak)) {
-                    mc.player.motionY -= 0.04;
+                    mc.player.motionY -= 0.04 * ElytraFlyTranslator.INSTANCE.speed;
                 }
 
                 if (ReflectionStuff.getPressed(mc.gameSettings.keyBindForward)) {
@@ -89,7 +88,6 @@ public class ElytraFlyMod extends TimeModule {
                     mc.player.motionX += Math.sin(yaw) * ElytraFlyTranslator.INSTANCE.speed;
                     mc.player.motionZ -= Math.cos(yaw) * ElytraFlyTranslator.INSTANCE.speed;
                 }
-
             }
         } else if (ElytraFlyTranslator.INSTANCE.easyStart && ElytraFlyTranslator.INSTANCE.mode != ElytraFlyTranslator.ElytraFlyMode.PACKET && ItemElytra.isUsable(chestplate) && mc.gameSettings.keyBindJump.isPressed()) {
             if (this.hasTimePassedM(1000)) {
@@ -119,7 +117,6 @@ public class ElytraFlyMod extends TimeModule {
 
     @Override
     public void init() {
-
     }
 
     @Override
@@ -164,7 +161,7 @@ public class ElytraFlyMod extends TimeModule {
                         },
                         () -> {
                             return ElytraFlyTranslator.INSTANCE.speed;
-                        }, "Speed", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0f, 3f, 0.01f))
+                        }, "Speed", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0f, 1.0f, 0.005f))
         };
     }
 

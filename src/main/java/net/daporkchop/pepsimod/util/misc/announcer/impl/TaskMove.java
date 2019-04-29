@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -21,22 +21,29 @@ import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.misc.announcer.MessagePrefixes;
 import net.daporkchop.pepsimod.util.misc.announcer.QueuedTask;
 import net.daporkchop.pepsimod.util.misc.announcer.TaskType;
+import net.minecraft.util.math.Vec3d;
 
 public class TaskMove extends QueuedTask {
-    public double posX;
-    public double posZ;
+    public double dist = 0.0d;
+    public Vec3d lastPos = null;
 
     public TaskMove(TaskType type) {
         super(type);
-        this.posX = mc.player.posX;
-        this.posZ = mc.player.posZ;
+        this.lastPos = mc.player.getPositionVector();
     }
 
     public String getMessage() {
-        if (!AnnouncerMod.INSTANCE.state.enabled || (mc.player.posX == this.posX && mc.player.posZ == this.posZ)) {
+        if (!AnnouncerMod.INSTANCE.state.enabled) {
             return null;
         }
 
-        return MessagePrefixes.getMessage(TaskType.WALK, PepsiUtils.roundCoords(Math.abs(mc.player.posX - this.posX) + Math.abs(mc.player.posZ - this.posZ)));
+        return MessagePrefixes.getMessage(TaskType.WALK, this.dist);
+    }
+
+    public void update(Vec3d nextPos)   {
+        if (this.lastPos != null && nextPos != null)   {
+            this.dist += this.lastPos.distanceTo(nextPos);
+        }
+        this.lastPos = nextPos;
     }
 }
