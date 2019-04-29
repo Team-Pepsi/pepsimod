@@ -20,8 +20,17 @@ import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
+import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.RenderColor;
 import net.daporkchop.pepsimod.util.config.impl.ESPTranslator;
+import net.daporkchop.pepsimod.util.config.impl.FriendsTranslator;
+import net.daporkchop.pepsimod.util.render.Renderer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityGolem;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.AxisAlignedBB;
 
 public class ESPMod extends Module {
     public static final RenderColor friendColor = new RenderColor(76, 144, 255, 255);
@@ -55,6 +64,45 @@ public class ESPMod extends Module {
     @Override
     public void init() {
         INSTANCE = this;
+    }
+
+    @Override
+    public void renderWorld(Renderer renderer) {
+        if (!ESPTranslator.INSTANCE.box)    {
+            return;
+        }
+
+        for (Entity entity : mc.world.loadedEntityList) {
+            if (entity == mc.player)    {
+                continue;
+            }
+            RenderColor color = this.chooseColor(entity);
+            if (color != null)  {
+                renderer.color(color).outline(entity);
+            }
+        }
+    }
+
+    public RenderColor chooseColor(Entity entity) {
+        if (!this.state.enabled) {
+            return null;
+        } else if (entity.isInvisible() && !ESPTranslator.INSTANCE.invisible) {
+            return null;
+        } else if (ESPTranslator.INSTANCE.animals && entity instanceof EntityAnimal) {
+            return animalColor;
+        } else if (ESPTranslator.INSTANCE.monsters && entity instanceof EntityMob) {
+            return monsterColor;
+        } else if (ESPTranslator.INSTANCE.players && entity instanceof EntityPlayer) {
+            if (ESPTranslator.INSTANCE.friendColors && FriendsTranslator.INSTANCE.isFriend(entity)) {
+                return friendColor;
+            } else {
+                return playerColor;
+            }
+        } else if (ESPTranslator.INSTANCE.golems && entity instanceof EntityGolem) {
+            return golemColor;
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -107,7 +155,15 @@ public class ESPMod extends Module {
                         },
                         () -> {
                             return ESPTranslator.INSTANCE.friendColors;
-                        }, "FriendColors")
+                        }, "FriendColors"),
+                new ModuleOption<>(ESPTranslator.INSTANCE.box, "box", OptionCompletions.BOOLEAN,
+                        (value) -> {
+                            ESPTranslator.INSTANCE.box = value;
+                            return true;
+                        },
+                        () -> {
+                            return ESPTranslator.INSTANCE.box;
+                        }, "Box")
         };
     }
 

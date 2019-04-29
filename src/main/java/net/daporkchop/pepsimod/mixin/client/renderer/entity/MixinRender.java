@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -20,6 +20,7 @@ import net.daporkchop.pepsimod.module.impl.render.ESPMod;
 import net.daporkchop.pepsimod.module.impl.render.HealthTagsMod;
 import net.daporkchop.pepsimod.module.impl.render.NameTagsMod;
 import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.RenderColor;
 import net.daporkchop.pepsimod.util.config.impl.ESPTranslator;
 import net.daporkchop.pepsimod.util.config.impl.FriendsTranslator;
 import net.daporkchop.pepsimod.util.config.impl.NameTagsTranslator;
@@ -65,7 +66,7 @@ public abstract class MixinRender<T extends Entity> {
             int i = "deadmau5".equals(str) ? -10 : 0;
 
             if (entityIn instanceof EntityLivingBase) {
-                if (entityIn instanceof EntityPlayer && FriendsTranslator.INSTANCE.friends.contains(entityIn.getUniqueID().toString())) {
+                if (entityIn instanceof EntityPlayer && FriendsTranslator.INSTANCE.isFriend(entityIn)) {
                     str = PepsiUtils.COLOR_ESCAPE + "b" + str;
                 }
 
@@ -95,23 +96,10 @@ public abstract class MixinRender<T extends Entity> {
 
     @Inject(method = "getTeamColor", at = @At("HEAD"), cancellable = true)
     public void pregetTeamColor(T entity, CallbackInfoReturnable<Integer> callbackInfoReturnable) {
-        if (ESPMod.INSTANCE.state.enabled) {
-            if (entity.isInvisible()) {
-                if (!ESPTranslator.INSTANCE.invisible) {
-                    return;
-                }
-            }
-            if (ESPTranslator.INSTANCE.animals && entity instanceof EntityAnimal) {
-                callbackInfoReturnable.setReturnValue(ESPMod.animalColor.getIntColor());
-            } else if (ESPTranslator.INSTANCE.monsters && entity instanceof EntityMob) {
-                callbackInfoReturnable.setReturnValue(ESPMod.monsterColor.getIntColor());
-            } else if (ESPTranslator.INSTANCE.players && entity instanceof EntityPlayer) {
-                if (ESPTranslator.INSTANCE.friendColors && FriendsTranslator.INSTANCE.friends.contains(entity.getUniqueID().toString())) {
-                    callbackInfoReturnable.setReturnValue(ESPMod.friendColor.getIntColor());
-                }
-                callbackInfoReturnable.setReturnValue(ESPMod.playerColor.getIntColor());
-            } else if (ESPTranslator.INSTANCE.golems && entity instanceof EntityGolem) {
-                callbackInfoReturnable.setReturnValue(ESPMod.golemColor.getIntColor());
+        if (ESPMod.INSTANCE.state.enabled && !ESPTranslator.INSTANCE.box) {
+            RenderColor color = ESPMod.INSTANCE.chooseColor(entity);
+            if (color != null)  {
+                callbackInfoReturnable.setReturnValue(color.getIntColor());
             }
         }
     }

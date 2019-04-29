@@ -1,3 +1,19 @@
+/*
+ * Adapted from the Wizardry License
+ *
+ * Copyright (c) 2017-2019 DaPorkchop_
+ *
+ * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
+ * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
+ *
+ * The persons and/or organizations are also disallowed from sub-licensing and/or trademarking this software without explicit permission from DaPorkchop_.
+ *
+ * Any persons and/or organizations using this software must disclose their source code and have it publicly available, include this license, provide sufficient credit to the original author of the project (IE: DaPorkchop_), as well as provide a link to the original project.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ */
+
 package net.daporkchop.pepsimod.util.render;
 
 import net.daporkchop.pepsimod.util.RenderColor;
@@ -6,7 +22,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.Color;
+import java.awt.*;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -172,41 +188,63 @@ public class Renderer implements AutoCloseable {
     }
 
     public Renderer outline(AxisAlignedBB bb)   {
-        glVertex3d(bb.minX - this.x, bb.minY - this.y, bb.minZ - this.z);
-        glVertex3d(bb.maxX - this.x, bb.minY - this.y, bb.minZ - this.z);
+        return this.outline(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ);
+    }
 
-        glVertex3d(bb.maxX - this.x, bb.minY - this.y, bb.minZ - this.z);
-        glVertex3d(bb.maxX - this.x, bb.minY - this.y, bb.maxZ - this.z);
+    public Renderer outline(Entity entity)   {
+        double x = entity.prevPosX + (entity.posX - entity.prevPosX) * partialTicks;
+        double y = entity.prevPosY + (entity.posY - entity.prevPosY) * partialTicks;
+        double z = entity.prevPosZ + (entity.posZ - entity.prevPosZ) * partialTicks;
+        double halfwidth = entity.width * 0.5d;
+        return this.outline(
+                x - halfwidth, y, z - halfwidth,
+                x + halfwidth, y + entity.height, z + halfwidth
+        );
+    }
 
-        glVertex3d(bb.maxX - this.x, bb.minY - this.y, bb.maxZ - this.z);
-        glVertex3d(bb.minX - this.x, bb.minY - this.y, bb.maxZ - this.z);
+    public Renderer outline(double minX, double minY, double minZ, double maxX, double maxY, double maxZ)   {
+        return this.internal_outline(
+                minX - this.x, minY - this.y, minZ - this.z,
+                maxX - this.x, maxY - this.y, maxZ - this.z
+        );
+    }
 
-        glVertex3d(bb.minX - this.x, bb.minY - this.y, bb.maxZ - this.z);
-        glVertex3d(bb.minX - this.x, bb.minY - this.y, bb.minZ - this.z);
+    protected Renderer internal_outline(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+        glVertex3d(minX, minY, minZ);
+        glVertex3d(maxX, minY, minZ);
 
-        glVertex3d(bb.minX - this.x, bb.minY - this.y, bb.minZ - this.z);
-        glVertex3d(bb.minX - this.x, bb.maxY - this.y, bb.minZ - this.z);
+        glVertex3d(maxX, minY, minZ);
+        glVertex3d(maxX, minY, maxZ);
 
-        glVertex3d(bb.maxX - this.x, bb.minY - this.y, bb.minZ - this.z);
-        glVertex3d(bb.maxX - this.x, bb.maxY - this.y, bb.minZ - this.z);
+        glVertex3d(maxX, minY, maxZ);
+        glVertex3d(minX, minY, maxZ);
 
-        glVertex3d(bb.maxX - this.x, bb.minY - this.y, bb.maxZ - this.z);
-        glVertex3d(bb.maxX - this.x, bb.maxY - this.y, bb.maxZ - this.z);
+        glVertex3d(minX, minY, maxZ);
+        glVertex3d(minX, minY, minZ);
 
-        glVertex3d(bb.minX - this.x, bb.minY - this.y, bb.maxZ - this.z);
-        glVertex3d(bb.minX - this.x, bb.maxY - this.y, bb.maxZ - this.z);
+        glVertex3d(minX, minY, minZ);
+        glVertex3d(minX, maxY, minZ);
 
-        glVertex3d(bb.minX - this.x, bb.maxY - this.y, bb.minZ - this.z);
-        glVertex3d(bb.maxX - this.x, bb.maxY - this.y, bb.minZ - this.z);
+        glVertex3d(maxX, minY, minZ);
+        glVertex3d(maxX, maxY, minZ);
 
-        glVertex3d(bb.maxX - this.x, bb.maxY - this.y, bb.minZ - this.z);
-        glVertex3d(bb.maxX - this.x, bb.maxY - this.y, bb.maxZ - this.z);
+        glVertex3d(maxX, minY, maxZ);
+        glVertex3d(maxX, maxY, maxZ);
 
-        glVertex3d(bb.maxX - this.x, bb.maxY - this.y, bb.maxZ - this.z);
-        glVertex3d(bb.minX - this.x, bb.maxY - this.y, bb.maxZ - this.z);
+        glVertex3d(minX, minY, maxZ);
+        glVertex3d(minX, maxY, maxZ);
 
-        glVertex3d(bb.minX - this.x, bb.maxY - this.y, bb.maxZ - this.z);
-        glVertex3d(bb.minX - this.x, bb.maxY - this.y, bb.minZ - this.z);
+        glVertex3d(minX, maxY, minZ);
+        glVertex3d(maxX, maxY, minZ);
+
+        glVertex3d(maxX, maxY, minZ);
+        glVertex3d(maxX, maxY, maxZ);
+
+        glVertex3d(maxX, maxY, maxZ);
+        glVertex3d(minX, maxY, maxZ);
+
+        glVertex3d(minX, maxY, maxZ);
+        glVertex3d(minX, maxY, minZ);
         return this;
     }
 }

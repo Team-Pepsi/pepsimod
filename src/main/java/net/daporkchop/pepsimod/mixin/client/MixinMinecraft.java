@@ -98,12 +98,12 @@ public abstract class MixinMinecraft {
                         if (Minecraft.getMinecraft().objectMouseOver != null) {
                             RayTraceResult result = Minecraft.getMinecraft().objectMouseOver;
                             if (result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit instanceof EntityPlayer) {
-                                if (FriendsTranslator.INSTANCE.friends.contains(result.entityHit.getUniqueID().toString())) {
+                                if (FriendsTranslator.INSTANCE.isFriend(result.entityHit)) {
                                     this.player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + "Removed \u00A7c" + result.entityHit.getName() + "\u00A7r as a friend"));
-                                    FriendsTranslator.INSTANCE.friends.remove(result.entityHit.getUniqueID().toString());
+                                    FriendsTranslator.INSTANCE.friends.remove(result.entityHit.getUniqueID());
                                 } else {
                                     this.player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + "Added \u00A79" + result.entityHit.getName() + "\u00A7r as a friend"));
-                                    FriendsTranslator.INSTANCE.friends.add(result.entityHit.getUniqueID().toString());
+                                    FriendsTranslator.INSTANCE.friends.add(result.entityHit.getUniqueID());
                                 }
                             }
                             FMLLog.log.info(result.entityHit.getClass().getCanonicalName());

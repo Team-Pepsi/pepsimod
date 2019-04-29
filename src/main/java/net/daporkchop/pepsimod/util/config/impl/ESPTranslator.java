@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -26,12 +26,14 @@ public class ESPTranslator implements IConfigTranslator {
     public boolean ender = false;
     public boolean hopper = false;
     public boolean furnace = false;
+
     public boolean monsters = false;
     public boolean animals = false;
     public boolean players = false;
     public boolean golems = false;
     public boolean invisible = false;
     public boolean friendColors = true;
+    public boolean box = false;
 
     private ESPTranslator() {
 
@@ -50,6 +52,7 @@ public class ESPTranslator implements IConfigTranslator {
         json.addProperty("golems", this.golems);
         json.addProperty("invisible", this.invisible);
         json.addProperty("friendColors", this.friendColors);
+        json.addProperty("box", this.box);
     }
 
     public void decode(String fieldName, JsonObject json) {
@@ -65,6 +68,7 @@ public class ESPTranslator implements IConfigTranslator {
         this.golems = this.getBoolean(json, "golems", this.golems);
         this.invisible = this.getBoolean(json, "invisible", this.invisible);
         this.friendColors = this.getBoolean(json, "friendColors", this.friendColors);
+        this.box = this.getBoolean(json, "box", this.box);
     }
 
     public String name() {

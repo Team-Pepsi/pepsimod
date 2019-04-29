@@ -103,7 +103,7 @@ public abstract class MixinEntity {
 
     @Inject(method = "isGlowing", at = @At("HEAD"), cancellable = true)
     public void preisGlowing(CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        if (ESPMod.INSTANCE.state.enabled) {
+        if (ESPMod.INSTANCE.state.enabled && !ESPTranslator.INSTANCE.box) {
             Entity this_ = Entity.class.cast(this);
             if (this_.isInvisible()) {
                 if (!ESPTranslator.INSTANCE.invisible) {
