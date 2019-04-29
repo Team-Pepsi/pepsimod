@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -335,10 +335,10 @@ public class HUDMod extends Module {
         if (HUDTranslator.INSTANCE.armor) {
             i = 0;
             int xPos = width / 2;
-            xPos -= 103;
+            xPos -= 90;
             for (int j = 0; j < 4; j++) {
                 ItemStack stack = PepsiUtils.getWearingArmor(j);
-                PepsiUtils.renderItem(xPos + 20 * i++, height - 40, partialTicks, mc.player, stack);
+                PepsiUtils.renderItem(xPos + 20 * i++, height - 70, partialTicks, mc.player, stack);
             }
         }
     }

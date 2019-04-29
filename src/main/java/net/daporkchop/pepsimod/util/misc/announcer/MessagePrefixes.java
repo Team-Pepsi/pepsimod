@@ -49,8 +49,8 @@ public class MessagePrefixes {
                 "I just ate %2$d %1$s!"
         }));
         messageMakers.put(TaskType.WALK, new MessageMaker(new String[]{
-                "I just walked %1$f meters!",
-                "I just walked %1$f blocks!"
+                "I just walked %1$.2f meters!",
+                "I just walked %1$.2f blocks!"
         }));
     }
 

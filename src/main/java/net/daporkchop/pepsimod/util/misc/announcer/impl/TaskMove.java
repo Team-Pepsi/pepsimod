@@ -33,7 +33,7 @@ public class TaskMove extends QueuedTask {
     }
 
     public String getMessage() {
-        if (!AnnouncerMod.INSTANCE.state.enabled) {
+        if (!AnnouncerMod.INSTANCE.state.enabled || this.dist == 0.0d) {
             return null;
         }
 
