@@ -19,7 +19,6 @@ package net.daporkchop.pepsimod.event;
 import net.daporkchop.pepsimod.module.impl.misc.HUDMod;
 import net.daporkchop.pepsimod.module.impl.misc.NotificationsMod;
 import net.daporkchop.pepsimod.util.PepsiConstants;
-import net.daporkchop.pepsimod.util.misc.waypoints.pathfind.PathFindTickListener;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
@@ -34,9 +33,6 @@ public class MiscEventHandler extends PepsiConstants {
         System.out.println("[PEPSIMOD] Saving config...");
         pepsimod.saveConfig();
         System.out.println("[PEPSIMOD] Saved.");
-        if (PathFindTickListener.INSTANCE != null) {
-            PathFindTickListener.INSTANCE.disable();
-        }
         NotificationsMod.sendNotification("Disconnected from server", TrayIcon.MessageType.WARNING);
         NotificationsMod.INSTANCE.inQueue = false;
     }
