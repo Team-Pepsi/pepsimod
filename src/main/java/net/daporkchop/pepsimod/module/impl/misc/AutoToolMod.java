@@ -21,7 +21,9 @@ import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.impl.player.AutoEatMod;
 import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.minecraft.network.Packet;
+import net.minecraft.network.play.client.CPacketHeldItemChange;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.world.GameType;
 
@@ -40,34 +42,42 @@ public class AutoToolMod extends Module {
 
     @Override
     public void onEnable() {
-
     }
 
     @Override
     public void onDisable() {
-
     }
 
     @Override
     public void tick() {
-        if (!mc.gameSettings.keyBindAttack.isKeyDown() && this.digging) {
-            this.digging = false;
-            mc.player.inventory.currentItem = this.slot;
-            this.slot = -1;
+        synchronized (this) {
+            if (!mc.gameSettings.keyBindAttack.isKeyDown() && this.digging) {
+                this.digging = false;
+                if (this.slot != -1) {
+                    ReflectionStuff.setCurrentPlayerItem(mc.player.inventory.currentItem = this.slot);
+                    mc.getConnection().sendPacket(new CPacketHeldItemChange(this.slot));
+                    this.slot = -1;
+                }
+            }
         }
     }
 
     public boolean preSendPacket(Packet<?> packetIn) {
-        if (AutoEatMod.INSTANCE.doneEating && packetIn instanceof CPacketPlayerDigging) {
-            CPacketPlayerDigging pck = (CPacketPlayerDigging) packetIn;
-            if (mc.playerController.getCurrentGameType() != GameType.CREATIVE && pck.getAction() == CPacketPlayerDigging.Action.START_DESTROY_BLOCK) {
-                this.digging = true;
-                int bestIndex = PepsiUtils.getBestTool(mc.world.getBlockState(pck.getPosition()).getBlock());
-                if (bestIndex != -1) {
-                    if (this.slot == -1) {
-                        this.slot = mc.player.inventory.currentItem;
+        if (!this.digging && AutoEatMod.INSTANCE.doneEating && packetIn instanceof CPacketPlayerDigging) {
+            synchronized (this) {
+                CPacketPlayerDigging pck = (CPacketPlayerDigging) packetIn;
+                if (!this.digging && mc.playerController.getCurrentGameType() != GameType.CREATIVE && pck.getAction() == CPacketPlayerDigging.Action.START_DESTROY_BLOCK) {
+                    this.digging = true;
+                    int bestIndex = PepsiUtils.getBestTool(mc.world.getBlockState(pck.getPosition()).getBlock());
+                    if (bestIndex != -1 && bestIndex != mc.player.inventory.currentItem) {
+                        if (this.slot == -1) {
+                            this.slot = mc.player.inventory.currentItem;
+                        }
+                        ReflectionStuff.setCurrentPlayerItem(mc.player.inventory.currentItem = bestIndex);
+                        mc.getConnection().sendPacket(new CPacketHeldItemChange(bestIndex));
+                        mc.getConnection().sendPacket(packetIn);
+                        return true;
                     }
-                    mc.player.inventory.currentItem = bestIndex;
                 }
             }
         }

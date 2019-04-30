@@ -78,6 +78,7 @@ public class ReflectionStuff extends PepsiConstants {
     public static Field parentScreen;
     public static Field DEFAULT_RESOURCE_DOMAINS;
     public static Field cPacketVehicleMove_y;
+    public static Field currentPlayerItem;
 
     public static Method updateFallState;
     public static Method rightClickMouse;
@@ -157,6 +158,7 @@ public class ReflectionStuff extends PepsiConstants {
             parentScreen = getField(GuiDisconnected.class, "parentScreen", "field_146307_h", "h");
             DEFAULT_RESOURCE_DOMAINS = getField(DefaultResourcePack.class, "DEFAULT_RESOURCE_DOMAINS", "field_110608_a", "a");
             cPacketVehicleMove_y = getField(CPacketVehicleMove.class, "y", "field_187008_b", "b");
+            currentPlayerItem = getField(PlayerControllerMP.class, "currentPlayerItem", "field_78777_l", "j");
 
             updateFallState = getMethod(Entity.class, new String[]{"updateFallState", "func_184231_a", "a"}, double.class, boolean.class, IBlockState.class, BlockPos.class);
             rightClickMouse = getMethod(Minecraft.class, new String[]{"rightClickMouse", "func_147121_ag", "aB"});
@@ -167,9 +169,17 @@ public class ReflectionStuff extends PepsiConstants {
         }
     }
 
+    public static void setCurrentPlayerItem(int i) {
+        try {
+            currentPlayerItem.setInt(mc.playerController, i);
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     public static double getCPacketVehicleMove_y(CPacketVehicleMove n) {
         try {
-            return (double) cPacketVehicleMove_y.get(n);
+            return cPacketVehicleMove_y.getDouble(n);
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
@@ -177,7 +187,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setcPacketVehicleMove_y(CPacketVehicleMove n, double y) {
         try {
-            cPacketVehicleMove_y.set(n, y);
+            cPacketVehicleMove_y.setDouble(n, y);
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
@@ -210,7 +220,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setcPacketPlayer_onGround(CPacketPlayer packet, boolean onGround) {
         try {
-            cPacketPlayer_onGround.set(packet, onGround);
+            cPacketPlayer_onGround.setBoolean(packet, onGround);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -219,7 +229,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static boolean getPressed(KeyBinding binding) {
         try {
-            return (boolean) pressed.get(binding);
+            return pressed.getBoolean(binding);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -228,7 +238,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static float getCurBlockDamageMP() {
         try {
-            return (float) curBlockDamageMP.get(mc.playerController);
+            return curBlockDamageMP.getFloat(mc.playerController);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -237,7 +247,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setCurBlockDamageMP(float val) {
         try {
-            curBlockDamageMP.set(mc.playerController, val);
+            curBlockDamageMP.setFloat(mc.playerController, val);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -246,7 +256,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static int getBlockHitDelay() {
         try {
-            return (int) blockHitDelay.get(mc.playerController);
+            return blockHitDelay.getInt(mc.playerController);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -255,7 +265,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setBlockHitDelay(int val) {
         try {
-            blockHitDelay.set(mc.playerController, val);
+            blockHitDelay.setInt(mc.playerController, val);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -264,7 +274,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setRightClickDelayTimer(int val) {
         try {
-            rightClickDelayTimer.set(mc, val);
+            rightClickDelayTimer.setInt(mc, val);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -273,7 +283,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setInWater(Entity entity, boolean y) {
         try {
-            inWater.set(entity, y);
+            inWater.setBoolean(entity, y);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -282,7 +292,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setLandMovementFactor(EntityLivingBase entity, float y) {
         try {
-            landMovementFactor.set(entity, y);
+            landMovementFactor.setFloat(entity, y);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -291,7 +301,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setCPacketPlayer_x(CPacketPlayer packet, double x) {
         try {
-            cPacketPlayer_x.set(packet, x);
+            cPacketPlayer_x.setDouble(packet, x);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -300,7 +310,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setCPacketPlayer_y(CPacketPlayer packet, double y) {
         try {
-            cPacketPlayer_y.set(packet, y);
+            cPacketPlayer_y.setDouble(packet, y);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -309,7 +319,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setCPacketPlayer_z(CPacketPlayer packet, double z) {
         try {
-            cPacketPlayer_z.set(packet, z);
+            cPacketPlayer_z.setDouble(packet, z);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -318,7 +328,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setHorseJumpPower(float value) {
         try {
-            horseJumpPower.set(mc.player, value);
+            horseJumpPower.setFloat(mc.player, value);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -345,7 +355,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setPressed(KeyBinding keyBinding, boolean state) {
         try {
-            pressed.set(keyBinding, state);
+            pressed.setBoolean(keyBinding, state);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -363,7 +373,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static int getDebugFps() {
         try {
-            return (int) debugFps.get(null);
+            return debugFps.getInt(null);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -390,7 +400,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setY_vec3d(Vec3d vec, double val) {
         try {
-            y_vec3d.set(vec, val);
+            y_vec3d.setDouble(vec, val);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -399,7 +409,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static double getMinX(AxisAlignedBB bb) {
         try {
-            return (double) minX.get(bb);
+            return minX.getDouble(bb);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -408,7 +418,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static double getMinY(AxisAlignedBB bb) {
         try {
-            return (double) minY.get(bb);
+            return minY.getDouble(bb);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -417,7 +427,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static double getMinZ(AxisAlignedBB bb) {
         try {
-            return (double) minZ.get(bb);
+            return minZ.getDouble(bb);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -426,7 +436,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static double getMaxX(AxisAlignedBB bb) {
         try {
-            return (double) maxX.get(bb);
+            return maxX.getDouble(bb);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -435,7 +445,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static double getMaxY(AxisAlignedBB bb) {
         try {
-            return (double) maxY.get(bb);
+            return maxY.getDouble(bb);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -444,7 +454,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static double getMaxZ(AxisAlignedBB bb) {
         try {
-            return (double) maxZ.get(bb);
+            return maxZ.getDouble(bb);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -453,7 +463,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setMinX(AxisAlignedBB bb, double val) {
         try {
-            minX.set(bb, val);
+            minX.setDouble(bb, val);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -462,7 +472,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setMinY(AxisAlignedBB bb, double val) {
         try {
-            minY.set(bb, val);
+            minY.setDouble(bb, val);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -471,7 +481,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setMinZ(AxisAlignedBB bb, double val) {
         try {
-            minZ.set(bb, val);
+            minZ.setDouble(bb, val);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -480,7 +490,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setMaxX(AxisAlignedBB bb, double val) {
         try {
-            maxX.set(bb, val);
+            maxX.setDouble(bb, val);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -489,7 +499,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setMaxY(AxisAlignedBB bb, double val) {
         try {
-            maxY.set(bb, val);
+            maxY.setDouble(bb, val);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -498,7 +508,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setMaxZ(AxisAlignedBB bb, double val) {
         try {
-            maxZ.set(bb, val);
+            maxZ.setDouble(bb, val);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -516,7 +526,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static double getRenderPosX(RenderManager mgr) {
         try {
-            return (double) renderPosX.get(mgr);
+            return renderPosX.getDouble(mgr);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -525,7 +535,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static double getRenderPosY(RenderManager mgr) {
         try {
-            return (double) renderPosY.get(mgr);
+            return renderPosY.getDouble(mgr);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -534,7 +544,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static double getRenderPosZ(RenderManager mgr) {
         try {
-            return (double) renderPosZ.get(mgr);
+            return renderPosZ.getDouble(mgr);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -543,7 +553,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static double getRenderPosX() {
         try {
-            return (double) renderPosX.get(mc.getRenderManager());
+            return renderPosX.getDouble(mc.getRenderManager());
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -552,7 +562,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static double getRenderPosY() {
         try {
-            return (double) renderPosY.get(mc.getRenderManager());
+            return renderPosY.getDouble(mc.getRenderManager());
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -561,7 +571,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static double getRenderPosZ() {
         try {
-            return (double) renderPosZ.get(mc.getRenderManager());
+            return renderPosZ.getDouble(mc.getRenderManager());
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -570,7 +580,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static boolean getSleeping(EntityPlayer mgr) {
         try {
-            return (boolean) sleeping.get(mgr);
+            return sleeping.getBoolean(mgr);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
