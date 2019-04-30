@@ -66,7 +66,6 @@ import net.daporkchop.pepsimod.module.impl.movement.AutoWalkMod;
 import net.daporkchop.pepsimod.module.impl.movement.BoatFlyMod;
 import net.daporkchop.pepsimod.module.impl.movement.ElytraFlyMod;
 import net.daporkchop.pepsimod.module.impl.movement.EntitySpeedMod;
-import net.daporkchop.pepsimod.module.impl.movement.FastLadderMod;
 import net.daporkchop.pepsimod.module.impl.movement.FlightMod;
 import net.daporkchop.pepsimod.module.impl.movement.HorseJumpPowerMod;
 import net.daporkchop.pepsimod.module.impl.movement.InventoryMoveMod;
@@ -184,7 +183,6 @@ public class PepsiMod {
         ModuleManager.registerModule(new AutoFishMod());
         ModuleManager.registerModule(new AutoToolMod());
         ModuleManager.registerModule(new AutoArmorMod());
-        ModuleManager.registerModule(new FastLadderMod());
     }
 
     public static void registerCommands(FMLStateEvent event) {
