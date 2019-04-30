@@ -48,7 +48,7 @@ public class XrayTranslator implements IConfigTranslator {
                 .map(ResourceLocation::toString)
                 .map(JsonPrimitive::new)
                 .forEach(array::add);
-        json.add("targetBlocks", array);
+        json.add("targetBlocks_v2", array);
     }
 
     public void decode(String fieldName, JsonObject json) {

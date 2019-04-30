@@ -50,8 +50,6 @@ public abstract class MixinEntity {
     @Shadow
     public double motionZ;
 
-    public boolean pepsimod_cacheSneaking;
-
     @Inject(method = "setVelocity", at = @At("HEAD"), cancellable = true)
     public void preSetVelocity(double x, double y, double z, CallbackInfo callbackInfo) {
         float strength = 1.0f;
@@ -90,8 +88,6 @@ public abstract class MixinEntity {
     @Shadow
     public void resetPositionToBB() {
     }
-
-    @Shadow public ArrayList<EntityItem> capturedDrops;
 
     @Inject(method = "isInvisibleToPlayer", at = @At("HEAD"), cancellable = true)
     public void preIsInvisibleToPlayer(EntityPlayer player, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {

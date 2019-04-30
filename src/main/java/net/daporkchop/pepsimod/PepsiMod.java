@@ -18,7 +18,6 @@ package net.daporkchop.pepsimod;
 
 import net.daporkchop.pepsimod.clickgui.ClickGUI;
 import net.daporkchop.pepsimod.command.CommandRegistry;
-import net.daporkchop.pepsimod.command.impl.DamageCommand;
 import net.daporkchop.pepsimod.command.impl.GoToCommand;
 import net.daporkchop.pepsimod.command.impl.HelpCommand;
 import net.daporkchop.pepsimod.command.impl.InvSeeCommand;
@@ -202,7 +201,6 @@ public class PepsiMod {
         CommandRegistry.registerCommand(new WaypointRemoveCommand());
         CommandRegistry.registerCommand(new WaypointShowCommand());
         CommandRegistry.registerCommand(new GoToCommand());
-        CommandRegistry.registerCommand(new DamageCommand());
     }
 
     /**

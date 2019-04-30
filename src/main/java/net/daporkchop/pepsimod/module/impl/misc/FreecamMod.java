@@ -26,9 +26,46 @@ import net.daporkchop.pepsimod.util.EntityFakePlayer;
 import net.daporkchop.pepsimod.util.config.impl.FreecamTranslator;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketPlayer;
+import org.lwjgl.opengl.Display;
 
 public class FreecamMod extends Module {
     public static FreecamMod INSTANCE;
+
+    public static void doMove(float speed) {
+        mc.player.motionX = 0.0d;
+        mc.player.motionY = 0.0d;
+        mc.player.motionZ = 0.0d;
+
+        if (Display.isActive()) {
+            if (mc.gameSettings.keyBindJump.isKeyDown()) {
+                mc.player.motionY += speed;
+            }
+            if (mc.gameSettings.keyBindSneak.isKeyDown()) {
+                mc.player.motionY -= speed;
+            }
+
+            float forward = 0.0f;
+            if (mc.gameSettings.keyBindForward.isKeyDown()) {
+                forward += speed;
+            }
+            if (mc.gameSettings.keyBindBack.isKeyDown()) {
+                forward -= speed;
+            }
+
+            float strafe = 0.0f;
+            if (mc.gameSettings.keyBindLeft.isKeyDown()) {
+                strafe += speed;
+            }
+            if (mc.gameSettings.keyBindRight.isKeyDown()) {
+                strafe -= speed;
+            }
+
+            float yaw = mc.player.rotationYaw;
+            mc.player.motionX = (forward * Math.cos(Math.toRadians(yaw + 90.0F)) + strafe * Math.sin(Math.toRadians(yaw + 90.0F)));
+            mc.player.motionZ = (forward * Math.sin(Math.toRadians(yaw + 90.0F)) - strafe * Math.cos(Math.toRadians(yaw + 90.0F)));
+        }
+    }
+
     public EntityFakePlayer fakePlayer;
 
     {
@@ -58,37 +95,7 @@ public class FreecamMod extends Module {
 
     @Override
     public void tick() {
-        float speed = FreecamTranslator.INSTANCE.speed;
-        mc.player.motionX = 0.0d;
-        mc.player.motionY = 0.0d;
-        mc.player.motionZ = 0.0d;
-
-        if (mc.gameSettings.keyBindJump.isKeyDown())    {
-            mc.player.motionY += speed;
-        }
-        if (mc.gameSettings.keyBindSneak.isKeyDown())    {
-            mc.player.motionY -= speed;
-        }
-
-        float forward = 0.0f;
-        if (mc.gameSettings.keyBindForward.isKeyDown())    {
-            forward += speed;
-        }
-        if (mc.gameSettings.keyBindBack.isKeyDown())    {
-            forward -= speed;
-        }
-
-        float strafe = 0.0f;
-        if (mc.gameSettings.keyBindLeft.isKeyDown())    {
-            strafe += speed;
-        }
-        if (mc.gameSettings.keyBindRight.isKeyDown())    {
-            strafe -= speed;
-        }
-
-        float yaw = mc.player.rotationYaw;
-        mc.player.motionX = (forward * Math.cos(Math.toRadians(yaw + 90.0F)) + strafe * Math.sin(Math.toRadians(yaw + 90.0F)));
-        mc.player.motionZ = (forward * Math.sin(Math.toRadians(yaw + 90.0F)) - strafe * Math.cos(Math.toRadians(yaw + 90.0F)));
+        doMove(FreecamTranslator.INSTANCE.speed);
     }
 
     @Override
