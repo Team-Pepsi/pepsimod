@@ -20,6 +20,7 @@ import net.daporkchop.pepsimod.module.impl.misc.AnnouncerMod;
 import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
 import net.daporkchop.pepsimod.module.impl.movement.NoClipMod;
 import net.daporkchop.pepsimod.module.impl.render.XrayMod;
+import net.daporkchop.pepsimod.optimization.blockid.BlockID;
 import net.daporkchop.pepsimod.util.config.impl.XrayTranslator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -36,28 +37,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static net.daporkchop.pepsimod.util.PepsiConstants.pepsimod;
 
 @Mixin(Block.class)
-public abstract class MixinBlock extends net.minecraftforge.registries.IForgeRegistryEntry.Impl<Block> {
-    /**
-     * used for superfast accessing of block ids
-     */
+public abstract class MixinBlock extends net.minecraftforge.registries.IForgeRegistryEntry.Impl<Block> implements BlockID {
     public int pepsimod_id = 0;
+
+    @Override
+    public int getBlockId() {
+        return this.pepsimod_id;
+    }
+
+    @Override
+    public void internal_setBlockId(int id) {
+        this.pepsimod_id = id;
+    }
 
     @Inject(method = "isFullCube", at = @At("HEAD"), cancellable = true)
     public void preIsFullCube(IBlockState state, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (pepsimod.hasInitializedModules) {
             if (XrayMod.INSTANCE.state.enabled) {
-                callbackInfoReturnable.setReturnValue(XrayTranslator.INSTANCE.isTargeted(Block.class.cast(this)));
+                callbackInfoReturnable.setReturnValue(XrayTranslator.INSTANCE.isTargeted(this));
             } else if (FreecamMod.INSTANCE.state.enabled || NoClipMod.INSTANCE.state.enabled) {
                 callbackInfoReturnable.setReturnValue(false);
             }
         }
-    }
-
-    /**
-     * called on pepsimod init
-     */
-    public void setPepsimod_id() {
-        this.pepsimod_id = Block.REGISTRY.getIDForObject(Block.class.cast(this));
     }
 
     @Inject(method = "shouldSideBeRendered", at = @At("HEAD"), cancellable = true)

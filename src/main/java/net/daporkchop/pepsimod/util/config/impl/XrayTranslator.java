@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -20,33 +20,50 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
+import net.daporkchop.pepsimod.optimization.blockid.BlockID;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.config.IConfigTranslator;
 import net.minecraft.block.Block;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
+import java.util.stream.StreamSupport;
 
 public class XrayTranslator implements IConfigTranslator {
     public static final XrayTranslator INSTANCE = new XrayTranslator();
-    public ArrayList<Integer> target_blocks = new ArrayList<>();
+    public IntOpenHashSet target_blocks = new IntOpenHashSet();
 
     private XrayTranslator() {
-
     }
 
     public void encode(JsonObject json) {
         JsonArray array = new JsonArray();
-        for (Integer integer : this.target_blocks) {
-            array.add(new JsonPrimitive(integer));
-        }
+        this.target_blocks.stream()
+                .map(BlockID.BLOCK_LOOKUP::get)
+                .map(Block::getRegistryName)
+                .map(ResourceLocation::toString)
+                .map(JsonPrimitive::new)
+                .forEach(array::add);
         json.add("targetBlocks", array);
     }
 
     public void decode(String fieldName, JsonObject json) {
-        JsonArray array = this.getArray(json, "targetBlocks", new JsonArray());
-        for (JsonElement anArray : array) {
-            this.target_blocks.add(anArray.getAsInt());
-        }
+        this.target_blocks.clear();
+        StreamSupport.stream(this.getArray(json, "targetBlocks", new JsonArray()).spliterator(), false)
+                .mapToInt(JsonElement::getAsInt)
+                .forEach(this.target_blocks::add);
+        StreamSupport.stream(this.getArray(json, "targetBlocks_v2", new JsonArray()).spliterator(), false)
+                .map(JsonElement::getAsString)
+                .map(ResourceLocation::new)
+                .map(Block.REGISTRY::getObject)
+                .map(BlockID.class::cast)
+                .mapToInt(BlockID::getBlockId)
+                .forEach(this.target_blocks::add);
+        this.target_blocks.trim();
     }
 
     public String name() {
@@ -54,13 +71,10 @@ public class XrayTranslator implements IConfigTranslator {
     }
 
     public boolean isTargeted(Block block) {
-        int id = PepsiUtils.getBlockId(block);
-        for (Integer i : this.target_blocks) {
-            if (i == id) {
-                return true;
-            }
-        }
+        return this.target_blocks.contains(((BlockID) block).getBlockId());
+    }
 
-        return false;
+    public boolean isTargeted(BlockID block) {
+        return this.target_blocks.contains(block.getBlockId());
     }
 }

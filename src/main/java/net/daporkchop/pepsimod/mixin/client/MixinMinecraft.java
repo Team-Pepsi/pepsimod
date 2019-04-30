@@ -17,6 +17,7 @@
 package net.daporkchop.pepsimod.mixin.client;
 
 import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.PepsiModMixinLoader;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.impl.render.UnfocusedCPUMod;
@@ -118,7 +119,7 @@ public abstract class MixinMinecraft {
 
     @Redirect(method = "createDisplay", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/Display;setTitle(Ljava/lang/String;)V"))
     public void changeWindowTitle(String title) {
-        Display.setTitle("pepsimod 11.1");
+        Display.setTitle(PepsiModMixinLoader.isObfuscatedEnvironment ? "pepsimod 11.1" : "pepsimod 11.1 (dev environment)");
     }
 
     @Inject(method = "setWindowIcon", at = @At("HEAD"), cancellable = true)

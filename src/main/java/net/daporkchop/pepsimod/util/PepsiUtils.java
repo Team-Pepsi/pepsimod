@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -17,6 +17,7 @@
 package net.daporkchop.pepsimod.util;
 
 import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.optimization.blockid.BlockID;
 import net.daporkchop.pepsimod.the.wurst.pkg.name.RotationUtils;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
 import net.daporkchop.pepsimod.util.colors.FixedColorElement;
@@ -123,7 +124,6 @@ public class PepsiUtils extends PepsiConstants {
     public static RainbowCycle rainbowCycle = new RainbowCycle();
     public static Color RAINBOW_COLOR = new Color(0, 0, 0);
     public static RainbowText PEPSI_NAME = new RainbowText("PepsiMod " + PepsiMod.VERSION);
-    public static Field block_pepsimod_id = null;
     public static ArrayList<ITickListener> tickListeners = new ArrayList<>();
     public static ArrayList<ITickListener> toRemoveTickListeners = new ArrayList<>();
     public static ArrayList<IWurstRenderListener> wurstRenderListeners = new ArrayList<>();
@@ -386,41 +386,7 @@ public class PepsiUtils extends PepsiConstants {
     }
 
     public static void setBlockIdFields() {
-        try {
-            if (block_pepsimod_id != null) {
-                return;
-            }
-            Class clazz = Block.class;
-            block_pepsimod_id = clazz.getDeclaredField("pepsimod_id");
-            Method setPepsimod_id = clazz.getDeclaredMethod("setPepsimod_id");
-            Block.REGISTRY.forEach((block -> {
-                try {
-                    setPepsimod_id.invoke(block);
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                    Runtime.getRuntime().exit(8742043);
-                }
-            }));
-        } catch (Throwable e) {
-            e.printStackTrace();
-            Runtime.getRuntime().exit(2349573);
-        }
-    }
-
-    /**
-     * this is important because getting a block id normally involves iterating through every object in the block registry
-     * in a modded environment there might be 1000s of entrys there
-     * so if we can get the id like this, it saves us lots of Time™
-     */
-    public static int getBlockId(Block block) {
-        try {
-            return (int) block_pepsimod_id.get(block);
-        } catch (Throwable e) {
-            e.printStackTrace();
-            Runtime.getRuntime().exit(97348562);
-        }
-        return -1; //the code will NEVER get here!
-        // thanks java for forcing me to add this
+        Block.REGISTRY.forEach(block -> ((BlockID) block).internal_setBlockId(Block.REGISTRY.getIDForObject(block)));
     }
 
     public static AxisAlignedBB cloneBB(AxisAlignedBB bb) {

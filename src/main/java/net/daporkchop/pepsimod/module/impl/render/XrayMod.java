@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -19,6 +19,7 @@ package net.daporkchop.pepsimod.module.impl.render;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
+import net.daporkchop.pepsimod.optimization.blockid.BlockID;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.config.impl.XrayTranslator;
 import net.minecraft.block.Block;
@@ -55,7 +56,6 @@ public class XrayMod extends Module {
 
     @Override
     public void tick() {
-
     }
 
     @Override
@@ -102,10 +102,10 @@ public class XrayMod extends Module {
                 return "";
             }
         } else if (args.length == 2 && args[1].equals("remove")) {
-            return cmd + " " + Block.REGISTRY.getObjectById(XrayTranslator.INSTANCE.target_blocks.get(0)).getRegistryName().toString();
+            return cmd + " " + Block.REGISTRY.getObjectById(XrayTranslator.INSTANCE.target_blocks.iterator().nextInt()).getRegistryName();
         } else if (args.length == 3 && args[1].equals("remove")) {
             if (args[2].isEmpty()) {
-                return cmd + Block.REGISTRY.getObjectById(XrayTranslator.INSTANCE.target_blocks.get(0)).getRegistryName().toString();
+                return cmd + Block.REGISTRY.getObjectById(XrayTranslator.INSTANCE.target_blocks.iterator().nextInt()).getRegistryName();
             } else {
                 String arg = args[2];
                 for (Integer i : XrayTranslator.INSTANCE.target_blocks) {
@@ -145,7 +145,7 @@ public class XrayMod extends Module {
                     if (block == null) {
                         clientMessage("Invalid id: " + PepsiUtils.COLOR_ESCAPE + "o" + s);
                     } else {
-                        XrayTranslator.INSTANCE.target_blocks.add(PepsiUtils.getBlockId(block));
+                        XrayTranslator.INSTANCE.target_blocks.add(((BlockID) block).getBlockId());
                         clientMessage("Added " + PepsiUtils.COLOR_ESCAPE + "o" + block.getRegistryName().toString() + PepsiUtils.COLOR_ESCAPE + "r to the Xray list");
                         if (this.state.enabled) {
                             mc.renderGlobal.loadRenderers();
@@ -176,9 +176,9 @@ public class XrayMod extends Module {
                     if (block == null) {
                         clientMessage("Invalid id: " + PepsiUtils.COLOR_ESCAPE + "o" + s);
                     } else {
-                        int id = PepsiUtils.getBlockId(block);
+                        int id = ((BlockID) block).getBlockId();
                         if (XrayTranslator.INSTANCE.target_blocks.contains(id)) {
-                            XrayTranslator.INSTANCE.target_blocks.remove((Integer) id);
+                            XrayTranslator.INSTANCE.target_blocks.remove(id);
                             clientMessage("Removed " + PepsiUtils.COLOR_ESCAPE + "o" + s + PepsiUtils.COLOR_ESCAPE + "r from the Xray list");
                             if (this.state.enabled) {
                                 mc.renderGlobal.loadRenderers();
