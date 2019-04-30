@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -36,7 +36,9 @@ public class AutoFishMod extends Module {
     public static boolean isBobberSplash(SPacketSoundEffect soundEffect) {
         return SoundEvents.ENTITY_BOBBER_SPLASH.equals(soundEffect.getSound());
     }
+
     public int timer;
+    public boolean running = false;
 
     {
         INSTANCE = this;
@@ -64,7 +66,7 @@ public class AutoFishMod extends Module {
         int rodInHotbar = -1;
         for (int i = 0; i < 9; i++) {
             // skip non-rod items
-            ItemStack stack = WMinecraft.getPlayer().inventory.getStackInSlot(i);
+            ItemStack stack = mc.player.inventory.getStackInSlot(i);
             if (stack.isEmpty() || !(stack.getItem() instanceof ItemFishingRod)) {
                 continue;
             }
@@ -76,8 +78,8 @@ public class AutoFishMod extends Module {
         // check if any rod was found
         if (rodInHotbar != -1) {
             // select fishing rod
-            if (WMinecraft.getPlayer().inventory.currentItem != rodInHotbar) {
-                WMinecraft.getPlayer().inventory.currentItem = rodInHotbar;
+            if (mc.player.inventory.currentItem != rodInHotbar) {
+                mc.player.inventory.currentItem = rodInHotbar;
                 return;
             }
 
@@ -88,7 +90,7 @@ public class AutoFishMod extends Module {
             }
 
             // check bobber
-            if (WMinecraft.getPlayer().fishEntity != null) {
+            if (mc.player.fishEntity != null) {
                 return;
             }
 
@@ -101,8 +103,7 @@ public class AutoFishMod extends Module {
         int rodInInventory = -1;
         for (int i = 9; i < 36; i++) {
             // skip non-rod items
-            ItemStack stack =
-                    WMinecraft.getPlayer().inventory.getStackInSlot(i);
+            ItemStack stack = mc.player.inventory.getStackInSlot(i);
             if (stack.isEmpty() || !(stack.getItem() instanceof ItemFishingRod)) {
                 continue;
             }
@@ -113,9 +114,10 @@ public class AutoFishMod extends Module {
 
         // check if completely out of rods
         if (rodInInventory == -1) {
-            Command.clientMessage("Out of fishing rods.");
-            ModuleManager.disableModule(this);
+            this.running = false;
             return;
+        } else {
+            this.running = true;
         }
 
         // find empty hotbar slot
@@ -133,7 +135,7 @@ public class AutoFishMod extends Module {
         // check if hotbar is full
         boolean swap = false;
         if (hotbarSlot == -1) {
-            hotbarSlot = WMinecraft.getPlayer().inventory.currentItem;
+            hotbarSlot = mc.player.inventory.currentItem;
             swap = true;
         }
 
@@ -177,17 +179,8 @@ public class AutoFishMod extends Module {
 
     @Override
     public void postRecievePacket(Packet<?> packetIn) {
-        // check packet type
-        if (!(packetIn instanceof SPacketSoundEffect)) {
-            return;
+        if (this.running && packetIn instanceof SPacketSoundEffect && isBobberSplash((SPacketSoundEffect) packetIn)) {
+            this.rightClick();
         }
-
-        // check sound type
-        if (!isBobberSplash((SPacketSoundEffect) packetIn)) {
-            return;
-        }
-
-        // catch fish
-        this.rightClick();
     }
 }

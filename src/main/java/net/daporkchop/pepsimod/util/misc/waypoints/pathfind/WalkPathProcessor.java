@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -40,8 +40,8 @@ public class WalkPathProcessor extends PathProcessor {
     public void process() {
         // get positions
         BlockPos pos;
-        pos = WMinecraft.getPlayer().onGround ? new BlockPos(WMinecraft.getPlayer().posX,
-                WMinecraft.getPlayer().posY + 0.5, WMinecraft.getPlayer().posZ) : new BlockPos(WMinecraft.getPlayer());
+        pos = mc.player.onGround ? new BlockPos(mc.player.posX,
+                mc.player.posY + 0.5, mc.player.posZ) : new BlockPos(mc.player);
         this.index = 1;
         PathPos nextPos = null;
         boolean forceNext = false;
@@ -55,7 +55,7 @@ public class WalkPathProcessor extends PathProcessor {
         if (forceNext || pos.equals(nextPos)) {
             GoToCommand.INSTANCE.pathFinder.toRemove.add(nextPos);
             return;
-        } else if (WMinecraft.getPlayer().getDistanceSq(nextPos) >= 16 || (!GoToCommand.INSTANCE.pathFinder.goesToGoal && this.path.size() <= 15)) {
+        } else if (mc.player.getDistanceSq(nextPos) >= 16 || (!GoToCommand.INSTANCE.pathFinder.goesToGoal && this.path.size() <= 15)) {
             GoToCommand.INSTANCE.pathFinder = new PathFinder(GoToCommand.INSTANCE.pathFinder.goal);
             return;
         }
@@ -68,7 +68,7 @@ public class WalkPathProcessor extends PathProcessor {
         if (Math.abs(RotationUtils.getHorizontalAngleToClientRotation(new Vec3d(nextPos).add(0.5, 0.5, 0.5))) > 90) {
             return;
         }
-        if (WMinecraft.getPlayer().isInWater() && pos.getY() <= nextPos.getY()) {
+        if (mc.player.isInWater() && pos.getY() <= nextPos.getY()) {
             ReflectionStuff.setPressed(mc.gameSettings.keyBindJump, true);
         }
 
@@ -113,7 +113,7 @@ public class WalkPathProcessor extends PathProcessor {
                 GoToCommand.INSTANCE.pathFinder.toRemove.add(this.path.get(i));
 
                 // walk off the edge
-                if (WMinecraft.getPlayer().onGround) {
+                if (mc.player.onGround) {
                     ReflectionStuff.setPressed(mc.gameSettings.keyBindForward, true);
                 }
             }
@@ -123,6 +123,6 @@ public class WalkPathProcessor extends PathProcessor {
     @Override
     public void lockControls() {
         super.lockControls();
-        WMinecraft.getPlayer().capabilities.isFlying = false;
+        mc.player.capabilities.isFlying = false;
     }
 }

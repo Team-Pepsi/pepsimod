@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -68,7 +68,7 @@ public class PathFinder extends PepsiConstants {
     public boolean goesToGoal = true;
 
     public PathFinder(BlockPos goal) {
-        this.start = WMinecraft.getPlayer().onGround ? new PathPos(new BlockPos(WMinecraft.getPlayer().posX, WMinecraft.getPlayer().posY + 0.5, WMinecraft.getPlayer().posZ)) : new PathPos(new BlockPos(WMinecraft.getPlayer()));
+        this.start = mc.player.onGround ? new PathPos(new BlockPos(mc.player.posX, mc.player.posY + 0.5, mc.player.posZ)) : new PathPos(new BlockPos(mc.player));
         this.goal = goal;
 
         this.costMap.put(this.start, 0F);
