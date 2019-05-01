@@ -74,6 +74,7 @@ import net.daporkchop.pepsimod.module.impl.movement.NoSlowdownMod;
 import net.daporkchop.pepsimod.module.impl.movement.SafewalkMod;
 import net.daporkchop.pepsimod.module.impl.movement.StepMod;
 import net.daporkchop.pepsimod.module.impl.movement.VelocityMod;
+import net.daporkchop.pepsimod.module.impl.player.AntiAFKMod;
 import net.daporkchop.pepsimod.module.impl.player.AutoEatMod;
 import net.daporkchop.pepsimod.module.impl.player.AutoMineMod;
 import net.daporkchop.pepsimod.module.impl.player.FastPlaceMod;
@@ -182,6 +183,7 @@ public class PepsiMod {
         ModuleManager.registerModule(new AutoFishMod());
         ModuleManager.registerModule(new AutoToolMod());
         ModuleManager.registerModule(new AutoArmorMod());
+        ModuleManager.registerModule(new AntiAFKMod());
     }
 
     public static void registerCommands(FMLStateEvent event) {

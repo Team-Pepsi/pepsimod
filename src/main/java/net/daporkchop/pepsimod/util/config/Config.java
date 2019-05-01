@@ -21,6 +21,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.daporkchop.pepsimod.util.config.impl.AnnouncerTranslator;
+import net.daporkchop.pepsimod.util.config.impl.AntiAFKTranslator;
 import net.daporkchop.pepsimod.util.config.impl.AutoEatTranslator;
 import net.daporkchop.pepsimod.util.config.impl.BedBomberTranslator;
 import net.daporkchop.pepsimod.util.config.impl.ClickGUITranslator;
@@ -56,6 +57,7 @@ public class Config {
 
     static {
         registerConfigTranslator(AnnouncerTranslator.INSTANCE);
+        registerConfigTranslator(AntiAFKTranslator.INSTANCE);
         registerConfigTranslator(AutoEatTranslator.INSTANCE);
         registerConfigTranslator(BedBomberTranslator.INSTANCE);
         registerConfigTranslator(ClickGUITranslator.INSTANCE);

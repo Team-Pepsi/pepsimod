@@ -14,36 +14,42 @@
  *
  */
 
-package net.daporkchop.pepsimod.module.impl;
+package net.daporkchop.pepsimod.module.impl.player;
 
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
+import net.daporkchop.pepsimod.util.config.impl.AntiAFKTranslator;
+import org.lwjgl.opengl.Display;
 
-public class BasicMod extends Module {
-    public static BasicMod INSTANCE;
+public class AntiAFKMod extends Module {
+    public static AntiAFKMod INSTANCE;
 
     {
         INSTANCE = this;
     }
 
-    public BasicMod() {
-        super("delet_this");
+    protected int tickCounter = 0;
+
+    public AntiAFKMod() {
+        super("AntiAFK");
     }
 
     @Override
     public void onEnable() {
-
+        this.tickCounter = 0;
     }
 
     @Override
     public void onDisable() {
-
     }
 
     @Override
     public void tick() {
-
+        if (AntiAFKTranslator.INSTANCE.requireInactive && (mc.inGameHasFocus || Display.isActive()))   {
+            this.tickCounter = AntiAFKTranslator.INSTANCE.delay;
+        } else if (this.tickCounter-- <= 0) {
+        }
     }
 
     @Override
@@ -53,11 +59,11 @@ public class BasicMod extends Module {
 
     @Override
     public ModuleOption[] getDefaultOptions() {
-        return new ModuleOption[]{
+        return new ModuleOption[] {
         };
     }
 
     public ModuleCategory getCategory() {
-        return ModuleCategory.PLACEHOLDER;
+        return ModuleCategory.PLAYER;
     }
 }
