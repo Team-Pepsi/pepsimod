@@ -35,7 +35,6 @@ public class AutoFishMod extends Module {
     }
 
     public int timer;
-    public boolean running = false;
 
     {
         INSTANCE = this;
@@ -111,10 +110,7 @@ public class AutoFishMod extends Module {
 
         // check if completely out of rods
         if (rodInInventory == -1) {
-            this.running = false;
             return;
-        } else {
-            this.running = true;
         }
 
         // find empty hotbar slot
@@ -176,7 +172,7 @@ public class AutoFishMod extends Module {
 
     @Override
     public void postRecievePacket(Packet<?> packetIn) {
-        if (this.running && packetIn instanceof SPacketSoundEffect && isBobberSplash((SPacketSoundEffect) packetIn)) {
+        if (packetIn instanceof SPacketSoundEffect && isBobberSplash((SPacketSoundEffect) packetIn) && mc.player.fishEntity != null) {
             this.rightClick();
         }
     }
