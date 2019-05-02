@@ -20,17 +20,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import it.unimi.dsi.fastutil.ints.IntSet;
-import net.daporkchop.pepsimod.optimization.blockid.BlockID;
-import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.optimization.BlockID;
 import net.daporkchop.pepsimod.util.config.IConfigTranslator;
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.ArrayList;
 import java.util.stream.StreamSupport;
 
 public class XrayTranslator implements IConfigTranslator {

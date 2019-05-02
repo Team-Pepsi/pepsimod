@@ -19,7 +19,7 @@ package net.daporkchop.pepsimod.module.impl.render;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.daporkchop.pepsimod.optimization.blockid.BlockID;
+import net.daporkchop.pepsimod.optimization.BlockID;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.config.impl.XrayTranslator;
 import net.minecraft.block.Block;

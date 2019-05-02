@@ -14,7 +14,7 @@
  *
  */
 
-package net.daporkchop.pepsimod.optimization.blockid;
+package net.daporkchop.pepsimod.optimization;
 
 import net.minecraft.block.Block;
 

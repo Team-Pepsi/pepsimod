@@ -20,7 +20,7 @@ import net.daporkchop.pepsimod.module.impl.misc.AnnouncerMod;
 import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
 import net.daporkchop.pepsimod.module.impl.movement.NoClipMod;
 import net.daporkchop.pepsimod.module.impl.render.XrayMod;
-import net.daporkchop.pepsimod.optimization.blockid.BlockID;
+import net.daporkchop.pepsimod.optimization.BlockID;
 import net.daporkchop.pepsimod.util.config.impl.XrayTranslator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

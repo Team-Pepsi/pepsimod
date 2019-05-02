@@ -19,6 +19,7 @@ package net.daporkchop.pepsimod.module.impl.movement;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
+import net.daporkchop.pepsimod.optimization.OverrideCounter;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import org.lwjgl.input.Keyboard;
 
@@ -35,19 +36,16 @@ public class AutoWalkMod extends Module {
 
     @Override
     public void onEnable() {
-
     }
 
     @Override
     public void onDisable() {
-        if (pepsimod.isInitialized) {
-            ReflectionStuff.setPressed(mc.gameSettings.keyBindForward, Keyboard.isKeyDown(mc.gameSettings.keyBindForward.getKeyCode()));
-        }
+        ((OverrideCounter) mc.gameSettings.keyBindForward).decrementOverride();
     }
 
     @Override
     public void tick() {
-        ReflectionStuff.setPressed(mc.gameSettings.keyBindForward, true);
+        ((OverrideCounter) mc.gameSettings.keyBindForward).incrementOverride();
     }
 
     @Override

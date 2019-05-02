@@ -18,6 +18,8 @@ package net.daporkchop.pepsimod.mixin.util;
 
 import net.daporkchop.pepsimod.clickgui.ClickGUI;
 import net.daporkchop.pepsimod.module.impl.movement.InventoryMoveMod;
+import net.daporkchop.pepsimod.module.impl.player.AntiAFKMod;
+import net.daporkchop.pepsimod.optimization.OverrideCounter;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiIngameMenu;
@@ -33,78 +35,34 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static net.daporkchop.pepsimod.util.PepsiConstants.mc;
 
 @Mixin(MovementInputFromOptions.class)
 public abstract class MixinMovementInputFromOptions extends MovementInput {
-    @Shadow
-    @Final
-    private GameSettings gameSettings;
-
-    @Inject(
-            method = "updatePlayerMoveState",
-            at = @At(value = "FIELD",
-                    target = "Lnet/minecraft/util/MovementInputFromOptions;moveStrafe:F",
-                    opcode = Opcodes.PUTFIELD),
-            cancellable = true
-    )
-    public void preUpdateMoveState(CallbackInfo ci) {
-        this.moveStrafe = 0.0F;
-        this.moveForward = 0.0F;
-
-        if (this.pepsimod_isPressed(this.gameSettings.keyBindForward)) {
-            ++this.moveForward;
-            this.forwardKeyDown = true;
-        } else {
-            this.forwardKeyDown = false;
+    @Redirect(
+            method = "Lnet/minecraft/util/MovementInputFromOptions;updatePlayerMoveState()V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/settings/KeyBinding;isKeyDown()Z"
+            ))
+    public boolean redirectIsKeyDown(KeyBinding binding)    {
+        if (((OverrideCounter) binding).isOverriden()) {
+            return true;
         }
-
-        if (this.pepsimod_isPressed(this.gameSettings.keyBindBack)) {
-            --this.moveForward;
-            this.backKeyDown = true;
-        } else {
-            this.backKeyDown = false;
-        }
-
-        if (this.pepsimod_isPressed(this.gameSettings.keyBindLeft)) {
-            ++this.moveStrafe;
-            this.leftKeyDown = true;
-        } else {
-            this.leftKeyDown = false;
-        }
-
-        if (this.pepsimod_isPressed(this.gameSettings.keyBindRight)) {
-            --this.moveStrafe;
-            this.rightKeyDown = true;
-        } else {
-            this.rightKeyDown = false;
-        }
-
-        this.jump = this.pepsimod_isPressed(this.gameSettings.keyBindJump);
-        this.sneak = this.pepsimod_isPressed(this.gameSettings.keyBindSneak);
-
-        if (this.sneak) {
-            this.moveStrafe = (float) ((double) this.moveStrafe * 0.3D);
-            this.moveForward = (float) ((double) this.moveForward * 0.3D);
-        }
-
-        ci.cancel();
-    }
-
-    public boolean pepsimod_isPressed(KeyBinding keyBinding) {
         if (InventoryMoveMod.INSTANCE.state.enabled && mc.currentScreen != null) {
             if (mc.currentScreen instanceof InventoryEffectRenderer) {
-                return Keyboard.isKeyDown(keyBinding.getKeyCode()) || ReflectionStuff.getPressed(keyBinding);
+                return Keyboard.isKeyDown(binding.getKeyCode()) || ReflectionStuff.getPressed(binding);
             } else if (mc.world.isRemote && mc.currentScreen instanceof GuiIngameMenu) {
-                return Keyboard.isKeyDown(keyBinding.getKeyCode()) || ReflectionStuff.getPressed(keyBinding);
+                return Keyboard.isKeyDown(binding.getKeyCode()) || ReflectionStuff.getPressed(binding);
             } else if (mc.currentScreen instanceof ClickGUI) {
-                return Keyboard.isKeyDown(keyBinding.getKeyCode()) || ReflectionStuff.getPressed(keyBinding);
+                return Keyboard.isKeyDown(binding.getKeyCode()) || ReflectionStuff.getPressed(binding);
             } else if (mc.currentScreen instanceof GuiChat) {
-                return ReflectionStuff.getPressed(keyBinding);
+                return ReflectionStuff.getPressed(binding);
             }
         }
-        return keyBinding.isKeyDown();
+        return binding.isKeyDown();
     }
 }

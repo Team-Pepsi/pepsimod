@@ -79,13 +79,6 @@ public abstract class MixinMinecraft {
                     module.tick();
                 }
             }
-            for (ITickListener listener : PepsiUtils.toRemoveTickListeners) {
-                PepsiUtils.tickListeners.remove(listener);
-            }
-            PepsiUtils.toRemoveTickListeners.clear();
-            for (ITickListener listener : PepsiUtils.tickListeners) {
-                listener.tick();
-            }
         }
     }
 

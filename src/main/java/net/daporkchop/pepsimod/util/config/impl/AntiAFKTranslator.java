@@ -24,12 +24,12 @@ public class AntiAFKTranslator implements IConfigTranslator {
 
     //spinning
     public boolean spin = false;
-    public float maxSpin = 360.0f;
-
     public boolean sneak = true;
     public boolean swingArm = true;
+    public boolean move = false;
+    public boolean strafe = false;
 
-    public int delay = 20;
+    public int delay = 5000;
     public boolean requireInactive = true;
 
     private AntiAFKTranslator() {
@@ -37,18 +37,20 @@ public class AntiAFKTranslator implements IConfigTranslator {
 
     public void encode(JsonObject json) {
         json.addProperty("spin", this.spin);
-        json.addProperty("maxSpin", this.maxSpin);
         json.addProperty("sneak", this.sneak);
         json.addProperty("swingArm", this.swingArm);
+        json.addProperty("move", this.move);
+        json.addProperty("strafe", this.strafe);
         json.addProperty("delay", this.delay);
         json.addProperty("requireInactive", this.requireInactive);
     }
 
     public void decode(String fieldName, JsonObject json) {
         this.spin = this.getBoolean(json, "spin", this.spin);
-        this.maxSpin = this.getFloat(json, "maxSpin", this.maxSpin);
         this.sneak = this.getBoolean(json, "sneak", this.sneak);
         this.swingArm = this.getBoolean(json, "swingArm", this.swingArm);
+        this.move = this.getBoolean(json, "move", this.move);
+        this.strafe = this.getBoolean(json, "strafe", this.strafe);
         this.delay = this.getInt(json, "delay", this.delay);
         this.requireInactive = this.getBoolean(json, "requireInactive", this.requireInactive);
     }

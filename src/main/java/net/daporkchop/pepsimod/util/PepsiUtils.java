@@ -17,8 +17,7 @@
 package net.daporkchop.pepsimod.util;
 
 import net.daporkchop.pepsimod.PepsiMod;
-import net.daporkchop.pepsimod.optimization.blockid.BlockID;
-import net.daporkchop.pepsimod.the.wurst.pkg.name.RotationUtils;
+import net.daporkchop.pepsimod.optimization.BlockID;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
 import net.daporkchop.pepsimod.util.colors.FixedColorElement;
 import net.daporkchop.pepsimod.util.colors.GradientText;
@@ -27,7 +26,6 @@ import net.daporkchop.pepsimod.util.colors.rainbow.RainbowCycle;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
 import net.daporkchop.pepsimod.util.config.impl.GeneralTranslator;
 import net.daporkchop.pepsimod.util.config.impl.TargettingTranslator;
-import net.daporkchop.pepsimod.util.misc.ITickListener;
 import net.daporkchop.pepsimod.util.misc.IWurstRenderListener;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -68,8 +66,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
@@ -124,8 +120,6 @@ public class PepsiUtils extends PepsiConstants {
     public static RainbowCycle rainbowCycle = new RainbowCycle();
     public static Color RAINBOW_COLOR = new Color(0, 0, 0);
     public static RainbowText PEPSI_NAME = new RainbowText("PepsiMod " + PepsiMod.VERSION);
-    public static ArrayList<ITickListener> tickListeners = new ArrayList<>();
-    public static ArrayList<ITickListener> toRemoveTickListeners = new ArrayList<>();
     public static ArrayList<IWurstRenderListener> wurstRenderListeners = new ArrayList<>();
     public static ArrayList<IWurstRenderListener> toRemoveWurstRenderListeners = new ArrayList<>();
     public static GuiButton reconnectButton;
