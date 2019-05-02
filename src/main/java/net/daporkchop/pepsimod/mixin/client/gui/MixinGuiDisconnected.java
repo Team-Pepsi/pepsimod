@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -79,7 +79,7 @@ public abstract class MixinGuiDisconnected extends GuiScreen {
             GeneralTranslator.INSTANCE.autoReconnect = !GeneralTranslator.INSTANCE.autoReconnect;
             if (GeneralTranslator.INSTANCE.autoReconnect) {
                 PepsiUtils.autoReconnectWaitTime = 5;
-                PepsiUtils.autoReconnectButton.displayString = "AutoReconnect (\u00A7a" + --PepsiUtils.autoReconnectWaitTime + "\u00A7r)";
+                PepsiUtils.autoReconnectButton.displayString = "AutoReconnect (\u00A7a" + PepsiUtils.autoReconnectWaitTime + "\u00A7r)";
             } else {
                 PepsiUtils.autoReconnectButton.displayString = "AutoReconnect (\u00A7cDisabled\u00A7r)";
             }

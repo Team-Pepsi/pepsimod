@@ -37,12 +37,9 @@ public class XrayTranslator implements IConfigTranslator {
 
     public void encode(JsonObject json) {
         JsonArray array = new JsonArray();
-        this.target_blocks.stream()
-                .map(BlockID.BLOCK_LOOKUP::get)
-                .map(Block::getRegistryName)
-                .map(ResourceLocation::toString)
-                .map(JsonPrimitive::new)
-                .forEach(array::add);
+        for (int id : this.target_blocks){
+            array.add(Block.REGISTRY.getObjectById(id).getRegistryName().toString());
+        }
         json.add("targetBlocks_v2", array);
     }
 

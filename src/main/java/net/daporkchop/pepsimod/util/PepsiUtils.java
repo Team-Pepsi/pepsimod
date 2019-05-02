@@ -143,10 +143,10 @@ public class PepsiUtils extends PepsiConstants {
             public void run() {
                 if (mc.currentScreen != null && mc.currentScreen instanceof GuiDisconnected && autoReconnectButton != null && GeneralTranslator.INSTANCE.autoReconnect) {
                     autoReconnectButton.displayString = "AutoReconnect (\u00A7a" + --autoReconnectWaitTime + "\u00A7r)";
-                    if (autoReconnectWaitTime == 0) {
+                    if (autoReconnectWaitTime <= 0) {
                         ServerData data = new ServerData("", lastIp + ':' + lastPort, false);
                         data.setResourceMode(ServerData.ServerResourceMode.PROMPT);
-                        FMLClientHandler.instance().connectToServer(mc.currentScreen, data);
+                        mc.addScheduledTask(() -> FMLClientHandler.instance().connectToServer(mc.currentScreen, data));
                         autoReconnectWaitTime = 5;
                     }
                 }
