@@ -41,7 +41,10 @@ public class CommandRegistry extends PepsiConstants {
         if (input.length() == 1) {
             return "." + commandNames.values().iterator().next().name;
         }
-        String[] split = input.split("\\s+");
+        String[] split = input.replace(" ", " \u0000").split("\\s+");
+        for (int i = split.length - 1; i >= 0; i--) {
+            split[i] = split[i].replace("\u0000", "");
+        }
         try {
             String commandName = split[0].substring(1);
             Command command = commandNames.get(commandName);
