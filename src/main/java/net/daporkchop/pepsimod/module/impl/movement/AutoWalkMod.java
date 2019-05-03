@@ -23,6 +23,8 @@ import net.daporkchop.pepsimod.optimization.OverrideCounter;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import org.lwjgl.input.Keyboard;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class AutoWalkMod extends Module {
     public static AutoWalkMod INSTANCE;
 
@@ -30,22 +32,28 @@ public class AutoWalkMod extends Module {
         INSTANCE = this;
     }
 
+    protected final AtomicBoolean incremented = new AtomicBoolean(false);
+
     public AutoWalkMod() {
         super("AutoWalk");
     }
 
     @Override
     public void onEnable() {
+        if (!this.incremented.getAndSet(true))  {
+            ((OverrideCounter) mc.gameSettings.keyBindForward).incrementOverride();
+        }
     }
 
     @Override
     public void onDisable() {
-        ((OverrideCounter) mc.gameSettings.keyBindForward).decrementOverride();
+        if (this.incremented.getAndSet(false))  {
+            ((OverrideCounter) mc.gameSettings.keyBindForward).decrementOverride();
+        }
     }
 
     @Override
     public void tick() {
-        ((OverrideCounter) mc.gameSettings.keyBindForward).incrementOverride();
     }
 
     @Override
