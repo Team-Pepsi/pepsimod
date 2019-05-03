@@ -25,6 +25,12 @@ import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.config.impl.EntitySpeedTranslator;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.SPacketEntity;
+import net.minecraft.network.play.server.SPacketEntityTeleport;
+import net.minecraft.network.play.server.SPacketEntityVelocity;
+import net.minecraft.network.play.server.SPacketMoveVehicle;
 import net.minecraft.util.MovementInput;
 
 public class EntitySpeedMod extends Module {
@@ -98,5 +104,22 @@ public class EntitySpeedMod extends Module {
 
     public ModuleCategory getCategory() {
         return ModuleCategory.MOVEMENT;
+    }
+
+    @Override
+    public boolean preRecievePacket(Packet<?> packetIn) {
+        if (mc.player != null && mc.player.getRidingEntity() != null && mc.player.getRidingEntity() instanceof EntityPig) { //prevent pigs from getting pushed around while riding them (maybe)
+            if (packetIn instanceof SPacketEntityTeleport && ((SPacketEntityTeleport) packetIn).getEntityId() == mc.player.getRidingEntity().getEntityId()) {
+                return true;
+            } else if (packetIn instanceof SPacketEntityVelocity && ((SPacketEntityVelocity) packetIn).getEntityID() == mc.player.getRidingEntity().getEntityId()) {
+                return true;
+            } else if (packetIn instanceof SPacketEntity && ((SPacketEntity) packetIn).getEntity(mc.player.world) == mc.player.getRidingEntity()) {
+                return true;
+            } else {
+                return packetIn instanceof SPacketMoveVehicle;
+            }
+        } else {
+            return false;
+        }
     }
 }
