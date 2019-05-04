@@ -19,7 +19,6 @@ package net.daporkchop.pepsimod.misc.data;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.daporkchop.lib.binary.UTF8;
 import net.daporkchop.lib.common.function.io.IOConsumer;
 import net.daporkchop.lib.common.function.io.IOFunction;
 import net.daporkchop.pepsimod.PepsiModMixinLoader;
@@ -35,6 +34,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -136,7 +136,11 @@ public class DataLoader extends PepsiConstants {
     }
 
     protected static JsonObject readJson(InputStream in) {
-        return new JsonParser().parse(new InputStreamReader(in, UTF8.utf8)).getAsJsonObject();
+        try {
+            return new JsonParser().parse(new InputStreamReader(in, "UTF-8")).getAsJsonObject();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("go buy a computer that isn't shit", e);
+        }
     }
 
     protected static JsonObject readJson(String path) throws IOException {
