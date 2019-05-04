@@ -22,17 +22,19 @@ import net.daporkchop.pepsimod.util.config.IConfigTranslator;
 public class EntitySpeedTranslator implements IConfigTranslator {
     public static final EntitySpeedTranslator INSTANCE = new EntitySpeedTranslator();
     public float speed = 1.0f;
+    public float idleSpeed = 1.0f;
 
     private EntitySpeedTranslator() {
-
     }
 
     public void encode(JsonObject json) {
         json.addProperty("speed", this.speed);
+        json.addProperty("idleSpeed", this.idleSpeed);
     }
 
     public void decode(String fieldName, JsonObject json) {
         this.speed = this.getFloat(json, "speed", this.speed);
+        this.idleSpeed = this.getFloat(json, "idleSpeed", this.idleSpeed);
     }
 
     public String name() {

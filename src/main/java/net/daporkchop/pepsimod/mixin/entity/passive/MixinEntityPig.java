@@ -18,6 +18,7 @@ package net.daporkchop.pepsimod.mixin.entity.passive;
 
 import net.daporkchop.pepsimod.module.impl.movement.EntitySpeedMod;
 import net.daporkchop.pepsimod.optimization.SizeSettable;
+import net.daporkchop.pepsimod.util.config.impl.EntitySpeedTranslator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityPig;
@@ -27,6 +28,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 import javax.annotation.Nullable;
 
@@ -76,8 +79,23 @@ public abstract class MixinEntityPig extends EntityAnimal implements SizeSettabl
         return 0.9d * 0.75d;
     }
 
-/*@Override
-    public AxisAlignedBB getEntityBoundingBox() {
-        return EntitySpeedMod.getMergedBBs(this, super.getEntityBoundingBox());
-    }*/
+    @ModifyConstant(
+            method = "Lnet/minecraft/entity/passive/EntityPig;travel(FFF)V",
+            constant = @Constant(
+                    floatValue = 1.0f,
+                    ordinal = 0
+            ))
+    public float modifyStepHeight(float orig)  {
+        return EntitySpeedMod.INSTANCE.state.enabled ? 0.5f : orig;
+    }
+
+    @ModifyConstant(
+            method = "Lnet/minecraft/entity/passive/EntityPig;travel(FFF)V",
+            constant = @Constant(
+                    floatValue = 1.0f,
+                    ordinal = 1
+            ))
+    public float modifyIdleSpeed(float orig)  {
+        return EntitySpeedMod.INSTANCE.state.enabled ? EntitySpeedTranslator.INSTANCE.idleSpeed : orig;
+    }
 }

@@ -32,8 +32,15 @@ public abstract class MixinAbstractHorse extends EntityAnimal {
     @Shadow
     protected abstract boolean getHorseWatchableBoolean(int p_110233_1_);
 
+    @Shadow
+    public abstract boolean isTame();
+
     @Overwrite
     public boolean isHorseSaddled() {
-        return this.getHorseWatchableBoolean(4) || EntitySpeedMod.INSTANCE.state.enabled; //make the horse be controllable even without a saddle
+        if (this.world.isRemote)    {
+            return this.getHorseWatchableBoolean(4) || (this.isTame() && EntitySpeedMod.INSTANCE.state.enabled); //make the horse be controllable even without a saddle
+        } else {
+            return this.getHorseWatchableBoolean(4);
+        }
     }
 }

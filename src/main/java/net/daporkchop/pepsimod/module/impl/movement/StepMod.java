@@ -74,7 +74,7 @@ public class StepMod extends Module {
                 return;
             }
 
-            AxisAlignedBB bb = player.getEntityBoundingBox().offset(0, 0.05d * 0, 0).expand(0.05, 0.05 * 0, 0.05).expand(-0.05, -0.05 * 0, -0.05);
+            AxisAlignedBB bb = player.getEntityBoundingBox().expand(0.0625, 0, 0.0625).expand(-0.0625, 0, -0.0625);
             boolean found = false;
             for (double d = 1.0d; d > 0.0d; d -= 1.0d / 16.0d)  {
                 if (mc.world.getCollisionBoxes(player, bb.offset(0, d, 0)).isEmpty())   {
