@@ -24,7 +24,6 @@ import net.daporkchop.pepsimod.module.impl.render.ESPMod;
 import net.daporkchop.pepsimod.util.config.impl.ESPTranslator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -37,8 +36,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.ArrayList;
-
 import static net.daporkchop.pepsimod.util.PepsiConstants.mc;
 
 @Mixin(Entity.class)
@@ -49,8 +46,17 @@ public abstract class MixinEntity {
     public double motionY;
     @Shadow
     public double motionZ;
+    @Shadow
+    private AxisAlignedBB boundingBox;
 
-    @Inject(method = "setVelocity", at = @At("HEAD"), cancellable = true)
+    @Shadow
+    public abstract void resetPositionToBB();
+
+    @Inject(
+            method = "setVelocity",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preSetVelocity(double x, double y, double z, CallbackInfo callbackInfo) {
         float strength = 1.0f;
         if (Entity.class.cast(this) == mc.player) {
@@ -62,6 +68,16 @@ public abstract class MixinEntity {
         callbackInfo.cancel();
     }
 
+    /*@Redirect(
+            method = "Lnet/minecraft/entity/Entity;move(Lnet/minecraft/entity/MoverType;DDD)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/Entity;getEntityBoundingBox()Lnet/minecraft/util/math/AxisAlignedBB;"
+            ))
+    public AxisAlignedBB move_dontUseGetterForBB(Entity entity) {
+        return this.boundingBox;
+    }*/
+
     @Inject(
             method = "move",
             at = @At("HEAD"),
@@ -70,26 +86,17 @@ public abstract class MixinEntity {
     public void preMove(MoverType type, double x, double y, double z, CallbackInfo callbackInfo) {
         Entity thisAsEntity = Entity.class.cast(this);
         if ((FreecamMod.INSTANCE.state.enabled || NoClipMod.INSTANCE.state.enabled) && thisAsEntity instanceof EntityPlayer) {
-            this.setEntityBoundingBox(this.getEntityBoundingBox().offset(x, y, z));
+            this.boundingBox = this.boundingBox.offset(x, y, z);
             this.resetPositionToBB();
             callbackInfo.cancel();
         }
     }
 
-    @Shadow
-    public AxisAlignedBB getEntityBoundingBox() {
-        return null;
-    }
-
-    @Shadow
-    public void setEntityBoundingBox(AxisAlignedBB bb) {
-    }
-
-    @Shadow
-    public void resetPositionToBB() {
-    }
-
-    @Inject(method = "isInvisibleToPlayer", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "isInvisibleToPlayer",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preIsInvisibleToPlayer(EntityPlayer player, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (AntiInvisibleMod.INSTANCE.state.enabled) {
             callbackInfoReturnable.setReturnValue(false);
@@ -97,7 +104,11 @@ public abstract class MixinEntity {
         }
     }
 
-    @Inject(method = "isGlowing", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "isGlowing",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preisGlowing(CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (ESPMod.INSTANCE.state.enabled && !ESPTranslator.INSTANCE.box) {
             Entity this_ = Entity.class.cast(this);
@@ -118,7 +129,11 @@ public abstract class MixinEntity {
         }
     }
 
-    @Inject(method = "isInWater", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "isInWater",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preIsInWater(CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (FreecamMod.INSTANCE.state.enabled) {
             callbackInfoReturnable.setReturnValue(false);

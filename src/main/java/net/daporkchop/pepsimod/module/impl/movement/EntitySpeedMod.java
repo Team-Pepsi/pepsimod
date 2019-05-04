@@ -16,15 +16,18 @@
 
 package net.daporkchop.pepsimod.module.impl.movement;
 
+import net.daporkchop.lib.unsafe.PUnsafe;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
+import net.daporkchop.pepsimod.optimization.SizeSettable;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.config.impl.EntitySpeedTranslator;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketEntity;
@@ -32,6 +35,13 @@ import net.minecraft.network.play.server.SPacketEntityTeleport;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.network.play.server.SPacketMoveVehicle;
 import net.minecraft.util.MovementInput;
+import net.minecraft.util.math.AxisAlignedBB;
+
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 
 public class EntitySpeedMod extends Module {
     public static EntitySpeedMod INSTANCE;
@@ -109,11 +119,11 @@ public class EntitySpeedMod extends Module {
     @Override
     public boolean preRecievePacket(Packet<?> packetIn) {
         if (mc.player != null && mc.player.getRidingEntity() != null && mc.player.getRidingEntity() instanceof EntityPig) { //prevent pigs from getting pushed around while riding them (maybe)
-            if (packetIn instanceof SPacketEntityTeleport && ((SPacketEntityTeleport) packetIn).getEntityId() == mc.player.getRidingEntity().getEntityId()) {
+            if (false && packetIn instanceof SPacketEntityTeleport && ((SPacketEntityTeleport) packetIn).getEntityId() == mc.player.getRidingEntity().getEntityId()) {
                 return true;
-            } else if (packetIn instanceof SPacketEntityVelocity && ((SPacketEntityVelocity) packetIn).getEntityID() == mc.player.getRidingEntity().getEntityId()) {
+            } else if (false && packetIn instanceof SPacketEntityVelocity && ((SPacketEntityVelocity) packetIn).getEntityID() == mc.player.getRidingEntity().getEntityId()) {
                 return true;
-            } else if (packetIn instanceof SPacketEntity && ((SPacketEntity) packetIn).getEntity(mc.player.world) == mc.player.getRidingEntity()) {
+            } else if (false && packetIn instanceof SPacketEntity && ((SPacketEntity) packetIn).getEntity(mc.player.world) == mc.player.getRidingEntity()) {
                 return true;
             } else {
                 return packetIn instanceof SPacketMoveVehicle;
@@ -121,5 +131,16 @@ public class EntitySpeedMod extends Module {
         } else {
             return false;
         }
+    }
+
+    public static AxisAlignedBB getMergedBBs(Entity entity, AxisAlignedBB bb) {
+        if (entity.world.isRemote)  { //only run on client to fix stuff in single player
+            for (Entity passenger : entity.getPassengers()) {
+                AxisAlignedBB bb2 = passenger.getEntityBoundingBox();
+                ReflectionStuff.setMaxY(bb2, passenger.getPositionEyes(0.0f).y);
+                bb = bb.union(bb2);
+            }
+        }
+        return bb;
     }
 }

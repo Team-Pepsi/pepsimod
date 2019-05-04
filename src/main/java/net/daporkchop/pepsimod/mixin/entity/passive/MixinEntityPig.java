@@ -17,19 +17,30 @@
 package net.daporkchop.pepsimod.mixin.entity.passive;
 
 import net.daporkchop.pepsimod.module.impl.movement.EntitySpeedMod;
+import net.daporkchop.pepsimod.optimization.SizeSettable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.util.math.AxisAlignedBB;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+
+import javax.annotation.Nullable;
 
 @Mixin(EntityPig.class)
-public abstract class MixinEntityPig extends EntityAnimal {
+public abstract class MixinEntityPig extends EntityAnimal implements SizeSettable {
+    public int riddenTicks = 0;
+
     public MixinEntityPig() {
         super(null);
     }
+
+    @Shadow
+    @Nullable
+    public abstract Entity getControllingPassenger();
 
     @Overwrite
     public boolean canBeSteered() {
@@ -39,7 +50,34 @@ public abstract class MixinEntityPig extends EntityAnimal {
             return false;
         } else {
             EntityPlayer entityplayer = (EntityPlayer) entity;
-            return EntitySpeedMod.INSTANCE.state.enabled || entityplayer.getHeldItemMainhand().getItem() == Items.CARROT_ON_A_STICK || entityplayer.getHeldItemOffhand().getItem() == Items.CARROT_ON_A_STICK;
+            return (this.world.isRemote && EntitySpeedMod.INSTANCE.state.enabled) || entityplayer.getHeldItemMainhand().getItem() == Items.CARROT_ON_A_STICK || entityplayer.getHeldItemOffhand().getItem() == Items.CARROT_ON_A_STICK;
         }
     }
+
+    @Override
+    public void onLivingUpdate() {
+        this.forceSetSize(0.9f, 0.9f);
+        if (this.world.isRemote && this.isBeingRidden()) {
+            if (this.riddenTicks++ >= 2) {
+                if (this.riddenTicks > 1000) {
+                    this.riddenTicks = 1000;
+                }
+                AxisAlignedBB bb = EntitySpeedMod.getMergedBBs(this, this.getEntityBoundingBox());
+                this.forceSetSize((float) Math.max(bb.maxX - bb.minX, bb.maxZ - bb.minZ), (float) (bb.maxY - bb.minY));
+            }
+        } else {
+            this.riddenTicks = 0;
+        }
+        super.onLivingUpdate();
+    }
+
+    @Override
+    public double getMountedYOffset() {
+        return 0.9d * 0.75d;
+    }
+
+/*@Override
+    public AxisAlignedBB getEntityBoundingBox() {
+        return EntitySpeedMod.getMergedBBs(this, super.getEntityBoundingBox());
+    }*/
 }

@@ -44,6 +44,7 @@
     "client.resources.MixinLocale",
     "world.storage.MixinWorldInfo",
     "client.renderer.MixinRenderGlobal",
-    "client.settings.MixinKeyBinding"
+    "client.settings.MixinKeyBinding",
+    "entity.MixinEntityAgeable"
   ]
 }
