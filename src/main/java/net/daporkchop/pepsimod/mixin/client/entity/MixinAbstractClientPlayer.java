@@ -40,7 +40,7 @@ public abstract class MixinAbstractClientPlayer extends EntityPlayer {
         NetworkPlayerInfo info = this.getPlayerInfo();
         if (info != null) {
             if (PepsiUtils.isPepsimodPlayer(info.getGameProfile().getId().toString())) {
-                callbackInfoReturnable.setReturnValue(ImageUtils.imgs.get(3));
+                callbackInfoReturnable.setReturnValue(ImageUtils.imgs.get(2));
             }
         }
     }

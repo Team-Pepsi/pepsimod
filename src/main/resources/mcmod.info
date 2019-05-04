@@ -11,6 +11,7 @@
       "DaPorkchop_"
     ],
     "credits": "Pepsi, for being amazing",
+    "logoFile": "assets/pepsimod/textures/gui/pepsimod.png",
     "screenshots": [],
     "dependencies": []
   }
