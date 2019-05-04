@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "baseurl": "https://raw.githubusercontent.com/Team-Pepsi/pepsimod/master/resources/",
+  "data": {
+    "groups": "data/groups.json",
+    "mainmenu": "data/mainmenu.json",
+    "lang": "data/lang.json"
+  }
+}
