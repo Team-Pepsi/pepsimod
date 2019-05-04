@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -29,10 +29,11 @@ import net.daporkchop.pepsimod.util.render.Renderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.settings.GameSettings;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.util.glu.Project;
 import org.spongepowered.asm.mixin.Final;
@@ -66,10 +67,6 @@ public abstract class MixinEntityRenderer {
     private int debugViewDirection;
     @Shadow
     private boolean debugView;
-    @Shadow
-    private int frameCount;
-    @Shadow
-    private boolean renderHand = true;
 
     @Inject(method = "renderWorldPass",
             at = @At(value = "INVOKE_ASSIGN",
@@ -229,28 +226,19 @@ public abstract class MixinEntityRenderer {
         return Math.max(FullbrightMod.INSTANCE.level * 0.5f, settings.gammaSetting);
     }
 
-    @Shadow
-    public void enableLightmap() {
-    }
-
-    @Shadow
-    public void disableLightmap() {
-    }
-
-    @Shadow
-    protected void renderRainSnow(float partialTicks) {
-    }
-
-    @Shadow
-    private void setupFog(int startCoords, float partialTicks) {
-    }
-
-    @Shadow
-    private void renderCloudsCheck(RenderGlobal renderGlobalIn, float partialTicks, int pass, double x, double y, double z) {
-    }
-
-    @Shadow
-    private void renderHand(float partialTicks, int pass) {
+    @Redirect(
+            method = "Lnet/minecraft/client/renderer/EntityRenderer;getMouseOver(F)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/Entity;getEntityBoundingBox()Lnet/minecraft/util/math/AxisAlignedBB;",
+                    ordinal = 1
+            ))
+    public AxisAlignedBB preventMousingOverRiddenEntity(Entity possiblyRidden) {
+        if (possiblyRidden.isPassenger(this.mc.getRenderViewEntity())) {
+            return new AxisAlignedBB(0, 0, 0, 0, 0, 0);
+        } else {
+            return possiblyRidden.getEntityBoundingBox();
+        }
     }
 
     @Shadow
@@ -268,14 +256,5 @@ public abstract class MixinEntityRenderer {
 
     @Shadow
     private void orientCamera(float partialTicks) {
-    }
-
-    @Shadow
-    private boolean isDrawBlockOutline() {
-        return true;
-    }
-
-    @Shadow
-    private void updateFogColor(float partialTicks) {
     }
 }

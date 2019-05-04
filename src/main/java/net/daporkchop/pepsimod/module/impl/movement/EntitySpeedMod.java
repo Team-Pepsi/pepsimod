@@ -54,6 +54,7 @@ public class EntitySpeedMod extends Module {
         INSTANCE = this;
     }
 
+    public float fakedStepHeight = 0.5f;
     protected int stepDelay = 0;
 
     public EntitySpeedMod() {
@@ -66,6 +67,7 @@ public class EntitySpeedMod extends Module {
 
     @Override
     public void onDisable() {
+        this.fakedStepHeight = 0.5f;
     }
 
     @Override
@@ -81,17 +83,18 @@ public class EntitySpeedMod extends Module {
 
                 EntityPig pig = (EntityPig) ridingEntity;
 
-                //pig.stepHeight = 0.5f;
+                if (mc.player.movementInput.moveForward == 0 && mc.player.movementInput.moveStrafe == 0) {
+                    pig.stepHeight = this.fakedStepHeight = 1.0f;
+                    break PIG_STEP;
+                } else {
+                    pig.stepHeight = this.fakedStepHeight = 0.5f;
+                }
 
                 if (!pig.collidedHorizontally) {
                     break PIG_STEP;
                 }
 
                 if (!pig.onGround || pig.isOnLadder() || pig.isInWater() || pig.isInLava()) {
-                    break PIG_STEP;
-                }
-
-                if (mc.player.movementInput.moveForward == 0 && mc.player.movementInput.moveStrafe == 0) {
                     break PIG_STEP;
                 }
 

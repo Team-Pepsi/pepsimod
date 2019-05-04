@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -85,8 +85,8 @@ public abstract class MixinEntityPig extends EntityAnimal implements SizeSettabl
                     floatValue = 1.0f,
                     ordinal = 0
             ))
-    public float modifyStepHeight(float orig)  {
-        return EntitySpeedMod.INSTANCE.state.enabled ? 0.5f : orig;
+    public float modifyStepHeight(float orig) {
+        return this.world.isRemote && EntitySpeedMod.INSTANCE.state.enabled ? EntitySpeedMod.INSTANCE.fakedStepHeight : orig;
     }
 
     @ModifyConstant(
@@ -95,7 +95,7 @@ public abstract class MixinEntityPig extends EntityAnimal implements SizeSettabl
                     floatValue = 1.0f,
                     ordinal = 1
             ))
-    public float modifyIdleSpeed(float orig)  {
-        return EntitySpeedMod.INSTANCE.state.enabled ? EntitySpeedTranslator.INSTANCE.idleSpeed : orig;
+    public float modifyIdleSpeed(float orig) {
+        return this.world.isRemote && EntitySpeedMod.INSTANCE.state.enabled ? EntitySpeedTranslator.INSTANCE.idleSpeed : orig;
     }
 }

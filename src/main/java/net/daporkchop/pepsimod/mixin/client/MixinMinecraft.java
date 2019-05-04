@@ -30,6 +30,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.multiplayer.PlayerControllerMP;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentString;
@@ -158,6 +160,18 @@ public abstract class MixinMinecraft {
         // Bypass the keybind system because the command prefix is not configurable
         if (mc.currentScreen == null && Keyboard.getEventCharacter() == '.') {
             mc.displayGuiScreen(new GuiChat("."));
+        }
+    }
+
+    @Redirect(
+            method = "Lnet/minecraft/client/Minecraft;clickMouse()V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/multiplayer/PlayerControllerMP;attackEntity(Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/entity/Entity;)V"
+            ))
+    public void preventAttackingRiddenEntity(PlayerControllerMP controller, EntityPlayer attacker, Entity attacked)  {
+        if (!attacked.isPassenger(attacker)) {
+            controller.attackEntity(attacker, attacked);
         }
     }
 }
