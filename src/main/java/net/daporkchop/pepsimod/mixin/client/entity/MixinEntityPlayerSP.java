@@ -16,17 +16,22 @@
 
 package net.daporkchop.pepsimod.mixin.client.entity;
 
+import net.daporkchop.pepsimod.module.ModuleManager;
+import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
 import net.daporkchop.pepsimod.module.impl.misc.HUDMod;
 import net.daporkchop.pepsimod.module.impl.movement.FlightMod;
 import net.daporkchop.pepsimod.module.impl.movement.NoSlowdownMod;
 import net.daporkchop.pepsimod.module.impl.movement.StepMod;
 import net.daporkchop.pepsimod.the.wurst.pkg.name.RotationUtils;
+import net.daporkchop.pepsimod.util.event.MoveEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -47,34 +52,30 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
     public NetHandlerPlayClient connection;
     @Shadow
     protected Minecraft mc;
-    @Shadow
-    private double lastReportedPosX;
-    @Shadow
-    private double lastReportedPosY;
-    @Shadow
-    private double lastReportedPosZ;
-    @Shadow
-    private float lastReportedYaw;
-    @Shadow
-    private float lastReportedPitch;
-    @Shadow
-    private boolean prevOnGround;
-    @Shadow
-    private boolean serverSneakState;
-    @Shadow
-    private boolean serverSprintState;
-    @Shadow
-    private int positionUpdateTicks;
-    @Shadow
-    private boolean autoJumpEnabled;
+
+    public MoveEvent event = new MoveEvent();
 
     public MixinEntityPlayerSP() {
         super(null, null);
     }
 
-    @Redirect(method = "onLivingUpdate",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/entity/Entity;isRiding()Z"))
+    @Overwrite
+    public void move(MoverType type, double x, double y, double z) {
+        this.event.x = x;
+        this.event.y = y;
+        this.event.z = z;
+        for (Module module : ModuleManager.ENABLED_MODULES) {
+            module.onPlayerMove(this.event);
+        }
+        super.move(type, this.event.x, this.event.y, this.event.z);
+    }
+
+    @Redirect(
+            method = "Lnet/minecraft/client/entity/EntityPlayerSP;onLivingUpdate()V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/Entity;isRiding()Z"
+            ))
     public boolean fixNoSlowdown(Entity entity) {
         return entity.isRiding() && NoSlowdownMod.INSTANCE.state.enabled;
     }
@@ -84,16 +85,43 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
         return false;
     }
 
-    @Inject(method = "isAutoJumpEnabled", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "isAutoJumpEnabled",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preisAutoJumpEnabled(CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (StepMod.INSTANCE.state.enabled) {
             callbackInfoReturnable.setReturnValue(false);
         }
     }
 
-    @Inject(method = "Lnet/minecraft/client/entity/EntityPlayerSP;setServerBrand(Ljava/lang/String;)V",
-            at = @At("HEAD"))
+    @Inject(
+            method = "Lnet/minecraft/client/entity/EntityPlayerSP;setServerBrand(Ljava/lang/String;)V",
+            at = @At("HEAD")
+    )
     public void setHUDBrand(String brand, CallbackInfo callbackInfo) {
         HUDMod.INSTANCE.serverBrand = brand;
+    }
+
+    //pepsimod: prevent guis from being impossible to open while in a portal
+    @Redirect(
+            method = "Lnet/minecraft/client/entity/EntityPlayerSP;onLivingUpdate()V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/entity/EntityPlayerSP;closeScreen()V",
+                    ordinal = 0
+            ))
+    public void fixPortalGUIs_1(EntityPlayerSP player)  {
+    }
+
+    @Redirect(
+            method = "Lnet/minecraft/client/entity/EntityPlayerSP;onLivingUpdate()V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/Minecraft;displayGuiScreen(Lnet/minecraft/client/gui/GuiScreen;)V",
+                    ordinal = 0
+            ))
+    public void fixPortalGUIs_2(Minecraft mc, GuiScreen screen)  {
     }
 }

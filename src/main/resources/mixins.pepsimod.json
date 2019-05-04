@@ -33,7 +33,6 @@
     "client.settings.MixinGameSettings",
     "client.gui.MixinGuiDisconnected",
     "client.gui.MixinGuiIngameMenu",
-    "entity.living.player.MixinEntityPlayerSP",
     "item.MixinItemStack",
     "scoreboard.MixinScoreboard",
     "block.MixinBlockSoulSand",
