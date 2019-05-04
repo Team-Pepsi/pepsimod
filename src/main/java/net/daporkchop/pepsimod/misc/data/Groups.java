@@ -14,51 +14,46 @@
  *
  */
 
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.misc.data;
 
-import net.minecraft.client.Minecraft;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.util.ResourceLocation;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
-public class ImageUtils {
-    public static HashMap<Integer, ResourceLocation> imgs = null;
+/**
+ * @author DaPorkchop_
+ */
+public class Groups extends PepsiConstants {
+    public Map<UUID, Group> playerToGroup = Collections.emptyMap();
+    public Collection<Group> groups = Collections.emptyList();
 
-    public static String[] names = {
-            "gui/pepsibuttons.png",
-            "gui/pepsimod.png",
-            "misc/cape.png"
-    };
-
-    public static void init(HashMap<String, byte[]> images) {
-        HashMap<Integer, DynamicTexture> temp = new HashMap<>();
-        for (Map.Entry<String, byte[]> entry : images.entrySet()) {
-            for (int i = 0; i < names.length; i++) {
-                if (entry.getKey().endsWith(names[i])) {
-                    temp.put(i, new DynamicTexture(createImageFromBytes(entry.getValue())));
-                }
-            }
-        }
-        imgs = new HashMap<>();
-        for (Map.Entry<Integer, DynamicTexture> entry : temp.entrySet()) {
-            imgs.put(entry.getKey(), Minecraft.getMinecraft().getTextureManager().getDynamicTextureLocation("pepsimod_texture_" + entry.getKey(), entry.getValue()));
-        }
+    public void cleanup()   {
+        this.groups.forEach(Group::cleanup);
     }
 
-    public static BufferedImage createImageFromBytes(byte[] imageData) {
-        ByteArrayInputStream bais = new ByteArrayInputStream(imageData);
-        try {
-            BufferedImage a = ImageIO.read(bais);
-            bais.close();
-            return a;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public static class Group   {
+        public String id = "";
+        public String name = "";
+        public Set<UUID> members = Collections.emptySet();
+        public ResourceLocation cape;
+        public ResourceLocation icon;
+
+        public void cleanup()   {
+            if (this.cape != null)  {
+                mc.getTextureManager().deleteTexture(this.cape);
+                this.cape = null;
+            }
+            if (this.icon != null)  {
+                mc.getTextureManager().deleteTexture(this.icon);
+                this.icon = null;
+            }
         }
     }
 }

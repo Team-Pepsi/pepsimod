@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -38,11 +38,13 @@ import net.minecraft.util.Timer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.translation.LanguageMap;
 import net.minecraftforge.fml.common.FMLLog;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Map;
 import java.util.Set;
 
 //TODO: replace this with Unsafe or access transformers
@@ -79,6 +81,8 @@ public class ReflectionStuff extends PepsiConstants {
     public static Field DEFAULT_RESOURCE_DOMAINS;
     public static Field cPacketVehicleMove_y;
     public static Field currentPlayerItem;
+    public static Field languageMap_instance;
+    public static Field languageMap_languageList;
 
     public static Method updateFallState;
     public static Method rightClickMouse;
@@ -90,7 +94,7 @@ public class ReflectionStuff extends PepsiConstants {
             modifiersField = Field.class.getDeclaredField("modifiers");
             modifiersField.setAccessible(true);
         } catch (Exception e) {
-            //impossable!
+            //impossible!
         }
     }
 
@@ -159,6 +163,8 @@ public class ReflectionStuff extends PepsiConstants {
             DEFAULT_RESOURCE_DOMAINS = getField(DefaultResourcePack.class, "DEFAULT_RESOURCE_DOMAINS", "field_110608_a", "a");
             cPacketVehicleMove_y = getField(CPacketVehicleMove.class, "y", "field_187008_b", "b");
             currentPlayerItem = getField(PlayerControllerMP.class, "currentPlayerItem", "field_78777_l", "j");
+            languageMap_instance = getField(LanguageMap.class, "instance", "field_74817_a", "c");
+            languageMap_languageList = getField(LanguageMap.class, "languageList", "field_74816_c", "d");
 
             updateFallState = getMethod(Entity.class, new String[]{"updateFallState", "func_184231_a", "a"}, double.class, boolean.class, IBlockState.class, BlockPos.class);
             rightClickMouse = getMethod(Minecraft.class, new String[]{"rightClickMouse", "func_147121_ag", "aB"});
@@ -166,6 +172,23 @@ public class ReflectionStuff extends PepsiConstants {
             setDEFAULT_RESOURCE_DOMAINS(ImmutableSet.<String>builder().addAll(DefaultResourcePack.DEFAULT_RESOURCE_DOMAINS).add("wdl").build());
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Map<String, String> getLanguageMapMap() {
+        try {
+            return (Map<String, String>) languageMap_languageList.get(languageMap_instance.get(null));
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static LanguageMap getLanguageMap() {
+        try {
+            return (LanguageMap) languageMap_instance.get(null);
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
         }
     }
 

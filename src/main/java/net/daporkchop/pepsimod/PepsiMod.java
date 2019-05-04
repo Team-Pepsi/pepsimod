@@ -42,6 +42,7 @@ import net.daporkchop.pepsimod.gui.clickgui.WindowMovement;
 import net.daporkchop.pepsimod.gui.clickgui.WindowPlayer;
 import net.daporkchop.pepsimod.gui.clickgui.WindowRender;
 import net.daporkchop.pepsimod.key.KeyRegistry;
+import net.daporkchop.pepsimod.misc.data.DataLoader;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.impl.combat.AuraMod;
 import net.daporkchop.pepsimod.module.impl.combat.AutoArmorMod;
@@ -97,14 +98,12 @@ import net.daporkchop.pepsimod.module.impl.render.TrajectoriesMod;
 import net.daporkchop.pepsimod.module.impl.render.UnfocusedCPUMod;
 import net.daporkchop.pepsimod.module.impl.render.XrayMod;
 import net.daporkchop.pepsimod.module.impl.render.ZoomMod;
-import net.daporkchop.pepsimod.util.ImageUtils;
 import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.config.Config;
 import net.daporkchop.pepsimod.util.config.impl.HUDTranslator;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Session;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -121,7 +120,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.TimerTask;
 
 @Mod(modid = "pepsimod", name = "pepsimod", version = "11.1")
@@ -234,6 +232,8 @@ public class PepsiMod {
     public void construction(FMLConstructionEvent event) {
         PepsiConstants.mc = Minecraft.getMinecraft();
         PepsiConstants.pepsimod = this;
+
+        ReflectionStuff.init();
     }
 
     @Mod.EventHandler
@@ -243,6 +243,8 @@ public class PepsiMod {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
+        DataLoader.load();
+
         new ClickGUI();
         ClickGUI.INSTANCE.setWindows(
                 new WindowRender(),
@@ -263,14 +265,6 @@ public class PepsiMod {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        ReflectionStuff.init();
-        if (ImageUtils.imgs == null) {
-            ImageUtils.imgs = new HashMap<>();
-            for (int i = 0; i < ImageUtils.names.length; i++) {
-                String s = ImageUtils.names[i];
-                ImageUtils.imgs.put(i, new ResourceLocation("pepsimod", "textures/" + s));
-            }
-        }
         MinecraftForge.EVENT_BUS.register(new GuiRenderHandler());
         MinecraftForge.EVENT_BUS.register(new MiscEventHandler());
         PepsiUtils.timer.schedule(new TimerTask() {

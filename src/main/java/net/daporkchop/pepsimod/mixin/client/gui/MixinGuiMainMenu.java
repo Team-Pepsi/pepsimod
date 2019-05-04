@@ -16,9 +16,9 @@
 
 package net.daporkchop.pepsimod.mixin.client.gui;
 
+import net.daporkchop.pepsimod.misc.data.DataLoader;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
-import net.daporkchop.pepsimod.util.ImageUtils;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.Texture;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
@@ -38,7 +38,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.awt.Color;
+import java.awt.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static net.daporkchop.pepsimod.util.PepsiConstants.pepsimod;
 
@@ -50,7 +51,10 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
     private String splashText;
     private Texture TITLE;
 
-    @Inject(method = "initGui", at = @At("RETURN"))
+    @Inject(
+            method = "initGui",
+            at = @At("RETURN")
+    )
     public void addPepsiIconAndChangeSplash(CallbackInfo ci) {
         pepsimod.isInitialized = true;
         if (!pepsimod.hasInitializedModules) {
@@ -60,12 +64,27 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
             PepsiUtils.setBlockIdFields();
             pepsimod.hasInitializedModules = true;
         }
-        this.TITLE = new Texture(ImageUtils.imgs.get(1));
-        this.splashText = PepsiUtils.COLOR_ESCAPE + "c" + PepsiUtils.COLOR_ESCAPE + "lpepsi" + PepsiUtils.COLOR_ESCAPE + '9' + PepsiUtils.COLOR_ESCAPE + "lmod";
+        this.TITLE = new Texture(DataLoader.banner);
+        String[] colors = {
+                "\u00A71",
+                "\u00A79",
+                "\u00A7a",
+                "\u00A7b",
+                "\u00A7c",
+                "\u00A7f",
+        };
+        this.splashText = colors[ThreadLocalRandom.current().nextInt(colors.length)] +
+                        DataLoader.splashes[ThreadLocalRandom.current().nextInt(DataLoader.splashes.length)];
         ModuleManager.sortModules(GeneralTranslator.INSTANCE.sortType);
     }
 
-    @Redirect(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/texture/TextureManager;bindTexture(Lnet/minecraft/util/ResourceLocation;)V", ordinal = 0))
+    @Redirect(
+            method = "drawScreen",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/texture/TextureManager;bindTexture(Lnet/minecraft/util/ResourceLocation;)V",
+                    ordinal = 0
+            ))
     public void removeMenuLogoInit(TextureManager textureManager, ResourceLocation resource) {
         int titleX = this.width / 2 - 150;
         int titleY = 20;
@@ -73,19 +92,37 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
         this.TITLE.render(titleX, titleY + 10, 300, 100);
     }
 
-    @Redirect(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiMainMenu;drawTexturedModalRect(IIIIII)V"))
+    @Redirect(
+            method = "drawScreen",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/GuiMainMenu;drawTexturedModalRect(IIIIII)V"
+            ))
     public void removeMenuLogoRendering(GuiMainMenu guiMainMenu, int x, int y, int textureX, int textureY, int width, int height) {
     }
 
-    @Redirect(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiMainMenu;drawModalRectWithCustomSizedTexture(IIFFIIFF)V"))
+    @Redirect(
+            method = "drawScreen",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/GuiMainMenu;drawModalRectWithCustomSizedTexture(IIFFIIFF)V"
+            ))
     public void removeSubLogoRendering(int x, int y, float a, float b, int c, int d, float e, float f) {
     }
 
-    @Redirect(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiMainMenu;drawString(Lnet/minecraft/client/gui/FontRenderer;Ljava/lang/String;III)V"))
+    @Redirect(
+            method = "drawScreen",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/GuiMainMenu;drawString(Lnet/minecraft/client/gui/FontRenderer;Ljava/lang/String;III)V"
+            ))
     public void removeAllDrawStrings(GuiMainMenu guiMainMenu, FontRenderer fontRenderer1, String string, int i1, int i2, int i3) {
     }
 
-    @Inject(method = "drawScreen", at = @At("RETURN"))
+    @Inject(
+            method = "drawScreen",
+            at = @At("RETURN")
+    )
     public void addDrawPepsiStuff(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
         this.drawString(this.fontRenderer, PepsiUtils.COLOR_ESCAPE + "cCopyright Mojang AB. Do not distribute!", this.width - this.fontRenderer.getStringWidth("Copyright Mojang AB. Do not distribute!") - 2, this.height - 10, -1);
         this.PEPSIMOD_TEXT_GRADIENT.drawAtPos(this, 2, this.height - 20);

@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -16,7 +16,6 @@
 
 package net.daporkchop.pepsimod.gui.misc;
 
-import net.daporkchop.pepsimod.util.ImageUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
@@ -42,7 +41,7 @@ public class GuiButtonTooBeeTooTee extends GuiButton {
     @Override
     public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
         if (this.location == null) {
-            this.location = ImageUtils.imgs.get(0);
+            this.location = new ResourceLocation("pepsimod", "textures/gui/pepsibuttons.png");
         }
         if (this.visible) {
             mc.getTextureManager().bindTexture(this.location);

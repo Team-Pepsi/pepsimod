@@ -14,43 +14,33 @@
  *
  */
 
-package net.daporkchop.pepsimod.mixin.client.entity;
+package net.daporkchop.pepsimod.mixin.util.text.translation;
 
 import net.daporkchop.pepsimod.misc.data.DataLoader;
-import net.daporkchop.pepsimod.misc.data.Groups;
-import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.translation.LanguageMap;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(AbstractClientPlayer.class)
-public abstract class MixinAbstractClientPlayer extends EntityPlayer {
-    public MixinAbstractClientPlayer() {
-        super(null, null);
-    }
+import java.util.Map;
 
-    @Inject(
-            method = "getLocationCape",
-            at = @At("HEAD"),
-            cancellable = true
-    )
-    public void preGetLocationCape(CallbackInfoReturnable<ResourceLocation> callbackInfoReturnable) {
-        NetworkPlayerInfo info = this.getPlayerInfo();
-        if (info != null) {
-            Groups.Group group = DataLoader.groups.playerToGroup.get(info.getGameProfile().getId());
-            if (group != null) {
-                callbackInfoReturnable.setReturnValue(group.cape);
-            }
-        }
-    }
-
-    @Shadow
-    protected NetworkPlayerInfo getPlayerInfo() {
-        return null;
+/**
+ * @author DaPorkchop_
+ */
+@Mixin(LanguageMap.class)
+public abstract class MixinLanguageMap {
+    @Redirect(
+            method = "Lnet/minecraft/util/text/translation/LanguageMap;replaceWith(Ljava/util/Map;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Ljava/util/Map;putAll(Ljava/util/Map;)V"
+            ))
+    private static void postReplaceWith(Map<String, String> languageList, Map<String, String> newMap) {
+        languageList.putAll(newMap);
+        languageList.putAll(DataLoader.localeKeys);
     }
 }
