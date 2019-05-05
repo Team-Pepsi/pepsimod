@@ -14,9 +14,10 @@
  *
  */
 
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.util.render;
 
 import net.daporkchop.lib.unsafe.PCleaner;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;

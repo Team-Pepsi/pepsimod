@@ -17,7 +17,7 @@
 package net.daporkchop.pepsimod.misc.data;
 
 import net.daporkchop.pepsimod.util.PepsiConstants;
-import net.daporkchop.pepsimod.util.Texture;
+import net.daporkchop.pepsimod.util.render.Texture;
 
 import java.util.Collections;
 import java.util.Objects;

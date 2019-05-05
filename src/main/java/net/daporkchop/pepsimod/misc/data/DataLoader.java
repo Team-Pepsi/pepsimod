@@ -27,10 +27,9 @@ import net.daporkchop.pepsimod.PepsimodMixinLoader;
 import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
-import net.daporkchop.pepsimod.util.Texture;
+import net.daporkchop.pepsimod.util.render.Texture;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
-import org.lwjgl.opengl.Display;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -50,7 +49,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 

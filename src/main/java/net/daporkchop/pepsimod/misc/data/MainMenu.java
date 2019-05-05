@@ -16,8 +16,7 @@
 
 package net.daporkchop.pepsimod.misc.data;
 
-import net.daporkchop.pepsimod.util.Texture;
-import net.minecraft.util.ResourceLocation;
+import net.daporkchop.pepsimod.util.render.Texture;
 
 import java.util.Objects;
 import java.util.Random;

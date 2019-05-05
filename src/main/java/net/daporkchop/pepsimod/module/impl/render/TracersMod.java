@@ -27,7 +27,7 @@ import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.RenderColor;
 import net.daporkchop.pepsimod.util.config.impl.FriendsTranslator;
 import net.daporkchop.pepsimod.util.config.impl.TracersTranslator;
-import net.daporkchop.pepsimod.util.render.Renderer;
+import net.daporkchop.pepsimod.util.render.WorldRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
@@ -160,7 +160,7 @@ public class TracersMod extends Module {
 
 
     @Override
-    public void renderOverlay(Renderer renderer) {
+    public void renderOverlay(WorldRenderer renderer) {
         renderer.width(TracersTranslator.INSTANCE.width);
 
         RenderColor color = null;

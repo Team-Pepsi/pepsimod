@@ -16,9 +16,7 @@
 
 package net.daporkchop.pepsimod.mixin.client.gui;
 
-import net.daporkchop.pepsimod.misc.data.DataLoader;
 import net.daporkchop.pepsimod.misc.data.Group;
-import net.daporkchop.pepsimod.util.Texture;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiPlayerTabOverlay;

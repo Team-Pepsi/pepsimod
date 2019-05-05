@@ -27,7 +27,7 @@ import net.daporkchop.pepsimod.util.config.impl.GeneralTranslator;
 import net.daporkchop.pepsimod.util.config.impl.HUDTranslator;
 import net.daporkchop.pepsimod.util.event.MoveEvent;
 import net.daporkchop.pepsimod.util.misc.ITickListener;
-import net.daporkchop.pepsimod.util.render.Renderer;
+import net.daporkchop.pepsimod.util.render.WorldRenderer;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.network.Packet;
@@ -375,10 +375,10 @@ public abstract class Module extends Command implements ITickListener {
     public void onRenderGUI(float partialTicks, int width, int height, GuiIngame gui) {
     }
 
-    public void renderOverlay(Renderer renderer)   {
+    public void renderOverlay(WorldRenderer renderer)   {
     }
 
-    public void renderWorld(Renderer renderer)   {
+    public void renderWorld(WorldRenderer renderer)   {
     }
 
     @Deprecated

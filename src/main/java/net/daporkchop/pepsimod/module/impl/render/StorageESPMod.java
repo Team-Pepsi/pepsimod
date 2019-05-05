@@ -25,7 +25,7 @@ import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.RenderColor;
 import net.daporkchop.pepsimod.util.config.impl.ESPTranslator;
 import net.daporkchop.pepsimod.util.config.impl.TracersTranslator;
-import net.daporkchop.pepsimod.util.render.Renderer;
+import net.daporkchop.pepsimod.util.render.WorldRenderer;
 import net.minecraft.block.BlockChest;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
@@ -169,7 +169,7 @@ public class StorageESPMod extends Module {
     }
 
     @Override
-    public void renderWorld(Renderer renderer) {
+    public void renderWorld(WorldRenderer renderer) {
         renderer.width(TracersTranslator.INSTANCE.width);
 
         if (ESPTranslator.INSTANCE.basic) {

@@ -25,7 +25,7 @@ import net.daporkchop.pepsimod.module.impl.render.NoHurtCamMod;
 import net.daporkchop.pepsimod.module.impl.render.NoOverlayMod;
 import net.daporkchop.pepsimod.the.wurst.pkg.name.RotationUtils;
 import net.daporkchop.pepsimod.util.PepsiUtils;
-import net.daporkchop.pepsimod.util.render.Renderer;
+import net.daporkchop.pepsimod.util.render.WorldRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -175,7 +175,7 @@ public abstract class MixinEntityRenderer {
 
             glPushMatrix();
             this.setupCameraTransform(partialTicks, pass);
-            try (Renderer renderer = new Renderer(RotationUtils.getClientLookVec(), PepsiUtils.getPlayerPos(partialTicks), partialTicks)) {
+            try (WorldRenderer renderer = new WorldRenderer(RotationUtils.getClientLookVec(), PepsiUtils.getPlayerPos(partialTicks), partialTicks)) {
                 for (Module module : ModuleManager.ENABLED_MODULES) {
                     module.renderOverlay(renderer);
                 }
@@ -186,14 +186,14 @@ public abstract class MixinEntityRenderer {
 
             glPushMatrix();
             this.setupCameraTransform(partialTicks, pass);
-            try (Renderer renderer = new Renderer(RotationUtils.getClientLookVec(), PepsiUtils.getPlayerPos(partialTicks), partialTicks)) {
+            try (WorldRenderer renderer = new WorldRenderer(RotationUtils.getClientLookVec(), PepsiUtils.getPlayerPos(partialTicks), partialTicks)) {
                 for (Module module : ModuleManager.ENABLED_MODULES) {
                     module.renderWorld(renderer);
                 }
             }
             glPopMatrix();
         } else {
-            try (Renderer renderer = new Renderer(RotationUtils.getClientLookVec(), PepsiUtils.getPlayerPos(partialTicks), partialTicks)) {
+            try (WorldRenderer renderer = new WorldRenderer(RotationUtils.getClientLookVec(), PepsiUtils.getPlayerPos(partialTicks), partialTicks)) {
                 for (Module module : ModuleManager.ENABLED_MODULES) {
                     module.renderOverlay(renderer);
                     module.renderWorld(renderer);
