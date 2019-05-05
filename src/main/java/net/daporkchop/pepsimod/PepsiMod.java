@@ -122,10 +122,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.TimerTask;
 
-@Mod(modid = "pepsimod", name = "pepsimod", version = "11.1")
+@Mod(
+        modid = "pepsimod",
+        name = "pepsimod",
+        version = "11.1"
+)
 public class PepsiMod {
     public static final String VERSION = "11.1";
     public static final String chatPrefix = PepsiUtils.COLOR_ESCAPE + "0" + PepsiUtils.COLOR_ESCAPE + "l[" + PepsiUtils.COLOR_ESCAPE + "c" + PepsiUtils.COLOR_ESCAPE + "lpepsi" + PepsiUtils.COLOR_ESCAPE + "9" + PepsiUtils.COLOR_ESCAPE + "lmod" + PepsiUtils.COLOR_ESCAPE + "0" + PepsiUtils.COLOR_ESCAPE + "l]" + PepsiUtils.COLOR_ESCAPE + "r ";
+    public static final String NAME_VERSION = String.format("pepsimod v%s", VERSION);
 
     public static void registerModules(FMLStateEvent event) {
         ModuleManager.registerModule(new NoFallMod());
@@ -222,11 +227,15 @@ public class PepsiMod {
         }
         return null;
     }
-
+    public DataLoader data = new DataLoader("https://raw.githubusercontent.com/Team-Pepsi/pepsimod/master/resources/resources.json");
     public boolean isMcLeaksAccount = false;
     public Session originalSession = null;
     public boolean hasInitializedModules = false;
     public boolean isInitialized = false;
+
+    {
+        PepsiConstants.pepsimod = this;
+    }
 
     @Mod.EventHandler
     public void construction(FMLConstructionEvent event) {
@@ -243,7 +252,7 @@ public class PepsiMod {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        DataLoader.load();
+        this.data.load();
 
         new ClickGUI();
         ClickGUI.INSTANCE.setWindows(

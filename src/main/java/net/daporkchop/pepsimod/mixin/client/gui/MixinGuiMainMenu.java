@@ -16,9 +16,11 @@
 
 package net.daporkchop.pepsimod.mixin.client.gui;
 
+import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.misc.data.DataLoader;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.Texture;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
@@ -45,11 +47,10 @@ import static net.daporkchop.pepsimod.util.PepsiConstants.pepsimod;
 
 @Mixin(GuiMainMenu.class)
 public abstract class MixinGuiMainMenu extends GuiScreen {
-    public final ColorizedText PEPSIMOD_TEXT_GRADIENT = PepsiUtils.getGradientFromStringThroughColor("PepsiMod 11.0 for Minecraft " + MinecraftForge.MC_VERSION, new Color(255, 0, 0), new Color(0, 0, 255), new Color(255, 255, 255));
+    public final ColorizedText PEPSIMOD_TEXT_GRADIENT = PepsiUtils.getGradientFromStringThroughColor(PepsiMod.NAME_VERSION + " for Minecraft " + MinecraftForge.MC_VERSION, new Color(255, 0, 0), new Color(0, 0, 255), new Color(255, 255, 255));
     public final ColorizedText PEPSIMOD_AUTHOR_GRADIENT = new RainbowText("Made by DaPorkchop_");
     @Shadow
     private String splashText;
-    private Texture TITLE;
 
     @Inject(
             method = "initGui",
@@ -64,17 +65,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
             PepsiUtils.setBlockIdFields();
             pepsimod.hasInitializedModules = true;
         }
-        this.TITLE = new Texture(DataLoader.banner);
-        String[] colors = {
-                "\u00A71",
-                "\u00A79",
-                "\u00A7a",
-                "\u00A7b",
-                "\u00A7c",
-                "\u00A7f",
-        };
-        this.splashText = colors[ThreadLocalRandom.current().nextInt(colors.length)] +
-                        DataLoader.splashes[ThreadLocalRandom.current().nextInt(DataLoader.splashes.length)];
+        this.splashText = pepsimod.data.mainMenu.getRandomSplash();
         ModuleManager.sortModules(GeneralTranslator.INSTANCE.sortType);
     }
 
@@ -87,7 +78,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
             ))
     public void removeMenuLogoInit(TextureManager textureManager, ResourceLocation resource) {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        this.TITLE.render(this.width / 2 - 150, 10, 300, 100);
+        pepsimod.data.mainMenu.banner.render(this.width / 2 - 150, 10, 300, 100);
     }
 
     @Redirect(

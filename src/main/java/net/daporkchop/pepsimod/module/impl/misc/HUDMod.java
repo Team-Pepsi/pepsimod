@@ -16,6 +16,7 @@
 
 package net.daporkchop.pepsimod.module.impl.misc;
 
+import net.daporkchop.pepsimod.PepsiMod;
 import net.daporkchop.pepsimod.misc.TickRate;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.ModuleManager;
@@ -227,7 +228,7 @@ public class HUDMod extends Module {
                 PepsiUtils.PEPSI_NAME.drawAtPos(gui, 2, 2, 0);
             } else {
                 HUDTranslator.INSTANCE.bindColor();
-                mc.fontRenderer.drawString(PepsiUtils.PEPSI_NAME.text, 2, 2, HUDTranslator.INSTANCE.getColor(), true);
+                mc.fontRenderer.drawString(PepsiMod.NAME_VERSION, 2, 2, HUDTranslator.INSTANCE.getColor(), true);
             }
         }
 

@@ -17,7 +17,7 @@
 package net.daporkchop.pepsimod.mixin.client.renderer.entity;
 
 import net.daporkchop.pepsimod.misc.data.DataLoader;
-import net.daporkchop.pepsimod.misc.data.Groups;
+import net.daporkchop.pepsimod.misc.data.Group;
 import net.daporkchop.pepsimod.module.impl.render.ESPMod;
 import net.daporkchop.pepsimod.module.impl.render.HealthTagsMod;
 import net.daporkchop.pepsimod.module.impl.render.NameTagsMod;
@@ -26,6 +26,7 @@ import net.daporkchop.pepsimod.util.RenderColor;
 import net.daporkchop.pepsimod.util.config.impl.ESPTranslator;
 import net.daporkchop.pepsimod.util.config.impl.FriendsTranslator;
 import net.daporkchop.pepsimod.util.config.impl.NameTagsTranslator;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.entity.Render;
@@ -37,11 +38,10 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import static net.daporkchop.pepsimod.util.PepsiConstants.pepsimod;
 
 @Mixin(Render.class)
 public abstract class MixinRender<T extends Entity> {
@@ -102,8 +102,8 @@ public abstract class MixinRender<T extends Entity> {
             ))
     public int changeDefaultTeamColor(int old, Entity entity) {
         if (entity instanceof EntityPlayer) {
-            Groups.Group group = DataLoader.groups.playerToGroup.get(((EntityPlayer) entity).getGameProfile().getId());
-            if (group != null) {
+            Group group = pepsimod.data.getGroup((EntityPlayer) entity);
+            if (group != null && group.color != 0) {
                 return group.color;
             }
         }

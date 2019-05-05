@@ -14,32 +14,48 @@
  *
  */
 
-package net.daporkchop.pepsimod.command.impl.waypoint;
+package net.daporkchop.pepsimod.misc.data;
 
-import net.daporkchop.pepsimod.command.api.Command;
-import net.daporkchop.pepsimod.util.config.impl.WaypointsTranslator;
+import net.daporkchop.pepsimod.util.Texture;
+import net.minecraft.util.ResourceLocation;
 
-public class WaypointClearCommand extends Command {
-    public WaypointClearCommand() {
-        super("waypointclear");
+import java.util.Objects;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
+/**
+ * Contains additional data injected by pepsimod into Minecraft's main menu
+ *
+ * @author DaPorkchop_
+ */
+public class MainMenu implements AutoCloseable {
+    protected String[] splashes;
+    public Texture banner;
+
+    public void setup(String[] splashes, Texture banner)    {
+        if (this.banner != null)    {
+            this.close();
+        }
+        this.splashes = Objects.requireNonNull(splashes, "splashes");
+        this.banner = Objects.requireNonNull(banner, "banner");
     }
 
-    @Override
-    public void execute(String cmd, String[] args) {
-        WaypointsTranslator.INSTANCE.clearWaypoints();
-        clientMessage("Deleted all waypoints for this server!");
-    }
-
-    @Override
-    public String getSuggestion(String cmd, String[] args) {
-        return cmd;
-    }
-
-    @Override
-    public String[] aliases() {
-        return new String[]{
-                "waypointclear",
-                "wclear"
+    public String getRandomSplash() {
+        Random r = ThreadLocalRandom.current();
+        String[] colors = {
+                "\u00A71",
+                "\u00A79",
+                "\u00A7a",
+                "\u00A7b",
+                "\u00A7c",
+                "\u00A7f",
         };
+        return colors[r.nextInt(colors.length)] + this.splashes[r.nextInt(this.splashes.length)];
+    }
+
+    @Override
+    public void close() {
+        this.banner.close();
+        this.splashes = null;
     }
 }

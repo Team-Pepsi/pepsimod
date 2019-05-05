@@ -16,8 +16,7 @@
 
 package net.daporkchop.pepsimod.mixin.client.entity;
 
-import net.daporkchop.pepsimod.misc.data.DataLoader;
-import net.daporkchop.pepsimod.misc.data.Groups;
+import net.daporkchop.pepsimod.misc.data.Group;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,29 +27,28 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import static net.daporkchop.pepsimod.util.PepsiConstants.pepsimod;
+
 @Mixin(AbstractClientPlayer.class)
 public abstract class MixinAbstractClientPlayer extends EntityPlayer {
     public MixinAbstractClientPlayer() {
         super(null, null);
     }
 
+    @Shadow
+    protected abstract NetworkPlayerInfo getPlayerInfo();
+
     @Inject(
             method = "getLocationCape",
             at = @At("HEAD"),
             cancellable = true
     )
-    public void preGetLocationCape(CallbackInfoReturnable<ResourceLocation> callbackInfoReturnable) {
-        NetworkPlayerInfo info = this.getPlayerInfo();
-        if (info != null) {
-            Groups.Group group = DataLoader.groups.playerToGroup.get(info.getGameProfile().getId());
+    public void preGetLocationCape(CallbackInfoReturnable<ResourceLocation> callbackInfo) {
+        if (this.getPlayerInfo() != null) {
+            Group group = pepsimod.data.getGroup(this.getPlayerInfo());
             if (group != null) {
-                callbackInfoReturnable.setReturnValue(group.cape);
+                group.doWithCapeIfPresent(tex -> callbackInfo.setReturnValue(tex.texture));
             }
         }
-    }
-
-    @Shadow
-    protected NetworkPlayerInfo getPlayerInfo() {
-        return null;
     }
 }

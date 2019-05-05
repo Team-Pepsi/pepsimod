@@ -19,15 +19,18 @@ package net.daporkchop.pepsimod.misc.data;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mojang.authlib.GameProfile;
 import net.daporkchop.lib.common.function.io.IOConsumer;
 import net.daporkchop.lib.common.function.io.IOFunction;
 import net.daporkchop.pepsimod.PepsiModMixinLoader;
 import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
-import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.util.ResourceLocation;
+import net.daporkchop.pepsimod.util.Texture;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 
-import javax.imageio.ImageIO;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,111 +42,123 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
  * @author DaPorkchop_
  */
 public class DataLoader extends PepsiConstants {
-    protected static final String RESOURCES_URL = "https://raw.githubusercontent.com/Team-Pepsi/pepsimod/master/resources/resources.json";
+    protected final String resourcesUrl;
+    protected final JsonObject root;
+    protected IOFunction<String, InputStream> readerFunction;
 
-    protected static IOFunction<String, InputStream> READER_FUNCTION = null;
+    public final Groups groups = new Groups();
+    public final Map<String, String> localeKeys = new HashMap<>();
+    public final MainMenu mainMenu = new MainMenu();
 
-    public static Groups groups = new Groups();
-    public static final Map<String, String> localeKeys = new HashMap<>();
-    public static String[] splashes = {""};
-    public static ResourceLocation banner;
+    public DataLoader(String resourcesUrl) {
+        this.resourcesUrl = Objects.requireNonNull(resourcesUrl, "resourcesUrl");
 
-    public static void load() {
-        try {
-            JsonObject root = getResourcesRoot();
-            {
-                String baseurl = root.get("baseurl").getAsString();
-                READER_FUNCTION = PepsiModMixinLoader.isObfuscatedEnvironment ?
-                        s -> new URL(String.format("%s%s", baseurl, s)).openStream() :
-                        s -> new BufferedInputStream(new FileInputStream(new File(String.format("../resources/%s", s))));
-            }
-            JsonObject data = root.get("data").getAsJsonObject();
-            if (data.has("groups")) {
-                JsonObject json = readJson(data.get("groups").getAsString());
-                Groups groups = new Groups();
-                DataLoader.groups.cleanup();
-
-                groups.playerToGroup = new HashMap<>();
-                groups.groups = new HashSet<>();
-                StreamSupport.stream(json.getAsJsonArray("groups").spliterator(), false)
-                        .map(JsonElement::getAsString)
-                        .map((IOFunction<String, JsonObject>) DataLoader::readJson)
-                        .forEach((IOConsumer<JsonObject>) object -> {
-                            Groups.Group group = new Groups.Group();
-                            group.id = object.get("id").getAsString();
-                            group.name = object.has("name") ? object.get("name").getAsString() : group.id;
-                            group.cape = object.has("cape") ? readTexture(object.get("cape").getAsString()) : null;
-                            group.icon = object.has("icon") ? readTexture(object.get("icon").getAsString()) : null;
-
-                            group.members = new HashSet<>();
-                            StreamSupport.stream(object.getAsJsonArray("members").spliterator(), false)
-                                    .map(JsonElement::getAsString)
-                                    .map(UUID::fromString)
-                                    .forEach(uuid -> {
-                                        group.members.add(uuid);
-                                        groups.playerToGroup.put(uuid, group);
-                                    });
-
-                            if (object.has("color")) {
-                                JsonObject color = object.getAsJsonObject("color");
-                                group.color = (color.get("r").getAsInt() << 16) |
-                                        (color.get("g").getAsInt() << 8) |
-                                        (color.get("b").getAsInt());
-                            }
-
-                            groups.groups.add(group);
-                        });
-                DataLoader.groups = groups;
-            }
-            if (data.has("lang")) {
-                JsonObject json = readJson(data.get("lang").getAsString());
-                Map<String, String> internalMap = ReflectionStuff.getLanguageMapMap();
-                Map<String, String> ourMap = new HashMap<>();
-                for (Map.Entry<String, JsonElement> entry : json.getAsJsonObject("translations").entrySet()) {
-                    ourMap.put(entry.getKey(), entry.getValue().getAsString());
-                }
-                localeKeys.forEach(internalMap::remove);
-                internalMap.putAll(ourMap);
-                localeKeys.clear();
-                localeKeys.putAll(ourMap);
-            }
-            if (data.has("mainmenu")) {
-                JsonObject json = readJson(data.get("mainmenu").getAsString());
-
-                splashes = StreamSupport.stream(json.getAsJsonArray("splashes").spliterator(), false)
-                        .map(JsonElement::getAsString)
-                        .toArray(String[]::new);
-
-                if (banner != null) {
-                    mc.getTextureManager().deleteTexture(banner);
-                }
-                banner = readTexture(json.get("banner").getAsString());
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        this.root = this.getResourcesRoot();
+        {
+            String baseurl = this.root.get("baseurl").getAsString();
+            this.readerFunction = PepsiModMixinLoader.isObfuscatedEnvironment ?
+                    s -> new URL(String.format("%s%s", baseurl, s)).openStream() :
+                    s -> new BufferedInputStream(new FileInputStream(new File(String.format("../resources/%s", s))));
         }
     }
 
-    protected static JsonObject getResourcesRoot() throws IOException {
+    public void load() {
+        JsonObject data = this.root.get("data").getAsJsonObject();
+        if (data.has("groups")) {
+            JsonObject json = this.readJson(data.get("groups").getAsString());
+            this.groups.close();
+
+            StreamSupport.stream(json.getAsJsonArray("groups").spliterator(), false)
+                         .map(JsonElement::getAsString)
+                         .map((IOFunction<String, JsonObject>) this::readJson)
+                         .forEach((IOConsumer<JsonObject>) object -> {
+                             int color = 0x000000;
+                             if (object.has("color")) {
+                                 JsonObject colorJson = object.getAsJsonObject("color");
+                                 color = (colorJson.get("r").getAsInt() << 16) |
+                                         (colorJson.get("g").getAsInt() << 8) |
+                                         (colorJson.get("b").getAsInt());
+                             }
+                             this.groups.addGroup(new Group(
+                                     object.get("id").getAsString(),
+                                     object.has("name") ? object.get("name").getAsString() : null,
+                                     StreamSupport.stream(object.getAsJsonArray("members").spliterator(), false)
+                                                  .map(JsonElement::getAsString)
+                                                  .map(UUID::fromString)
+                                                  .collect(Collectors.toSet()),
+                                     color,
+                                     object.has("cape") ? this.readTexture(object.get("cape").getAsString()) : null,
+                                     object.has("icon") ? this.readTexture(object.get("icon").getAsString()) : null
+                             ));
+                         });
+        }
+
+        if (data.has("lang")) {
+            JsonObject json = this.readJson(data.get("lang").getAsString());
+            Map<String, String> internalMap = ReflectionStuff.getLanguageMapMap();
+            Map<String, String> ourMap = new HashMap<>();
+            for (Map.Entry<String, JsonElement> entry : json.getAsJsonObject("translations").entrySet()) {
+                ourMap.put(entry.getKey(), entry.getValue().getAsString());
+            }
+            this.localeKeys.forEach(internalMap::remove);
+            internalMap.putAll(ourMap);
+            this.localeKeys.clear();
+            this.localeKeys.putAll(ourMap);
+        }
+
+        if (data.has("mainmenu")) {
+            JsonObject json = this.readJson(data.get("mainmenu").getAsString());
+            this.mainMenu.setup(
+                    StreamSupport.stream(json.getAsJsonArray("splashes").spliterator(), false)
+                                 .map(JsonElement::getAsString)
+                                 .toArray(String[]::new),
+                    this.readTexture(json.get("banner").getAsString())
+            );
+        }
+    }
+
+    public Group getGroup(EntityPlayer entity)   {
+        return this.getGroup(entity.getGameProfile());
+    }
+
+    public Group getGroup(NetworkPlayerInfo info)   {
+        return this.getGroup(info.getGameProfile());
+    }
+
+    public Group getGroup(GameProfile profile)   {
+        return this.getGroup(profile.getId());
+    }
+
+    public Group getGroup(UUID uuid)   {
+        return this.groups.playerToGroup.get(uuid);
+    }
+
+    protected JsonObject getResourcesRoot() {
         if (PepsiModMixinLoader.isObfuscatedEnvironment) {
-            try (InputStream in = new URL(RESOURCES_URL).openStream()) {
-                return readJson(in);
+            try (InputStream in = new URL(this.resourcesUrl).openStream()) {
+                return this.readJson(in);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         } else {
             try (InputStream in = new BufferedInputStream(new FileInputStream(new File("../resources/resources.json")))) {
-                return readJson(in);
+                return this.readJson(in);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
     }
 
-    protected static JsonObject readJson(InputStream in) {
+    protected JsonObject readJson(InputStream in) {
         try {
             return new JsonParser().parse(new InputStreamReader(in, "UTF-8")).getAsJsonObject();
         } catch (UnsupportedEncodingException e) {
@@ -151,17 +166,19 @@ public class DataLoader extends PepsiConstants {
         }
     }
 
-    protected static JsonObject readJson(String path) throws IOException {
-        try (InputStream in = READER_FUNCTION.apply(path)) {
-            return readJson(in);
+    protected JsonObject readJson(String path) {
+        try (InputStream in = this.readerFunction.apply(path)) {
+            return this.readJson(in);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    protected static ResourceLocation readTexture(String path) throws IOException {
-        DynamicTexture texture;
-        try (InputStream in = READER_FUNCTION.apply(path)) {
-            texture = new DynamicTexture(ImageIO.read(in));
+    protected Texture readTexture(String path) {
+        try (InputStream in = this.readerFunction.apply(path)) {
+            return new Texture(in);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        return mc.getTextureManager().getDynamicTextureLocation(String.format("pepsimod_%s", path), texture);
     }
 }

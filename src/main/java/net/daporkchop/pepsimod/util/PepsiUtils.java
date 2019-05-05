@@ -85,7 +85,7 @@ public class PepsiUtils extends PepsiConstants {
     public static String buttonPrefix = COLOR_ESCAPE + "c";
     public static RainbowCycle rainbowCycle = new RainbowCycle();
     public static Color RAINBOW_COLOR = new Color(0, 0, 0);
-    public static RainbowText PEPSI_NAME = new RainbowText("PepsiMod " + PepsiMod.VERSION);
+    public static RainbowText PEPSI_NAME = new RainbowText(PepsiMod.NAME_VERSION);
     public static ArrayList<IWurstRenderListener> wurstRenderListeners = new ArrayList<>();
     public static ArrayList<IWurstRenderListener> toRemoveWurstRenderListeners = new ArrayList<>();
     public static GuiButton reconnectButton;

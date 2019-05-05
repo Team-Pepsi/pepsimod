@@ -16,17 +16,14 @@
 
 package net.daporkchop.pepsimod.mixin.util.text.translation;
 
-import net.daporkchop.pepsimod.misc.data.DataLoader;
 import net.minecraft.util.text.translation.LanguageMap;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
+
+import static net.daporkchop.pepsimod.util.PepsiConstants.pepsimod;
 
 /**
  * @author DaPorkchop_
@@ -41,6 +38,8 @@ public abstract class MixinLanguageMap {
             ))
     private static void postReplaceWith(Map<String, String> languageList, Map<String, String> newMap) {
         languageList.putAll(newMap);
-        languageList.putAll(DataLoader.localeKeys);
+        if (pepsimod != null)   {
+            languageList.putAll(pepsimod.data.localeKeys);
+        }
     }
 }

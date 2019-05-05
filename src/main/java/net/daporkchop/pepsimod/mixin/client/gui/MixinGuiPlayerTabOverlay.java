@@ -17,7 +17,7 @@
 package net.daporkchop.pepsimod.mixin.client.gui;
 
 import net.daporkchop.pepsimod.misc.data.DataLoader;
-import net.daporkchop.pepsimod.misc.data.Groups;
+import net.daporkchop.pepsimod.misc.data.Group;
 import net.daporkchop.pepsimod.util.Texture;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -40,6 +40,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.List;
+
+import static net.daporkchop.pepsimod.util.PepsiConstants.pepsimod;
 
 /**
  * @author DaPorkchop_
@@ -72,8 +74,8 @@ public abstract class MixinGuiPlayerTabOverlay extends Gui {
                                               NetHandlerPlayClient nethandlerplayclient, List<NetworkPlayerInfo> list, int i, int j, int l3, int i4, int j4, boolean flag, int l, int i1, int j1, int k1, int l1, List<String> list1, List<String> list2, int k4, int l4, int i5, int j2, int k2) {
         int color = 553648126;
         if (k4 < list.size()) {
-            Groups.Group group = DataLoader.groups.playerToGroup.get(list.get(k4).getGameProfile().getId());
-            if (group != null) {
+            Group group = pepsimod.data.getGroup(list.get(k4));
+            if (group != null && group.color != 0) {
                 color = group.color | 0x80000000;
             }
         }
@@ -104,12 +106,10 @@ public abstract class MixinGuiPlayerTabOverlay extends Gui {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/GuiPlayerTabOverlay;drawTexturedModalRect(IIIIII)V"
             ))
-    public void drawIconIfPossible(int p_175245_1_, int p_175245_2_, int p_175245_3_, NetworkPlayerInfo networkPlayerInfoIn, CallbackInfo callbackInfo)    {
-        Groups.Group group = DataLoader.groups.playerToGroup.get(networkPlayerInfoIn.getGameProfile().getId());
-        if (group != null && group.icon != null)    {
-            Texture texture = new Texture(group.icon);
-            texture.bindTexture();
-            texture.render(p_175245_2_ + p_175245_1_ - 11 - 9, p_175245_3_, 8, 8);
+    public void drawIconIfPossible(int p_175245_1_, int p_175245_2_, int p_175245_3_, NetworkPlayerInfo info, CallbackInfo callbackInfo)    {
+        Group group = pepsimod.data.getGroup(info);
+        if (group != null)    {
+            group.doWithIconIfPresent(tex -> tex.render(p_175245_2_ + p_175245_1_ - 11 - 9, p_175245_3_, 8, 8));
         }
         this.mc.getTextureManager().bindTexture(ICONS);
     }

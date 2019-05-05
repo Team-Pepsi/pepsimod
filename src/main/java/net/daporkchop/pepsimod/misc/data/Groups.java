@@ -17,44 +17,41 @@
 package net.daporkchop.pepsimod.misc.data;
 
 import net.daporkchop.pepsimod.util.PepsiConstants;
-import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.util.ResourceLocation;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 /**
  * @author DaPorkchop_
  */
-public class Groups extends PepsiConstants {
-    public Map<UUID, Group> playerToGroup = Collections.emptyMap();
-    public Collection<Group> groups = Collections.emptyList();
+public class Groups extends PepsiConstants implements AutoCloseable {
+    protected Map<UUID, Group> playerToGroup = Collections.emptyMap();
+    protected Collection<Group> groups = Collections.emptyList();
 
-    public void cleanup()   {
-        this.groups.forEach(Group::cleanup);
+    public void addGroup(Group group) {
+        if (this.groups.isEmpty()) {
+            this.groups = new HashSet<>();
+        }
+        this.groups.add(group);
+        group.members.forEach(uuid -> this.addPlayerMapping(uuid, group));
     }
 
-    public static class Group   {
-        public String id = "";
-        public String name = "";
-        public Set<UUID> members = Collections.emptySet();
-        public int color = 0xFFFFFF;
-        public ResourceLocation cape;
-        public ResourceLocation icon;
-
-        public void cleanup()   {
-            if (this.cape != null)  {
-                mc.getTextureManager().deleteTexture(this.cape);
-                this.cape = null;
-            }
-            if (this.icon != null)  {
-                mc.getTextureManager().deleteTexture(this.icon);
-                this.icon = null;
-            }
+    public void addPlayerMapping(UUID uuid, Group group) {
+        if (this.playerToGroup.isEmpty()) {
+            this.playerToGroup = new HashMap<>();
         }
+        this.playerToGroup.put(uuid, group);
+    }
+
+    @Override
+    public void close() {
+        this.groups.forEach(Group::close);
+
+        this.playerToGroup.clear();
+        this.groups.clear();
     }
 }
