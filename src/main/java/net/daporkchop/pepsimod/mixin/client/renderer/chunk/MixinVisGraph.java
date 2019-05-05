@@ -27,7 +27,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(VisGraph.class)
 public abstract class MixinVisGraph {
-    @Inject(method = "setOpaqueCube", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/client/renderer/chunk/VisGraph;setOpaqueCube(Lnet/minecraft/util/math/BlockPos;)V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preSetOpaqueCube(BlockPos pos, CallbackInfo callbackInfo) {
         if (XrayMod.INSTANCE.state.enabled || FreecamMod.INSTANCE.state.enabled) {
             callbackInfo.cancel();

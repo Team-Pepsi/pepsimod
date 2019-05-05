@@ -170,7 +170,7 @@ public class PepsiUtils extends PepsiConstants {
         }, 0, 50);
 
         BufferedImage pepsiLogo = null;
-        try (InputStream in = PepsiUtils.class.getResourceAsStream("/pepsilogo.png"))   {
+        try (InputStream in = PepsiUtils.class.getResourceAsStream("/pepsilogo.png")) {
             pepsiLogo = ImageIO.read(in);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -465,23 +465,13 @@ public class PepsiUtils extends PepsiConstants {
         GlStateManager.pushMatrix();
 
         double dist = new Vec3d(x, y + offset, z).length();
-        /*{
-            offset *= dist / 4.0d;
-            Vec3d vec = new Vec3d(x, y + offset, z).normalize().scale(4.0d);
-            GlStateManager.translate(vec.x, vec.y, vec.z);
-        }*/
         GlStateManager.translate(x, y + offset, z);
 
         GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(-viewerYaw, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate((float)(isThirdPersonFrontal ? -1 : 1) * viewerPitch, 1.0F, 0.0F, 0.0F);
-        if (true || dist > 4.0d)    {
-            size *= dist * 0.3d;
-            GlStateManager.scale(-0.025F * size, -0.025F * size, 0.025F * size);
-        } else {
-            double scale = (4.0d / dist) * size;
-            GlStateManager.scale(-0.025F * scale, -0.025F * scale, 0.025F * scale);
-        }
+        GlStateManager.rotate((float) (isThirdPersonFrontal ? -1 : 1) * viewerPitch, 1.0F, 0.0F, 0.0F);
+        size *= dist * 0.3d;
+        GlStateManager.scale(-0.025F * size, -0.025F * size, 0.025F * size);
         GlStateManager.disableLighting();
         GlStateManager.depthMask(false);
 
@@ -494,16 +484,14 @@ public class PepsiUtils extends PepsiConstants {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-        bufferbuilder.pos((double)(-i - 1), (double)(-8 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-        bufferbuilder.pos((double)(-i - 1), (double)(1 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-        bufferbuilder.pos((double)(i + 1), (double)(1 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-        bufferbuilder.pos((double)(i + 1), (double)(-8 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        bufferbuilder.pos((double) (-i - 1), (double) (-8 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        bufferbuilder.pos((double) (-i - 1), (double) (1 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        bufferbuilder.pos((double) (i + 1), (double) (1 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        bufferbuilder.pos((double) (i + 1), (double) (-8 + verticalShift), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
         tessellator.draw();
         GlStateManager.enableTexture2D();
 
-        int color = 0x20FFFFFF;
-        color = 0xFFFFFFFF;
-        //fontRendererIn.drawString(str, -fontRendererIn.getStringWidth(str) / 2, verticalShift - 7, color);
+        int color = 0xFFFFFFFF;
         GlStateManager.enableDepth();
 
         GlStateManager.depthMask(true);
@@ -516,101 +504,12 @@ public class PepsiUtils extends PepsiConstants {
         //TODO: draw items in name tag
     }
 
-    public static void renderFloatingText(String text, float x, float y, float z, int color, boolean renderBlackBackground, float scale) {
-        drawNameplateNoScale(
-                mc.fontRenderer,
-                text,
-                (float) (x - ReflectionStuff.getRenderPosX(mc.getRenderManager())),
-                (float) (y - ReflectionStuff.getRenderPosY(mc.getRenderManager())),
-                (float) (z - ReflectionStuff.getRenderPosZ(mc.getRenderManager())),
-                0,
-                mc.getRenderManager().playerViewY,
-                mc.getRenderManager().playerViewX,
-                false,
-                0.0f,
-                scale
-        );
-    }
-
-    /**
-     * Renders an Item icon in the 3D world at the specified coordinates
-     *
-     * @param item
-     * @param x
-     * @param y
-     * @param z
-     * @param partialTickTime
-     */
-    public static void renderFloatingItemIcon(float x, float y, float z, Item item, float partialTickTime) {
-        RenderManager renderManager = mc.getRenderManager();
-
-        float playerX = (float) (mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * partialTickTime);
-        float playerY = (float) (mc.player.lastTickPosY + (mc.player.posY - mc.player.lastTickPosY) * partialTickTime);
-        float playerZ = (float) (mc.player.lastTickPosZ + (mc.player.posZ - mc.player.lastTickPosZ) * partialTickTime);
-
-        float dx = x - playerX;
-        float dy = y - playerY;
-        float dz = z - playerZ;
-        float scale = 0.025f;
-
-        GL11.glColor4f(1f, 1f, 1f, 0.75f);
-        GL11.glPushMatrix();
-        GL11.glTranslatef(dx, dy, dz);
-        GL11.glRotatef(-renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-        GL11.glScalef(-scale, -scale, scale);
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDepthMask(false);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
-        renderItemTexture(-8, -8, item, 16, 16);
-
-        GL11.glColor4f(1f, 1f, 1f, 1f);
-        GL11.glDepthMask(true);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glPopMatrix();
-    }
-
-    public static void renderItemTexture(int x, int y, Item item, int width, int height) {
-        IBakedModel iBakedModel = mc.getRenderItem().getItemModelMesher().getItemModel(new ItemStack(item));
-        TextureAtlasSprite textureAtlasSprite = mc.getTextureMapBlocks().getAtlasSprite(iBakedModel.getParticleTexture().getIconName());
-        mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-
-        renderTexture(x, y, textureAtlasSprite, width, height, 0);
-    }
-
-    /**
-     * Renders a previously bound texture (with mc.getTextureManager().bindTexture())
-     *
-     * @param x
-     * @param y
-     * @param textureAtlasSprite
-     * @param width
-     * @param height
-     * @param zLevel
-     */
-    private static void renderTexture(int x, int y, TextureAtlasSprite textureAtlasSprite, int width, int height, double zLevel) {
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder worldrenderer = tessellator.getBuffer();
-
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-
-        worldrenderer.pos((double) (x), (double) (y + height), zLevel).tex((double) textureAtlasSprite.getMaxU(), (double) textureAtlasSprite.getMaxV()).endVertex();
-        worldrenderer.pos((double) (x + width), (double) (y + height), zLevel).tex((double) textureAtlasSprite.getMinU(), (double) textureAtlasSprite.getMaxV()).endVertex();
-        worldrenderer.pos((double) (x + width), (double) (y), zLevel).tex((double) textureAtlasSprite.getMinU(), (double) textureAtlasSprite.getMinV()).endVertex();
-        worldrenderer.pos((double) (x), (double) (y), zLevel).tex((double) textureAtlasSprite.getMaxU(), (double) textureAtlasSprite.getMinV()).endVertex();
-
-        tessellator.draw();
-    }
-
     public static int getBestTool(Block block) {
         float best = -1.0F;
         int index = -1;
         for (int i = 0; i < 9; i++) {
             ItemStack itemStack = mc.player.inventory.getStackInSlot(i);
-            if (itemStack != null) {
+            if (!itemStack.isEmpty()) {
                 float str = itemStack.getItem().getDestroySpeed(itemStack, block.getDefaultState());
                 if (str > best) {
                     best = str;
@@ -697,11 +596,11 @@ public class PepsiUtils extends PepsiConstants {
         GL11.glPopMatrix();
     }
 
-    public static Vec3d getPlayerPos(float partialTicks)    {
+    public static Vec3d getPlayerPos(float partialTicks) {
         return getEntityPos(partialTicks, mc.player);
     }
 
-    public static Vec3d getEntityPos(float partialTicks, Entity entity)    {
+    public static Vec3d getEntityPos(float partialTicks, Entity entity) {
         if (partialTicks == 1.0F) {
             return new Vec3d(entity.posX, entity.posY, entity.posZ);
         } else {

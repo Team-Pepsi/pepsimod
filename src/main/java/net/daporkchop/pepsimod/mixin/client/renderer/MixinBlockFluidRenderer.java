@@ -30,7 +30,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BlockFluidRenderer.class)
 public abstract class MixinBlockFluidRenderer {
-    @Inject(method = "renderFluid", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/client/renderer/BlockFluidRenderer;renderFluid(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/renderer/BufferBuilder;)Z",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preRenderFluid(IBlockAccess blockAccess, IBlockState blockStateIn, BlockPos blockPosIn, BufferBuilder worldRendererIn, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (XrayMod.INSTANCE.state.enabled) {
             if (!XrayTranslator.INSTANCE.isTargeted(blockStateIn.getBlock())) {

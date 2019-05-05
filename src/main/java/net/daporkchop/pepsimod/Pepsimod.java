@@ -27,13 +27,6 @@ import net.daporkchop.pepsimod.command.impl.SaveCommand;
 import net.daporkchop.pepsimod.command.impl.SetRotCommand;
 import net.daporkchop.pepsimod.command.impl.SortModulesCommand;
 import net.daporkchop.pepsimod.command.impl.ToggleCommand;
-import net.daporkchop.pepsimod.command.impl.waypoint.WaypointAddCommand;
-import net.daporkchop.pepsimod.command.impl.waypoint.WaypointClearCommand;
-import net.daporkchop.pepsimod.command.impl.waypoint.WaypointHardClearCommand;
-import net.daporkchop.pepsimod.command.impl.waypoint.WaypointHideCommand;
-import net.daporkchop.pepsimod.command.impl.waypoint.WaypointListCommand;
-import net.daporkchop.pepsimod.command.impl.waypoint.WaypointRemoveCommand;
-import net.daporkchop.pepsimod.command.impl.waypoint.WaypointShowCommand;
 import net.daporkchop.pepsimod.event.GuiRenderHandler;
 import net.daporkchop.pepsimod.event.MiscEventHandler;
 import net.daporkchop.pepsimod.gui.clickgui.WindowCombat;
@@ -60,7 +53,6 @@ import net.daporkchop.pepsimod.module.impl.misc.HUDMod;
 import net.daporkchop.pepsimod.module.impl.misc.NoFallMod;
 import net.daporkchop.pepsimod.module.impl.misc.NotificationsMod;
 import net.daporkchop.pepsimod.module.impl.misc.TimerMod;
-import net.daporkchop.pepsimod.module.impl.misc.WaypointsMod;
 import net.daporkchop.pepsimod.module.impl.movement.AutoRespawnMod;
 import net.daporkchop.pepsimod.module.impl.movement.AutoWalkMod;
 import net.daporkchop.pepsimod.module.impl.movement.BoatFlyMod;
@@ -231,7 +223,6 @@ public class Pepsimod extends PepsiConstants {
                 new ScaffoldMod(),
                 new UnfocusedCPUMod(),
                 new ESPMod(),
-                new WaypointsMod(),
                 new NoClipMod(),
                 new BoatFlyMod(),
                 new NotificationsMod(),
@@ -254,13 +245,6 @@ public class Pepsimod extends PepsiConstants {
                 new ListCommand(),
                 new InvSeeCommand(),
                 new PeekCommand(),
-                new WaypointAddCommand(),
-                new WaypointClearCommand(),
-                new WaypointHardClearCommand(),
-                new WaypointHideCommand(),
-                new WaypointListCommand(),
-                new WaypointRemoveCommand(),
-                new WaypointShowCommand(),
                 new GoToCommand()
         );
     }

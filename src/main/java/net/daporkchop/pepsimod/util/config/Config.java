@@ -45,7 +45,6 @@ import net.daporkchop.pepsimod.util.config.impl.TargettingTranslator;
 import net.daporkchop.pepsimod.util.config.impl.TimerTranslator;
 import net.daporkchop.pepsimod.util.config.impl.TracersTranslator;
 import net.daporkchop.pepsimod.util.config.impl.VelocityTranslator;
-import net.daporkchop.pepsimod.util.config.impl.WaypointsTranslator;
 import net.daporkchop.pepsimod.util.config.impl.XrayTranslator;
 import net.minecraftforge.fml.common.FMLLog;
 
@@ -81,7 +80,6 @@ public class Config {
         registerConfigTranslator(TimerTranslator.INSTANCE);
         registerConfigTranslator(TracersTranslator.INSTANCE);
         registerConfigTranslator(VelocityTranslator.INSTANCE);
-        registerConfigTranslator(WaypointsTranslator.INSTANCE);
         registerConfigTranslator(XrayTranslator.INSTANCE);
     }
 

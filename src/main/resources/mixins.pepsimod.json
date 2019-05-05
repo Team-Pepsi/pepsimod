@@ -43,7 +43,6 @@
     "client.gui.MixinGuiConnecting",
     "client.resources.MixinLocale",
     "world.storage.MixinWorldInfo",
-    "client.renderer.MixinRenderGlobal",
     "client.settings.MixinKeyBinding",
     "entity.MixinEntityAgeable",
     "util.text.translation.MixinLanguageMap",
