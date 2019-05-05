@@ -26,6 +26,7 @@ import net.minecraft.util.ResourceLocation;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
@@ -40,6 +41,10 @@ import static org.lwjgl.opengl.GL11.GL_QUADS;
 public class Texture extends PepsiConstants implements AutoCloseable {
     public final ResourceLocation texture;
     protected final PCleaner cleaner;
+
+    public Texture(byte[] in) throws IOException {
+        this(new ByteArrayInputStream(in));
+    }
 
     public Texture(InputStream in) throws IOException {
         this(ImageIO.read(in));

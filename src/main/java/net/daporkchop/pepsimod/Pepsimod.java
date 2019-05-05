@@ -132,7 +132,7 @@ public class Pepsimod extends PepsiConstants {
     public static final String chatPrefix = PepsiUtils.COLOR_ESCAPE + "0" + PepsiUtils.COLOR_ESCAPE + "l[" + PepsiUtils.COLOR_ESCAPE + "c" + PepsiUtils.COLOR_ESCAPE + "lpepsi" + PepsiUtils.COLOR_ESCAPE + "9" + PepsiUtils.COLOR_ESCAPE + "lmod" + PepsiUtils.COLOR_ESCAPE + "0" + PepsiUtils.COLOR_ESCAPE + "l]" + PepsiUtils.COLOR_ESCAPE + "r ";
     public static final String NAME_VERSION = String.format("pepsimod v%s", VERSION);
 
-    public DataLoader data = new DataLoader("https://raw.githubusercontent.com/Team-Pepsi/pepsimod/master/resources/resources.json");
+    public DataLoader data;
     public boolean isMcLeaksAccount = false;
     public Session originalSession = null;
     public boolean hasInitializedModules = false;
@@ -144,10 +144,15 @@ public class Pepsimod extends PepsiConstants {
 
     @Mod.EventHandler
     public void construction(FMLConstructionEvent event) {
-        PepsiConstants.mc = Minecraft.getMinecraft();
-        PepsiConstants.pepsimod = this;
+        mc = Minecraft.getMinecraft();
+        pepsimod = this;
 
         ReflectionStuff.init();
+
+        this.data = new DataLoader(
+                "https://raw.githubusercontent.com/Team-Pepsi/pepsimod/master/resources/resources.json",
+                new File(mc.gameDir, "pepsimod/resources/")
+        );
     }
 
     @Mod.EventHandler

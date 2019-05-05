@@ -22,6 +22,7 @@ import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.impl.render.UnfocusedCPUMod;
 import net.daporkchop.pepsimod.module.impl.render.ZoomMod;
+import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.config.impl.CpuLimitTranslator;
 import net.daporkchop.pepsimod.util.config.impl.FriendsTranslator;
 import net.minecraft.client.Minecraft;
@@ -57,7 +58,15 @@ public abstract class MixinMinecraft {
     @Shadow
     public EntityPlayerSP player;
 
-    @Inject(method = "shutdown()V", at = @At("HEAD"))
+    @Shadow
+    private ByteBuffer readImageToBuffer(InputStream imageStream) throws IOException {
+        return null;
+    }
+
+    @Inject(
+            method = "Lnet/minecraft/client/Minecraft;shutdown()V",
+            at = @At("HEAD")
+    )
     public void saveSettingsOnShutdown(CallbackInfo ci) {
         System.out.println("[PEPSIMOD] Saving config...");
         pepsimod.saveConfig();
@@ -69,7 +78,10 @@ public abstract class MixinMinecraft {
         }
     }
 
-    @Inject(method = "runGameLoop", at = @At("RETURN"))
+    @Inject(
+            method = "Lnet/minecraft/client/Minecraft;runGameLoop()V",
+            at = @At("RETURN")
+    )
     public void postOnClientPreTick(CallbackInfo callbackInfo) {
         if (mc.player != null && mc.player.movementInput != null) { // is ingame
             for (Module module : ModuleManager.AVALIBLE_MODULES) {
@@ -80,7 +92,12 @@ public abstract class MixinMinecraft {
         }
     }
 
-    @Inject(method = "runTickMouse", at = @At(value = "INVOKE_ASSIGN", target = "Lorg/lwjgl/input/Mouse;getEventButton()I"))
+    @Inject(
+            method = "Lnet/minecraft/client/Minecraft;runTickMouse()V",
+            at = @At(
+                    value = "INVOKE_ASSIGN",
+                    target = "Lorg/lwjgl/input/Mouse;getEventButton()I"
+            ))
     public void onMouseClick(CallbackInfo ci) {
         try {
             if (Mouse.getEventButtonState()) {
@@ -108,12 +125,21 @@ public abstract class MixinMinecraft {
         }
     }
 
-    @Redirect(method = "createDisplay", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/Display;setTitle(Ljava/lang/String;)V"))
+    @Redirect(
+            method = "Lnet/minecraft/client/Minecraft;createDisplay()V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lorg/lwjgl/opengl/Display;setTitle(Ljava/lang/String;)V"
+            ))
     public void changeWindowTitle(String title) {
         Display.setTitle(PepsimodMixinLoader.isObfuscatedEnvironment ? "pepsimod 11.1" : "pepsimod 11.1 (dev environment)");
     }
 
-    @Inject(method = "setWindowIcon", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/client/Minecraft;setWindowIcon()V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preSetWindowIcon(CallbackInfo callbackInfo) {
         try (InputStream in = Pepsimod.class.getResourceAsStream("/pepsilogo.png")) {
             Display.setIcon(new ByteBuffer[]{this.readImageToBuffer(in)});
@@ -126,11 +152,6 @@ public abstract class MixinMinecraft {
         //in case of exception vanilla code will run
     }
 
-    @Shadow
-    private ByteBuffer readImageToBuffer(InputStream imageStream) throws IOException {
-        return null;
-    }
-
     @Inject(method = "displayGuiScreen", at = @At("HEAD"))
     public void preDisplayGuiScreen(GuiScreen guiScreen, CallbackInfo callbackInfo) {
         if (ZoomMod.INSTANCE.state.enabled) {
@@ -139,18 +160,24 @@ public abstract class MixinMinecraft {
         }
     }
 
-    @Inject(method = "getLimitFramerate", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/client/Minecraft;getLimitFramerate()I",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preGetLimitFramerate(CallbackInfoReturnable<Integer> callbackInfoReturnable) {
         try {
             if (UnfocusedCPUMod.INSTANCE.state.enabled && !Display.isActive()) {
                 callbackInfoReturnable.setReturnValue(CpuLimitTranslator.INSTANCE.limit);
             }
         } catch (NullPointerException e) {
-
         }
     }
 
-    @Inject(method = "processKeyBinds", at = @At("HEAD"))
+    @Inject(
+            method = "Lnet/minecraft/client/Minecraft;processKeyBinds()V",
+            at = @At("HEAD")
+    )
     public void preProcessKeyBinds(CallbackInfo ci) {
         // If . is typed open GuiChat
         // Bypass the keybind system because the command prefix is not configurable

@@ -30,6 +30,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import org.spongepowered.asm.lib.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -49,7 +50,15 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
     private String splashText;
 
     @Inject(
-            method = "initGui",
+            method = "Lnet/minecraft/client/gui/GuiMainMenu;<init>()V",
+            at = @At("RETURN")
+    )
+    public void postConstructor(CallbackInfo callbackInfo)  {
+        this.splashText = pepsimod.data.mainMenu.getRandomSplash();
+    }
+
+    @Inject(
+            method = "Lnet/minecraft/client/gui/GuiMainMenu;initGui()V",
             at = @At("RETURN")
     )
     public void addPepsiIconAndChangeSplash(CallbackInfo ci) {
@@ -61,12 +70,31 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
             PepsiUtils.setBlockIdFields();
             pepsimod.hasInitializedModules = true;
         }
-        this.splashText = pepsimod.data.mainMenu.getRandomSplash();
         ModuleManager.sortModules(GeneralTranslator.INSTANCE.sortType);
     }
 
     @Redirect(
-            method = "drawScreen",
+            method = "Lnet/minecraft/client/gui/GuiMainMenu;initGui()V",
+            at = @At(
+                    value = "FIELD",
+                    target = "Lnet/minecraft/client/gui/GuiMainMenu;splashText:Ljava/lang/String;",
+                    opcode = Opcodes.PUTFIELD
+            ))
+    public void preventSettingSplashInInitGui(GuiMainMenu menu, String val)   {
+    }
+
+    @Redirect(
+            method = "Lnet/minecraft/client/gui/GuiMainMenu;drawScreen(IIF)V",
+            at = @At(
+                    value = "FIELD",
+                    target = "Lnet/minecraft/client/gui/GuiMainMenu;splashText:Ljava/lang/String;",
+                    opcode = Opcodes.PUTFIELD
+            ))
+    public void preventSettingSplashInDrawScreen(GuiMainMenu menu, String val)   {
+    }
+
+    @Redirect(
+            method = "Lnet/minecraft/client/gui/GuiMainMenu;drawScreen(IIF)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/renderer/texture/TextureManager;bindTexture(Lnet/minecraft/util/ResourceLocation;)V",
@@ -78,7 +106,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
     }
 
     @Redirect(
-            method = "drawScreen",
+            method = "Lnet/minecraft/client/gui/GuiMainMenu;drawScreen(IIF)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/GuiMainMenu;drawTexturedModalRect(IIIIII)V"
@@ -87,7 +115,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
     }
 
     @Redirect(
-            method = "drawScreen",
+            method = "Lnet/minecraft/client/gui/GuiMainMenu;drawScreen(IIF)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/GuiMainMenu;drawModalRectWithCustomSizedTexture(IIFFIIFF)V"
@@ -96,7 +124,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
     }
 
     @Redirect(
-            method = "drawScreen",
+            method = "Lnet/minecraft/client/gui/GuiMainMenu;drawScreen(IIF)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/GuiMainMenu;drawString(Lnet/minecraft/client/gui/FontRenderer;Ljava/lang/String;III)V"
@@ -105,7 +133,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
     }
 
     @Inject(
-            method = "drawScreen",
+            method = "Lnet/minecraft/client/gui/GuiMainMenu;drawScreen(IIF)V",
             at = @At("RETURN")
     )
     public void addDrawPepsiStuff(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {

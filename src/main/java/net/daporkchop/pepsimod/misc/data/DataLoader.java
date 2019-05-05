@@ -22,25 +22,35 @@ import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import net.daporkchop.lib.common.function.io.IOConsumer;
 import net.daporkchop.lib.common.function.io.IOFunction;
+import net.daporkchop.lib.common.function.io.IOSupplier;
 import net.daporkchop.pepsimod.PepsimodMixinLoader;
 import net.daporkchop.pepsimod.util.PepsiConstants;
+import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.Texture;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
+import org.lwjgl.opengl.Display;
 
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -49,6 +59,7 @@ import java.util.stream.StreamSupport;
  */
 public class DataLoader extends PepsiConstants {
     protected final String resourcesUrl;
+    protected final File cache;
     protected final JsonObject root;
     protected IOFunction<String, InputStream> readerFunction;
 
@@ -56,8 +67,13 @@ public class DataLoader extends PepsiConstants {
     public final Map<String, String> localeKeys = new HashMap<>();
     public final MainMenu mainMenu = new MainMenu();
 
-    public DataLoader(String resourcesUrl) {
+    public DataLoader(String resourcesUrl, File cache) {
         this.resourcesUrl = Objects.requireNonNull(resourcesUrl, "resourcesUrl");
+        this.cache = cache;
+
+        if (!cache.exists() && !cache.mkdirs()) {
+            throw new IllegalStateException(String.format("Unable to create directory: %s", cache.getAbsolutePath()));
+        }
 
         this.root = this.getResourcesRoot();
         {
@@ -141,41 +157,96 @@ public class DataLoader extends PepsiConstants {
 
     protected JsonObject getResourcesRoot() {
         if (PepsimodMixinLoader.isObfuscatedEnvironment) {
-            try (InputStream in = new URL(this.resourcesUrl).openStream()) {
-                return this.readJson(in);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+                return this.readJson(this.read(
+                        "/resources.json",
+                        () -> new URL(this.resourcesUrl).openStream(),
+                        new File(this.cache, "resources.json")
+                ));
         } else {
-            try (InputStream in = new BufferedInputStream(new FileInputStream(new File("../resources/resources.json")))) {
-                return this.readJson(in);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            return this.readJson(this.read(
+                    "/resources.json",
+                    () -> new BufferedInputStream(new FileInputStream(new File("../resources/resources.json"))),
+                    new File(this.cache, "resources.json")
+            ));
         }
     }
 
-    protected JsonObject readJson(InputStream in) {
+    protected byte[] read(String path)  {
+        return this.read(path, () -> this.readerFunction.apply(path), new File(this.cache, path.replace('/', File.separatorChar)));
+    }
+
+    protected byte[] read(String path, IOSupplier<InputStream> inSupplier, File cached)  {
         try {
-            return new JsonParser().parse(new InputStreamReader(in, "UTF-8")).getAsJsonObject();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            try (InputStream in = inSupplier.get()) {
+                int i;
+                while ((i = in.read()) != -1) {
+                    baos.write(i);
+                }
+            } catch (IOException e) {
+                if (cached.exists()) {
+                    //attempt to load from cache if error occurred while loading
+                    baos.reset();
+                    try (InputStream in = new BufferedInputStream(new FileInputStream(cached))) {
+                        int i;
+                        while ((i = in.read()) != -1)   {
+                            baos.write(i);
+                        }
+                    } catch (IOException e1) {
+                        throw new RuntimeException(e1);
+                    }
+                } else {
+                    throw new RuntimeException(e);
+                }
+            }
+            byte[] b = baos.toByteArray();
+            try {
+                //write to cache
+                if (!cached.exists()) {
+                    File parent = cached.getParentFile();
+                    if (!parent.exists() && !parent.mkdirs())   {
+                        throw new IllegalStateException(String.format("Unable to create directory: %s", parent.getAbsolutePath()));
+                    } else if (!cached.createNewFile()) {
+                        throw new IllegalStateException(String.format("Unable to create file: %s", cached.getAbsolutePath()));
+                    }
+                }
+                try (OutputStream out = new FileOutputStream(cached))   {
+                    out.write(b);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return b;
+        } catch (RuntimeException e)   {
+                e.printStackTrace();
+            JOptionPane.showMessageDialog(
+                    null,
+                    String.format("Unable to load resource: \"%s\"", path),
+                    "pepsimod load error",
+                    JOptionPane.ERROR_MESSAGE,
+                    new ImageIcon(PepsiUtils.PEPSI_LOGO)
+            );
+            throw e;
+        }
+    }
+
+    protected JsonObject readJson(byte[] in) {
+        try {
+            return new JsonParser().parse(new InputStreamReader(new ByteArrayInputStream(in), "UTF-8")).getAsJsonObject();
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("go buy a computer that isn't shit", e);
         }
     }
 
     protected JsonObject readJson(String path) {
-        try (InputStream in = this.readerFunction.apply(path)) {
-            return this.readJson(in);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return this.readJson(this.read(path));
     }
 
     protected Texture readTexture(String path) {
-        try (InputStream in = this.readerFunction.apply(path)) {
-            return new Texture(in);
+        try {
+            return new Texture(this.read(path));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(String.format("Unable to parse texture: %s", path), e);
         }
     }
 }

@@ -65,7 +65,11 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.opengl.GL11;
 
+import javax.imageio.ImageIO;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -81,6 +85,7 @@ public class PepsiUtils extends PepsiConstants {
             mc.gameSettings.keyBindRight, mc.gameSettings.keyBindLeft,
             mc.gameSettings.keyBindJump, mc.gameSettings.keyBindSneak
     };
+    public static final BufferedImage PEPSI_LOGO;
     public static String buttonPrefix = COLOR_ESCAPE + "c";
     public static RainbowCycle rainbowCycle = new RainbowCycle();
     public static Color RAINBOW_COLOR = new Color(0, 0, 0);
@@ -163,6 +168,15 @@ public class PepsiUtils extends PepsiConstants {
                 RAINBOW_COLOR = new Color(ensureRange(rainbowCycle.r, 0, 255), ensureRange(rainbowCycle.g, 0, 255), ensureRange(rainbowCycle.b, 0, 255));
             }
         }, 0, 50);
+
+        BufferedImage pepsiLogo = null;
+        try (InputStream in = PepsiUtils.class.getResourceAsStream("/pepsilogo.png"))   {
+            pepsiLogo = ImageIO.read(in);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            PEPSI_LOGO = pepsiLogo;
+        }
     }
 
     /**
