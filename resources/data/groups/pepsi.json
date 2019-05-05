@@ -4,38 +4,50 @@
   "cape": "textures/capes/pepsi.png",
   "icon": "textures/pepsilogo.png",
   "members": [
-    "8f8cef60-1f3a-4778-849d-5dab58c46639",
-    "a4f77739-d15e-4dc2-b957-219a2f6f9244",
-    "2f8731ca-c2a7-454e-85b6-6d072ed199c1",
-    "4c8e844e-43ab-4d39-a62c-56fc02dda031",
-    "4f27dd06-b5e1-44ff-8edf-2c5135b74489",
-    "65f815b5-17b0-4c68-9aa3-91b68379fc6d",
-    "266cae9f-b230-4fa6-b4d3-66c17755e3e5",
-    "2d9d43d8-cb19-48a1-85c1-c7ccb2676d85",
-    "02a8e07d-ce7f-46e2-a7ab-e994a940ae73",
-    "8c7f2df9-48df-460c-853f-26b98bfd160f",
-    "d16acb1b-8fb2-46dd-a561-4e9b9b557523",
-    "95ddfd3a-d40e-4fc8-a408-d3ee6995706d",
-    "a3166d0a-bcfd-406c-9ca8-4693e771d7e2",
-    "26d7502f-fa48-4e0c-a3fd-637433f42f80",
-    "475b83d1-5189-4bb8-88d4-f2922c0c8d58",
-    "71832324-a62f-4ed4-a86e-4c4b8a3226dd",
-    "90c66ec2-d931-4f1f-b2da-328afc9fe854",
-    "69427358-99e6-4e4e-94ed-4a669ba6a8da",
-    "0c3959df-4667-4bc5-b47c-a756689764f4",
-    "a3b69979-9248-4a2e-979f-bc992b29a9f6",
-    "773e431a-cc3a-41d4-90db-e749f579fff8",
-    "b372c514-1d6a-4f86-b1c9-f06bac38690a",
-    "c88f6974-a324-4e85-bd54-975a6aa03e75",
-    "4b052543-9f20-4636-939e-d8dc05a53b3f",
-    "4fd69819-b260-4ff4-af8a-172073fa7d5f",
-    "fdee323e-7f0c-4c15-8d1c-0f277442342a",
-    "8c7f2df9-48df-460c-853f-26b98bfd160f",
-    "49f99d0a-cd48-4faa-a72e-d3b1552e95f1",
-    "8034d01d-bc3b-49e2-a6f6-29455d0a5f24",
-    "104f192a-0f3e-41e3-b574-919cc931559a",
-    "6a711553-4287-478b-9b84-9ec1e01715a2",
-    "4495eebb-7a4e-43aa-9784-02ea86f705ed",
-    "1e8c7d13-9118-41e2-b334-fdb213970135"
-  ]
+    //copy-pasted from https://github.com/ImpactDevelopment/Resources/blob/master/data/users/pepsi.txt
+    //usernames looked up manually by me
+    "8f8cef60-1f3a-4778-849d-5dab58c46639", //PepsiLord420 (pepsi boy)
+    "a4f77739-d15e-4dc2-b957-219a2f6f9244", //LeafHacker
+    "2f8731ca-c2a7-454e-85b6-6d072ed199c1", //booboy123
+    "4c8e844e-43ab-4d39-a62c-56fc02dda031", //durkburk
+    "4f27dd06-b5e1-44ff-8edf-2c5135b74489", //Xurai
+    "65f815b5-17b0-4c68-9aa3-91b68379fc6d", //Nerxit
+    "266cae9f-b230-4fa6-b4d3-66c17755e3e5", //xRazlee (?)
+    "2d9d43d8-cb19-48a1-85c1-c7ccb2676d85", //Idifee
+    "02a8e07d-ce7f-46e2-a7ab-e994a940ae73", //Xijorn
+    "8c7f2df9-48df-460c-853f-26b98bfd160f", //durkburk
+    "d16acb1b-8fb2-46dd-a561-4e9b9b557523", //_Henry_
+    "95ddfd3a-d40e-4fc8-a408-d3ee6995706d", //torogadude
+    "a3166d0a-bcfd-406c-9ca8-4693e771d7e2", //edudagorot (torogadude)
+    "26d7502f-fa48-4e0c-a3fd-637433f42f80", //1_7
+    "475b83d1-5189-4bb8-88d4-f2922c0c8d58", //iTavux
+    "71832324-a62f-4ed4-a86e-4c4b8a3226dd", //t3hmadhatter
+    "90c66ec2-d931-4f1f-b2da-328afc9fe854", //Raman_HK (durkburk?)
+    "69427358-99e6-4e4e-94ed-4a669ba6a8da", //Lecatzz
+    "0c3959df-4667-4bc5-b47c-a756689764f4", //Ngoma (Idifee)
+    "a3b69979-9248-4a2e-979f-bc992b29a9f6", //eenmom2001 (0x22)
+    "773e431a-cc3a-41d4-90db-e749f579fff8", //jonesdj1 (0x22)
+    "b372c514-1d6a-4f86-b1c9-f06bac38690a", //Kar731
+    "c88f6974-a324-4e85-bd54-975a6aa03e75", //solar531 (Vel)
+    "4b052543-9f20-4636-939e-d8dc05a53b3f", //on963 (Vel)
+    "4fd69819-b260-4ff4-af8a-172073fa7d5f", //DaPorkchop_
+    "fdee323e-7f0c-4c15-8d1c-0f277442342a", //Fit
+    "49f99d0a-cd48-4faa-a72e-d3b1552e95f1", //Galaxayy (?)
+    "8034d01d-bc3b-49e2-a6f6-29455d0a5f24", //Babbaj
+    "104f192a-0f3e-41e3-b574-919cc931559a", //2pork2bot (DaPorkchop_)
+    "6a711553-4287-478b-9b84-9ec1e01715a2", //fluffy__cloud (DaPorkchop_)
+    "4495eebb-7a4e-43aa-9784-02ea86f705ed", //qy_
+    "bf4fccd9-c8d7-41ad-aa14-947fb9902c3d", //qy_Alt (qy_)
+    "12736215-9375-4db9-9b32-2db5107507e9", //McNeo
+    "c64bbc02-db10-418e-ac9e-4911922520db", //NcMeo (McNeo)
+    "7f4403ba-a8da-40c1-9abc-1cf813e673d4", //McMeo (McNeo)
+    "2ff087c0-3475-4cbe-97d9-2f0bfc66e189", //NcNeo (McNeo),
+    "39c9ee1d-473f-4601-a862-5b7cf01f0e07", //BornToRun
+    "e97ff4c0-48bf-4c98-be34-248fdde2ffd3"  //HermeticLock
+  ],
+  "color": { //0xff5555, or formatting code §c
+    "r": 255,
+    "g": 85,
+    "b": 85
+  }
 }

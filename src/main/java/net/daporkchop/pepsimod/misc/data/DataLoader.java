@@ -90,6 +90,14 @@ public class DataLoader extends PepsiConstants {
                                         group.members.add(uuid);
                                         groups.playerToGroup.put(uuid, group);
                                     });
+
+                            if (object.has("color")) {
+                                JsonObject color = object.getAsJsonObject("color");
+                                group.color = (color.get("r").getAsInt() << 16) |
+                                        (color.get("g").getAsInt() << 8) |
+                                        (color.get("b").getAsInt());
+                            }
+
                             groups.groups.add(group);
                         });
                 DataLoader.groups = groups;

@@ -16,6 +16,8 @@
 
 package net.daporkchop.pepsimod.mixin.client.renderer.entity;
 
+import net.daporkchop.pepsimod.misc.data.DataLoader;
+import net.daporkchop.pepsimod.misc.data.Groups;
 import net.daporkchop.pepsimod.module.impl.render.ESPMod;
 import net.daporkchop.pepsimod.module.impl.render.HealthTagsMod;
 import net.daporkchop.pepsimod.module.impl.render.NameTagsMod;
@@ -30,16 +32,15 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityGolem;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Render.class)
@@ -87,20 +88,31 @@ public abstract class MixinRender<T extends Entity> {
             }
 
             if (NameTagsMod.INSTANCE.state.enabled) {
-                PepsiUtils.drawNameplateNoScale(this.getFontRendererFromRenderManager(), str, (float) x, (float) y , (float) z, i, f, f1, flag1, f2, NameTagsTranslator.INSTANCE.scale);
+                PepsiUtils.drawNameplateNoScale(this.getFontRendererFromRenderManager(), str, (float) x, (float) y, (float) z, i, f, f1, flag1, f2, NameTagsTranslator.INSTANCE.scale);
             } else {
                 EntityRenderer.drawNameplate(this.getFontRendererFromRenderManager(), str, (float) x, (float) y + f2, (float) z, i, f, f1, flag1, flag);
             }
         }
     }
 
-    @Inject(method = "getTeamColor", at = @At("HEAD"), cancellable = true)
-    public void pregetTeamColor(T entity, CallbackInfoReturnable<Integer> callbackInfoReturnable) {
-        if (ESPMod.INSTANCE.state.enabled && !ESPTranslator.INSTANCE.box) {
-            RenderColor color = ESPMod.INSTANCE.chooseColor(entity);
-            if (color != null)  {
-                callbackInfoReturnable.setReturnValue(color.getIntColor());
+    @ModifyConstant(
+            method = "Lnet/minecraft/client/renderer/entity/Render;getTeamColor(Lnet/minecraft/entity/Entity;)I",
+            constant = @Constant(
+                    intValue = 16777215 // 0xFFFFFF
+            ))
+    public int changeDefaultTeamColor(int old, Entity entity) {
+        if (entity instanceof EntityPlayer) {
+            Groups.Group group = DataLoader.groups.playerToGroup.get(((EntityPlayer) entity).getGameProfile().getId());
+            if (group != null) {
+                return group.color;
             }
         }
+        if (ESPMod.INSTANCE.state.enabled && !ESPTranslator.INSTANCE.box) {
+            RenderColor color = ESPMod.INSTANCE.chooseColor(entity);
+            if (color != null) {
+                return color.getIntColor();
+            }
+        }
+        return old;
     }
 }

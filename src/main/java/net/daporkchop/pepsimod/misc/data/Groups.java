@@ -42,6 +42,7 @@ public class Groups extends PepsiConstants {
         public String id = "";
         public String name = "";
         public Set<UUID> members = Collections.emptySet();
+        public int color = 0xFFFFFF;
         public ResourceLocation cape;
         public ResourceLocation icon;
 

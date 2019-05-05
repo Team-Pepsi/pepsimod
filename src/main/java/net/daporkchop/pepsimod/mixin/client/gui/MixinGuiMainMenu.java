@@ -86,10 +86,8 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
                     ordinal = 0
             ))
     public void removeMenuLogoInit(TextureManager textureManager, ResourceLocation resource) {
-        int titleX = this.width / 2 - 150;
-        int titleY = 20;
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        this.TITLE.render(titleX, titleY + 10, 300, 100);
+        this.TITLE.render(this.width / 2 - 150, 10, 300, 100);
     }
 
     @Redirect(

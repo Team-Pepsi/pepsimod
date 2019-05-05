@@ -70,52 +70,18 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PepsiUtils extends PepsiConstants {
     public static final char COLOR_ESCAPE = '\u00A7';
     public static final String[] colorCodes = {"c", "9", "f", "1", "4"};
     public static final Timer timer = new Timer();
     public static final ServerData TOOBEETOOTEE_DATA = new ServerData("toobeetootee", "2b2t.org", false);
-    public static final String[] PEPSI_MEMBERS = {
-            "8f8cef60-1f3a-4778-849d-5dab58c46639",
-            "a4f77739-d15e-4dc2-b957-219a2f6f9244",
-            "2f8731ca-c2a7-454e-85b6-6d072ed199c1",
-            "4c8e844e-43ab-4d39-a62c-56fc02dda031",
-            "4f27dd06-b5e1-44ff-8edf-2c5135b74489",
-            "65f815b5-17b0-4c68-9aa3-91b68379fc6d",
-            "266cae9f-b230-4fa6-b4d3-66c17755e3e5",
-            "2d9d43d8-cb19-48a1-85c1-c7ccb2676d85",
-            "02a8e07d-ce7f-46e2-a7ab-e994a940ae73",
-            "8c7f2df9-48df-460c-853f-26b98bfd160f",
-            "d16acb1b-8fb2-46dd-a561-4e9b9b557523",
-            "95ddfd3a-d40e-4fc8-a408-d3ee6995706d",
-            "a3166d0a-bcfd-406c-9ca8-4693e771d7e2",
-            "26d7502f-fa48-4e0c-a3fd-637433f42f80",
-            "475b83d1-5189-4bb8-88d4-f2922c0c8d58",
-            "71832324-a62f-4ed4-a86e-4c4b8a3226dd",
-            "90c66ec2-d931-4f1f-b2da-328afc9fe854",
-            "69427358-99e6-4e4e-94ed-4a669ba6a8da",
-            "0c3959df-4667-4bc5-b47c-a756689764f4",
-            "a3b69979-9248-4a2e-979f-bc992b29a9f6",
-            "773e431a-cc3a-41d4-90db-e749f579fff8",
-            "b372c514-1d6a-4f86-b1c9-f06bac38690a",
-            "c88f6974-a324-4e85-bd54-975a6aa03e75",
-            "4b052543-9f20-4636-939e-d8dc05a53b3f",
-            "4fd69819-b260-4ff4-af8a-172073fa7d5f",
-            "fdee323e-7f0c-4c15-8d1c-0f277442342a",
-            "8c7f2df9-48df-460c-853f-26b98bfd160f",
-            "49f99d0a-cd48-4faa-a72e-d3b1552e95f1",
-            "8034d01d-bc3b-49e2-a6f6-29455d0a5f24",
-            "104f192a-0f3e-41e3-b574-919cc931559a",
-            "6a711553-4287-478b-9b84-9ec1e01715a2",
-            "4495eebb-7a4e-43aa-9784-02ea86f705ed",
-            "1e8c7d13-9118-41e2-b334-fdb213970135"
-    };
     public static final KeyBinding[] controls = {
             mc.gameSettings.keyBindForward, mc.gameSettings.keyBindBack,
             mc.gameSettings.keyBindRight, mc.gameSettings.keyBindLeft,
-            mc.gameSettings.keyBindJump, mc.gameSettings.keyBindSneak};
-    private static final Random random = new Random(System.currentTimeMillis());
+            mc.gameSettings.keyBindJump, mc.gameSettings.keyBindSneak
+    };
     public static String buttonPrefix = COLOR_ESCAPE + "c";
     public static RainbowCycle rainbowCycle = new RainbowCycle();
     public static Color RAINBOW_COLOR = new Color(0, 0, 0);
@@ -134,7 +100,7 @@ public class PepsiUtils extends PepsiConstants {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {// random colors
-                PepsiUtils.buttonPrefix = PepsiUtils.COLOR_ESCAPE + colorCodes[PepsiUtils.rand(0, PepsiUtils.colorCodes.length)];
+                PepsiUtils.buttonPrefix = PepsiUtils.COLOR_ESCAPE + colorCodes[ThreadLocalRandom.current().nextInt(PepsiUtils.colorCodes.length)];
             }
         }, 1000, 1000);
 
@@ -198,29 +164,6 @@ public class PepsiUtils extends PepsiConstants {
                 RAINBOW_COLOR = new Color(ensureRange(rainbowCycle.r, 0, 255), ensureRange(rainbowCycle.g, 0, 255), ensureRange(rainbowCycle.b, 0, 255));
             }
         }, 0, 50);
-    }
-
-    /**
-     * Returns a random number between min (inkl.) and max (excl.) If you want a number between 1 and 4 (inkl) you need to call rand (1, 5)
-     *
-     * @param min min inklusive value
-     * @param max max exclusive value
-     * @return
-     */
-    public static int rand(int min, int max) {
-        if (min == max) {
-            return max;
-        }
-        return min + random.nextInt(max - min);
-    }
-
-    /**
-     * Returns random boolean
-     *
-     * @return a boolean random value either <code>true</code> or <code>false</code>
-     */
-    public static boolean rand() {
-        return random.nextBoolean();
     }
 
     /**
@@ -482,16 +425,6 @@ public class PepsiUtils extends PepsiConstants {
         return s;
     }
 
-    public static boolean isPepsimodPlayer(String uuid) {
-        for (String s : PEPSI_MEMBERS) {
-            if (s.equals(uuid)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public static void renderItem(int x, int y, float partialTicks, EntityPlayer player, ItemStack stack) {
         if (!stack.isEmpty()) {
             GlStateManager.pushMatrix();
@@ -570,17 +503,6 @@ public class PepsiUtils extends PepsiConstants {
         //TODO: draw items in name tag
     }
 
-    /**
-     * Renders floating lines of text in the 3D world at a specific position.
-     *
-     * @param text                  The string array of text to render
-     * @param x                     X coordinate in the game world
-     * @param y                     Y coordinate in the game world
-     * @param z                     Z coordinate in the game world
-     * @param color                 0xRRGGBB text color
-     * @param renderBlackBackground render a pretty black border behind the text?
-     * @param partialTickTime       Usually taken from RenderWorldLastEvent.partialTicks variable
-     */
     public static void renderFloatingText(String text, float x, float y, float z, int color, boolean renderBlackBackground, float scale) {
         drawNameplateNoScale(
                 mc.fontRenderer,
@@ -595,63 +517,6 @@ public class PepsiUtils extends PepsiConstants {
                 0.0f,
                 scale
         );
-
-        /*
-        RenderManager renderManager = mc.getRenderManager();
-
-        float playerX = (float) (mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * partialTickTime);
-        float playerY = (float) (mc.player.lastTickPosY + (mc.player.posY - mc.player.lastTickPosY) * partialTickTime);
-        float playerZ = (float) (mc.player.lastTickPosZ + (mc.player.posZ - mc.player.lastTickPosZ) * partialTickTime);
-
-        float dx = x - playerX;
-        float dy = y - playerY;
-        float dz = z - playerZ;
-        float distanceRatio = (float) (5 / mc.player.getDistance(x, y, z));
-        dx *= distanceRatio;
-        dy *= distanceRatio;
-        dz *= distanceRatio;
-        scale = 0.03f;
-
-        GL11.glColor4f(1f, 1f, 1f, 0.5f);
-        GL11.glPushMatrix();
-        GL11.glTranslatef(dx, dy, dz);
-        GL11.glRotatef(-renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-
-        GL11.glScalef(-scale, -scale, scale);
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDepthMask(false);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
-        int textWidth = mc.fontRenderer.getStringWidth(text);
-
-        int lineHeight = 10;
-
-        if (renderBlackBackground) {
-            int stringMiddle = textWidth / 2;
-
-            Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder buffer = tessellator.getBuffer();
-
-            GlStateManager.disableTexture2D();
-            buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-            buffer.pos(-stringMiddle - 1, -1, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-            buffer.pos(-stringMiddle - 1, 8 + lineHeight - lineHeight, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-            buffer.pos(stringMiddle + 1, 8 + lineHeight - lineHeight, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-            buffer.pos(stringMiddle + 1, -1, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-
-            tessellator.draw();
-            GlStateManager.enableTexture2D();
-        }
-
-        mc.fontRenderer.drawString(text, -textWidth / 2, 0, color);
-
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glDepthMask(true);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glPopMatrix();*/
     }
 
     /**

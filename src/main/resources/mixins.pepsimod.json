@@ -46,6 +46,7 @@
     "client.renderer.MixinRenderGlobal",
     "client.settings.MixinKeyBinding",
     "entity.MixinEntityAgeable",
-    "util.text.translation.MixinLanguageMap"
+    "util.text.translation.MixinLanguageMap",
+    "client.gui.MixinGuiPlayerTabOverlay"
   ]
 }

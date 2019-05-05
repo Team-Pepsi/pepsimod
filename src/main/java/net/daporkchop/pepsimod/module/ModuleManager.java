@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -23,6 +23,7 @@ import net.daporkchop.pepsimod.util.config.impl.GeneralTranslator;
 import net.minecraft.network.Packet;
 
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ModuleManager {
 
@@ -177,7 +178,7 @@ public class ModuleManager {
                 ArrayList<Module> newArrayList2 = new ArrayList<>();
                 ESCAPE:
                 for (Module module : tempArrayList2) {
-                    newArrayList2.add(PepsiUtils.rand(0, newArrayList2.size()), module);
+                    newArrayList2.add(ThreadLocalRandom.current().nextInt(newArrayList2.size()), module);
                 }
                 ENABLED_MODULES = newArrayList2;
         }
