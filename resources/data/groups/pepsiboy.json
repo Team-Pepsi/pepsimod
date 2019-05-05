@@ -1,0 +1,14 @@
+{
+  "id": "pepsiboy",
+  "name": "pepsi boy himself",
+  "cape": "textures/capes/pepsiboy.png",
+  "icon": "textures/pepsilogo.png",
+  "members": [
+    "8f8cef60-1f3a-4778-849d-5dab58c46639" //PepsiLord420 (pepsi boy)
+  ],
+  "color": { //0xff5555, or formatting code §c
+    "r": 255,
+    "g": 85,
+    "b": 85
+  }
+}

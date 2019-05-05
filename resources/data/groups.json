@@ -1,6 +1,7 @@
 {
   "version": 1,
   "groups": [
+    "data/groups/pepsiboy.json",
     "data/groups/pepsi.json"
   ]
 }

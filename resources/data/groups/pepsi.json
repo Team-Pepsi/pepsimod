@@ -6,7 +6,6 @@
   "members": [
     //copy-pasted from https://github.com/ImpactDevelopment/Resources/blob/master/data/users/pepsi.txt
     //usernames looked up manually by me
-    "8f8cef60-1f3a-4778-849d-5dab58c46639", //PepsiLord420 (pepsi boy)
     "a4f77739-d15e-4dc2-b957-219a2f6f9244", //LeafHacker
     "2f8731ca-c2a7-454e-85b6-6d072ed199c1", //booboy123
     "4c8e844e-43ab-4d39-a62c-56fc02dda031", //durkburk
@@ -45,9 +44,9 @@
     "39c9ee1d-473f-4601-a862-5b7cf01f0e07", //BornToRun
     "e97ff4c0-48bf-4c98-be34-248fdde2ffd3"  //HermeticLock
   ],
-  "color": { //0xff5555, or formatting code §c
-    "r": 255,
+  "color": { //0x5555ff, or formatting code §9
+    "r": 85,
     "g": 85,
-    "b": 85
+    "b": 255
   }
 }
