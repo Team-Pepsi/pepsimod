@@ -14,14 +14,34 @@
  *
  */
 
-package net.daporkchop.pepsimod.gui.clickgui;
+package net.daporkchop.pepsimod.gui.clickgui.api;
 
-import net.daporkchop.pepsimod.clickgui.Window;
-import net.daporkchop.pepsimod.module.ModuleCategory;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 
-public class WindowMovement extends Window {
+public abstract class EntryImplBase extends PepsiConstants implements IEntry {
+    public static void drawString(int x, int y, String text, int color) {
+        mc.fontRenderer.drawString(text, x, y, color, false);
+    }
+    public final int width;
+    public final int height;
+    public int x;
+    public int y;
+    protected boolean isHoveredCached = false;
 
-    public WindowMovement() {
-        super(308, 2, "Movement", ModuleCategory.MOVEMENT);
+    public EntryImplBase(int x, int y, int width, int height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
+    public boolean isMouseHovered() {
+        return this.isHoveredCached;
+    }
+
+    protected void updateIsMouseHovered(int mouseX, int mouseY) {
+        int x = this.getX(), y = this.getY();
+        int maxX = x + this.width, maxY = y + this.height;
+        this.isHoveredCached = (x <= mouseX && mouseX <= maxX && y <= mouseY && mouseY <= maxY);
     }
 }

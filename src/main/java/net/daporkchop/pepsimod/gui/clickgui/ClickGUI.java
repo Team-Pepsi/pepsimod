@@ -14,7 +14,7 @@
  *
  */
 
-package net.daporkchop.pepsimod.clickgui;
+package net.daporkchop.pepsimod.gui.clickgui;
 
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.impl.misc.ClickGuiMod;

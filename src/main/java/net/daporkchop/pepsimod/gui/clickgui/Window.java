@@ -14,13 +14,13 @@
  *
  */
 
-package net.daporkchop.pepsimod.clickgui;
+package net.daporkchop.pepsimod.gui.clickgui;
 
-import net.daporkchop.pepsimod.clickgui.api.EntryImplBase;
-import net.daporkchop.pepsimod.clickgui.api.IEntry;
-import net.daporkchop.pepsimod.clickgui.entry.Button;
-import net.daporkchop.pepsimod.clickgui.entry.SubButton;
-import net.daporkchop.pepsimod.clickgui.entry.SubSlider;
+import net.daporkchop.pepsimod.gui.clickgui.api.EntryImplBase;
+import net.daporkchop.pepsimod.gui.clickgui.api.IEntry;
+import net.daporkchop.pepsimod.gui.clickgui.entry.Button;
+import net.daporkchop.pepsimod.gui.clickgui.entry.SubButton;
+import net.daporkchop.pepsimod.gui.clickgui.entry.SubSlider;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;

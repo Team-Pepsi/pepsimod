@@ -14,14 +14,38 @@
  *
  */
 
-package net.daporkchop.pepsimod.gui.clickgui;
+package net.daporkchop.pepsimod.gui.clickgui.api;
 
-import net.daporkchop.pepsimod.clickgui.Window;
-import net.daporkchop.pepsimod.module.ModuleCategory;
+public interface IEntry {
+    boolean isMouseHovered();
 
-public class WindowRender extends Window {
+    void draw(int mouseX, int mouseY);
 
-    public WindowRender() {
-        super(2, 2, "Render", ModuleCategory.RENDER);
-    }
+    void processMouseClick(int x, int y, int button);
+
+    void processMouseRelease(int x, int y, int button);
+
+    int getX();
+
+    void setX(int x);
+
+    int getY();
+
+    void setY(int y);
+
+    int getWidth();
+
+    int getHeight();
+
+    int getColor();
+
+    boolean shouldRender();
+
+    void openGui();
+
+    String getName();
+
+    boolean isOpen();
+
+    void setOpen(boolean val);
 }

@@ -14,10 +14,10 @@
  *
  */
 
-package net.daporkchop.pepsimod.clickgui.entry;
+package net.daporkchop.pepsimod.gui.clickgui.entry;
 
-import net.daporkchop.pepsimod.clickgui.Window;
-import net.daporkchop.pepsimod.clickgui.api.EntryImplBase;
+import net.daporkchop.pepsimod.gui.clickgui.Window;
+import net.daporkchop.pepsimod.gui.clickgui.api.EntryImplBase;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;

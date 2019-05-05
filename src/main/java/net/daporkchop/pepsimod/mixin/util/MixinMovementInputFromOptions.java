@@ -16,27 +16,20 @@
 
 package net.daporkchop.pepsimod.mixin.util;
 
-import net.daporkchop.pepsimod.clickgui.ClickGUI;
+import net.daporkchop.pepsimod.gui.clickgui.ClickGUI;
 import net.daporkchop.pepsimod.module.impl.movement.InventoryMoveMod;
-import net.daporkchop.pepsimod.module.impl.player.AntiAFKMod;
 import net.daporkchop.pepsimod.optimization.OverrideCounter;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
-import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.MovementInput;
 import net.minecraft.util.MovementInputFromOptions;
 import org.lwjgl.input.Keyboard;
-import org.spongepowered.asm.lib.Opcodes;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static net.daporkchop.pepsimod.util.PepsiConstants.mc;
 

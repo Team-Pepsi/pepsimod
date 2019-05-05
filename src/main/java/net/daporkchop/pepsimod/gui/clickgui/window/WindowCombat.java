@@ -14,9 +14,9 @@
  *
  */
 
-package net.daporkchop.pepsimod.gui.clickgui;
+package net.daporkchop.pepsimod.gui.clickgui.window;
 
-import net.daporkchop.pepsimod.clickgui.Window;
+import net.daporkchop.pepsimod.gui.clickgui.Window;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 
 public class WindowCombat extends Window {

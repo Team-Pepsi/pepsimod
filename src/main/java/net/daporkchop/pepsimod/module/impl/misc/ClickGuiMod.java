@@ -16,8 +16,8 @@
 
 package net.daporkchop.pepsimod.module.impl.misc;
 
-import net.daporkchop.pepsimod.clickgui.ClickGUI;
-import net.daporkchop.pepsimod.clickgui.Window;
+import net.daporkchop.pepsimod.gui.clickgui.ClickGUI;
+import net.daporkchop.pepsimod.gui.clickgui.Window;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;

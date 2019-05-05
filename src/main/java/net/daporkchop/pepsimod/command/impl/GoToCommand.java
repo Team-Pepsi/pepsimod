@@ -22,7 +22,6 @@ import net.minecraft.util.math.BlockPos;
 public class GoToCommand extends Command {
     public static GoToCommand INSTANCE;
     public boolean enabled;
-    public BlockPos endGoal;
 
     public GoToCommand() {
         super("goto");
@@ -31,7 +30,7 @@ public class GoToCommand extends Command {
 
     @Override
     public void execute(String cmd, String[] args) {
-        clientMessage("§cThe pathfiner is currently disabled.");
+        clientMessage("§cThe pathfinder is currently disabled.");
     }
 
     @Override

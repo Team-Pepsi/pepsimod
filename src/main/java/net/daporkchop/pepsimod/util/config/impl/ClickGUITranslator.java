@@ -17,9 +17,9 @@
 package net.daporkchop.pepsimod.util.config.impl;
 
 import com.google.gson.JsonObject;
-import net.daporkchop.pepsimod.clickgui.ClickGUI;
-import net.daporkchop.pepsimod.clickgui.Window;
-import net.daporkchop.pepsimod.clickgui.api.IEntry;
+import net.daporkchop.pepsimod.gui.clickgui.ClickGUI;
+import net.daporkchop.pepsimod.gui.clickgui.Window;
+import net.daporkchop.pepsimod.gui.clickgui.api.IEntry;
 import net.daporkchop.pepsimod.util.config.IConfigTranslator;
 
 public class ClickGUITranslator implements IConfigTranslator {

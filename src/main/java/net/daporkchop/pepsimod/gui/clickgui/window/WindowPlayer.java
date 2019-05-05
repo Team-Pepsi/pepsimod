@@ -14,14 +14,14 @@
  *
  */
 
-package net.daporkchop.pepsimod.gui.clickgui;
+package net.daporkchop.pepsimod.gui.clickgui.window;
 
-import net.daporkchop.pepsimod.clickgui.Window;
+import net.daporkchop.pepsimod.gui.clickgui.Window;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 
-public class WindowMisc extends Window {
+public class WindowPlayer extends Window {
 
-    public WindowMisc() {
-        super(206, 2, "Misc", ModuleCategory.MISC);
+    public WindowPlayer() {
+        super(410, 2, "Player", ModuleCategory.PLAYER);
     }
 }

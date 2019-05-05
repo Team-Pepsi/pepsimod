@@ -16,7 +16,7 @@
 
 package net.daporkchop.pepsimod;
 
-import net.daporkchop.pepsimod.clickgui.ClickGUI;
+import net.daporkchop.pepsimod.gui.clickgui.ClickGUI;
 import net.daporkchop.pepsimod.command.CommandRegistry;
 import net.daporkchop.pepsimod.command.impl.GoToCommand;
 import net.daporkchop.pepsimod.command.impl.HelpCommand;
@@ -29,11 +29,11 @@ import net.daporkchop.pepsimod.command.impl.SortModulesCommand;
 import net.daporkchop.pepsimod.command.impl.ToggleCommand;
 import net.daporkchop.pepsimod.event.GuiRenderHandler;
 import net.daporkchop.pepsimod.event.MiscEventHandler;
-import net.daporkchop.pepsimod.gui.clickgui.WindowCombat;
-import net.daporkchop.pepsimod.gui.clickgui.WindowMisc;
-import net.daporkchop.pepsimod.gui.clickgui.WindowMovement;
-import net.daporkchop.pepsimod.gui.clickgui.WindowPlayer;
-import net.daporkchop.pepsimod.gui.clickgui.WindowRender;
+import net.daporkchop.pepsimod.gui.clickgui.window.WindowCombat;
+import net.daporkchop.pepsimod.gui.clickgui.window.WindowMisc;
+import net.daporkchop.pepsimod.gui.clickgui.window.WindowMovement;
+import net.daporkchop.pepsimod.gui.clickgui.window.WindowPlayer;
+import net.daporkchop.pepsimod.gui.clickgui.window.WindowRender;
 import net.daporkchop.pepsimod.key.KeyRegistry;
 import net.daporkchop.pepsimod.misc.data.DataLoader;
 import net.daporkchop.pepsimod.module.ModuleManager;
