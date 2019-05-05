@@ -22,13 +22,11 @@ import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import net.daporkchop.lib.common.function.io.IOConsumer;
 import net.daporkchop.lib.common.function.io.IOFunction;
-import net.daporkchop.pepsimod.PepsiModMixinLoader;
+import net.daporkchop.pepsimod.PepsimodMixinLoader;
 import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.Texture;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.io.BufferedInputStream;
@@ -40,7 +38,6 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -65,7 +62,7 @@ public class DataLoader extends PepsiConstants {
         this.root = this.getResourcesRoot();
         {
             String baseurl = this.root.get("baseurl").getAsString();
-            this.readerFunction = PepsiModMixinLoader.isObfuscatedEnvironment ?
+            this.readerFunction = PepsimodMixinLoader.isObfuscatedEnvironment ?
                     s -> new URL(String.format("%s%s", baseurl, s)).openStream() :
                     s -> new BufferedInputStream(new FileInputStream(new File(String.format("../resources/%s", s))));
         }
@@ -143,7 +140,7 @@ public class DataLoader extends PepsiConstants {
     }
 
     protected JsonObject getResourcesRoot() {
-        if (PepsiModMixinLoader.isObfuscatedEnvironment) {
+        if (PepsimodMixinLoader.isObfuscatedEnvironment) {
             try (InputStream in = new URL(this.resourcesUrl).openStream()) {
                 return this.readJson(in);
             } catch (IOException e) {

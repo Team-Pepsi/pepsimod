@@ -25,11 +25,11 @@ import org.spongepowered.asm.mixin.Mixins;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class PepsiModMixinLoader implements IFMLLoadingPlugin {
+public class PepsimodMixinLoader implements IFMLLoadingPlugin {
     public static boolean isObfuscatedEnvironment = false;
 
-    public PepsiModMixinLoader() {
-        FMLLog.log.info("\n\n\nPepsiMod Mixin init\n\n");
+    public PepsimodMixinLoader() {
+        FMLLog.log.info("\n\n\nPepsimod Mixin init\n\n");
         MixinBootstrap.init();
         Mixins.addConfiguration("mixins.pepsimod.json");
 

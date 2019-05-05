@@ -16,16 +16,14 @@
 
 package net.daporkchop.pepsimod.mixin.client;
 
-import net.daporkchop.pepsimod.PepsiMod;
-import net.daporkchop.pepsimod.PepsiModMixinLoader;
+import net.daporkchop.pepsimod.Pepsimod;
+import net.daporkchop.pepsimod.PepsimodMixinLoader;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.impl.render.UnfocusedCPUMod;
 import net.daporkchop.pepsimod.module.impl.render.ZoomMod;
-import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.config.impl.CpuLimitTranslator;
 import net.daporkchop.pepsimod.util.config.impl.FriendsTranslator;
-import net.daporkchop.pepsimod.util.misc.ITickListener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiChat;
@@ -47,11 +45,9 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.util.Base64;
 
 import static net.daporkchop.pepsimod.util.PepsiConstants.mc;
 import static net.daporkchop.pepsimod.util.PepsiConstants.pepsimod;
@@ -95,10 +91,10 @@ public abstract class MixinMinecraft {
                             RayTraceResult result = Minecraft.getMinecraft().objectMouseOver;
                             if (result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit instanceof EntityPlayer) {
                                 if (FriendsTranslator.INSTANCE.isFriend(result.entityHit)) {
-                                    this.player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + "Removed \u00A7c" + result.entityHit.getName() + "\u00A7r as a friend"));
+                                    this.player.sendMessage(new TextComponentString(Pepsimod.chatPrefix + "Removed \u00A7c" + result.entityHit.getName() + "\u00A7r as a friend"));
                                     FriendsTranslator.INSTANCE.friends.remove(result.entityHit.getUniqueID());
                                 } else {
-                                    this.player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + "Added \u00A79" + result.entityHit.getName() + "\u00A7r as a friend"));
+                                    this.player.sendMessage(new TextComponentString(Pepsimod.chatPrefix + "Added \u00A79" + result.entityHit.getName() + "\u00A7r as a friend"));
                                     FriendsTranslator.INSTANCE.friends.add(result.entityHit.getUniqueID());
                                 }
                             }
@@ -114,12 +110,12 @@ public abstract class MixinMinecraft {
 
     @Redirect(method = "createDisplay", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/Display;setTitle(Ljava/lang/String;)V"))
     public void changeWindowTitle(String title) {
-        Display.setTitle(PepsiModMixinLoader.isObfuscatedEnvironment ? "pepsimod 11.1" : "pepsimod 11.1 (dev environment)");
+        Display.setTitle(PepsimodMixinLoader.isObfuscatedEnvironment ? "pepsimod 11.1" : "pepsimod 11.1 (dev environment)");
     }
 
     @Inject(method = "setWindowIcon", at = @At("HEAD"), cancellable = true)
     public void preSetWindowIcon(CallbackInfo callbackInfo) {
-        try (InputStream in = PepsiMod.class.getResourceAsStream("/pepsilogo.png")) {
+        try (InputStream in = Pepsimod.class.getResourceAsStream("/pepsilogo.png")) {
             Display.setIcon(new ByteBuffer[]{this.readImageToBuffer(in)});
             callbackInfo.cancel();
         } catch (IOException e) {

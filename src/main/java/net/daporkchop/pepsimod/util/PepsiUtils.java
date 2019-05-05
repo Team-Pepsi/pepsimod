@@ -16,7 +16,7 @@
 
 package net.daporkchop.pepsimod.util;
 
-import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.Pepsimod;
 import net.daporkchop.pepsimod.optimization.BlockID;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
 import net.daporkchop.pepsimod.util.colors.FixedColorElement;
@@ -67,7 +67,6 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ThreadLocalRandom;
@@ -85,7 +84,7 @@ public class PepsiUtils extends PepsiConstants {
     public static String buttonPrefix = COLOR_ESCAPE + "c";
     public static RainbowCycle rainbowCycle = new RainbowCycle();
     public static Color RAINBOW_COLOR = new Color(0, 0, 0);
-    public static RainbowText PEPSI_NAME = new RainbowText(PepsiMod.NAME_VERSION);
+    public static RainbowText PEPSI_NAME = new RainbowText(Pepsimod.NAME_VERSION);
     public static ArrayList<IWurstRenderListener> wurstRenderListeners = new ArrayList<>();
     public static ArrayList<IWurstRenderListener> toRemoveWurstRenderListeners = new ArrayList<>();
     public static GuiButton reconnectButton;

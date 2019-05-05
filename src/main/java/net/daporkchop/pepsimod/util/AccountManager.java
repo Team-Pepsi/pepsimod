@@ -81,7 +81,7 @@ public class AccountManager extends PepsiConstants {
      */
     public void setUser(String username, String password) {
         if (Minecraft.getMinecraft().getSession().getUsername() != username || "0".equals(Minecraft.getMinecraft().getSession().getToken())) {
-            /*for (Config.AccountEntry data : PepsiMod.pepsimodInstance.getConfig().getAccounts()) {
+            /*for (Config.AccountEntry data : Pepsimod.pepsimodInstance.getConfig().getAccounts()) {
                 if (data.getUsername().equals(Minecraft.getMinecraft().getSession().getUsername()) && data.getUsername().equals(username)) {
                     return;
                 }
@@ -93,8 +93,8 @@ public class AccountManager extends PepsiConstants {
                 this.auth.logIn();
                 Session session = new Session(this.auth.getSelectedProfile().getName(), UUIDTypeAdapter.fromUUID(this.auth.getSelectedProfile().getId()), this.auth.getAuthenticatedToken(), this.auth.getUserType().getName());
                 this.setSession(session);
-                /*for (int i = 0; i < PepsiMod.pepsimodInstance.getConfig().getAccounts().size(); i++) {
-                    Config.AccountEntry data = PepsiMod.pepsimodInstance.getConfig().getAccounts().get(i);
+                /*for (int i = 0; i < Pepsimod.pepsimodInstance.getConfig().getAccounts().size(); i++) {
+                    Config.AccountEntry data = Pepsimod.pepsimodInstance.getConfig().getAccounts().get(i);
                     if (data.getUsername().equals(username) && data.getPassword().equals(password)) {
                         data.setName(session.getUsername());
                     }

@@ -16,7 +16,7 @@
 
 package net.daporkchop.pepsimod.command;
 
-import net.daporkchop.pepsimod.PepsiMod;
+import net.daporkchop.pepsimod.Pepsimod;
 import net.daporkchop.pepsimod.command.api.Command;
 import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.PepsiUtils;
@@ -75,6 +75,12 @@ public class CommandRegistry extends PepsiConstants {
         }
     }
 
+    public static void registerCommands(Command... toRegister) {
+        for (Command command : toRegister)  {
+            registerCommand(command);
+        }
+    }
+
     /**
      * Runs a command
      *
@@ -90,7 +96,7 @@ public class CommandRegistry extends PepsiConstants {
                 }
             }
 
-            mc.player.sendMessage(new TextComponentString(PepsiMod.chatPrefix + PepsiUtils.COLOR_ESCAPE + "cUnknown command! Use .help for a list of commands!"));
+            mc.player.sendMessage(new TextComponentString(Pepsimod.chatPrefix + PepsiUtils.COLOR_ESCAPE + "cUnknown command! Use .help for a list of commands!"));
         } catch (ArrayIndexOutOfBoundsException | StringIndexOutOfBoundsException e) {
         }
     }

@@ -106,13 +106,11 @@ import net.daporkchop.pepsimod.util.config.impl.HUDTranslator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLStateEvent;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.input.Keyboard;
 
@@ -120,6 +118,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.TimerTask;
 
 @Mod(
@@ -127,106 +127,11 @@ import java.util.TimerTask;
         name = "pepsimod",
         version = "11.1"
 )
-public class PepsiMod {
+public class Pepsimod extends PepsiConstants {
     public static final String VERSION = "11.1";
     public static final String chatPrefix = PepsiUtils.COLOR_ESCAPE + "0" + PepsiUtils.COLOR_ESCAPE + "l[" + PepsiUtils.COLOR_ESCAPE + "c" + PepsiUtils.COLOR_ESCAPE + "lpepsi" + PepsiUtils.COLOR_ESCAPE + "9" + PepsiUtils.COLOR_ESCAPE + "lmod" + PepsiUtils.COLOR_ESCAPE + "0" + PepsiUtils.COLOR_ESCAPE + "l]" + PepsiUtils.COLOR_ESCAPE + "r ";
     public static final String NAME_VERSION = String.format("pepsimod v%s", VERSION);
 
-    public static void registerModules(FMLStateEvent event) {
-        ModuleManager.registerModule(new NoFallMod());
-        ModuleManager.registerModule(new AntiHungerMod());
-        ModuleManager.registerModule(new FullbrightMod());
-        ModuleManager.registerModule(new CriticalsMod());
-        ModuleManager.registerModule(new AuraMod());
-        ModuleManager.registerModule(new VelocityMod());
-        ModuleManager.registerModule(new TimerMod());
-        ModuleManager.registerModule(new XrayMod());
-        ModuleManager.registerModule(new AntiBlindMod());
-        ModuleManager.registerModule(new StorageESPMod());
-        ModuleManager.registerModule(new FreecamMod());
-        ModuleManager.registerModule(new HealthTagsMod());
-        ModuleManager.registerModule(new NameTagsMod());
-        ModuleManager.registerModule(new NoHurtCamMod());
-        ModuleManager.registerModule(new NoOverlayMod());
-        ModuleManager.registerModule(new NoWeatherMod());
-        ModuleManager.registerModule(new AntiInvisibleMod());
-        ModuleManager.registerModule(new TrajectoriesMod());
-        ModuleManager.registerModule(new TracersMod());
-        ModuleManager.registerModule(new ClickGuiMod(false, Keyboard.KEY_RSHIFT));
-        ModuleManager.registerModule(new HUDMod(true, -1));
-        ModuleManager.registerModule(new ZoomMod(-1));
-        ModuleManager.registerModule(new ElytraFlyMod());
-        ModuleManager.registerModule(new AutoWalkMod());
-        ModuleManager.registerModule(new EntitySpeedMod());
-        ModuleManager.registerModule(new SafewalkMod());
-        ModuleManager.registerModule(new InventoryMoveMod());
-        ModuleManager.registerModule(new HorseJumpPowerMod());
-        ModuleManager.registerModule(new AutoTotemMod());
-        ModuleManager.registerModule(new CrystalAuraMod());
-        ModuleManager.registerModule(new AntiTotemAnimationMod());
-        ModuleManager.registerModule(new AnnouncerMod());
-        ModuleManager.registerModule(new AutoRespawnMod());
-        ModuleManager.registerModule(new JesusMod()); //test
-        ModuleManager.registerModule(new SprintMod());
-        ModuleManager.registerModule(new NoSlowdownMod());
-        ModuleManager.registerModule(new FlightMod());
-        ModuleManager.registerModule(new FastPlaceMod());
-        ModuleManager.registerModule(new SpeedmineMod());
-        ModuleManager.registerModule(new AutoEatMod());
-        ModuleManager.registerModule(new StepMod());
-        ModuleManager.registerModule(new AutoMineMod());
-        ModuleManager.registerModule(new ScaffoldMod());
-        ModuleManager.registerModule(new UnfocusedCPUMod());
-        ModuleManager.registerModule(new ESPMod());
-        ModuleManager.registerModule(new WaypointsMod());
-        ModuleManager.registerModule(new NoClipMod());
-        ModuleManager.registerModule(new BoatFlyMod());
-        ModuleManager.registerModule(new NotificationsMod());
-        ModuleManager.registerModule(new BedBomberMod());
-        ModuleManager.registerModule(new AutoFishMod());
-        ModuleManager.registerModule(new AutoToolMod());
-        ModuleManager.registerModule(new AutoArmorMod());
-        ModuleManager.registerModule(new AntiAFKMod());
-    }
-
-    public static void registerCommands(FMLStateEvent event) {
-        CommandRegistry.registerCommand(new HelpCommand());
-        CommandRegistry.registerCommand(new SetRotCommand());
-        CommandRegistry.registerCommand(new ToggleCommand());
-        CommandRegistry.registerCommand(new SortModulesCommand());
-        CommandRegistry.registerCommand(new SaveCommand());
-        CommandRegistry.registerCommand(new ListCommand());
-        CommandRegistry.registerCommand(new InvSeeCommand());
-        CommandRegistry.registerCommand(new PeekCommand());
-        CommandRegistry.registerCommand(new WaypointAddCommand());
-        CommandRegistry.registerCommand(new WaypointClearCommand());
-        CommandRegistry.registerCommand(new WaypointHardClearCommand());
-        CommandRegistry.registerCommand(new WaypointHideCommand());
-        CommandRegistry.registerCommand(new WaypointListCommand());
-        CommandRegistry.registerCommand(new WaypointRemoveCommand());
-        CommandRegistry.registerCommand(new WaypointShowCommand());
-        CommandRegistry.registerCommand(new GoToCommand());
-    }
-
-    /**
-     * Probably unneeded, as pepsimod is client-only
-     *
-     * @return a java.io.File with the .minecraft directory
-     */
-    public static File getWorkingFolder() {
-        File toBeReturned;
-        try {
-            if (FMLCommonHandler.instance().getSide().isClient()) {
-                toBeReturned = Minecraft.getMinecraft().gameDir;
-            } else {
-                toBeReturned = FMLCommonHandler.instance().getMinecraftServerInstance().getFile("");
-            }
-            return toBeReturned;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
     public DataLoader data = new DataLoader("https://raw.githubusercontent.com/Team-Pepsi/pepsimod/master/resources/resources.json");
     public boolean isMcLeaksAccount = false;
     public Session originalSession = null;
@@ -264,12 +169,84 @@ public class PepsiMod {
         );
 
         this.loadConfig();
-        registerModules(event);
+        ModuleManager.registerModules(
+                new NoFallMod(),
+                new AntiHungerMod(),
+                new FullbrightMod(),
+                new CriticalsMod(),
+                new AuraMod(),
+                new VelocityMod(),
+                new TimerMod(),
+                new XrayMod(),
+                new AntiBlindMod(),
+                new StorageESPMod(),
+                new FreecamMod(),
+                new HealthTagsMod(),
+                new NameTagsMod(),
+                new NoHurtCamMod(),
+                new NoOverlayMod(),
+                new NoWeatherMod(),
+                new AntiInvisibleMod(),
+                new TrajectoriesMod(),
+                new TracersMod(),
+                new ClickGuiMod(false, Keyboard.KEY_RSHIFT),
+                new HUDMod(true, -1),
+                new ZoomMod(-1),
+                new ElytraFlyMod(),
+                new AutoWalkMod(),
+                new EntitySpeedMod(),
+                new SafewalkMod(),
+                new InventoryMoveMod(),
+                new HorseJumpPowerMod(),
+                new AutoTotemMod(),
+                new CrystalAuraMod(),
+                new AntiTotemAnimationMod(),
+                new AnnouncerMod(),
+                new AutoRespawnMod(),
+                new JesusMod(),
+                new SprintMod(),
+                new NoSlowdownMod(),
+                new FlightMod(),
+                new FastPlaceMod(),
+                new SpeedmineMod(),
+                new AutoEatMod(),
+                new StepMod(),
+                new AutoMineMod(),
+                new ScaffoldMod(),
+                new UnfocusedCPUMod(),
+                new ESPMod(),
+                new WaypointsMod(),
+                new NoClipMod(),
+                new BoatFlyMod(),
+                new NotificationsMod(),
+                new BedBomberMod(),
+                new AutoFishMod(),
+                new AutoToolMod(),
+                new AutoArmorMod(),
+                new AntiAFKMod()
+        );
 
         ClickGUI.INSTANCE.initWindows();
         HUDTranslator.INSTANCE.parseConfigLate();
 
-        registerCommands(event);
+        CommandRegistry.registerCommands(
+                new HelpCommand(),
+                new SetRotCommand(),
+                new ToggleCommand(),
+                new SortModulesCommand(),
+                new SaveCommand(),
+                new ListCommand(),
+                new InvSeeCommand(),
+                new PeekCommand(),
+                new WaypointAddCommand(),
+                new WaypointClearCommand(),
+                new WaypointHardClearCommand(),
+                new WaypointHideCommand(),
+                new WaypointListCommand(),
+                new WaypointRemoveCommand(),
+                new WaypointShowCommand(),
+                new GoToCommand()
+        );
     }
 
     @Mod.EventHandler
@@ -285,15 +262,10 @@ public class PepsiMod {
     }
 
     public void loadConfig() {
-        String launcherJson = null;
-        File file = new File(getWorkingFolder().getPath() + File.separatorChar + "pepsimodConf.json");
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-                launcherJson = "{}";
-            } else {
-                launcherJson = IOUtils.toString(new FileInputStream(file));
-            }
+        String launcherJson = "{}";
+        File file = new File(mc.gameDir, "pepsimodConf.json");
+        try (InputStream in = new FileInputStream(file)) {
+            launcherJson = IOUtils.toString(in, "UTF-8");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -303,12 +275,13 @@ public class PepsiMod {
     public void saveConfig() {
         String config = Config.saveConfig();
         try {
-            File file = new File(getWorkingFolder().getPath() + File.separatorChar + "pepsimodConf.json");
-            if (file.exists()) {
-                file.delete();
+            File file = new File(mc.gameDir, "pepsimodConf.json");
+            if (!file.exists() && !file.createNewFile()) {
+                throw new IllegalStateException(String.format("Unable to create file: %s", file.getAbsolutePath()));
             }
-            file.createNewFile();
-            IOUtils.write(config.getBytes(), new FileOutputStream(file));
+            try (OutputStream out = new FileOutputStream(file)) {
+                out.write(config.getBytes("UTF-8"));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -43,7 +43,7 @@ public class ModuleManager {
      * @param toRegister the Module to register
      * @return the Module passed to the function
      */
-    public static final Module registerModule(Module toRegister) {
+    public static Module registerModule(Module toRegister) {
         if (toRegister.shouldRegister()) {
             AVALIBLE_MODULES.add(toRegister);
             if (toRegister.state.enabled) {
@@ -53,6 +53,12 @@ public class ModuleManager {
             }
         }
         return toRegister;
+    }
+
+    public static void registerModules(Module... toRegister) {
+        for (Module module : toRegister)    {
+            registerModule(module);
+        }
     }
 
     public static void unRegister(Module module) {
@@ -68,7 +74,7 @@ public class ModuleManager {
      * @param toEnable the module to enable
      * @return the enabled module
      */
-    public static final Module enableModule(Module toEnable) {
+    public static Module enableModule(Module toEnable) {
         if (!ENABLED_MODULES.contains(toEnable)) {
             if (AVALIBLE_MODULES.contains(toEnable)) {
                 ENABLED_MODULES.add(toEnable);
@@ -86,7 +92,7 @@ public class ModuleManager {
      * @param toDisable the module to disable
      * @return the disabled module
      */
-    public static final Module disableModule(Module toDisable) {
+    public static Module disableModule(Module toDisable) {
         if (toDisable.state.enabled && ENABLED_MODULES.contains(toDisable)) {
             if (AVALIBLE_MODULES.contains(toDisable)) {
                 ENABLED_MODULES.remove(toDisable);
@@ -104,7 +110,7 @@ public class ModuleManager {
      * @param toToggle the module to toggle
      * @return the toggled module
      */
-    public static final Module toggleModule(Module toToggle) {
+    public static Module toggleModule(Module toToggle) {
         if (toToggle.state.enabled) {
             disableModule(toToggle);
         } else {
@@ -119,7 +125,7 @@ public class ModuleManager {
      * @param name the module's name
      * @return a module, or null if nothing was found
      */
-    public static final Module getModuleByName(String name) {
+    public static Module getModuleByName(String name) {
         for (Module module : AVALIBLE_MODULES) {
             if (module.name.equals(name)) {
                 return module;
@@ -129,7 +135,8 @@ public class ModuleManager {
         return null;
     }
 
-    public static final void sortModules(ModuleSortType type) {
+    @SuppressWarnings("unchecked")
+    public static void sortModules(ModuleSortType type) {
         GeneralTranslator.INSTANCE.sortType = type;
         switch (type) {
             case ALPHABETICAL:
@@ -176,7 +183,6 @@ public class ModuleManager {
             case RANDOM:
                 ArrayList<Module> tempArrayList2 = (ArrayList<Module>) ENABLED_MODULES.clone();
                 ArrayList<Module> newArrayList2 = new ArrayList<>();
-                ESCAPE:
                 for (Module module : tempArrayList2) {
                     newArrayList2.add(ThreadLocalRandom.current().nextInt(newArrayList2.size()), module);
                 }
