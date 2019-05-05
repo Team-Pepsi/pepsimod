@@ -124,13 +124,24 @@ import java.util.TimerTask;
 
 @Mod(
         modid = "pepsimod",
-        name = "pepsimod",
-        version = "11.1"
+        version = "v11.1",
+        useMetadata = true
 )
 public class Pepsimod extends PepsiConstants {
-    public static final String VERSION = "11.1";
-    public static final String chatPrefix = PepsiUtils.COLOR_ESCAPE + "0" + PepsiUtils.COLOR_ESCAPE + "l[" + PepsiUtils.COLOR_ESCAPE + "c" + PepsiUtils.COLOR_ESCAPE + "lpepsi" + PepsiUtils.COLOR_ESCAPE + "9" + PepsiUtils.COLOR_ESCAPE + "lmod" + PepsiUtils.COLOR_ESCAPE + "0" + PepsiUtils.COLOR_ESCAPE + "l]" + PepsiUtils.COLOR_ESCAPE + "r ";
-    public static final String NAME_VERSION = String.format("pepsimod v%s", VERSION);
+    public static final String VERSION;
+    public static final String CHAT_PREFIX = "\u00A70\u00A7l[\u00A7c\u00A7lpepsi\u00A79\u00A7lmod\u00A70\u00A7l]\u00A7r";
+    public static final String NAME_VERSION;
+
+    static {
+        {
+            String version = Pepsimod.class.getAnnotation(Mod.class).version();
+            if (version.indexOf('-') == -1)  {
+                version += String.format("-%s", MinecraftForge.MC_VERSION);
+            }
+            VERSION = version;
+        }
+        NAME_VERSION = String.format("pepsimod %s", VERSION);
+    }
 
     public DataLoader data;
     public boolean isMcLeaksAccount = false;

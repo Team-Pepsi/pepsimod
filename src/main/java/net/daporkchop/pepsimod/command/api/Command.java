@@ -22,7 +22,7 @@ import net.minecraft.util.text.TextComponentString;
 
 public abstract class Command extends PepsiConstants {
     public static void clientMessage(String toSend) {
-        mc.player.sendMessage(new TextComponentString(Pepsimod.chatPrefix + toSend));
+        mc.player.sendMessage(new TextComponentString(Pepsimod.CHAT_PREFIX + toSend));
     }
     public String name;
 

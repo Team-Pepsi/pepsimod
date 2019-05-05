@@ -22,7 +22,6 @@ import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.impl.render.UnfocusedCPUMod;
 import net.daporkchop.pepsimod.module.impl.render.ZoomMod;
-import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.config.impl.CpuLimitTranslator;
 import net.daporkchop.pepsimod.util.config.impl.FriendsTranslator;
 import net.minecraft.client.Minecraft;
@@ -108,10 +107,10 @@ public abstract class MixinMinecraft {
                             RayTraceResult result = Minecraft.getMinecraft().objectMouseOver;
                             if (result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit instanceof EntityPlayer) {
                                 if (FriendsTranslator.INSTANCE.isFriend(result.entityHit)) {
-                                    this.player.sendMessage(new TextComponentString(Pepsimod.chatPrefix + "Removed \u00A7c" + result.entityHit.getName() + "\u00A7r as a friend"));
+                                    this.player.sendMessage(new TextComponentString(Pepsimod.CHAT_PREFIX + "Removed \u00A7c" + result.entityHit.getName() + "\u00A7r as a friend"));
                                     FriendsTranslator.INSTANCE.friends.remove(result.entityHit.getUniqueID());
                                 } else {
-                                    this.player.sendMessage(new TextComponentString(Pepsimod.chatPrefix + "Added \u00A79" + result.entityHit.getName() + "\u00A7r as a friend"));
+                                    this.player.sendMessage(new TextComponentString(Pepsimod.CHAT_PREFIX + "Added \u00A79" + result.entityHit.getName() + "\u00A7r as a friend"));
                                     FriendsTranslator.INSTANCE.friends.add(result.entityHit.getUniqueID());
                                 }
                             }
@@ -132,7 +131,7 @@ public abstract class MixinMinecraft {
                     target = "Lorg/lwjgl/opengl/Display;setTitle(Ljava/lang/String;)V"
             ))
     public void changeWindowTitle(String title) {
-        Display.setTitle(PepsimodMixinLoader.isObfuscatedEnvironment ? "pepsimod 11.1" : "pepsimod 11.1 (dev environment)");
+        Display.setTitle(Pepsimod.NAME_VERSION + (PepsimodMixinLoader.isObfuscatedEnvironment ? "" : " (dev environment)"));
     }
 
     @Inject(

@@ -59,7 +59,7 @@ minecraft {
     coreMod = "net.daporkchop.pepsimod.PepsimodMixinLoader"
 }
 
-version = project.minecraft.version
+version = "v11.1-" + project.minecraft.version
 
 repositories {
     mavenLocal()
@@ -120,7 +120,7 @@ shadowJar {
     }
     exclude 'dummyThing'
     exclude 'LICENSE.txt'
-    classifier = 'full'
+    classifier = null
 }
 
 build.dependsOn(shadowJar)

@@ -96,7 +96,7 @@ public class CommandRegistry extends PepsiConstants {
                 }
             }
 
-            mc.player.sendMessage(new TextComponentString(Pepsimod.chatPrefix + PepsiUtils.COLOR_ESCAPE + "cUnknown command! Use .help for a list of commands!"));
+            mc.player.sendMessage(new TextComponentString(Pepsimod.CHAT_PREFIX + PepsiUtils.COLOR_ESCAPE + "cUnknown command! Use .help for a list of commands!"));
         } catch (ArrayIndexOutOfBoundsException | StringIndexOutOfBoundsException e) {
         }
     }
