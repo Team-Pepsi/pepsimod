@@ -17,6 +17,7 @@
 package net.daporkchop.pepsimod.mixin.client.gui;
 
 import net.daporkchop.pepsimod.misc.data.Group;
+import net.daporkchop.pepsimod.util.config.impl.HUDTranslator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiPlayerTabOverlay;
@@ -46,7 +47,41 @@ import static net.daporkchop.pepsimod.util.PepsiConstants.pepsimod;
  */
 @Mixin(GuiPlayerTabOverlay.class)
 public abstract class MixinGuiPlayerTabOverlay extends Gui {
-    @Shadow @Final private Minecraft mc;
+    @Shadow
+    @Final
+    private Minecraft mc;
+
+    @Redirect(
+            method = "Lnet/minecraft/client/gui/GuiPlayerTabOverlay;renderPlayerlist(ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Ljava/lang/Math;min(II)I",
+                    ordinal = 0
+            ))
+    public int preventTabClamping(int listSize, int theNumber_80) {
+        return HUDTranslator.INSTANCE.clampTabList ? Math.min(listSize, theNumber_80) : listSize;
+    }
+
+    @ModifyConstant(
+            method = "Lnet/minecraft/client/gui/GuiPlayerTabOverlay;renderPlayerlist(ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V",
+            constant = @Constant(
+                    intValue = 20,
+                    ordinal = 0
+            ))
+    public int modifyMaxRows(int old)   {
+        int maxRows = HUDTranslator.INSTANCE.maxTabRows;
+        return maxRows > 0 ? maxRows : old;
+    }
+
+    @Redirect(
+            method = "Lnet/minecraft/client/gui/GuiPlayerTabOverlay;renderPlayerlist(ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/Minecraft;isIntegratedServerRunning()Z"
+            ))
+    public boolean alwaysRenderPlayerIcons(Minecraft mc) {
+        return true;
+    }
 
     @ModifyConstant(
             method = "Lnet/minecraft/client/gui/GuiPlayerTabOverlay;renderPlayerlist(ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreObjective;)V",
@@ -95,7 +130,7 @@ public abstract class MixinGuiPlayerTabOverlay extends Gui {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/renderer/texture/TextureManager;bindTexture(Lnet/minecraft/util/ResourceLocation;)V"
             ))
-    public void preventExtraPingTextureBind(TextureManager manager, ResourceLocation location)    {
+    public void preventExtraPingTextureBind(TextureManager manager, ResourceLocation location) {
     }
 
     @Inject(
@@ -104,9 +139,9 @@ public abstract class MixinGuiPlayerTabOverlay extends Gui {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/GuiPlayerTabOverlay;drawTexturedModalRect(IIIIII)V"
             ))
-    public void drawIconIfPossible(int p_175245_1_, int p_175245_2_, int p_175245_3_, NetworkPlayerInfo info, CallbackInfo callbackInfo)    {
+    public void drawIconIfPossible(int p_175245_1_, int p_175245_2_, int p_175245_3_, NetworkPlayerInfo info, CallbackInfo callbackInfo) {
         Group group = pepsimod.data.getGroup(info);
-        if (group != null)    {
+        if (group != null) {
             group.doWithIconIfPresent(tex -> tex.render(p_175245_2_ + p_175245_1_ - 11 - 9, p_175245_3_, 8, 8));
         }
         this.mc.getTextureManager().bindTexture(ICONS);

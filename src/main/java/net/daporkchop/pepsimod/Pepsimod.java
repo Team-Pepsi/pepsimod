@@ -16,6 +16,7 @@
 
 package net.daporkchop.pepsimod;
 
+import net.daporkchop.pepsimod.command.impl.ReloadCommand;
 import net.daporkchop.pepsimod.gui.clickgui.ClickGUI;
 import net.daporkchop.pepsimod.command.CommandRegistry;
 import net.daporkchop.pepsimod.command.impl.GoToCommand;
@@ -245,7 +246,8 @@ public class Pepsimod extends PepsiConstants {
                 new ListCommand(),
                 new InvSeeCommand(),
                 new PeekCommand(),
-                new GoToCommand()
+                new GoToCommand(),
+                new ReloadCommand()
         );
     }
 

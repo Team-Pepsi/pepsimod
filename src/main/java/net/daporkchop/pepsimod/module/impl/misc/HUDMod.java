@@ -187,6 +187,30 @@ public class HUDMod extends Module {
                         () -> {
                             return HUDTranslator.INSTANCE.ping;
                         }, "Ping"),
+                new ModuleOption<>(HUDTranslator.INSTANCE.clampTabList, "clampTabList", OptionCompletions.BOOLEAN,
+                        (value) -> {
+                            HUDTranslator.INSTANCE.clampTabList = value;
+                            return true;
+                        },
+                        () -> {
+                            return HUDTranslator.INSTANCE.clampTabList;
+                        }, "Clamp Tab List"),
+                new ModuleOption<>(HUDTranslator.INSTANCE.maxTabRows, "maxTabRows", OptionCompletions.INTEGER,
+                        (value) -> {
+                            HUDTranslator.INSTANCE.maxTabRows = value;
+                            return true;
+                        },
+                        () -> {
+                            return HUDTranslator.INSTANCE.maxTabRows;
+                        }, "Max Tab Rows", new ExtensionSlider(ExtensionType.VALUE_INT, 1, 80, 1)),
+                /*new ModuleOption<>(HUDTranslator.INSTANCE.maxTabCols, "maxTabCols", OptionCompletions.INTEGER,
+                        (value) -> {
+                            HUDTranslator.INSTANCE.maxTabCols = value;
+                            return true;
+                        },
+                        () -> {
+                            return HUDTranslator.INSTANCE.maxTabCols;
+                        }, "Max Tab Cols", new ExtensionSlider(ExtensionType.VALUE_INT, 0, 15, 1)),*/
                 new ModuleOption<>(HUDTranslator.INSTANCE.r, "r", new String[]{"0", "128", "255"},
                         (value) -> {
                             HUDTranslator.INSTANCE.r = value;

@@ -30,6 +30,7 @@ import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.render.Texture;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
+import org.lwjgl.opengl.GLContext;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -61,9 +62,9 @@ public class DataLoader extends PepsiConstants {
     protected final JsonObject root;
     protected IOFunction<String, InputStream> readerFunction;
 
-    public final Groups groups = new Groups();
+    public Groups groups = new Groups();
     public final Map<String, String> localeKeys = new HashMap<>();
-    public final MainMenu mainMenu = new MainMenu();
+    public MainMenu mainMenu = new MainMenu();
 
     public DataLoader(String resourcesUrl, File cache) {
         this.resourcesUrl = Objects.requireNonNull(resourcesUrl, "resourcesUrl");
@@ -86,8 +87,8 @@ public class DataLoader extends PepsiConstants {
         JsonObject data = this.root.get("data").getAsJsonObject();
         if (data.has("groups")) {
             JsonObject json = this.readJson(data.get("groups").getAsString());
-            this.groups.close();
 
+            Groups groups = new Groups();
             StreamSupport.stream(json.getAsJsonArray("groups").spliterator(), false)
                          .map(JsonElement::getAsString)
                          .map((IOFunction<String, JsonObject>) this::readJson)
@@ -99,7 +100,7 @@ public class DataLoader extends PepsiConstants {
                                          (colorJson.get("g").getAsInt() << 8) |
                                          (colorJson.get("b").getAsInt());
                              }
-                             this.groups.addGroup(new Group(
+                             groups.addGroup(new Group(
                                      object.get("id").getAsString(),
                                      object.has("name") ? object.get("name").getAsString() : null,
                                      StreamSupport.stream(object.getAsJsonArray("members").spliterator(), false)
@@ -111,6 +112,10 @@ public class DataLoader extends PepsiConstants {
                                      object.has("icon") ? this.readTexture(object.get("icon").getAsString()) : null
                              ));
                          });
+
+            Groups oldGroups = this.groups;
+            this.groups = groups;
+            oldGroups.close();
         }
 
         if (data.has("lang")) {

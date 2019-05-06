@@ -31,6 +31,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import static org.lwjgl.opengl.GL11.GL_QUADS;
 
@@ -40,6 +42,23 @@ import static org.lwjgl.opengl.GL11.GL_QUADS;
  * kek
  */
 public class Texture extends PepsiConstants implements AutoCloseable {
+    protected static DynamicTexture loadTexture(BufferedImage image)  {
+        try {
+            return new DynamicTexture(image);
+        } catch (RuntimeException e)    {
+            if ("No OpenGL context found in the current thread.".equalsIgnoreCase(e.getMessage()))  {
+                //load async
+                try {
+                    return mc.addScheduledTask(() -> new DynamicTexture(image)).get();
+                } catch (InterruptedException | ExecutionException e1)   {
+                    throw new RuntimeException(e1);
+                }
+            } else {
+                throw e;
+            }
+        }
+    }
+
     public final ResourceLocation texture;
     protected final PCleaner cleaner;
 
@@ -52,7 +71,7 @@ public class Texture extends PepsiConstants implements AutoCloseable {
     }
 
     public Texture(BufferedImage img) {
-        this(mc.getTextureManager().getDynamicTextureLocation(UUID.randomUUID().toString(), new DynamicTexture(img)), true);
+        this(mc.getTextureManager().getDynamicTextureLocation(UUID.randomUUID().toString(), loadTexture(img)), true);
     }
 
     public Texture(ResourceLocation texture) {
@@ -61,7 +80,7 @@ public class Texture extends PepsiConstants implements AutoCloseable {
 
     public Texture(ResourceLocation texture, boolean clean) {
         this.texture = texture;
-        this.cleaner = clean ? PCleaner.cleaner(this, () -> mc.getTextureManager().deleteTexture(texture)) : null;
+        this.cleaner = clean ? PCleaner.cleaner(this, () -> mc.addScheduledTask(() -> mc.getTextureManager().deleteTexture(texture))) : null;
     }
 
     public void render(float x, float y, float width, float height) {

@@ -39,6 +39,9 @@ public class HUDTranslator implements IConfigTranslator {
     public boolean effects = false;
     public boolean fps = true;
     public boolean ping = true;
+    public boolean clampTabList = false;
+    public int maxTabRows = 20;
+    //public int maxTabCols = 5;
     public JsonObject json = new JsonObject();
 
     private HUDTranslator() {
@@ -62,6 +65,9 @@ public class HUDTranslator implements IConfigTranslator {
         json.addProperty("effects", this.effects);
         json.addProperty("fps", this.fps);
         json.addProperty("ping", this.ping);
+        json.addProperty("clampTabList", this.clampTabList);
+        json.addProperty("maxTabRows", this.maxTabRows);
+        //json.addProperty("maxTabCols", this.maxTabCols);
     }
 
     public void decode(String fieldName, JsonObject json) {
@@ -85,6 +91,9 @@ public class HUDTranslator implements IConfigTranslator {
         this.effects = this.getBoolean(this.json, "effects", this.effects);
         this.fps = this.getBoolean(this.json, "fps", this.fps);
         this.ping = this.getBoolean(this.json, "ping", this.ping);
+        this.clampTabList = this.getBoolean(this.json, "clampTabList", this.clampTabList);
+        this.maxTabRows = this.getInt(this.json, "maxTabRows", this.maxTabRows);
+        //this.maxTabCols = this.getInt(this.json, "maxTabCols", this.maxTabCols);
     }
 
     public String name() {

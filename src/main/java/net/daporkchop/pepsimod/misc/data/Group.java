@@ -66,11 +66,15 @@ public class Group extends PepsiConstants implements AutoCloseable {
     @Override
     public void close() {
         this.cape.updateAndGet(loc -> {
-            loc.close();
+            if (loc != null)    {
+                loc.close();
+            }
             return null;
         });
         this.icon.updateAndGet(loc -> {
-            loc.close();
+            if (loc != null) {
+                loc.close();
+            }
             return null;
         });
     }
