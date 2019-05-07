@@ -35,22 +35,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GuiDisconnected.class)
 public abstract class MixinGuiDisconnected extends GuiScreen {
-    @Shadow
-    @Final
-    private GuiScreen parentScreen;
-
-    @Shadow
-    @Final
-    private String reason;
-
-    @Shadow
-    @Final
-    private ITextComponent message;
 
     @Shadow
     private int textHeight;
 
-    @Inject(method = "drawScreen", at = @At("HEAD"))
+    @Inject(
+            method = "Lnet/minecraft/client/gui/GuiDisconnected;drawScreen(IIF)V",
+            at = @At("HEAD")
+    )
     public void preDrawScreen(int mouseX, int mouseY, float partialTicks, CallbackInfo callbackInfo) {
         if (ZoomMod.INSTANCE.state.enabled) {
             ModuleManager.disableModule(ZoomMod.INSTANCE);
@@ -58,7 +50,10 @@ public abstract class MixinGuiDisconnected extends GuiScreen {
         }
     }
 
-    @Inject(method = "initGui", at = @At("RETURN"))
+    @Inject(
+            method = "Lnet/minecraft/client/gui/GuiDisconnected;initGui()V",
+            at = @At("RETURN")
+    )
     public void postInitGui(CallbackInfo callbackInfo) {
         PepsiUtils.autoReconnectWaitTime = 5;
         this.buttonList.add(PepsiUtils.reconnectButton = new GuiButton(1, this.width / 2 - 100, Math.min(this.height / 2 + this.textHeight / 2 + this.fontRenderer.FONT_HEIGHT + 22, this.height - 30 + 22), "Reconnect"));
@@ -68,7 +63,11 @@ public abstract class MixinGuiDisconnected extends GuiScreen {
         }
     }
 
-    @Inject(method = "actionPerformed", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/client/gui/GuiDisconnected;actionPerformed(Lnet/minecraft/client/gui/GuiButton;)V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preActionPerformed(GuiButton button, CallbackInfo callbackInfo) {
         if (button.id == 1) {
             ServerData data = new ServerData("", PepsiUtils.lastIp + ':' + PepsiUtils.lastPort, false);

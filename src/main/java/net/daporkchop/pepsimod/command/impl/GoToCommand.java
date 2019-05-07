@@ -21,7 +21,6 @@ import net.minecraft.util.math.BlockPos;
 
 public class GoToCommand extends Command {
     public static GoToCommand INSTANCE;
-    public boolean enabled;
 
     public GoToCommand() {
         super("goto");

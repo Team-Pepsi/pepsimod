@@ -32,7 +32,11 @@ public abstract class MixinTabCompleter {
     @Final
     protected GuiTextField textField;
 
-    @Inject(method = "complete", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/util/TabCompleter;complete()V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preComplete(CallbackInfo callbackInfo) {
         if (this.textField.getText().startsWith(".")) {
             String completed = CommandRegistry.getSuggestionFor(this.textField.getText());

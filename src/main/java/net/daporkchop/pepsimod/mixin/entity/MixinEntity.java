@@ -53,7 +53,7 @@ public abstract class MixinEntity {
     public abstract void resetPositionToBB();
 
     @Inject(
-            method = "setVelocity",
+            method = "Lnet/minecraft/entity/Entity;setVelocity(DDD)V",
             at = @At("HEAD"),
             cancellable = true
     )
@@ -68,18 +68,8 @@ public abstract class MixinEntity {
         callbackInfo.cancel();
     }
 
-    /*@Redirect(
-            method = "Lnet/minecraft/entity/Entity;move(Lnet/minecraft/entity/MoverType;DDD)V",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/entity/Entity;getEntityBoundingBox()Lnet/minecraft/util/math/AxisAlignedBB;"
-            ))
-    public AxisAlignedBB move_dontUseGetterForBB(Entity entity) {
-        return this.boundingBox;
-    }*/
-
     @Inject(
-            method = "move",
+            method = "Lnet/minecraft/entity/Entity;move(Lnet/minecraft/entity/MoverType;DDD)V",
             at = @At("HEAD"),
             cancellable = true
     )
@@ -93,7 +83,7 @@ public abstract class MixinEntity {
     }
 
     @Inject(
-            method = "isInvisibleToPlayer",
+            method = "Lnet/minecraft/entity/Entity;isInvisibleToPlayer(Lnet/minecraft/entity/player/EntityPlayer;)Z",
             at = @At("HEAD"),
             cancellable = true
     )
@@ -105,7 +95,7 @@ public abstract class MixinEntity {
     }
 
     @Inject(
-            method = "isGlowing",
+            method = "Lnet/minecraft/entity/Entity;isGlowing()Z",
             at = @At("HEAD"),
             cancellable = true
     )
@@ -130,7 +120,7 @@ public abstract class MixinEntity {
     }
 
     @Inject(
-            method = "isInWater",
+            method = "Lnet/minecraft/entity/Entity;isInWater()Z",
             at = @At("HEAD"),
             cancellable = true
     )

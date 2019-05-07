@@ -34,13 +34,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GuiMultiplayer.class)
 public abstract class MixinGuiMultiplayer extends GuiScreen {
 
-    @Inject(method = "createButtons", at = @At("RETURN"))
+    @Inject(
+            method = "Lnet/minecraft/client/gui/GuiMultiplayer;createButtons()V",
+            at = @At("RETURN")
+    )
     public void createButtons(CallbackInfo ci) {
         this.buttonList.add(new GuiButtonMCLeaks(9, 6, 6, 20, 20));
         this.buttonList.add(new GuiButtonTooBeeTooTee(10, this.width - 26, 6, 20, 20));
     }
 
-    @Inject(method = "actionPerformed", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/client/gui/GuiMultiplayer;actionPerformed(Lnet/minecraft/client/gui/GuiButton;)V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void actionPerformed(GuiButton button, CallbackInfo ci) {
         if (button.id == 9) {
             GuiScreenMCLeaks mcLeaks = new GuiScreenMCLeaks(this, Minecraft.getMinecraft());

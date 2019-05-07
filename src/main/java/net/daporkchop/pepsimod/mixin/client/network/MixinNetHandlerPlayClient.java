@@ -40,7 +40,10 @@ public abstract class MixinNetHandlerPlayClient {
     @Shadow
     private final Map<UUID, NetworkPlayerInfo> playerInfoMap = Maps.newHashMap();
 
-    @Inject(method = "handlePlayerListItem", at = @At("HEAD"))
+    @Inject(
+            method = "Lnet/minecraft/client/network/NetHandlerPlayClient;handlePlayerListItem(Lnet/minecraft/network/play/server/SPacketPlayerListItem;)V",
+            at = @At("HEAD")
+    )
     public void preHandlePlayerListItem(SPacketPlayerListItem listItem, CallbackInfo callbackInfo) {
         try {
             if (listItem.getEntries().size() == 1) {
@@ -60,7 +63,6 @@ public abstract class MixinNetHandlerPlayClient {
                 }
             }
         } catch (NullPointerException e) {
-
         }
     }
 }

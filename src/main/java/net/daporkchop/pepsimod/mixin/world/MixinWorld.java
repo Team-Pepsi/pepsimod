@@ -26,7 +26,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(World.class)
 public abstract class MixinWorld {
-    @Inject(method = "getCelestialAngle", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/world/World;getCelestialAngle(F)F",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preGetCelestialAngle(float partialTicks, CallbackInfoReturnable<Float> callbackInfoReturnable) {
         if (NoWeatherMod.INSTANCE.state.enabled && NoWeatherTranslator.INSTANCE.changeTime) {
             callbackInfoReturnable.setReturnValue(NoWeatherTranslator.INSTANCE.time + 0.0f);
@@ -34,7 +38,11 @@ public abstract class MixinWorld {
         }
     }
 
-    @Inject(method = "getRainStrength", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/world/World;getRainStrength(F)F",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preGetRainStrength(float partialTicks, CallbackInfoReturnable<Float> callbackInfoReturnable) {
         if (NoWeatherMod.INSTANCE.state.enabled && NoWeatherTranslator.INSTANCE.disableRain) {
             callbackInfoReturnable.setReturnValue(0.0f);

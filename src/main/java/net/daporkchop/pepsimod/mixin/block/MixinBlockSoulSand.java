@@ -24,15 +24,19 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BlockSoulSand.class)
 public abstract class MixinBlockSoulSand {
-    @Inject(method = "onEntityCollision", at = @At("HEAD"), cancellable = true)
-    public void preOnEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn, CallbackInfo callbackInfo) {
-        if (NoSlowdownMod.INSTANCE.state.enabled) {
-            callbackInfo.cancel();
-        }
+    @ModifyConstant(
+            method = "Lnet/minecraft/block/BlockSoulSand;onEntityCollision(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/entity/Entity;)V",
+            constant = @Constant(
+                    doubleValue = 0.4d
+            ))
+    public double changeSpeed(double oldMultiplier) {
+        return NoSlowdownMod.INSTANCE.state.enabled ? 1.0d : oldMultiplier;
     }
 }

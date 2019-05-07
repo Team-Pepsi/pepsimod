@@ -25,7 +25,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GuiConnecting.class)
 public abstract class MixinGuiConnecting {
-    @Inject(method = "connect", at = @At("HEAD"))
+    @Inject(
+            method = "Lnet/minecraft/client/multiplayer/GuiConnecting;connect(Ljava/lang/String;I)V",
+            at = @At("HEAD")
+    )
     public void preConnect(String ip, int port, CallbackInfo callbackInfo) {
         PepsiUtils.lastIp = ip;
         PepsiUtils.lastPort = port;

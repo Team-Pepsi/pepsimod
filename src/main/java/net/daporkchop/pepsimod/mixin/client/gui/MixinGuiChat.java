@@ -36,7 +36,12 @@ public abstract class MixinGuiChat extends GuiScreen {
     @Shadow
     protected GuiTextField inputField;
 
-    @Inject(method = "drawScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiTextField;drawTextBox()V"))
+    @Inject(
+            method = "Lnet/minecraft/client/gui/GuiChat;drawScreen(IIF)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/GuiTextField;drawTextBox()V"
+            ))
     public void drawSemiTransparentText(CallbackInfo ci) {
         if (this.inputField.getText().startsWith(".")) {
             GL11.glPushMatrix();
@@ -53,7 +58,11 @@ public abstract class MixinGuiChat extends GuiScreen {
         }
     }
 
-    @Inject(method = "keyTyped", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/client/gui/GuiChat;keyTyped(CI)V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void checkIfIsCommandAndProcess(char typedChar, int keyCode, CallbackInfo ci) {
         if (keyCode == 28 || keyCode == 156) {
             if (this.inputField.getText().startsWith(".")) {

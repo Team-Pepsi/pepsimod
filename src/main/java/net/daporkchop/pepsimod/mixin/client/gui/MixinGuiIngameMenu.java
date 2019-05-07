@@ -29,7 +29,10 @@ import static net.daporkchop.pepsimod.util.PepsiConstants.mc;
 
 @Mixin(GuiIngameMenu.class)
 public abstract class MixinGuiIngameMenu {
-    @Inject(method = "actionPerformed", at = @At("HEAD"))
+    @Inject(
+            method = "Lnet/minecraft/client/gui/GuiIngameMenu;actionPerformed(Lnet/minecraft/client/gui/GuiButton;)V",
+            at = @At("HEAD")
+    )
     public void preActionPerformed(GuiButton button, CallbackInfo callbackInfo) {
         if (ZoomMod.INSTANCE.state.enabled) {
             ModuleManager.disableModule(ZoomMod.INSTANCE);

@@ -25,14 +25,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemRenderer.class)
 public abstract class MixinItemRenderer {
-    @Inject(method = "renderWaterOverlayTexture", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/client/renderer/ItemRenderer;renderWaterOverlayTexture(F)V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preRenderWaterOverlayTexture(float partialTicks, CallbackInfo callbackInfo) {
         if (NoOverlayMod.INSTANCE.state.enabled) {
             callbackInfo.cancel();
         }
     }
 
-    @Inject(method = "renderFireInFirstPerson", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/client/renderer/ItemRenderer;renderFireInFirstPerson()V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preRenderFireInFirstPerson(CallbackInfo callbackInfo) {
         if (NoOverlayMod.INSTANCE.state.enabled) {
             callbackInfo.cancel();

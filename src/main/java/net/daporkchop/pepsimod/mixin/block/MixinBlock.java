@@ -50,7 +50,11 @@ public abstract class MixinBlock extends net.minecraftforge.registries.IForgeReg
         this.pepsimod_id = id;
     }
 
-    @Inject(method = "isFullCube", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/block/Block;isFullCube(Lnet/minecraft/block/state/IBlockState;)Z",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preIsFullCube(IBlockState state, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (pepsimod.hasInitializedModules) {
             if (XrayMod.INSTANCE.state.enabled) {
@@ -61,7 +65,11 @@ public abstract class MixinBlock extends net.minecraftforge.registries.IForgeReg
         }
     }
 
-    @Inject(method = "shouldSideBeRendered", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/block/Block;shouldSideBeRendered(Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/EnumFacing;)Z",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preShouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side, CallbackInfoReturnable<Boolean> callbackInfo) {
         if (pepsimod.hasInitializedModules) {
             if (XrayMod.INSTANCE.state.enabled) {
@@ -72,7 +80,10 @@ public abstract class MixinBlock extends net.minecraftforge.registries.IForgeReg
         //vanilla code follows
     }
 
-    @Inject(method = "onPlayerDestroy", at = @At("HEAD"))
+    @Inject(
+            method = "Lnet/minecraft/block/Block;onPlayerDestroy(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;)V",
+            at = @At("HEAD")
+    )
     public void preOnPlayerDestroy(World worldIn, BlockPos pos, IBlockState state, CallbackInfo callbackInfo) {
         if (worldIn.isRemote) {
             AnnouncerMod.INSTANCE.onBreakBlock(state);

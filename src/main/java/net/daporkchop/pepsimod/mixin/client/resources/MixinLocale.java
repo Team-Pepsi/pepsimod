@@ -36,7 +36,7 @@ public abstract class MixinLocale {
     }
 
     @Inject(
-            method = "loadLocaleDataFiles",
+            method = "Lnet/minecraft/client/resources/Locale;loadLocaleDataFiles(Lnet/minecraft/client/resources/IResourceManager;Ljava/util/List;)V",
             at = @At("RETURN")
     )
     public void postLoad(IResourceManager resourceManager, List<String> languageList, CallbackInfo callbackInfo) {

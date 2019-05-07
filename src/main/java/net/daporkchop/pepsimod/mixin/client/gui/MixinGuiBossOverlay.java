@@ -52,7 +52,11 @@ public abstract class MixinGuiBossOverlay extends Gui {
     @Final
     private Minecraft client;
 
-    @Inject(method = "renderBossHealth", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/client/gui/GuiBossOverlay;renderBossHealth()V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preRenderBossHealth(CallbackInfo callbackInfo) {
         if (!this.mapBossInfos.isEmpty()) {
             ScaledResolution scaledresolution = new ScaledResolution(this.client);
@@ -77,15 +81,13 @@ public abstract class MixinGuiBossOverlay extends Gui {
 
     @Shadow
     private void render(int x, int y, BossInfo info) {
-
     }
 
-    @Inject(method = "read", at = @At("HEAD"))
+    @Inject(
+            method = "Lnet/minecraft/client/gui/GuiBossOverlay;read(Lnet/minecraft/network/play/server/SPacketUpdateBossInfo;)V",
+            at = @At("HEAD")
+    )
     public void read(SPacketUpdateBossInfo packetIn, CallbackInfo callbackInfo) {
-        this.updateCounter();
-    }
-
-    public void updateCounter() {
         this.counted_cache.clear();
         ArrayList<String> known = new ArrayList<>();
         for (BossInfoClient infoLerping : this.mapBossInfos.values()) {

@@ -28,14 +28,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GuiIngame.class)
 public abstract class MixinGuiIngame extends Gui {
-    @Inject(method = "renderPumpkinOverlay", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/client/gui/GuiIngame;renderPumpkinOverlay(Lnet/minecraft/client/gui/ScaledResolution;)V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     protected void preRenderPumpkinOverlay(ScaledResolution scaledRes, CallbackInfo callbackInfo) {
         if (NoOverlayMod.INSTANCE.state.enabled) {
             callbackInfo.cancel();
         }
     }
 
-    @Inject(method = "renderPotionEffects", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/client/gui/GuiIngame;renderPotionEffects(Lnet/minecraft/client/gui/ScaledResolution;)V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void prerenderPotionEffects(ScaledResolution resolution, CallbackInfo callbackInfo) {
         if (!HUDTranslator.INSTANCE.effects) {
             callbackInfo.cancel();

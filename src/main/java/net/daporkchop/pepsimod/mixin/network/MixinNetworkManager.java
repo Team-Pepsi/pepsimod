@@ -37,19 +37,30 @@ import javax.annotation.Nullable;
  */
 @Mixin(NetworkManager.class)
 public abstract class MixinNetworkManager {
-    @Inject(method = "dispatchPacket", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/network/NetworkManager;dispatchPacket(Lnet/minecraft/network/Packet;[Lio/netty/util/concurrent/GenericFutureListener;)V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preSend(final Packet<?> inPacket, @Nullable final GenericFutureListener<? extends Future<? super Void>>[] futureListeners, CallbackInfo callbackInfo) {
         if (ModuleManager.preSendPacket(inPacket)) {
             callbackInfo.cancel();
         }
     }
 
-    @Inject(method = "dispatchPacket", at = @At("RETURN"))
+    @Inject(
+            method = "Lnet/minecraft/network/NetworkManager;dispatchPacket(Lnet/minecraft/network/Packet;[Lio/netty/util/concurrent/GenericFutureListener;)V",
+            at = @At("RETURN")
+    )
     public void postSend(final Packet<?> inPacket, @Nullable final GenericFutureListener<? extends Future<? super Void>>[] futureListeners, CallbackInfo callbackInfo) {
         ModuleManager.postSendPacket(inPacket);
     }
 
-    @Inject(method = "channelRead0", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/network/NetworkManager;channelRead0(Lio/netty/channel/ChannelHandlerContext;Lnet/minecraft/network/Packet;)V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preProcess(ChannelHandlerContext p_channelRead0_1_, Packet<?> p_channelRead0_2_, CallbackInfo callbackInfo) {
         TickRate.update(p_channelRead0_2_);
         if (ModuleManager.preRecievePacket(p_channelRead0_2_)) {
@@ -57,12 +68,18 @@ public abstract class MixinNetworkManager {
         }
     }
 
-    @Inject(method = "channelRead0", at = @At("RETURN"))
+    @Inject(
+            method = "Lnet/minecraft/network/NetworkManager;channelRead0(Lio/netty/channel/ChannelHandlerContext;Lnet/minecraft/network/Packet;)V",
+            at = @At("RETURN")
+    )
     public void postProcess(ChannelHandlerContext p_channelRead0_1_, Packet<?> p_channelRead0_2_, CallbackInfo callbackInfo) {
         ModuleManager.postRecievePacket(p_channelRead0_2_);
     }
 
-    @Inject(method = "closeChannel", at = @At("HEAD"))
+    @Inject(
+            method = "Lnet/minecraft/network/NetworkManager;closeChannel(Lnet/minecraft/util/text/ITextComponent;)V",
+            at = @At("HEAD")
+    )
     public void preCloseChannel(ITextComponent message, CallbackInfo callbackInfo) {
         TickRate.reset();
         if (FreecamMod.INSTANCE.state.enabled) {
@@ -70,7 +87,10 @@ public abstract class MixinNetworkManager {
         }
     }
 
-    @Inject(method = "exceptionCaught", at = @At("RETURN"))
+    @Inject(
+            method = "Lnet/minecraft/network/NetworkManager;exceptionCaught(Lio/netty/channel/ChannelHandlerContext;Ljava/lang/Throwable;)V",
+            at = @At("RETURN")
+    )
     public void postExceptionCaught(ChannelHandlerContext p_exceptionCaught_1_, Throwable p_exceptionCaught_2_, CallbackInfo callbackInfo) {
         p_exceptionCaught_2_.printStackTrace(System.out);
     }

@@ -37,7 +37,11 @@ public abstract class MixinBlockLiquid extends Block {
         super(null);
     }
 
-    @Inject(method = "isPassable", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/block/BlockLiquid;isPassable(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;)Z",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preIsPassable(IBlockAccess worldIn, BlockPos pos, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (pepsimod.hasInitializedModules) {
             if (XrayMod.INSTANCE.state.enabled) {
@@ -46,7 +50,11 @@ public abstract class MixinBlockLiquid extends Block {
         }
     }
 
-    @Inject(method = "getCollisionBoundingBox", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/block/BlockLiquid;getCollisionBoundingBox(Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/util/math/AxisAlignedBB;",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preGetCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos, CallbackInfoReturnable<AxisAlignedBB> callbackInfoReturnable) {
         if (pepsimod.hasInitializedModules) {
             if (JesusMod.INSTANCE.shouldBeSolid()) {

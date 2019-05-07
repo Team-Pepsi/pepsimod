@@ -86,7 +86,7 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
     }
 
     @Inject(
-            method = "isAutoJumpEnabled",
+            method = "Lnet/minecraft/client/entity/EntityPlayerSP;isAutoJumpEnabled()Z",
             at = @At("HEAD"),
             cancellable = true
     )

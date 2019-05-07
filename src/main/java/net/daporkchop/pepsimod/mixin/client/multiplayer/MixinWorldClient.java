@@ -30,7 +30,11 @@ public abstract class MixinWorldClient extends World {
         super(null, null, null, null, false);
     }
 
-    @Inject(method = "doVoidFogParticles", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/client/multiplayer/WorldClient;doVoidFogParticles(III)V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preDoVoidFogParticles(int posX, int posY, int posZ, CallbackInfo callbackInfo) {
         if (FreecamMod.INSTANCE.state.enabled) {
             callbackInfo.cancel();

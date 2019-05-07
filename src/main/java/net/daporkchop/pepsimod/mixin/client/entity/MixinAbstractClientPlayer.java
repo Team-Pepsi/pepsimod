@@ -39,7 +39,7 @@ public abstract class MixinAbstractClientPlayer extends EntityPlayer {
     protected abstract NetworkPlayerInfo getPlayerInfo();
 
     @Inject(
-            method = "getLocationCape",
+            method = "Lnet/minecraft/client/entity/AbstractClientPlayer;getLocationCape()Lnet/minecraft/util/ResourceLocation;",
             at = @At("HEAD"),
             cancellable = true
     )

@@ -51,7 +51,11 @@ public abstract class MixinEntityLivingBase extends Entity {
         super(null);
     }
 
-    @Inject(method = "isPotionActive", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/entity/EntityLivingBase;isPotionActive(Lnet/minecraft/potion/Potion;)Z",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void preIsPotionActive(Potion potionIn, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (potionIn == MobEffects.BLINDNESS && AntiBlindMod.INSTANCE.state.enabled) {
             callbackInfoReturnable.setReturnValue(false);
@@ -59,7 +63,10 @@ public abstract class MixinEntityLivingBase extends Entity {
         }
     }
 
-    @Inject(method = "onLivingUpdate", at = @At("HEAD"))
+    @Inject(
+            method = "Lnet/minecraft/entity/EntityLivingBase;onLivingUpdate()V",
+            at = @At("HEAD")
+    )
     public void preOnLivingUpdate(CallbackInfo callbackInfo) {
         EntityLivingBase thisAsEntity = EntityLivingBase.class.cast(this);
         if (thisAsEntity == mc.player && ElytraFlyMod.INSTANCE.state.enabled && ElytraFlyTranslator.INSTANCE.mode == ElytraFlyTranslator.ElytraFlyMode.PACKET) {
@@ -67,51 +74,14 @@ public abstract class MixinEntityLivingBase extends Entity {
         }
     }
 
-    @Shadow
-    public boolean isElytraFlying() {
-        return false;
-    }
-
-    @Inject(method = "travel", at = @At("HEAD"))
+    @Inject(
+            method = "Lnet/minecraft/entity/EntityLivingBase;travel(FFF)V",
+            at = @At("HEAD")
+    )
     public void preTravel(float x, float y, float z, CallbackInfo callbackInfo) {
         EntityLivingBase thisAsEntity = EntityLivingBase.class.cast(this);
         if (thisAsEntity == mc.player && ElytraFlyMod.INSTANCE.state.enabled && ElytraFlyTranslator.INSTANCE.mode == ElytraFlyTranslator.ElytraFlyMode.PACKET) {
             this.motionY = 0;
         }
-    }
-
-    @Shadow
-    protected SoundEvent getFallSound(int heightIn) {
-        return null;
-    }
-
-    @Shadow
-    public boolean isServerWorld() {
-        return true;
-    }
-
-    @Shadow
-    public float getAIMoveSpeed() {
-        return 0.0f;
-    }
-
-    @Shadow
-    public boolean isOnLadder() {
-        return false;
-    }
-
-    @Shadow
-    public boolean isPotionActive(Potion potionIn) {
-        return false;
-    }
-
-    @Shadow
-    public PotionEffect getActivePotionEffect(Potion potionIn) {
-        return null;
-    }
-
-    @Shadow
-    protected float getWaterSlowDown() {
-        return 0.0f;
     }
 }

@@ -25,7 +25,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameSettings.class)
 public abstract class MixinGameSettings {
-    @Inject(method = "setOptionFloatValue", at = @At("HEAD"))
+    @Inject(
+            method = "Lnet/minecraft/client/settings/GameSettings;setOptionFloatValue(Lnet/minecraft/client/settings/GameSettings$Options;F)V",
+            at = @At("HEAD")
+    )
     public void preSetOptionFloatValue(GameSettings.Options settingsOption, float value, CallbackInfo callbackInfo) {
         if (settingsOption == GameSettings.Options.FOV) {
             ZoomMod.INSTANCE.fov = value;

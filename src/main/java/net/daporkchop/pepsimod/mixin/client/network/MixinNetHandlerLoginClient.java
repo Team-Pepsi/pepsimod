@@ -36,7 +36,11 @@ public abstract class MixinNetHandlerLoginClient implements INetHandlerLoginClie
     @Final
     private NetworkManager networkManager;
 
-    @Inject(method = "handleEncryptionRequest", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "Lnet/minecraft/client/network/NetHandlerLoginClient;handleEncryptionRequest(Lnet/minecraft/network/login/server/SPacketEncryptionRequest;)V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     public void handleEncryptionRequest(SPacketEncryptionRequest packetIn, CallbackInfo ci) {
         if (pepsimod.isMcLeaksAccount) {
             MCLeaks.joinServerStuff(packetIn, this.networkManager);
