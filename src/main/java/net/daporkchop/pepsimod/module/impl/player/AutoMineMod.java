@@ -19,12 +19,17 @@ package net.daporkchop.pepsimod.module.impl.player;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.daporkchop.pepsimod.util.ReflectionStuff;
+import net.daporkchop.pepsimod.optimization.OverrideCounter;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.RayTraceResult;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AutoMineMod extends Module {
     public static AutoMineMod INSTANCE;
+    protected boolean started = false;
+    protected final AtomicBoolean incremented = new AtomicBoolean(false);
 
     {
         INSTANCE = this;
@@ -36,30 +41,38 @@ public class AutoMineMod extends Module {
 
     @Override
     public void onEnable() {
-
     }
 
     @Override
     public void onDisable() {
-        if (pepsimod.hasInitializedModules) {
-            ReflectionStuff.setPressed(mc.gameSettings.keyBindAttack, false);
+        if (this.incremented.getAndSet(false)) {
+            ((OverrideCounter) mc.gameSettings.keyBindAttack).decrementOverride();
         }
     }
 
     @Override
     public void tick() {
-        if (mc.objectMouseOver == null || mc.objectMouseOver.getBlockPos() == null) {
+        if (this.started && mc.gameSettings.keyBindUseItem.isKeyDown()) {
+            this.started = false;
+        }
+        if (this.incremented.getAndSet(false)) {
+            ((OverrideCounter) mc.gameSettings.keyBindAttack).decrementOverride();
+        }
+        if (mc.objectMouseOver == null || mc.objectMouseOver.typeOfHit != RayTraceResult.Type.BLOCK) {
             return;
         }
 
-        if (mc.gameSettings.keyBindAttack.isPressed() && !mc.playerController.getIsHittingBlock()) {
-            ReflectionStuff.setPressed(mc.gameSettings.keyBindAttack, false);
-            return;
+        if (this.started) {
+            IBlockState state = mc.world.getBlockState(mc.objectMouseOver.getBlockPos());
+            boolean flag = state.getBlock().getMaterial(state) != Material.AIR;
+            if (flag && !this.incremented.getAndSet(true)) {
+                ((OverrideCounter) mc.gameSettings.keyBindAttack).incrementOverride();
+            }
+        } else {
+            if (mc.gameSettings.keyBindAttack.isKeyDown()) {
+                this.started = true;
+            }
         }
-
-        // press attack key if looking at block
-        IBlockState state = mc.world.getBlockState(mc.objectMouseOver.getBlockPos());
-        ReflectionStuff.setPressed(mc.gameSettings.keyBindAttack, state.getBlock().getMaterial(state) != Material.AIR);
     }
 
     @Override

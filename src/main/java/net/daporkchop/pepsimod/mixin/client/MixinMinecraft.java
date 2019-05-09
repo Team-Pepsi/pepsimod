@@ -45,9 +45,14 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import javax.imageio.ImageIO;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 import static net.daporkchop.pepsimod.util.PepsiConstants.mc;
 import static net.daporkchop.pepsimod.util.PepsiConstants.pepsimod;
@@ -140,8 +145,17 @@ public abstract class MixinMinecraft {
             cancellable = true
     )
     public void preSetWindowIcon(CallbackInfo callbackInfo) {
-        try (InputStream in = Pepsimod.class.getResourceAsStream("/pepsilogo.png")) {
-            Display.setIcon(new ByteBuffer[]{this.readImageToBuffer(in)});
+        try {
+            BufferedImage img = ImageIO.read(Pepsimod.class.getResourceAsStream("/pepsilogo.png"));
+            List<ByteBuffer> sizes = new ArrayList<>();
+            int w = img.getWidth();
+            do  {
+                BufferedImage tmp = new BufferedImage(w, w, img.getType());
+                tmp.createGraphics().drawImage(img, 0, 0, w, w, null);
+                sizes.add(this.convertImageToBuffer(tmp));
+                w >>= 1;
+            } while (w >= 8);
+            Display.setIcon(sizes.toArray(new ByteBuffer[sizes.size()]));
             callbackInfo.cancel();
         } catch (IOException e) {
             e.printStackTrace();
@@ -191,9 +205,22 @@ public abstract class MixinMinecraft {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/multiplayer/PlayerControllerMP;attackEntity(Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/entity/Entity;)V"
             ))
-    public void preventAttackingRiddenEntity(PlayerControllerMP controller, EntityPlayer attacker, Entity attacked)  {
+    public void preventAttackingRiddenEntity(PlayerControllerMP controller, EntityPlayer attacker, Entity attacked) {
         if (!attacked.isPassenger(attacker)) {
             controller.attackEntity(attacker, attacked);
         }
+    }
+
+
+    private ByteBuffer convertImageToBuffer(BufferedImage bufferedimage) throws IOException {
+        int[] aint = bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), null, 0, bufferedimage.getWidth());
+        ByteBuffer bytebuffer = ByteBuffer.allocate(4 * aint.length);
+
+        for (int i : aint) {
+            bytebuffer.putInt(i << 8 | i >> 24 & 255);
+        }
+
+        bytebuffer.flip();
+        return bytebuffer;
     }
 }

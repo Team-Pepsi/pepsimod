@@ -19,12 +19,18 @@ package net.daporkchop.pepsimod.mixin.client.settings;
 import net.daporkchop.pepsimod.optimization.OverrideCounter;
 import net.minecraft.client.settings.KeyBinding;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 /**
  * @author DaPorkchop_
  */
 @Mixin(KeyBinding.class)
 public abstract class MixinKeyBinding implements OverrideCounter {
+    @Shadow
+    private boolean pressed;
+
     public int overrideCounter = 0;
 
     @Override
@@ -42,5 +48,15 @@ public abstract class MixinKeyBinding implements OverrideCounter {
     @Override
     public int getOverride() {
         return this.overrideCounter;
+    }
+
+    @Redirect(
+            method = "Lnet/minecraft/client/settings/KeyBinding;isKeyDown()Z",
+            at = @At(
+                    value = "FIELD",
+                    target = "Lnet/minecraft/client/settings/KeyBinding;pressed:Z"
+            ))
+    public boolean modifyIsKeyDown(KeyBinding binding)  {
+        return this.pressed || this.isOverriden();
     }
 }
