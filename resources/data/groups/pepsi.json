@@ -42,7 +42,7 @@
     "7f4403ba-a8da-40c1-9abc-1cf813e673d4", //McMeo (McNeo)
     "2ff087c0-3475-4cbe-97d9-2f0bfc66e189", //NcNeo (McNeo),
     "39c9ee1d-473f-4601-a862-5b7cf01f0e07", //BornToRun
-    "e97ff4c0-48bf-4c98-be34-248fdde2ffd3"  //HermeticLock
+    "e97ff4c0-48bf-4c98-be34-248fdde2ffd3", //HermeticLock
   ],
   "color": { //0x5555ff, or formatting code §9
     "r": 85,
