@@ -1,10 +1,8 @@
 # pepsimod
 
-"The best way to use pepsimod is assume that nothing will work and then be suprised by how well it works"
+![pepsimod logo](https://raw.githubusercontent.com/Team-Pepsi/pepsimod/4e9f42a870284af48a4813b6dfd74483f5e61e14/src/main/resources/assets/minecraft/textures/gui/pepsimod.png)
 
-![pepsimod logo](https://bytebucket.org/TeamPepsi/pepsimod/raw/4e9f42a870284af48a4813b6dfd74483f5e61e14/src/main/resources/assets/minecraft/textures/gui/pepsimod.png?token=0a0123412d9983b8a7e882b057f7b58fb5e1e8c8)
-
-[Discord](https://discord.gg/jVEPCTT)  [![Build Status](https://jenkins.daporkchop.net/job/pepsimod/badge/icon)](https://jenkins.daporkchop.net/job/pepsimod/)
+[![Discord](https://img.shields.io/discord/356205695093178389.svg)](https://discord.gg/jVEPCTT)  [![Build Status](https://jenkins.daporkchop.net/job/Minecraft/job/pepsimod/badge/icon)](https://jenkins.daporkchop.net/job/Minecraft/job/pepsimod/)
 
 This is a hacked client developed entirely by DaPorkchop_ for use by Team Pepsi. Due to constant requests for a download and an overwhelming lack of time currently, I've decided to open-source the project.
 
