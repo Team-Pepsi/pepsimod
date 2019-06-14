@@ -40,12 +40,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.*;
 
+import static net.daporkchop.pepsimod.util.PepsiConstants.mcStartedSuccessfully;
 import static net.daporkchop.pepsimod.util.PepsiConstants.pepsimod;
 
 @Mixin(GuiMainMenu.class)
 public abstract class MixinGuiMainMenu extends GuiScreen {
-    public final ColorizedText PEPSIMOD_TEXT_GRADIENT = PepsiUtils.getGradientFromStringThroughColor(Pepsimod.NAME_VERSION + " for Minecraft " + MinecraftForge.MC_VERSION, new Color(255, 0, 0), new Color(0, 0, 255), new Color(255, 255, 255));
-    public final ColorizedText PEPSIMOD_AUTHOR_GRADIENT = new RainbowText("Made by DaPorkchop_");
+    public ColorizedText PEPSIMOD_TEXT_GRADIENT;
+    public ColorizedText PEPSIMOD_AUTHOR_GRADIENT;
     @Shadow
     private String splashText;
 
@@ -54,7 +55,12 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
             at = @At("RETURN")
     )
     public void postConstructor(CallbackInfo callbackInfo)  {
-        this.splashText = pepsimod.data.mainMenu.getRandomSplash();
+        if (mcStartedSuccessfully) {
+            this.PEPSIMOD_TEXT_GRADIENT = PepsiUtils.getGradientFromStringThroughColor(Pepsimod.NAME_VERSION + " for Minecraft " + MinecraftForge.MC_VERSION, new Color(255, 0, 0), new Color(0, 0, 255), new Color(255, 255, 255));
+            this.PEPSIMOD_AUTHOR_GRADIENT = new RainbowText("Made by DaPorkchop_");
+
+            this.splashText = pepsimod.data.mainMenu.getRandomSplash();
+        }
     }
 
     @Inject(
@@ -62,15 +68,17 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
             at = @At("RETURN")
     )
     public void addPepsiIconAndChangeSplash(CallbackInfo ci) {
-        pepsimod.isInitialized = true;
-        if (!pepsimod.hasInitializedModules) {
-            for (Module module : ModuleManager.AVALIBLE_MODULES) {
-                module.doInit();
+        if (mcStartedSuccessfully) {
+            pepsimod.isInitialized = true;
+            if (!pepsimod.hasInitializedModules) {
+                for (Module module : ModuleManager.AVALIBLE_MODULES) {
+                    module.doInit();
+                }
+                PepsiUtils.setBlockIdFields();
+                pepsimod.hasInitializedModules = true;
             }
-            PepsiUtils.setBlockIdFields();
-            pepsimod.hasInitializedModules = true;
+            ModuleManager.sortModules(GeneralTranslator.INSTANCE.sortType);
         }
-        ModuleManager.sortModules(GeneralTranslator.INSTANCE.sortType);
     }
 
     @Redirect(
@@ -138,7 +146,9 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
     )
     public void addDrawPepsiStuff(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
         this.drawString(this.fontRenderer, PepsiUtils.COLOR_ESCAPE + "cCopyright Mojang AB. Do not distribute!", this.width - this.fontRenderer.getStringWidth("Copyright Mojang AB. Do not distribute!") - 2, this.height - 10, -1);
-        this.PEPSIMOD_TEXT_GRADIENT.drawAtPos(this, 2, this.height - 20);
-        this.PEPSIMOD_AUTHOR_GRADIENT.drawAtPos(this, 2, this.height - 10);
+        if (this.PEPSIMOD_TEXT_GRADIENT != null && this.PEPSIMOD_AUTHOR_GRADIENT != null)    {
+            this.PEPSIMOD_TEXT_GRADIENT.drawAtPos(this, 2, this.height - 20);
+            this.PEPSIMOD_AUTHOR_GRADIENT.drawAtPos(this, 2, this.height - 10);
+        }
     }
 }

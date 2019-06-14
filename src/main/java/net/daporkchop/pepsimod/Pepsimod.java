@@ -161,6 +161,8 @@ public class Pepsimod extends PepsiConstants {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        mcStartedSuccessfully = true;
+
         MinecraftForge.EVENT_BUS.register(new KeyRegistry());
     }
 

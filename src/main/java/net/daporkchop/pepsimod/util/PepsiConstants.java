@@ -22,4 +22,5 @@ import net.minecraft.client.Minecraft;
 public abstract class PepsiConstants {
     public static Minecraft mc = null;
     public static Pepsimod pepsimod = null;
+    public static boolean mcStartedSuccessfully = false;
 }

@@ -55,6 +55,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static net.daporkchop.pepsimod.util.PepsiConstants.mc;
+import static net.daporkchop.pepsimod.util.PepsiConstants.mcStartedSuccessfully;
 import static net.daporkchop.pepsimod.util.PepsiConstants.pepsimod;
 
 @Mixin(Minecraft.class)
@@ -72,13 +73,15 @@ public abstract class MixinMinecraft {
             at = @At("HEAD")
     )
     public void saveSettingsOnShutdown(CallbackInfo ci) {
-        System.out.println("[PEPSIMOD] Saving config...");
-        pepsimod.saveConfig();
-        System.out.println("[PEPSIMOD] Saved.");
+        if (mcStartedSuccessfully) {
+            System.out.println("[PEPSIMOD] Saving config...");
+            pepsimod.saveConfig();
+            System.out.println("[PEPSIMOD] Saved.");
 
-        if (ZoomMod.INSTANCE.state.enabled) {
-            ModuleManager.disableModule(ZoomMod.INSTANCE);
-            mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
+            if (ZoomMod.INSTANCE.state.enabled) {
+                ModuleManager.disableModule(ZoomMod.INSTANCE);
+                mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
+            }
         }
     }
 
@@ -87,7 +90,7 @@ public abstract class MixinMinecraft {
             at = @At("RETURN")
     )
     public void postOnClientPreTick(CallbackInfo callbackInfo) {
-        if (mc.player != null && mc.player.movementInput != null) { // is ingame
+        if (mcStartedSuccessfully && mc.player != null && mc.player.movementInput != null) { // is ingame
             for (Module module : ModuleManager.AVALIBLE_MODULES) {
                 if (module.shouldTick()) {
                     module.tick();
@@ -167,7 +170,7 @@ public abstract class MixinMinecraft {
 
     @Inject(method = "displayGuiScreen", at = @At("HEAD"))
     public void preDisplayGuiScreen(GuiScreen guiScreen, CallbackInfo callbackInfo) {
-        if (ZoomMod.INSTANCE.state.enabled) {
+        if (mcStartedSuccessfully && ZoomMod.INSTANCE.state.enabled) {
             ModuleManager.disableModule(ZoomMod.INSTANCE);
             mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
         }
@@ -194,7 +197,7 @@ public abstract class MixinMinecraft {
     public void preProcessKeyBinds(CallbackInfo ci) {
         // If . is typed open GuiChat
         // Bypass the keybind system because the command prefix is not configurable
-        if (mc.currentScreen == null && Keyboard.getEventCharacter() == '.') {
+        if (mcStartedSuccessfully && mc.currentScreen == null && Keyboard.getEventCharacter() == '.') {
             mc.displayGuiScreen(new GuiChat("."));
         }
     }
