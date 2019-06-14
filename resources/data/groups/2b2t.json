@@ -1,6 +1,7 @@
 {
   "id": "2b2t",
   "name": "Notable/Regular 2b2t Players",
+  "cape": "textures/capes/2b2t.png",
   "icon": "textures/2b2t.png",
   "members": [
     //no specific order to these, i basically just scrolled through discord and a few
