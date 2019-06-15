@@ -30,6 +30,7 @@
     "6ce4932a-0ba2-4dc8-beb2-64904c59944f", //Aryezz
     "33156c4b-6ede-4d24-9067-fdd72e3abb85", //Auchzezt
     "92e45daf-89d5-4c9b-8c97-d9e030b3d1ff", //AutismBot
+    "c0da56cd-587c-48b9-9ebf-1a8d979e1c49", //AWarGuy
     "62e26f7d-66c6-449d-b2a2-504805e358c6", //AyyItsCancer
     "153b92b1-17de-404d-b2db-4d3ac01f42fc", //BarrenDome
     "b0837843-518a-4223-8c91-8d6c2cef0f81", //Beardler
@@ -43,8 +44,10 @@
     "bbccc640-dbb0-488a-8c84-e8056d4ec051", //Chunkr
     "87c68548-a02f-4e25-9e9b-46e27c754ad2", //Coltsnid
     "59554514-74f5-4eb4-ac55-d35ad340241c", //CorruptedUnicorn
+    "cb9932d3-9b2d-412b-956a-1a6d7037c0b3", //D4RKJ0E (jared2013 alt)
     "5a2d78f3-5b3e-45f6-8172-fda5a2abd13b", //D_loaded
     "35746719-c9d1-401f-9394-149a366b26ef", //Dark_Annihilator
+    "1a455479-4daa-4494-9e9b-3f50dfa16031", //DemonElite119
     "ecc6ad17-611f-46cc-aa1f-99f5742e8cbc", //DocSmurf
     "e43610eb-3a9f-40ba-ba3e-0a501a9a6f3f", //Drollovitch
     "5c84d95f-7ef3-4814-9557-52ff1cba7923", //Elementars
@@ -52,21 +55,24 @@
     "886eba7a-b901-4a2d-a977-bb286e93bb73", //FallsGreen
     "fdee323e-7f0c-4c15-8d1c-0f277442342a", //Fit
     "751f4598-27ce-42f0-9991-e1b17728616b", //Fluffbuck3t
-    "e195d3d7-e6dc-456e-8393-e2f90816a1af", //Hausemaster
+    "e195d3d7-e6dc-456e-8393-e2f90816a1af", //Hausemaster (Fake Hause)
     "e97ff4c0-48bf-4c98-be34-248fdde2ffd3", //HermeticLock
     "520c705e-0ae9-4d54-8819-586a00751277", //HolyBruhBrine
     "fd04e3e6-16a9-4755-bf69-7ee55ed4766b", //IHackedWalmart
     "99505893-fc91-4c8c-8d54-4192c23e9654", //ImportedSocks
+    "3822abef-a351-4e91-9577-70e09cba79d2", //Jaang
     "7f197618-32c2-4876-841b-cea29bd58cae", //Jacktherippa
     "184901d1-3081-4679-b09e-29731ed4f7c6", //James_Rustles
     "64271c60-f9d2-4b09-9ce3-68935212902d", //JewishBanker
     "24f7eb09-ad9e-4e09-b58b-2b59259f171d", //Joey_Coconut
     "bac78aea-dbc7-44cf-b7c2-9ed74559942e", //John200410
     "652ad196-92cd-49a9-9087-3df989c8bfe2", //Jumbo_Warrior
+    "f7be16a0-f648-4b55-b965-d898542b548d", //JIDF (popbob alt #3)
     "d8915a8f-94c5-44ae-9714-fcc434804625", //Kalju
     "ef2cd19f-177a-4f31-897a-b4ebf0fd2ecc", //Killet
     "a46b69ad-11dc-46b8-a2f7-9e6118c75d9d", //Lambo_Veneno
     "cb643a0c-7877-4304-89bd-4afd29f23aea", //LordGalvatronMC
+    "202bdf03-7cb1-4ea2-8ff5-1adf72ff0217", //Melkor (Sato86 alt)
     "c46d1f94-43a1-48ec-87b3-662e38750e0d", //Mike_embed
     "75e299cd-9f60-49f2-bbe6-32f7b1fc4528", //MiningMinecraft
     "dc906658-0356-4fc9-a7fd-90439ebff8fa", //Myne1001
@@ -74,15 +80,20 @@
     "f3cd098a-e4fc-49df-88fd-096cdf45c7c0", //NedaT
     "290bcd4a-edd3-4b13-bfce-81121f5f5432", //Negative_Entropy
     "414274ac-a663-45c5-b573-6a06a8381e99", //Nekramite
+    "9d1f7b2c-d4ee-4702-9430-5e48265a0fa8", //Nes (Fit alt #2)
     "53a25bf1-96af-4091-888a-58ea7e8b11ce", //NickHasCancer
     "5c143a11-235b-437d-ab26-1a930e0aeff9", //Nordic93
+    "a5b28f53-1cc4-498e-9965-9d4948d41b47", //Offtopia
     "0f58e2ac-7e5f-4b01-be5e-901c36c37e49", //OldFreeWilly
     "f8595af6-fae5-4fad-92dd-ac876eb2d740", //OreMonger
+    "16f38f47-3308-45cb-99ca-017ea4123602", //OreMongerIsANig (popbob alt #1)
+    "e2301079-0001-4da2-9a30-31687c2adb26", //OreMongerIsANigr (popbob alt #2)
     "57f9d29f-03a8-4491-8a0c-e391a6986869", //P529
     "80303f9c-c0c1-42ce-926d-c8496c8c1232", //Parthicus
     "5faa40dd-815e-42f5-8f7d-9786a1db9087", //Prismary
     "68b1bb11-cfa3-4e16-a01d-b6ddda0a1083", //Pyrobyte
     "d5b2dde0-de1d-46f6-bc7d-a8112d90362c", //RusherB0t
+    "0275f74a-f697-4c3c-ad85-929409adfd47", //RIDF (popbob alt #4)
     "375e0f37-b516-47f1-8772-a62752debb62", //R2bEEaton
     "a55a594b-b3d3-4340-9454-1ac7af986a51", //Sato86
     "9711a662-ea54-444b-a0de-19a02f93159c", //SaVaTaR_
@@ -94,7 +105,9 @@
     "f68e5be6-9faf-47d5-9b7d-1c6f3a30c2fe", //THEJudgeHolden
     "b95aaeab-a70e-44d1-a363-1f2dd4e1cc57", //Tanaxis
     "a4cb5e16-39d6-4fdc-aa35-492d72587d40", //ThebesAndSound
-    "017e2785-a655-4e84-9a9f-f2d9829447b4", //TheDark_Emperor
+    "017e2785-a655-4e84-9a9f-f2d9829447b4", //TheDark_EmperorxxBurnseyxx
+    "61937077-e2b1-468b-b88e-2c8576f89493", //TheLuke2thebun (luke2thebun)
+    "0012eeb7-3b5a-4ea4-b569-bdefd6f90784", //TheMilkeManMike
     "ea06f38a-df2f-47b5-bf61-2906201c8b3d", //The_GenderBender
     "0b6d7218-0dcd-4da9-a54e-cef69033011e", //The_Grand_Lotus
     "2f335f8f-0ba0-4e3e-a8d4-7d92199ba07c", //Tim_Mcnukepants
@@ -107,7 +120,10 @@
     "d191a10b-b5f5-4781-9a9a-30ce78a3ad1a", //YellowstoneJoe
     "788a4e3e-a4c4-442f-a669-79ba379a11d0", //alien803
     "57d319b5-3a31-4c6b-9a6e-27259f29aae2", //cityboss1
+    "fed43b81-83b9-4799-ac44-f2a75b4db2c6", //csisDustin
     "855f0807-94a6-407d-90c2-0c3de4447f52", //doctrzombie
+    "a3166d0a-bcfd-406c-9ca8-4693e771d7e2", //edudagorot (torogadude alt #1)
+    "8f2ce453-cef2-4b3e-b686-dc21b519a0a1", //expunged (Real Hause)
     "21810c8f-d0e5-4cbd-bd9a-c22826b9d97a", //fr1kin
     "752e0d10-b87f-4014-8f93-2dc66d6d39a8", //gRiNdLoRd
     "68da9416-a38f-4e9d-91c6-303dbb2c8026", //georgebush420
@@ -124,11 +140,17 @@
     "5a22e643-8a64-4510-b2f2-e0481e206f3e", //______________P5 (_P5)
     "8e3ffc4a-df00-4013-a9be-9cd909fa775b", //passie05
     "0f75a81d-70e5-43c5-b892-f33c524284f2", //popbob
-    "ff9b6f04-1516-4b88-90bd-36a757b45f40", //spam
+    "9451ce51-1f04-4a0b-a58e-bd4755758287", //popbobYT (popbob alt #5)
+    "ff9b6f04-1516-4b88-90bd-36a757b45f40", //spam (John200410)
+    "80950e3c-448f-4ee4-a473-47dbbe4325b9", //tejerka (Fit alt #1)
     "d039366f-5879-4de3-b4fa-a496f6e6e12c", //terbin
     "1add8238-b53e-4c2b-adc2-bfd393eb2ebe", //thesheergenius
+    "95ddfd3a-d40e-4fc8-a408-d3ee6995706d", //torogadude
     "a0dd2efd-d7db-4130-b5e9-7c534932b58f", //ufocrossing
+    "79b5980b-010c-4300-a13a-dd922882c691", //veteran16 (Fit alt #3)
+    "35b4b09c-5a71-44f4-b966-97f7e0167b1b", //wanderus (Byrnsy alt)
     "05178670-fffb-450a-b8a4-095ee51df4d4", //x0XP
+    "48d12967-e6ca-4fe6-81e5-71c4c561435e", //xarviar
     "25f40033-4201-47df-b5f1-85c58e095d64" //xcc2
   ],
   "color": { //0x00ff00, or green
