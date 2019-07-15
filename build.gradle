@@ -38,7 +38,7 @@ apply plugin: "org.spongepowered.mixin"
 ext {
     //general things
     javaVersion = "1.8"
-    pepsimodVersion = "1.11"
+    pepsimodVersion = "11.1"
 
     //minecraft things
     mcpmappingsVersion = "stable_39"
@@ -52,9 +52,8 @@ ext {
 }
 
 group "net.daporkchop"
-version "v$pepsimodVersion-$minecraftVersion"
+version "$pepsimodVersion"
 
-archivesBaseName = "pepsimod"
 sourceCompatibility = targetCompatibility = "$javaVersion"
 
 configurations {
@@ -102,11 +101,9 @@ dependencies {
 }
 
 processResources {
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
     from(sourceSets.main.resources.srcDirs) {
         include "mcmod.info"
-        expand "version": project.version, "mcversion": project.minecraft.version
+        expand "version": "$pepsimodVersion-$minecraftVersion", "mcversion": "$minecraftVersion"
     }
     from(sourceSets.main.resources.srcDirs) {
         exclude "mcmod.info"
@@ -120,6 +117,8 @@ mixin {
 }
 
 jar {
+    archiveName "pepsimod-v$pepsimodVersion-$minecraftVersion" + ".jar"
+
     from {
         configurations.shade.collect {
             zipTree(it)

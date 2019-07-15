@@ -18,9 +18,13 @@ package net.daporkchop.pepsimod.util;
 
 import net.daporkchop.pepsimod.Pepsimod;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.common.MinecraftForge;
 
 public abstract class PepsiConstants {
+    public static final String MOD_ID = "pepsimod";
+    public static String VERSION = "unknown";
+    public static String VERSION_FULL = "unknown";
+
     public static Minecraft mc = null;
     public static Pepsimod pepsimod = null;
-    public static boolean mcStartedSuccessfully = false;
 }
