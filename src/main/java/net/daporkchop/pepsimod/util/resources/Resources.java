@@ -24,6 +24,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.Accessors;
 import net.daporkchop.lib.common.misc.file.PFiles;
+import net.daporkchop.pepsimod.PepsimodMixinLoader;
 import net.daporkchop.pepsimod.util.PepsiConstants;
 
 import javax.imageio.ImageIO;
@@ -57,8 +58,6 @@ public final class Resources implements PepsiConstants {
     public Resources(@NonNull String url, @NonNull File cacheDir) {
         this.url = url;
         this.cacheDir = PFiles.ensureDirectoryExists(cacheDir);
-
-        this.tryLoad();
     }
 
     /**
@@ -79,7 +78,7 @@ public final class Resources implements PepsiConstants {
      */
     public void load() throws IOException {
         this.baseUrl = "";
-        JsonObject root = this.getJson(this.url);
+        JsonObject root = this.getJson(PepsimodMixinLoader.isObfuscatedEnvironment ? this.url : "resources.json");
         if (root != null) {
             this.baseUrl = root.get("baseurl").getAsString();
             JsonObject data = root.getAsJsonObject("data");
@@ -99,41 +98,58 @@ public final class Resources implements PepsiConstants {
     }
 
     byte[] getBytes(@NonNull String url) throws IOException {
-        ByteBuf buf = PooledByteBufAllocator.DEFAULT.ioBuffer();
-        try {
-            File cacheFile = this.baseUrl.isEmpty() ? null : new File(this.cacheDir, url);
+        if (PepsimodMixinLoader.isObfuscatedEnvironment) {
+            ByteBuf buf = PooledByteBufAllocator.DEFAULT.ioBuffer();
+            try {
+                File cacheFile = this.baseUrl.isEmpty() ? null : new File(this.cacheDir, url);
 
-            try (InputStream in = new URL(this.baseUrl + url).openStream()) {
-                buf.writeBytes(in, 2 << 20); //2 MB
-            } catch (IOException e) {
-                //try to load from cache
-                if (cacheFile != null && cacheFile.exists() && cacheFile.isFile()) {
-                    byte[] b = new byte[(int) cacheFile.length()];
-                    try (InputStream in = new FileInputStream(cacheFile)) {
-                        if (in.read(b) != b.length) {
-                            log.warn("Couldn't read entire file from disk!");
-                            b = null;
+                try (InputStream in = new URL(this.baseUrl + url).openStream()) {
+                    while (buf.writeBytes(in, (2 << 20) - buf.readableBytes()) >= 0)
+                        ;
+                } catch (IOException e) {
+                    //try to load from cache
+                    if (cacheFile != null && cacheFile.exists() && cacheFile.isFile()) {
+                        byte[] b = new byte[(int) cacheFile.length()];
+                        try (InputStream in = new FileInputStream(cacheFile)) {
+                            if (in.read(b) != b.length) {
+                                log.warn("Couldn't read entire file from disk!");
+                                b = null;
+                            }
                         }
+                        return b;
+                    } else {
+                        return null; //couldn't load from cache
                     }
-                    return b;
-                } else {
-                    return null; //couldn't load from cache
+                }
+
+                byte[] b = new byte[buf.readableBytes()];
+                buf.readBytes(b);
+
+                //check if we should store in cache
+                if (cacheFile != null) {
+                    try (OutputStream out = new FileOutputStream(PFiles.ensureFileExists(cacheFile))) {
+                        out.write(b);
+                    }
+                }
+
+                return b;
+            } finally {
+                buf.release();
+            }
+        } else {
+            //in a dev environment, we just want to read straight from the resources dir
+            File file = new File(mc.gameDir, "../resources/" + url);
+            byte[] b = null;
+            if (file.exists() && file.isFile()) {
+                b = new byte[(int) file.length()];
+                try (InputStream in = new FileInputStream(file)) {
+                    if (in.read(b) != b.length) {
+                        log.warn("Couldn't read entire file from disk!");
+                        b = null;
+                    }
                 }
             }
-
-            byte[] b = new byte[buf.readableBytes()];
-            buf.readBytes(b);
-
-            //check if we should store in cache
-            if (cacheFile != null) {
-                try (OutputStream out = new FileOutputStream(PFiles.ensureFileExists(cacheFile))) {
-                    out.write(b);
-                }
-            }
-
             return b;
-        } finally {
-            buf.release();
         }
     }
 }

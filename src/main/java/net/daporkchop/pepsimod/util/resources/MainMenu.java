@@ -21,6 +21,8 @@ import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.Accessors;
+import net.daporkchop.pepsimod.util.render.texture.SimpleTexture;
+import net.daporkchop.pepsimod.util.render.texture.Texture;
 
 import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
@@ -39,16 +41,19 @@ public final class MainMenu implements Resource {
     protected static final String[] DEFAULT_SPLASHES = {""};
 
     protected String[] splashes = DEFAULT_SPLASHES;
+    protected Texture banner = Texture.NOOP_TEXTURE;
 
     @Override
     public void load(@NonNull Resources resources, JsonObject obj) throws IOException {
         if (obj == null) {
             this.splashes = DEFAULT_SPLASHES;
+            this.banner = Texture.NOOP_TEXTURE;
         } else {
             this.splashes = StreamSupport.stream(obj.getAsJsonArray("splashes").spliterator(), false)
                     .filter(JsonElement::isJsonPrimitive)
                     .map(JsonElement::getAsString)
                     .toArray(String[]::new);
+            this.banner = new SimpleTexture(resources.getImage(obj.get("banner").getAsString()));
         }
     }
 

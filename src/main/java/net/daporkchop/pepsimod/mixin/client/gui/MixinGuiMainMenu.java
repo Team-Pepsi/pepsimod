@@ -17,12 +17,18 @@
 package net.daporkchop.pepsimod.mixin.client.gui;
 
 import net.daporkchop.pepsimod.util.PepsiUtil;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.util.ResourceLocation;
+import org.spongepowered.asm.lib.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -39,13 +45,71 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
 
     @Inject(
             method = "Lnet/minecraft/client/gui/GuiMainMenu;initGui()V",
-            at = @At("TAIL")
-    )
-    private void postInitGui(CallbackInfo ci) {
+            at = @At("TAIL"))
+    private void setSplashText(CallbackInfo ci) {
         this.splashText = String.format(
                 "§%c%s",
                 RANDOM_COLORS[ThreadLocalRandom.current().nextInt(RANDOM_COLORS.length)],
                 pepsimod.resources().mainMenu().randomSplash()
         );
+    }
+
+    @Redirect(
+            method = "Lnet/minecraft/client/gui/GuiMainMenu;initGui()V",
+            at = @At(
+                    value = "FIELD",
+                    target = "Lnet/minecraft/client/gui/GuiMainMenu;splashText:Ljava/lang/String;",
+                    opcode = Opcodes.PUTFIELD
+            ))
+    public void preventSettingSplashInInitGui(GuiMainMenu menu, String val)   {
+    }
+
+    @Redirect(
+            method = "Lnet/minecraft/client/gui/GuiMainMenu;drawScreen(IIF)V",
+            at = @At(
+                    value = "FIELD",
+                    target = "Lnet/minecraft/client/gui/GuiMainMenu;splashText:Ljava/lang/String;",
+                    opcode = Opcodes.PUTFIELD
+            ))
+    public void preventSettingSplashInDrawScreen(GuiMainMenu menu, String val)   {
+    }
+
+    @Redirect(
+            method = "Lnet/minecraft/client/gui/GuiMainMenu;drawScreen(IIF)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/GuiMainMenu;drawTexturedModalRect(IIIIII)V"
+            ))
+    public void removeMenuLogoRendering(GuiMainMenu guiMainMenu, int x, int y, int textureX, int textureY, int width, int height) {
+    }
+
+    @Redirect(
+            method = "Lnet/minecraft/client/gui/GuiMainMenu;drawScreen(IIF)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/GuiMainMenu;drawModalRectWithCustomSizedTexture(IIFFIIFF)V"
+            ))
+    public void removeSubLogoRendering(int x, int y, float a, float b, int c, int d, float e, float f) {
+    }
+
+    @Redirect(
+            method = "Lnet/minecraft/client/gui/GuiMainMenu;drawScreen(IIF)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/GuiMainMenu;drawString(Lnet/minecraft/client/gui/FontRenderer;Ljava/lang/String;III)V"
+            ))
+    public void removeAllDrawStrings(GuiMainMenu guiMainMenu, FontRenderer fontRenderer1, String string, int i1, int i2, int i3) {
+    }
+
+    @Redirect(
+            method = "Lnet/minecraft/client/gui/GuiMainMenu;drawScreen(IIF)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/texture/TextureManager;bindTexture(Lnet/minecraft/util/ResourceLocation;)V",
+                    ordinal = 0
+            ))
+    public void removeMenuLogoInit(TextureManager textureManager, ResourceLocation resource) {
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        pepsimod.resources().mainMenu().banner().draw(this.width / 2 - 150, 50, 300);
     }
 }

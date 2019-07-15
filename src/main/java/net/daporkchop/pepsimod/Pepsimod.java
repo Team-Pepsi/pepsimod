@@ -105,5 +105,6 @@ public final class Pepsimod implements PepsiConstants {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        this.resources.tryLoad();
     }
 }

@@ -147,3 +147,13 @@ jar {
         )
     }
 }
+
+//prints the additional JVM arguments required for IDE hot swapping of mixins
+task debugArguments << {
+    configurations.compile.each {
+        String absolutePath = it.absolutePath
+        if(absolutePath.contains("mixin")) {
+            println("-Dmixin.hotSwap=true -javaagent:" + absolutePath)
+        }
+    }
+}
