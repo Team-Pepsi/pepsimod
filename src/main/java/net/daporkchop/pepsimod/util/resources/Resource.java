@@ -14,38 +14,25 @@
  *
  */
 
-package net.daporkchop.pepsimod.mixin.client.gui;
+package net.daporkchop.pepsimod.util.resources;
 
-import net.daporkchop.pepsimod.util.PepsiUtil;
-import net.minecraft.client.gui.GuiMainMenu;
-import net.minecraft.client.gui.GuiScreen;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import com.google.gson.JsonObject;
+import lombok.NonNull;
 
-import java.util.concurrent.ThreadLocalRandom;
-
-import static net.daporkchop.pepsimod.util.PepsiUtil.*;
+import java.io.IOException;
 
 /**
+ * A resource that is loaded at runtime over the network.
+ *
  * @author DaPorkchop_
  */
-@Mixin(GuiMainMenu.class)
-public abstract class MixinGuiMainMenu extends GuiScreen {
-    @Shadow
-    private String splashText;
-
-    @Inject(
-            method = "Lnet/minecraft/client/gui/GuiMainMenu;initGui()V",
-            at = @At("TAIL")
-    )
-    private void postInitGui(CallbackInfo ci) {
-        this.splashText = String.format(
-                "§%c%s",
-                RANDOM_COLORS[ThreadLocalRandom.current().nextInt(RANDOM_COLORS.length)],
-                pepsimod.resources().mainMenu().randomSplash()
-        );
-    }
+interface Resource {
+    /**
+     * (Re)loads this resource from the network.
+     *
+     * @param resources the {@link Resources} instance that this is contained by
+     * @param obj       the {@link JsonObject} containing this resource's metadata
+     * @throws IOException if an IO exception occurs you dummy
+     */
+    void load(@NonNull Resources resources, JsonObject obj) throws IOException;
 }

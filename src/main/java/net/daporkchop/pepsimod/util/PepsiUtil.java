@@ -16,11 +16,8 @@
 
 package net.daporkchop.pepsimod.util;
 
-import net.minecraftforge.fml.common.FMLLog;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -29,11 +26,12 @@ import java.io.InputStream;
  * @author DaPorkchop_
  */
 public final class PepsiUtil implements PepsiConstants {
-    public static final int[] PEPSI_LOGO_SIZES = {16, 32, 64, 128, 256};
-    public static final BufferedImage[] PEPSI_LOGOS = new BufferedImage[PEPSI_LOGO_SIZES.length];
+    public static final int[]           PEPSI_LOGO_SIZES = {16, 32, 64, 128, 256};
+    public static final BufferedImage[] PEPSI_LOGOS      = new BufferedImage[PEPSI_LOGO_SIZES.length];
+    public static final char[]          RANDOM_COLORS    = {'c', '9', 'f', '1', '4'};
 
     static {
-        for (int i = PEPSI_LOGOS.length - 1; i >= 0; i--)  {
+        for (int i = PEPSI_LOGOS.length - 1; i >= 0; i--) {
             try (InputStream in = PepsiUtil.class.getResourceAsStream(String.format("/assets/pepsimod/textures/icon/pepsilogo-%d.png", PEPSI_LOGO_SIZES[i]))) {
                 PEPSI_LOGOS[i] = ImageIO.read(in);
             } catch (Exception e) {
@@ -45,16 +43,20 @@ public final class PepsiUtil implements PepsiConstants {
     /**
      * This returns {@code null} in a very roundabout way. This is to work around warnings in IntelliJ that certain values are always
      * {@code null} when they're actually initialized reflectively at runtime.
+     *
      * @param <T> the type of {@code null} to get
      * @return {@code null}
      */
+    @SuppressWarnings("unchecked")
     public static <T> T getNull() {
-        return null;
+        Object[] o = new Object[1];
+        return (T) o[0];
     }
 
     /**
      * This returns the input value in a very roundabout way. This is to work around warnings in IntelliJ that certain values are constant when
      * they're actually initialized reflectively at runtime.
+     *
      * @param val the value to get
      * @param <T> the type of value to get
      * @return the input value

@@ -52,7 +52,7 @@ ext {
     //dependency things
     guavaVersion = "21.0"
     mixinVersion = "0.7.11-SNAPSHOT"
-    porklibVersion = "0.3.0-SNAPSHOT"
+    porklibVersion = "0.4.0-SNAPSHOT"
 }
 
 group "net.daporkchop"

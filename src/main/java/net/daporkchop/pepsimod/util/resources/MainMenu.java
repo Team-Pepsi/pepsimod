@@ -14,38 +14,50 @@
  *
  */
 
-package net.daporkchop.pepsimod.mixin.client.gui;
+package net.daporkchop.pepsimod.util.resources;
 
-import net.daporkchop.pepsimod.util.PepsiUtil;
-import net.minecraft.client.gui.GuiMainMenu;
-import net.minecraft.client.gui.GuiScreen;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.experimental.Accessors;
 
+import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
-
-import static net.daporkchop.pepsimod.util.PepsiUtil.*;
+import java.util.stream.StreamSupport;
 
 /**
+ * Contains the resources used for customizing the main menu:
+ * - splash texts
+ * - banner
+ *
  * @author DaPorkchop_
  */
-@Mixin(GuiMainMenu.class)
-public abstract class MixinGuiMainMenu extends GuiScreen {
-    @Shadow
-    private String splashText;
+@Getter
+@Accessors(fluent = true)
+public final class MainMenu implements Resource {
+    protected static final String[] DEFAULT_SPLASHES = {""};
 
-    @Inject(
-            method = "Lnet/minecraft/client/gui/GuiMainMenu;initGui()V",
-            at = @At("TAIL")
-    )
-    private void postInitGui(CallbackInfo ci) {
-        this.splashText = String.format(
-                "§%c%s",
-                RANDOM_COLORS[ThreadLocalRandom.current().nextInt(RANDOM_COLORS.length)],
-                pepsimod.resources().mainMenu().randomSplash()
-        );
+    protected String[] splashes = DEFAULT_SPLASHES;
+
+    @Override
+    public void load(@NonNull Resources resources, JsonObject obj) throws IOException {
+        if (obj == null) {
+            this.splashes = DEFAULT_SPLASHES;
+        } else {
+            this.splashes = StreamSupport.stream(obj.getAsJsonArray("splashes").spliterator(), false)
+                    .filter(JsonElement::isJsonPrimitive)
+                    .map(JsonElement::getAsString)
+                    .toArray(String[]::new);
+        }
+    }
+
+    /**
+     * Gets a random splash text from the list of splash texts.
+     *
+     * @return a random splash text
+     */
+    public String randomSplash() {
+        return this.splashes[ThreadLocalRandom.current().nextInt(this.splashes.length)];
     }
 }

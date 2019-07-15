@@ -16,6 +16,7 @@
 
 package net.daporkchop.pepsimod.util;
 
+import com.google.gson.JsonParser;
 import lombok.NonNull;
 import net.daporkchop.pepsimod.Pepsimod;
 import net.minecraft.client.Minecraft;
@@ -32,8 +33,9 @@ import java.lang.reflect.Modifier;
  */
 public interface PepsiConstants {
     Minecraft mc       = PepsiUtil.getNull();
-    Pepsimod  pepsimod = Pepsimod.getINSTANCE();
+    Pepsimod  pepsimod = Pepsimod.INSTANCE();
     Logger    log      = LogManager.getFormatterLogger("pepsimod");
+    JsonParser JSON_PARSER = new JsonParser();
 
     String MOD_ID = "pepsimod";
     String VERSION = PepsiUtil.getSelfValue("unknown");

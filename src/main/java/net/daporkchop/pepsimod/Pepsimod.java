@@ -17,8 +17,10 @@
 package net.daporkchop.pepsimod;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.PepsiUtil;
+import net.daporkchop.pepsimod.util.resources.Resources;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -29,7 +31,9 @@ import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
+import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,6 +46,8 @@ import java.util.regex.Pattern;
         modid = PepsiConstants.MOD_ID,
         useMetadata = true
 )
+@Getter
+@Accessors(fluent = true)
 public final class Pepsimod implements PepsiConstants {
     @Getter(onMethod_ = {@Mod.InstanceFactory})
     private static final Pepsimod INSTANCE = new Pepsimod();
@@ -52,8 +58,14 @@ public final class Pepsimod implements PepsiConstants {
         }
     }
 
+    protected Resources resources;
+
     @Mod.EventHandler
     public void construction(FMLConstructionEvent event) {
+        if (event.getSide() != Side.CLIENT) {
+            throw new IllegalStateException("pepsimod can only be loaded on a client!");
+        }
+
         PepsiConstants.setMC(Minecraft.getMinecraft());
 
         ModContainer container = FMLCommonHandler.instance().findContainerFor(this);
@@ -76,10 +88,10 @@ public final class Pepsimod implements PepsiConstants {
 
         log.info("Loading pepsimod %s...\n", VERSION_FULL);
 
-        /*this.data = new DataLoader(
+        this.resources = new Resources(
                 "https://raw.githubusercontent.com/Team-Pepsi/pepsimod/master/resources/resources.json",
                 new File(mc.gameDir, "pepsimod/resources/")
-        );*/
+        );
     }
 
     @Mod.EventHandler

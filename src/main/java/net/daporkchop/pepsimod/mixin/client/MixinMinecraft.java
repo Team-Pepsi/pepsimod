@@ -53,12 +53,12 @@ public abstract class MixinMinecraft implements PepsiConstants {
     private void setWindowIcon() {
         if (Util.getOSType() != Util.EnumOS.OSX) {
             ByteBuffer[] buffers = new ByteBuffer[PepsiUtil.PEPSI_LOGOS.length];
-            for (int i = buffers.length - 1; i >= 0; i--)   {
+            for (int i = buffers.length - 1; i >= 0; i--) {
                 int size = PepsiUtil.PEPSI_LOGO_SIZES[i];
                 ByteBuffer buffer = ByteBuffer.allocate((size * size) << 2);
                 BufferedImage img = PepsiUtil.PEPSI_LOGOS[i];
                 for (int y = 0; y < size; y++) {
-                for (int x = 0; x < size; x++) {
+                    for (int x = 0; x < size; x++) {
                         int c = img.getRGB(x, y);
                         buffer.putInt(c << 8 | ((c >> 24) & 255));
                     }
