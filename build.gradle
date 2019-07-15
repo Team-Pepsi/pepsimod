@@ -29,13 +29,11 @@ buildscript {
     dependencies {
         classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
         classpath "org.spongepowered:mixingradle:0.4-SNAPSHOT"
-        classpath "com.github.jengelman.gradle.plugins:shadow:1.2.4"
     }
 }
 
 apply plugin: "net.minecraftforge.gradle.forge"
 apply plugin: "org.spongepowered.mixin"
-apply plugin: "com.github.johnrengelman.shadow"
 
 ext {
     //general things
@@ -59,9 +57,12 @@ version "v$pepsimodVersion-$minecraftVersion"
 archivesBaseName = "pepsimod"
 sourceCompatibility = targetCompatibility = "$javaVersion"
 
-configurations.all {
-    resolutionStrategy {
-        force("com.google.guava:guava:$guavaVersion")
+configurations {
+    shade
+    all {
+        resolutionStrategy {
+            force("com.google.guava:guava:$guavaVersion")
+        }
     }
 }
 
@@ -87,7 +88,7 @@ repositories {
 }
 
 dependencies {
-    compile("org.spongepowered:mixin:$mixinVersion") {
+    shade("org.spongepowered:mixin:$mixinVersion") {
         exclude module: "launchwrapper"
         exclude module: "guava"
         exclude module: "gson"
@@ -95,7 +96,9 @@ dependencies {
         exclude module: "log4j-core"
     }
 
-    compile "net.daporkchop.lib:common:$porklibVersion"
+    shade "net.daporkchop.lib:common:$porklibVersion"
+
+    compile configurations.shade.dependencies
 }
 
 processResources {
@@ -116,28 +119,16 @@ mixin {
     add sourceSets.main, "mixins.pepsimod.refmap.json"
 }
 
-reobf {
-    shadowJar {
-        mappingType = "SEARGE"
-        classpath = sourceSets.main.compileClasspath
-    }
-}
-
-shadowJar {
-    dependencies {
-        dependency("org.spongepowered:mixin")
-
-        dependency("net.daporkchop.lib:unsafe")
-        dependency("net.daporkchop.lib:common")
-    }
-    exclude "dummyThing"
-    exclude "LICENSE.txt"
-    classifier = null
-}
-
-build.dependsOn(shadowJar)
-
 jar {
+    from {
+        configurations.shade.collect {
+            zipTree(it)
+        }
+    } {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+    }
     manifest {
         attributes(
                 "MixinConfigs": "mixins.pepsimod.json",
