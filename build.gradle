@@ -120,7 +120,6 @@ processResources {
 
 mixin {
     defaultObfuscationEnv srg
-    add("main", "mixins.pepsimod.refmap.json")
 }
 
 jar {

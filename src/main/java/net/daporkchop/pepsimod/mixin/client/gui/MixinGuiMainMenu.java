@@ -14,53 +14,30 @@
  *
  */
 
-package net.daporkchop.pepsimod;
+package net.daporkchop.pepsimod.mixin.client.gui;
 
-import net.minecraftforge.fml.common.FMLLog;
-import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
-import org.spongepowered.asm.launch.MixinBootstrap;
-import org.spongepowered.asm.mixin.MixinEnvironment;
-import org.spongepowered.asm.mixin.Mixins;
+import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.client.gui.GuiScreen;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import javax.annotation.Nullable;
-import java.util.Map;
 
-public class PepsimodMixinLoader implements IFMLLoadingPlugin {
-    public static boolean isObfuscatedEnvironment = false;
+/**
+ * @author DaPorkchop_
+ */
+@Mixin(GuiMainMenu.class)
+public abstract class MixinGuiMainMenu extends GuiScreen {
+    @Shadow
+    private String splashText;
 
-    public PepsimodMixinLoader() {
-        FMLLog.log.info("\n\n\nPepsimod Mixin init\n\n");
-        MixinBootstrap.init();
-        Mixins.addConfiguration("mixins.pepsimod.json");
-
-        MixinEnvironment.getDefaultEnvironment().setObfuscationContext("searge");
-
-        FMLLog.log.info(MixinEnvironment.getDefaultEnvironment().getObfuscationContext());
-    }
-
-    @Override
-    public String[] getASMTransformerClass() {
-        return new String[0];
-    }
-
-    @Override
-    public String getModContainerClass() {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public String getSetupClass() {
-        return null;
-    }
-
-    @Override
-    public void injectData(Map<String, Object> data) {
-        isObfuscatedEnvironment = (Boolean) data.get("runtimeDeobfuscationEnabled");
-    }
-
-    @Override
-    public String getAccessTransformerClass() {
-        return null;
+    @Inject(
+            method = "Lnet/minecraft/client/gui/GuiMainMenu;initGui()V",
+            at = @At("TAIL")
+    )
+    private void postInitGui(CallbackInfo ci) {
+        this.splashText = "pepsimod xd";
     }
 }

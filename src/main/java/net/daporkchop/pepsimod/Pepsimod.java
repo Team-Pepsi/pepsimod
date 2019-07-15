@@ -18,9 +18,11 @@ package net.daporkchop.pepsimod;
 
 import lombok.Getter;
 import net.daporkchop.pepsimod.util.PepsiConstants;
+import net.daporkchop.pepsimod.util.PepsiUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
@@ -31,43 +33,48 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The main class of pepsimod's Forge mod.
+ *
+ * @author DaPorkchop_
+ */
 @Mod(
         modid = PepsiConstants.MOD_ID,
         useMetadata = true
 )
-public class Pepsimod extends PepsiConstants {
-    public static final String CHAT_PREFIX = "\u00A70\u00A7l[\u00A7c\u00A7lpepsi\u00A79\u00A7lmod\u00A70\u00A7l]\u00A7r";
-
-    @Getter
+public final class Pepsimod implements PepsiConstants {
+    @Getter(onMethod_ = {@Mod.InstanceFactory})
     private static final Pepsimod INSTANCE = new Pepsimod();
 
-    public String getVersion()  {
-        return VERSION_FULL;
+    private Pepsimod() {
+        if (INSTANCE != null) {
+            throw new IllegalStateException("pepsimod instance already created!");
+        }
     }
 
     @Mod.EventHandler
     public void construction(FMLConstructionEvent event) {
-        mc = Minecraft.getMinecraft();
+        PepsiConstants.setMC(Minecraft.getMinecraft());
 
-        ModContainer container = FMLCommonHandler.instance().findContainerFor(pepsimod = this);
-        VERSION = container.getVersion();
-        if ("${version}".equals(VERSION))    {
-            VERSION = "dev";
-            VERSION_FULL = "dev-" + MinecraftForge.MC_VERSION;
+        ModContainer container = FMLCommonHandler.instance().findContainerFor(this);
+        PepsiConstants.setVersion(container.getVersion());
+        if ("${version}".equals(VERSION)) {
+            PepsiConstants.setVersion("dev");
+            PepsiConstants.setVersionFull("dev-" + MinecraftForge.MC_VERSION);
         } else {
             Matcher matcher = Pattern.compile("([.0-9]+)-([.0-9]+)").matcher(VERSION);
             if (!matcher.find()) {
                 throw new IllegalStateException(String.format("Unparseable version: \"%s\"", VERSION));
             }
-            VERSION = matcher.group(1);
+            PepsiConstants.setVersion(matcher.group(1));
             String mcVersion = matcher.group(2);
-            VERSION_FULL = String.format("%s-%s", VERSION, mcVersion);
-            if (!MinecraftForge.MC_VERSION.equals(mcVersion))    {
+            PepsiConstants.setVersionFull(String.format("%s-%s", VERSION, mcVersion));
+            if (!MinecraftForge.MC_VERSION.equals(mcVersion)) {
                 throw new IllegalStateException(String.format("pepsimod expected Minecraft %s, but found %s!", MinecraftForge.MC_VERSION, mcVersion));
             }
         }
 
-        System.out.printf("Loading pepsimod %s...\n", VERSION_FULL);
+        log.info("Loading pepsimod %s...\n", VERSION_FULL);
 
         /*this.data = new DataLoader(
                 "https://raw.githubusercontent.com/Team-Pepsi/pepsimod/master/resources/resources.json",

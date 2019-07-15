@@ -16,15 +16,62 @@
 
 package net.daporkchop.pepsimod.util;
 
+import lombok.NonNull;
 import net.daporkchop.pepsimod.Pepsimod;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.common.MinecraftForge;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public abstract class PepsiConstants {
-    public static final String MOD_ID = "pepsimod";
-    public static String VERSION = "unknown";
-    public static String VERSION_FULL = "unknown";
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
-    public static Minecraft mc = null;
-    public static Pepsimod pepsimod = null;
+/**
+ * Constant values used throughout the mod.
+ *
+ * @author DaPorkchop_
+ */
+public interface PepsiConstants {
+    Minecraft mc       = PepsiUtil.getNull();
+    Pepsimod  pepsimod = Pepsimod.getINSTANCE();
+    Logger    log      = LogManager.getFormatterLogger("pepsimod");
+
+    String MOD_ID = "pepsimod";
+    String VERSION = PepsiUtil.getSelfValue("unknown");
+    String VERSION_FULL = PepsiUtil.getSelfValue("unknown");
+
+    static void setMC(@NonNull Minecraft mc)    {
+        try {
+            Field modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+            Field field = PepsiConstants.class.getDeclaredField("mc");
+            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+            field.set(null, mc);
+        } catch (Exception e)   {
+            throw new RuntimeException(e);
+        }
+    }
+
+    static void setVersion(@NonNull String version)    {
+        try {
+            Field modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+            Field field = PepsiConstants.class.getDeclaredField("VERSION");
+            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+            field.set(null, version);
+        } catch (Exception e)   {
+            throw new RuntimeException(e);
+        }
+    }
+
+    static void setVersionFull(@NonNull String version)    {
+        try {
+            Field modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+            Field field = PepsiConstants.class.getDeclaredField("VERSION_FULL");
+            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+            field.set(null, version);
+        } catch (Exception e)   {
+            throw new RuntimeException(e);
+        }
+    }
 }
