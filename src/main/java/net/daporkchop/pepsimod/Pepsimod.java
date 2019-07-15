@@ -16,6 +16,7 @@
 
 package net.daporkchop.pepsimod;
 
+import lombok.Getter;
 import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
@@ -36,6 +37,13 @@ import java.util.regex.Pattern;
 )
 public class Pepsimod extends PepsiConstants {
     public static final String CHAT_PREFIX = "\u00A70\u00A7l[\u00A7c\u00A7lpepsi\u00A79\u00A7lmod\u00A70\u00A7l]\u00A7r";
+
+    @Getter
+    private static final Pepsimod INSTANCE = new Pepsimod();
+
+    public String getVersion()  {
+        return VERSION_FULL;
+    }
 
     @Mod.EventHandler
     public void construction(FMLConstructionEvent event) {
@@ -60,7 +68,6 @@ public class Pepsimod extends PepsiConstants {
         }
 
         System.out.printf("Loading pepsimod %s...\n", VERSION_FULL);
-        System.exit(1);
 
         /*this.data = new DataLoader(
                 "https://raw.githubusercontent.com/Team-Pepsi/pepsimod/master/resources/resources.json",

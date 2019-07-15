@@ -28,8 +28,12 @@ buildscript {
     }
     dependencies {
         classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
-        classpath "org.spongepowered:mixingradle:0.4-SNAPSHOT"
+        classpath "org.spongepowered:mixingradle:0.6-SNAPSHOT"
     }
+}
+
+plugins {
+    id "io.franzbecker.gradle-lombok" version "1.14"
 }
 
 apply plugin: "net.minecraftforge.gradle.forge"
@@ -101,6 +105,9 @@ dependencies {
 }
 
 processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
     from(sourceSets.main.resources.srcDirs) {
         include "mcmod.info"
         expand "version": "$pepsimodVersion-$minecraftVersion", "mcversion": "$minecraftVersion"
@@ -112,8 +119,8 @@ processResources {
 }
 
 mixin {
-    defaultObfuscationEnv notch
-    add sourceSets.main, "mixins.pepsimod.refmap.json"
+    defaultObfuscationEnv srg
+    add("main", "mixins.pepsimod.refmap.json")
 }
 
 jar {
@@ -127,6 +134,8 @@ jar {
         exclude "META-INF/*.SF"
         exclude "META-INF/*.DSA"
         exclude "META-INF/*.RSA"
+        exclude "LICENSE.txt"
+        exclude "dummyThing"
     }
     manifest {
         attributes(
