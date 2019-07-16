@@ -56,6 +56,8 @@ public final class Pepsimod implements PepsiConstants {
         if (INSTANCE != null) {
             throw new IllegalStateException("pepsimod instance already created!");
         }
+
+        Minecraft.memoryReserve = null; //literally no reason to have this exist lol
     }
 
     protected Resources resources;

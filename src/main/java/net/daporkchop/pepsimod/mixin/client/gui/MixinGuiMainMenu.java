@@ -130,8 +130,6 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
     public void addDrawPepsiStuff(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
         RAINBOW.update()
                 .renderString("Hello World!", 2, this.height - 10 * 4)
-                .renderString("Lorem Ipsum dolor set amit", 2, this.height - 10 * 3)
-                .renderString("Other placeholder text", 2, this.height - 10 * 2)
                 .renderString("Made by DaPorkchop_", 2, this.height - 10)
                 .renderString("Copyright Mojang AB. Do not distribute!", this.width - this.fontRenderer.getStringWidth("Copyright Mojang AB. Do not distribute!") - 2, this.height - 10);
     }

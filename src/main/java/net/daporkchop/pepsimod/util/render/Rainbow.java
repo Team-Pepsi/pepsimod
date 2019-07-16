@@ -19,7 +19,6 @@ package net.daporkchop.pepsimod.util.render;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.minecraft.client.gui.FontRenderer;
@@ -76,7 +75,8 @@ public final class Rainbow implements PepsiConstants {
 
     protected final double speed;
     protected final double scale;
-    protected final double rotation;
+    protected final double rotationX;
+    protected final double rotationY;
 
     @Getter(AccessLevel.NONE)
     protected double time;
@@ -84,21 +84,32 @@ public final class Rainbow implements PepsiConstants {
     public Rainbow(double speed, double scale, double rotation) {
         this.speed = speed;
         this.scale = scale;
-        this.rotation = Math.toRadians(rotation) + PI;
+
+        rotation = Math.toRadians(rotation) + PI;
+        this.rotationX = sin(rotation);
+        this.rotationY = cos(rotation);
     }
 
     /**
      * Updates this instance according to the current system time.
      * <p>
      * This should be called once per frame to update the rainbow pattern's step.
+     *
+     * @return this {@link Rainbow} instance
      */
     public Rainbow update() {
         this.time = System.currentTimeMillis() / BASE_SPEED * this.speed;
         return this;
     }
 
+    /**
+     * Updates the render color according to the given coordinates.
+     *
+     * @param x the X coordinate
+     * @param y the Y coordinate
+     */
     public void setColor(double x, double y) {
-        double d = -(x * sin(this.rotation) + y * cos(this.rotation)) * this.scale;
+        double d = -(x * this.rotationX + y * this.rotationY) * this.scale;
 
         GlStateManager.color(
                 (float) clamp(0.5d + sin(this.time + d), 0.0d, 1.0d),
@@ -107,14 +118,41 @@ public final class Rainbow implements PepsiConstants {
         );
     }
 
-    public Rainbow renderString(@NonNull CharSequence letters, int x, int y) {
+    /**
+     * Renders a string at the given coordinates using RAINBOW text.
+     *
+     * @param text the text to render
+     * @param x    the X coordinate to render the text at
+     * @param y    the Y coordinate to render the text at
+     * @return this {@link Rainbow} instance
+     * @see #renderString(CharSequence, int, int, int, int)
+     */
+    public Rainbow renderString(@NonNull CharSequence text, int x, int y) {
+        return this.renderString(text, x, y, 0, text.length());
+    }
+
+    /**
+     * Renders a string at the given coordinates using RAINBOW text.
+     *
+     * @param text       the text to render
+     * @param x          the X coordinate to render the text at
+     * @param y          the Y coordinate to render the text at
+     * @param startIndex the first index of the text to render
+     * @param length     the number of letters in the text to render
+     * @return this {@link Rainbow} instance
+     */
+    public Rainbow renderString(@NonNull CharSequence text, int x, int y, int startIndex, int length) {
+        if (startIndex < 0 || length < 0 || startIndex + length > text.length())    {
+            throw new StringIndexOutOfBoundsException();
+        }
+
         FontRenderer renderer = mc.fontRenderer;
         renderer.posX = x;
         renderer.posY = y;
 
-        for (int i = 0; i < letters.length(); i++)   {
+        for (int i = 0; i < length; i++) {
             this.setColor(renderer.posX, renderer.posY);
-            renderer.posX += renderer.renderChar(letters.charAt(i), false);
+            renderer.posX += renderer.renderChar(text.charAt(startIndex + i), false);
         }
 
         return this;
