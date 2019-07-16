@@ -17,7 +17,8 @@
 package net.daporkchop.pepsimod.util;
 
 import net.daporkchop.pepsimod.util.event.render.PreRenderEvent;
-import net.daporkchop.pepsimod.util.render.Rainbow;
+import net.daporkchop.pepsimod.util.render.text.RainbowTextRenderer;
+import net.daporkchop.pepsimod.util.render.text.TextRenderer;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import javax.imageio.ImageIO;
@@ -33,7 +34,7 @@ public final class PepsiUtil implements PepsiConstants {
     public static final int[]           PEPSI_LOGO_SIZES = {16, 32, 64, 128, 256};
     public static final BufferedImage[] PEPSI_LOGOS      = new BufferedImage[PEPSI_LOGO_SIZES.length];
     public static final char[]          RANDOM_COLORS    = {'c', '9', 'f', '1', '4'};
-    public static       Rainbow         RAINBOW          = new Rainbow(0.2d, 0.03d, 45.0d);
+    public static       TextRenderer    TEXT_RENDERER    = new RainbowTextRenderer(0.2d, 0.03d, 45.0d);
 
     protected static final Object  PEPSIUTIL_MUTEX            = new Object[0];
     protected static       boolean STANDARD_EVENTS_REGISTERED = false;
@@ -83,7 +84,7 @@ public final class PepsiUtil implements PepsiConstants {
             if (!STANDARD_EVENTS_REGISTERED) {
                 STANDARD_EVENTS_REGISTERED = true;
 
-                EVENT_MANAGER.register(PreRenderEvent.class, partialTicks -> RAINBOW.update());
+                EVENT_MANAGER.register(PreRenderEvent.class, partialTicks -> TEXT_RENDERER.update());
             } else {
                 throw new IllegalStateException("Standard events already registered!");
             }

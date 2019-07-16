@@ -2,7 +2,7 @@
   {
     "modid": "pepsimod",
     "name": "pepsimod",
-    "description": "A hacked client for Forge\nMade by DaPorkchop_, for Team Pepsi",
+    "description": "A utility mod for Forge.\nMade by DaPorkchop_ for Team Pepsi.\nSince nobody except me uses this, I could basically say \"Made by DaPorkchop_ for himself\".",
     "version": "${version}",
     "mcversion": "${mcversion}",
     "url": "https://github.com/Team-Pepsi/pepsimod",

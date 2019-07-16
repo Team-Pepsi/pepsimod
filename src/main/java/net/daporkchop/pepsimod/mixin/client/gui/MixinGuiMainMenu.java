@@ -16,13 +16,11 @@
 
 package net.daporkchop.pepsimod.mixin.client.gui;
 
-import net.daporkchop.pepsimod.util.render.Rainbow;
+import net.daporkchop.pepsimod.util.render.texture.Texture;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.ResourceLocation;
 import org.spongepowered.asm.lib.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -40,12 +38,15 @@ import static net.daporkchop.pepsimod.util.PepsiUtil.*;
  */
 @Mixin(GuiMainMenu.class)
 public abstract class MixinGuiMainMenu extends GuiScreen {
+    protected final String versionText = "pepsimod " + VERSION_FULL;
+    private int scaledBannerHeight;
+
     @Shadow
     private String splashText;
 
     @Inject(
             method = "Lnet/minecraft/client/gui/GuiMainMenu;<init>()V",
-            at = @At("TAIL"))
+            at = @At("RETURN"))
     private void setSplashText(CallbackInfo ci) {
         this.splashText = String.format(
                 "§%c%s",
@@ -89,7 +90,12 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/GuiMainMenu;drawModalRectWithCustomSizedTexture(IIFFIIFF)V"
             ))
-    public void removeSubLogoRendering(int x, int y, float a, float b, int c, int d, float e, float f) {
+    public void removeSubLogoRenderingAndDrawBanner(int x, int y, float a, float b, int c, int d, float e, float f) {
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+
+        Texture banner = pepsimod.resources().mainMenu().banner();
+        this.scaledBannerHeight = (int) (banner.height() * (300.0f / banner.width()));
+        banner.draw(this.width / 2 - 150, (this.height / 4 + 48 - this.scaledBannerHeight) / 2, 300, this.scaledBannerHeight);
     }
 
     @Redirect(
@@ -115,12 +121,10 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
             method = "Lnet/minecraft/client/gui/GuiMainMenu;drawScreen(IIF)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/texture/TextureManager;bindTexture(Lnet/minecraft/util/ResourceLocation;)V",
-                    ordinal = 0
+                    target = "Lnet/minecraft/client/renderer/GlStateManager;translate(FFF)V"
             ))
-    public void drawBanner(TextureManager textureManager, ResourceLocation resource) {
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        pepsimod.resources().mainMenu().banner().draw(this.width / 2 - 150, 50, 300);
+    public void moveSplashText(float x, float y, float z)   {
+        GlStateManager.translate(this.width / 2 + 300.0f / 2.0f, this.height / 4 + 48 - this.scaledBannerHeight, 0.0f);
     }
 
     @Inject(
@@ -128,8 +132,9 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
             at = @At("TAIL")
     )
     public void addDrawPepsiStuff(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
-        RAINBOW.renderString(VERSION_FULL, 2, this.height - 10 * 2)
-                .renderString("Made by DaPorkchop_", 2, this.height - 10)
-                .renderString("Copyright Mojang AB. Do not distribute!", this.width - this.fontRenderer.getStringWidth("Copyright Mojang AB. Do not distribute!") - 2, this.height - 10);
+        TEXT_RENDERER
+                .renderText("pepsimod " + VERSION_FULL, 2, this.height - 10 * 2)
+                .renderText("Made by DaPorkchop_", 2, this.height - 10)
+                .renderText("Copyright Mojang AB. Do not distribute!", this.width - this.fontRenderer.getStringWidth("Copyright Mojang AB. Do not distribute!") - 2, this.height - 10);
     }
 }

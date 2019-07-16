@@ -42,7 +42,7 @@ apply plugin: "org.spongepowered.mixin"
 ext {
     //general things
     javaVersion = "1.8"
-    pepsimodVersion = "11.1"
+    pepsimodVersion = "12.0"
 
     //minecraft things
     mcpmappingsVersion = "stable_39"
