@@ -44,7 +44,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
     private String splashText;
 
     @Inject(
-            method = "Lnet/minecraft/client/gui/GuiMainMenu;initGui()V",
+            method = "Lnet/minecraft/client/gui/GuiMainMenu;<init>()V",
             at = @At("TAIL"))
     private void setSplashText(CallbackInfo ci) {
         this.splashText = String.format(
@@ -71,7 +71,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
                     target = "Lnet/minecraftforge/client/ForgeHooksClient;renderMainMenu(Lnet/minecraft/client/gui/GuiMainMenu;Lnet/minecraft/client/gui/FontRenderer;IILjava/lang/String;)Ljava/lang/String;"
             ))
     public String skipForgeDrawMainMenu(GuiMainMenu gui, FontRenderer font, int width, int height, String splashText) {
-        return null;
+        return this.splashText;
     }
 
     @Redirect(
@@ -125,11 +125,10 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
 
     @Inject(
             method = "Lnet/minecraft/client/gui/GuiMainMenu;drawScreen(IIF)V",
-            at = @At("RETURN")
+            at = @At("TAIL")
     )
     public void addDrawPepsiStuff(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
-        RAINBOW.update()
-                .renderString("Hello World!", 2, this.height - 10 * 4)
+        RAINBOW.renderString(VERSION_FULL, 2, this.height - 10 * 2)
                 .renderString("Made by DaPorkchop_", 2, this.height - 10)
                 .renderString("Copyright Mojang AB. Do not distribute!", this.width - this.fontRenderer.getStringWidth("Copyright Mojang AB. Do not distribute!") - 2, this.height - 10);
     }

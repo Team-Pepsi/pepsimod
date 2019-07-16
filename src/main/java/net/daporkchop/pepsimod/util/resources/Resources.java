@@ -78,7 +78,7 @@ public final class Resources implements PepsiConstants {
      */
     public void load() throws IOException {
         this.baseUrl = "";
-        JsonObject root = this.getJson(PepsimodMixinLoader.isObfuscatedEnvironment ? this.url : "resources.json");
+        JsonObject root = this.getJson(PepsimodMixinLoader.OBFUSCATED ? this.url : "resources.json");
         if (root != null) {
             this.baseUrl = root.get("baseurl").getAsString();
             JsonObject data = root.getAsJsonObject("data");
@@ -98,7 +98,7 @@ public final class Resources implements PepsiConstants {
     }
 
     byte[] getBytes(@NonNull String url) throws IOException {
-        if (PepsimodMixinLoader.isObfuscatedEnvironment) {
+        if (PepsimodMixinLoader.OBFUSCATED) {
             ByteBuf buf = PooledByteBufAllocator.DEFAULT.ioBuffer();
             try {
                 File cacheFile = this.baseUrl.isEmpty() ? null : new File(this.cacheDir, url);

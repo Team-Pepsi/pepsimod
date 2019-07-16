@@ -25,8 +25,16 @@ import org.spongepowered.asm.mixin.Mixins;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class PepsimodMixinLoader implements IFMLLoadingPlugin {
-    public static boolean isObfuscatedEnvironment = false;
+/**
+ * An {@link IFMLLoadingPlugin} that loads pepsimod's Mixins.
+ *
+ * @author DaPorkchop_
+ */
+public final class PepsimodMixinLoader implements IFMLLoadingPlugin {
+    /**
+     * Whether or not we are currently running in a development environment.
+     */
+    public static boolean OBFUSCATED;
 
     public PepsimodMixinLoader() {
         FMLLog.log.info("\n\n\nPepsimod Mixin init\n\n");
@@ -56,7 +64,7 @@ public class PepsimodMixinLoader implements IFMLLoadingPlugin {
 
     @Override
     public void injectData(Map<String, Object> data) {
-        isObfuscatedEnvironment = (Boolean) data.get("runtimeDeobfuscationEnabled");
+        OBFUSCATED = (Boolean) data.get("runtimeDeobfuscationEnabled");
     }
 
     @Override

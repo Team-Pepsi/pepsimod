@@ -24,7 +24,6 @@ import net.daporkchop.pepsimod.util.resources.Resources;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
@@ -51,6 +50,7 @@ import java.util.regex.Pattern;
 public final class Pepsimod implements PepsiConstants {
     @Getter(onMethod_ = {@Mod.InstanceFactory})
     private static final Pepsimod INSTANCE = new Pepsimod();
+    protected Resources resources;
 
     private Pepsimod() {
         if (INSTANCE != null) {
@@ -59,8 +59,6 @@ public final class Pepsimod implements PepsiConstants {
 
         Minecraft.memoryReserve = null; //literally no reason to have this exist lol
     }
-
-    protected Resources resources;
 
     @Mod.EventHandler
     public void construction(FMLConstructionEvent event) {
@@ -99,6 +97,8 @@ public final class Pepsimod implements PepsiConstants {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         //MinecraftForge.EVENT_BUS.register(new KeyRegistry());
+
+        PepsiUtil.registerStandardEvents();
     }
 
     @Mod.EventHandler
