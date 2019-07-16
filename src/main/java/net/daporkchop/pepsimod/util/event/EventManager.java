@@ -19,6 +19,7 @@ package net.daporkchop.pepsimod.util.event;
 import lombok.NonNull;
 import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.event.render.PreRenderEvent;
+import net.daporkchop.pepsimod.util.event.render.RenderHUDEvent;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -158,6 +159,38 @@ public final class EventManager implements EveryEvent, PepsiConstants {
         try {
             for (PreRenderEvent event : this.getHandlers(PreRenderEvent.class)) {
                 event.firePreRender(partialTicks);
+            }
+        } finally {
+            this.readLock.unlock();
+        }
+    }
+
+    @Override
+    public EventStatus firePreRenderHUD(float partialTicks, int width, int height) {
+        this.readLock.lock();
+        try {
+            EventStatus status = EventStatus.OK;
+            for (RenderHUDEvent.Pre event : this.getHandlers(RenderHUDEvent.Pre.class)) {
+                switch (event.firePreRenderHUD(partialTicks, width, height))    {
+                    case CANCEL:
+                        status = EventStatus.CANCEL;
+                        break;
+                    case ABORT:
+                        return EventStatus.ABORT;
+                }
+            }
+            return status;
+        } finally {
+            this.readLock.unlock();
+        }
+    }
+
+    @Override
+    public void firePostRenderHUD(float partialTicks, int width, int height) {
+        this.readLock.lock();
+        try {
+            for (RenderHUDEvent.Post event : this.getHandlers(RenderHUDEvent.Post.class)) {
+                event.firePostRenderHUD(partialTicks, width, height);
             }
         } finally {
             this.readLock.unlock();

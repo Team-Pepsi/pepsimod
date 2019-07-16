@@ -16,6 +16,7 @@
 
 package net.daporkchop.pepsimod.util;
 
+import lombok.NonNull;
 import net.daporkchop.pepsimod.util.event.render.PreRenderEvent;
 import net.daporkchop.pepsimod.util.render.text.RainbowTextRenderer;
 import net.daporkchop.pepsimod.util.render.text.TextRenderer;
@@ -24,6 +25,9 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
 
 /**
  * Common methods used throughout the mod.
@@ -35,6 +39,7 @@ public final class PepsiUtil implements PepsiConstants {
     public static final BufferedImage[] PEPSI_LOGOS      = new BufferedImage[PEPSI_LOGO_SIZES.length];
     public static final char[]          RANDOM_COLORS    = {'c', '9', 'f', '1', '4'};
     public static       TextRenderer    TEXT_RENDERER    = new RainbowTextRenderer(0.2d, 0.03d, 45.0d);
+    public static final Field           FIELD_MODIFIERS  = getField(Field.class, "modifiers");
 
     protected static final Object  PEPSIUTIL_MUTEX            = new Object[0];
     protected static       boolean STANDARD_EVENTS_REGISTERED = false;
@@ -84,10 +89,72 @@ public final class PepsiUtil implements PepsiConstants {
             if (!STANDARD_EVENTS_REGISTERED) {
                 STANDARD_EVENTS_REGISTERED = true;
 
-                EVENT_MANAGER.register(PreRenderEvent.class, partialTicks -> TEXT_RENDERER.update());
+                EVENT_MANAGER.register(PreRenderEvent.class, partialTicks -> {
+                    TEXT_RENDERER.update();
+                    RESOLUTION.update();
+                });
             } else {
                 throw new IllegalStateException("Standard events already registered!");
             }
+        }
+    }
+
+    /**
+     * Gets a field from a class with any one of the given names.
+     *
+     * @param clazz the class containing the field
+     * @param names all of the possible names for the field. The first match will be used
+     * @return a {@link Field} with one of the given names
+     * @throws IllegalStateException if no field with any of the given names could be found in the given class
+     */
+    public static Field getField(@NonNull Class<?> clazz, @NonNull String... names) throws IllegalStateException {
+        Field field = null;
+        for (String name : names) {
+            if (name == null) {
+                throw new NullPointerException();
+            }
+            try {
+                field = clazz.getDeclaredField(name);
+                break;
+            } catch (NoSuchFieldException e) {
+            }
+        }
+        if (field != null) {
+            field.setAccessible(true);
+            return field;
+        } else {
+            throw new IllegalStateException(String.format("Couldn't find field in class \"%s\" with any of the following names: %s", clazz, Arrays.toString(names)));
+        }
+    }
+
+    /**
+     * Replaces the value of a {@code static final} field.
+     *
+     * @param val   the new value
+     * @param clazz the class containing the field
+     * @param names all of the possible names of the field
+     * @throws IllegalStateException if no field with any of the given names could be found in the given class
+     */
+    public static void putStaticFinalField(Object val, @NonNull Class<?> clazz, @NonNull String... names) throws IllegalStateException {
+        putFinalField(null, val, clazz, names);
+    }
+
+    /**
+     * Replaces the value of a {@code final} field.
+     *
+     * @param obj   an instance of which to replace the value
+     * @param val   the new value
+     * @param clazz the class containing the field
+     * @param names all of the possible names of the field
+     * @throws IllegalStateException if no field with any of the given names could be found in the given class
+     */
+    public static void putFinalField(Object obj, Object val, @NonNull Class<?> clazz, @NonNull String... names) throws IllegalStateException {
+        try {
+            Field field = getField(clazz, names);
+            FIELD_MODIFIERS.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+            field.set(obj, val);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 }

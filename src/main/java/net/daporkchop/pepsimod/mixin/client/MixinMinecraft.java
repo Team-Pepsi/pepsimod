@@ -40,7 +40,7 @@ import java.nio.ByteBuffer;
  * @author DaPorkchop_
  */
 @Mixin(Minecraft.class)
-public abstract class MixinMinecraft implements PepsiConstants {
+abstract class MixinMinecraft implements PepsiConstants {
     @Shadow
     @Final
     private Timer timer;

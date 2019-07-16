@@ -17,15 +17,12 @@
 package net.daporkchop.pepsimod.util;
 
 import com.google.gson.JsonParser;
-import lombok.NonNull;
 import net.daporkchop.pepsimod.Pepsimod;
 import net.daporkchop.pepsimod.util.event.EventManager;
+import net.daporkchop.pepsimod.util.render.BetterScaledResolution;
 import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 
 /**
  * Constant values used throughout the mod.
@@ -33,55 +30,14 @@ import java.lang.reflect.Modifier;
  * @author DaPorkchop_
  */
 public interface PepsiConstants {
-    Minecraft    mc            = PepsiUtil.getNull();
-    Pepsimod     pepsimod      = Pepsimod.INSTANCE();
-    Logger       log           = LogManager.getFormatterLogger("pepsimod");
-    EventManager EVENT_MANAGER = PepsiUtil.getInputValue(new EventManager());
-    JsonParser   JSON_PARSER   = new JsonParser();
+    Minecraft              mc            = PepsiUtil.getNull();
+    Pepsimod               pepsimod      = Pepsimod.INSTANCE();
+    Logger                 log           = LogManager.getFormatterLogger("pepsimod");
+    EventManager           EVENT_MANAGER = PepsiUtil.getInputValue(new EventManager());
+    JsonParser             JSON_PARSER   = new JsonParser();
+    BetterScaledResolution RESOLUTION    = BetterScaledResolution.NOOP;
 
     String MOD_ID       = "pepsimod";
     String VERSION      = PepsiUtil.getInputValue("unknown");
     String VERSION_FULL = PepsiUtil.getInputValue("unknown");
-
-    /**
-     * Sets the global {@link Minecraft} instance.
-     *
-     * @param mc the new {@link Minecraft} instance
-     * @see #mc
-     */
-    static void setMC(@NonNull Minecraft mc) {
-        try {
-            Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            Field field = PepsiConstants.class.getDeclaredField("mc");
-            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-            field.set(null, mc);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    static void setVersion(@NonNull String version) {
-        try {
-            Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            Field field = PepsiConstants.class.getDeclaredField("VERSION");
-            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-            field.set(null, version);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    static void setVersionFull(@NonNull String version) {
-        try {
-            Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            Field field = PepsiConstants.class.getDeclaredField("VERSION_FULL");
-            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-            field.set(null, version);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

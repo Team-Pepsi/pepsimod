@@ -14,26 +14,57 @@
  *
  */
 
-package net.daporkchop.pepsimod.util.event;
+package net.daporkchop.pepsimod.util.render;
+
+import net.daporkchop.pepsimod.util.capability.Updateable;
+import net.minecraft.client.gui.ScaledResolution;
 
 /**
- * The status with which a {@link CancellableEvent} may complete.
+ * An interface injected into {@link ScaledResolution} to prevent it from having to be allocated hundreds of times per frame.
  *
  * @author DaPorkchop_
  */
-public enum EventStatus {
+public interface BetterScaledResolution extends Updateable {
     /**
-     * Indicates that the event has been handled successfully, and execution should proceed onto the next handler as usual.
-     * <p>
-     * A handler exiting with {@code null} is the same as if it were to exit with {@link #OK}.
+     * A {@link BetterScaledResolution} that does nothing at all, and can serve as a placeholder instead of {@code null}.
      */
-    OK,
+    BetterScaledResolution NOOP = new BetterScaledResolution() {
+        @Override
+        public int width() {
+            return 0;
+        }
+
+        @Override
+        public int height() {
+            return 0;
+        }
+
+        @Override
+        public ScaledResolution getAsMinecraft() throws UnsupportedOperationException {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void update() {
+        }
+    };
+
     /**
-     * Indicates that the event should be cancelled. Execution will proceed onto the next handler as usual, however the exit code will be {@link #CANCEL}.
+     * @see ScaledResolution#getScaledWidth()
      */
-    CANCEL,
+    int width();
+
     /**
-     * Similar to {@link #CANCEL}, however this will abort the event handling process and later handlers will not be notified.
+     * @see ScaledResolution#getScaledHeight()
      */
-    ABORT;
+    int height();
+
+    /**
+     * @return this instance as a {@link ScaledResolution}
+     * @throws UnsupportedOperationException if this isn't an instance of {@link ScaledResolution}
+     */
+    ScaledResolution getAsMinecraft() throws UnsupportedOperationException;
+
+    @Override
+    void update();
 }

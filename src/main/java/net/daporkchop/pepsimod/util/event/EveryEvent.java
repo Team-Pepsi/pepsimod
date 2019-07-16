@@ -17,6 +17,7 @@
 package net.daporkchop.pepsimod.util.event;
 
 import net.daporkchop.pepsimod.util.event.render.PreRenderEvent;
+import net.daporkchop.pepsimod.util.event.render.RenderHUDEvent;
 
 /**
  * A type that listens for every event.
@@ -26,5 +27,15 @@ import net.daporkchop.pepsimod.util.event.render.PreRenderEvent;
  * @author DaPorkchop_
  */
 public interface EveryEvent extends
-        PreRenderEvent {
+        PreRenderEvent,
+        RenderHUDEvent.Pre,
+        RenderHUDEvent.Post {
+    @Override
+    void firePreRender(float partialTicks);
+
+    @Override
+    EventStatus firePreRenderHUD(float partialTicks, int width, int height);
+
+    @Override
+    void firePostRenderHUD(float partialTicks, int width, int height);
 }

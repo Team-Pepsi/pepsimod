@@ -14,26 +14,37 @@
  *
  */
 
-package net.daporkchop.pepsimod.util.event;
+package net.daporkchop.pepsimod.util.event.render;
+
+import net.daporkchop.pepsimod.util.event.CancellableEvent;
+import net.daporkchop.pepsimod.util.event.Event;
+import net.daporkchop.pepsimod.util.event.EventStatus;
 
 /**
- * The status with which a {@link CancellableEvent} may complete.
+ * Container class for events related to rendering the HUD.
  *
  * @author DaPorkchop_
  */
-public enum EventStatus {
+public interface RenderHUDEvent extends Event {
     /**
-     * Indicates that the event has been handled successfully, and execution should proceed onto the next handler as usual.
+     * Fired before the HUD is rendered.
      * <p>
-     * A handler exiting with {@code null} is the same as if it were to exit with {@link #OK}.
+     * If cancelled, the HUD will not be rendered.
+     *
+     * @author DaPorkchop_
      */
-    OK,
+    @FunctionalInterface
+    interface Pre extends RenderHUDEvent, CancellableEvent {
+        EventStatus firePreRenderHUD(float partialTicks, int width, int height);
+    }
+
     /**
-     * Indicates that the event should be cancelled. Execution will proceed onto the next handler as usual, however the exit code will be {@link #CANCEL}.
+     * Fired after the HUD has been rendered.
+     *
+     * @author DaPorkchop_
      */
-    CANCEL,
-    /**
-     * Similar to {@link #CANCEL}, however this will abort the event handling process and later handlers will not be notified.
-     */
-    ABORT;
+    @FunctionalInterface
+    interface Post extends RenderHUDEvent {
+        void firePostRenderHUD(float partialTicks, int width, int height);
+    }
 }

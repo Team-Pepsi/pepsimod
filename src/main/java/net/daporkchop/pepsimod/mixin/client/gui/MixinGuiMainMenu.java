@@ -38,7 +38,7 @@ import static net.daporkchop.pepsimod.util.PepsiUtil.*;
  * @author DaPorkchop_
  */
 @Mixin(GuiMainMenu.class)
-public abstract class MixinGuiMainMenu extends GuiScreen {
+abstract class MixinGuiMainMenu extends GuiScreen {
     protected String[] versionText;
     private int scaledBannerHeight;
 

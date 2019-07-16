@@ -14,6 +14,8 @@
  *
  */
 
+import java.util.concurrent.atomic.AtomicReference
+
 buildscript {
     repositories {
         jcenter()
@@ -74,7 +76,6 @@ minecraft {
     runDir = "run"
     mappings = "$mcpmappingsVersion"
     makeObfSourceJar = false
-    coreMod = "net.daporkchop.pepsimod.PepsimodMixinLoader"
 }
 
 repositories {
@@ -149,12 +150,27 @@ jar {
     }
 }
 
-//prints the additional JVM arguments required for IDE hot swapping of mixins
-task debugArguments << {
-    configurations.compile.each {
-        String absolutePath = it.absolutePath
-        if(absolutePath.contains("mixin")) {
-            println("-Dmixin.hotSwap=true -javaagent:" + absolutePath)
-        }
+//sets JVM args for genIntellijRuns
+AtomicReference<String> mixinPath = new AtomicReference<>(null);
+configurations.compile.each {
+    String absolutePath = it.absolutePath
+    if(absolutePath.contains("mixin")) {
+        mixinPath.set(absolutePath)
     }
+}
+if (mixinPath != null)  {
+    minecraft.clientJvmArgs = minecraft.serverJvmArgs = Arrays.asList(
+            "-Dfml.coreMods.load=net.daporkchop.pepsimod.PepsimodMixinLoader",
+            "-Dmixin.checks.interfaces=true",
+            "-Dmixin.debug.export=true",
+            "-Dmixin.debug.verbose=true",
+            "-Dmixin.hotSwap=true",
+            "-javaagent:" + mixinPath,
+            "-Xmx2G",
+            "-XX:+UseG1GC",
+            "-ea",
+            "-da:io.netty..."
+    )
+} else {
+    throw new IllegalStateException("Unable to find mixin path!")
 }

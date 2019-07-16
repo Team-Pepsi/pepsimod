@@ -5,6 +5,8 @@
   "refmap": "mixins.pepsimod.refmap.json",
   "client": [
     "client.gui.MixinGuiMainMenu",
-    "client.MixinMinecraft"
+    "client.gui.MixinScaledResolution",
+    "client.MixinMinecraft",
+    "forge.client.MixinGuiIngameForge"
   ]
 }

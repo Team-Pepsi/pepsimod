@@ -22,6 +22,7 @@ import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.PepsiUtil;
 import net.daporkchop.pepsimod.util.resources.Resources;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
@@ -66,25 +67,30 @@ public final class Pepsimod implements PepsiConstants {
             throw new IllegalStateException("pepsimod can only be loaded on a client!");
         }
 
-        PepsiConstants.setMC(Minecraft.getMinecraft());
-
-        ModContainer container = FMLCommonHandler.instance().findContainerFor(this);
-        PepsiConstants.setVersion(container.getVersion());
-        if ("${version}".equals(VERSION)) {
-            PepsiConstants.setVersion("dev");
-            PepsiConstants.setVersionFull("dev-" + MinecraftForge.MC_VERSION);
+        String version;
+        if (PepsimodMixinLoader.OBFUSCATED) {
+            ModContainer container = FMLCommonHandler.instance().findContainerFor(this);
+            version = container.getVersion();
+            if ("${version}".equals(version)) {
+                version = "unknown";
+            } else {
+                Matcher matcher = Pattern.compile("([.0-9]+)-([.0-9]+)").matcher(VERSION);
+                if (!matcher.find()) {
+                    throw new IllegalStateException(String.format("Unparseable version: \"%s\"", VERSION));
+                }
+                version = matcher.group(1);
+                if (!MinecraftForge.MC_VERSION.equals(matcher.group(2))) {
+                    throw new IllegalStateException(String.format("pepsimod expected Minecraft %s, but found %s!", MinecraftForge.MC_VERSION, matcher.group(2)));
+                }
+            }
         } else {
-            Matcher matcher = Pattern.compile("([.0-9]+)-([.0-9]+)").matcher(VERSION);
-            if (!matcher.find()) {
-                throw new IllegalStateException(String.format("Unparseable version: \"%s\"", VERSION));
-            }
-            PepsiConstants.setVersion(matcher.group(1));
-            String mcVersion = matcher.group(2);
-            PepsiConstants.setVersionFull(String.format("%s-%s", VERSION, mcVersion));
-            if (!MinecraftForge.MC_VERSION.equals(mcVersion)) {
-                throw new IllegalStateException(String.format("pepsimod expected Minecraft %s, but found %s!", MinecraftForge.MC_VERSION, mcVersion));
-            }
+            version = "dev";
         }
+
+        PepsiUtil.putStaticFinalField(Minecraft.getMinecraft(), PepsiConstants.class, "mc");
+        PepsiUtil.putStaticFinalField(version, PepsiConstants.class, "VERSION");
+        PepsiUtil.putStaticFinalField(String.format("%s-%s", VERSION, MinecraftForge.MC_VERSION), PepsiConstants.class, "VERSION_FULL");
+        PepsiUtil.putStaticFinalField(new ScaledResolution(mc), PepsiConstants.class, "RESOLUTION");
 
         log.info("Loading pepsimod %s...\n", VERSION_FULL);
 
