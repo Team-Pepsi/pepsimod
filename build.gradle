@@ -143,7 +143,8 @@ jar {
                 "TweakOrder": 0,
                 "FMLCorePluginContainsFMLMod": "true",
                 "FMLCorePlugin": "net.daporkchop.pepsimod.PepsimodMixinLoader",
-                "ForceLoadAsMod": "true"
+                "ForceLoadAsMod": "true",
+                "FMLAT": "pepsimod_at.cfg"
         )
     }
 }

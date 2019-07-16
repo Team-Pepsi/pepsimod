@@ -22,6 +22,7 @@ import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import org.spongepowered.asm.lib.Opcodes;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -38,7 +39,7 @@ import static net.daporkchop.pepsimod.util.PepsiUtil.*;
  */
 @Mixin(GuiMainMenu.class)
 public abstract class MixinGuiMainMenu extends GuiScreen {
-    protected final String versionText = "pepsimod " + VERSION_FULL;
+    protected String[] versionText;
     private int scaledBannerHeight;
 
     @Shadow
@@ -48,6 +49,11 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
             method = "Lnet/minecraft/client/gui/GuiMainMenu;<init>()V",
             at = @At("RETURN"))
     private void setSplashText(CallbackInfo ci) {
+        this.versionText = new String[]{
+                "pepsimod ", VERSION_FULL, null,
+                "Made by DaPorkchop_"
+        };
+
         this.splashText = String.format(
                 "§%c%s",
                 RANDOM_COLORS[ThreadLocalRandom.current().nextInt(RANDOM_COLORS.length)],
@@ -62,7 +68,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
                     target = "Lnet/minecraft/client/gui/GuiMainMenu;splashText:Ljava/lang/String;",
                     opcode = Opcodes.PUTFIELD
             ))
-    public void preventSettingSplashInInitGui(GuiMainMenu menu, String val) {
+    private void preventSettingSplashInInitGui(GuiMainMenu menu, String val) {
     }
 
     @Redirect(
@@ -71,7 +77,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
                     value = "INVOKE",
                     target = "Lnet/minecraftforge/client/ForgeHooksClient;renderMainMenu(Lnet/minecraft/client/gui/GuiMainMenu;Lnet/minecraft/client/gui/FontRenderer;IILjava/lang/String;)Ljava/lang/String;"
             ))
-    public String skipForgeDrawMainMenu(GuiMainMenu gui, FontRenderer font, int width, int height, String splashText) {
+    private String skipForgeDrawMainMenu(GuiMainMenu gui, FontRenderer font, int width, int height, String splashText) {
         return this.splashText;
     }
 
@@ -81,7 +87,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/GuiMainMenu;drawTexturedModalRect(IIIIII)V"
             ))
-    public void removeMenuLogoRendering(GuiMainMenu guiMainMenu, int x, int y, int textureX, int textureY, int width, int height) {
+    private void removeMenuLogoRendering(GuiMainMenu guiMainMenu, int x, int y, int textureX, int textureY, int width, int height) {
     }
 
     @Redirect(
@@ -90,7 +96,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/GuiMainMenu;drawModalRectWithCustomSizedTexture(IIFFIIFF)V"
             ))
-    public void removeSubLogoRenderingAndDrawBanner(int x, int y, float a, float b, int c, int d, float e, float f) {
+    private void removeSubLogoRenderingAndDrawBanner(int x, int y, float a, float b, int c, int d, float e, float f) {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
         Texture banner = pepsimod.resources().mainMenu().banner();
@@ -104,7 +110,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/GuiMainMenu;drawString(Lnet/minecraft/client/gui/FontRenderer;Ljava/lang/String;III)V"
             ))
-    public void removeAllDrawStrings(GuiMainMenu guiMainMenu, FontRenderer fontRenderer1, String string, int i1, int i2, int i3) {
+    private void removeAllDrawStrings(GuiMainMenu guiMainMenu, FontRenderer fontRenderer1, String string, int i1, int i2, int i3) {
     }
 
     @Redirect(
@@ -114,7 +120,7 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
                     target = "Lnet/minecraft/client/gui/GuiMainMenu;drawRect(IIIII)V",
                     ordinal = 0
             ))
-    public void skipDrawCopyrightUnderline(int left, int top, int right, int bottom, int color) {
+    private void skipDrawCopyrightUnderline(int left, int top, int right, int bottom, int color) {
     }
 
     @Redirect(
@@ -123,18 +129,17 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/renderer/GlStateManager;translate(FFF)V"
             ))
-    public void moveSplashText(float x, float y, float z)   {
-        GlStateManager.translate(this.width / 2 + 300.0f / 2.0f, this.height / 4 + 48 - this.scaledBannerHeight, 0.0f);
+    private void moveSplashText(float x, float y, float z)   {
+        GlStateManager.translate(this.width / 2 + 300.0f / 2.0f, this.height / 4 + this.scaledBannerHeight * 0.5f * 0.0f, 0.0f);
     }
 
     @Inject(
             method = "Lnet/minecraft/client/gui/GuiMainMenu;drawScreen(IIF)V",
             at = @At("TAIL")
     )
-    public void addDrawPepsiStuff(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
+    private void addDrawPepsiStuff(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
         TEXT_RENDERER
-                .renderText("pepsimod " + VERSION_FULL, 2, this.height - 10 * 2)
-                .renderText("Made by DaPorkchop_", 2, this.height - 10)
-                .renderText("Copyright Mojang AB. Do not distribute!", this.width - this.fontRenderer.getStringWidth("Copyright Mojang AB. Do not distribute!") - 2, this.height - 10);
+                .renderLinesSmart(this.versionText, 2, this.height - 10 * 2)
+                .render("Copyright Mojang AB. Do not distribute!", this.width - this.fontRenderer.getStringWidth("Copyright Mojang AB. Do not distribute!") - 2, this.height - 10);
     }
 }

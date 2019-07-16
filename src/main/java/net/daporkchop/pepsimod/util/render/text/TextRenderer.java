@@ -26,52 +26,52 @@ import net.daporkchop.pepsimod.util.capability.Updateable;
  */
 public interface TextRenderer<I extends TextRenderer<I>> extends Updateable {
     /**
-     * @see #renderText(CharSequence, float, float, int, int)
+     * @see #render(CharSequence, float, float, int, int)
      */
-    default I renderText(int x, int y, @NonNull CharSequence text) {
-        return this.renderText(text, (float) x, (float) y, 0, text.length());
+    default I render(int x, int y, @NonNull CharSequence text) {
+        return this.render(text, (float) x, (float) y, 0, text.length());
     }
 
     /**
-     * @see #renderText(CharSequence, float, float, int, int)
+     * @see #render(CharSequence, float, float, int, int)
      */
-    default I renderText(int x, int y, int startIndex, int length, @NonNull CharSequence text) {
-        return this.renderText(text, (float) x, (float) y, startIndex, length);
+    default I render(int x, int y, int startIndex, int length, @NonNull CharSequence text) {
+        return this.render(text, (float) x, (float) y, startIndex, length);
     }
 
     /**
-     * @see #renderText(CharSequence, float, float, int, int)
+     * @see #render(CharSequence, float, float, int, int)
      */
-    default I renderText(float x, float y, @NonNull CharSequence text) {
-        return this.renderText(text, x, y, 0, text.length());
+    default I render(float x, float y, @NonNull CharSequence text) {
+        return this.render(text, x, y, 0, text.length());
     }
 
     /**
-     * @see #renderText(CharSequence, float, float, int, int)
+     * @see #render(CharSequence, float, float, int, int)
      */
-    default I renderText(float x, float y, int startIndex, int length, @NonNull CharSequence text) {
-        return this.renderText(text, x, y, startIndex, length);
+    default I render(float x, float y, int startIndex, int length, @NonNull CharSequence text) {
+        return this.render(text, x, y, startIndex, length);
     }
 
     /**
-     * @see #renderText(CharSequence, float, float, int, int)
+     * @see #render(CharSequence, float, float, int, int)
      */
-    default I renderText(@NonNull CharSequence text, int x, int y) {
-        return this.renderText(text, (float) x, (float) y, 0, text.length());
+    default I render(@NonNull CharSequence text, int x, int y) {
+        return this.render(text, (float) x, (float) y, 0, text.length());
     }
 
     /**
-     * @see #renderText(CharSequence, float, float, int, int)
+     * @see #render(CharSequence, float, float, int, int)
      */
-    default I renderText(@NonNull CharSequence text, int x, int y, int startIndex, int length) {
-        return this.renderText(text, (float) x, (float) y, startIndex, length);
+    default I render(@NonNull CharSequence text, int x, int y, int startIndex, int length) {
+        return this.render(text, (float) x, (float) y, startIndex, length);
     }
 
     /**
-     * @see #renderText(CharSequence, float, float, int, int)
+     * @see #render(CharSequence, float, float, int, int)
      */
-    default I renderText(@NonNull CharSequence text, float x, float y) {
-        return this.renderText(text, x, y, 0, text.length());
+    default I render(@NonNull CharSequence text, float x, float y) {
+        return this.render(text, x, y, 0, text.length());
     }
 
     /**
@@ -85,7 +85,63 @@ public interface TextRenderer<I extends TextRenderer<I>> extends Updateable {
      * @return this {@link RainbowTextRenderer} instance
      * @throws IndexOutOfBoundsException if the startIndex and/or length aren't within the bounds of the given text
      */
-    I renderText(@NonNull CharSequence text, float x, float y, int startIndex, int length) throws IndexOutOfBoundsException;
+    I render(@NonNull CharSequence text, float x, float y, int startIndex, int length) throws IndexOutOfBoundsException;
+
+    /**
+     * @see #renderPieces(float, float, CharSequence[])
+     */
+    default I renderPieces(float x, float y, @NonNull CharSequence... textSegments) {
+        return this.renderPieces(textSegments, x, y);
+    }
+
+    /**
+     * Renders multiple pieces of text sequentially at the given coordinates.
+     * <p>
+     * This may be used to avoid redundant string concatenation.
+     *
+     * @param textSegments the pieces of text to render
+     * @param x            the X coordinate to render the text at
+     * @param y            the Y coordinate to render the text at
+     * @return this {@link RainbowTextRenderer} instance
+     */
+    I renderPieces(@NonNull CharSequence[] textSegments, float x, float y);
+
+    /**
+     * @see #renderLines(float, float, CharSequence...)
+     */
+    default I renderLines(float x, float y, @NonNull CharSequence... lines) {
+        return this.renderLines(lines, x, y);
+    }
+
+    /**
+     * Renders multiple lines of text at the given coordinates.
+     *
+     * @param lines the lines of text to render
+     * @param x     the X coordinate to render the text at
+     * @param y     the Y coordinate to render the text at
+     * @return this {@link RainbowTextRenderer} instance
+     */
+    I renderLines(@NonNull CharSequence[] lines, float x, float y);
+
+    /**
+     * @see #renderLinesSmart(float, float, CharSequence...)
+     */
+    default I renderLinesSmart(float x, float y, @NonNull CharSequence... lines) {
+        return this.renderLinesSmart(lines, x, y);
+    }
+
+    /**
+     * Renders multiple lines of text at the given coordinates.
+     * <p>
+     * This is more powerful than {@link #renderLines(CharSequence[], float, float)} because it will only insert a line break when it finds a {@code null}
+     * value instead of text.
+     *
+     * @param lines the lines of text to render
+     * @param x     the X coordinate to render the text at
+     * @param y     the Y coordinate to render the text at
+     * @return this {@link RainbowTextRenderer} instance
+     */
+    I renderLinesSmart(@NonNull CharSequence[] lines, float x, float y);
 
     @Override
     void update();

@@ -76,11 +76,11 @@ public final class FixedColorTextRenderer implements TextRenderer<FixedColorText
     }
 
     @Override
-    public FixedColorTextRenderer renderText(@NonNull CharSequence text, float x, float y, int startIndex, int length) throws IndexOutOfBoundsException {
+    public FixedColorTextRenderer render(@NonNull CharSequence text, float x, float y, int startIndex, int length) throws IndexOutOfBoundsException {
         if (startIndex < 0 || length < 0 || startIndex + length > text.length()) {
             throw new IndexOutOfBoundsException();
         }
-
+        this.setColor();
         FontRenderer renderer = mc.fontRenderer;
         renderer.posX = x;
         renderer.posY = y;
@@ -88,6 +88,64 @@ public final class FixedColorTextRenderer implements TextRenderer<FixedColorText
         length += startIndex;
         for (; startIndex < length; startIndex++) {
             renderer.posX += renderer.renderChar(text.charAt(startIndex), false);
+        }
+
+        return this;
+    }
+
+    @Override
+    public FixedColorTextRenderer renderPieces(@NonNull CharSequence[] textSegments, float x, float y) {
+        this.setColor();
+        FontRenderer renderer = mc.fontRenderer;
+        renderer.posX = x;
+        renderer.posY = y;
+
+        for (CharSequence text : textSegments)  {
+            int length = text.length();
+            for (int i = 0; i < length; i++)    {
+                renderer.posX += renderer.renderChar(text.charAt(i), false);
+            }
+        }
+
+        return this;
+    }
+
+    @Override
+    public FixedColorTextRenderer renderLines(@NonNull CharSequence[] lines, float x, float y) {
+        this.setColor();
+        FontRenderer renderer = mc.fontRenderer;
+        renderer.posX = x;
+        renderer.posY = y;
+
+        for (CharSequence text : lines)  {
+            int length = text.length();
+            for (int i = 0; i < length; i++)    {
+                renderer.posX += renderer.renderChar(text.charAt(i), false);
+            }
+            renderer.posX = x;
+            renderer.posY += 10.0f;
+        }
+
+        return this;
+    }
+
+    @Override
+    public FixedColorTextRenderer renderLinesSmart(@NonNull CharSequence[] lines, float x, float y) {
+        this.setColor();
+        FontRenderer renderer = mc.fontRenderer;
+        renderer.posX = x;
+        renderer.posY = y;
+
+        for (CharSequence text : lines)  {
+            if (text != null) {
+                int length = text.length();
+                for (int i = 0; i < length; i++) {
+                    renderer.posX += renderer.renderChar(text.charAt(i), false);
+                }
+            } else {
+                renderer.posX = x;
+                renderer.posY += 10.0f;
+            }
         }
 
         return this;
