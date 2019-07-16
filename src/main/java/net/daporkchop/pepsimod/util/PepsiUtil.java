@@ -16,6 +16,8 @@
 
 package net.daporkchop.pepsimod.util;
 
+import net.daporkchop.pepsimod.util.render.Rainbow;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
@@ -29,6 +31,7 @@ public final class PepsiUtil implements PepsiConstants {
     public static final int[]           PEPSI_LOGO_SIZES = {16, 32, 64, 128, 256};
     public static final BufferedImage[] PEPSI_LOGOS      = new BufferedImage[PEPSI_LOGO_SIZES.length];
     public static final char[]          RANDOM_COLORS    = {'c', '9', 'f', '1', '4'};
+    public static       Rainbow         RAINBOW          = new Rainbow(0.2d, 0.03d, 45.0d);
 
     static {
         for (int i = PEPSI_LOGOS.length - 1; i >= 0; i--) {

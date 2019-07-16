@@ -16,7 +16,7 @@
 
 package net.daporkchop.pepsimod.mixin.client.gui;
 
-import net.daporkchop.pepsimod.util.PepsiUtil;
+import net.daporkchop.pepsimod.util.render.Rainbow;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
@@ -61,17 +61,17 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
                     target = "Lnet/minecraft/client/gui/GuiMainMenu;splashText:Ljava/lang/String;",
                     opcode = Opcodes.PUTFIELD
             ))
-    public void preventSettingSplashInInitGui(GuiMainMenu menu, String val)   {
+    public void preventSettingSplashInInitGui(GuiMainMenu menu, String val) {
     }
 
     @Redirect(
             method = "Lnet/minecraft/client/gui/GuiMainMenu;drawScreen(IIF)V",
             at = @At(
-                    value = "FIELD",
-                    target = "Lnet/minecraft/client/gui/GuiMainMenu;splashText:Ljava/lang/String;",
-                    opcode = Opcodes.PUTFIELD
+                    value = "INVOKE",
+                    target = "Lnet/minecraftforge/client/ForgeHooksClient;renderMainMenu(Lnet/minecraft/client/gui/GuiMainMenu;Lnet/minecraft/client/gui/FontRenderer;IILjava/lang/String;)Ljava/lang/String;"
             ))
-    public void preventSettingSplashInDrawScreen(GuiMainMenu menu, String val)   {
+    public String skipForgeDrawMainMenu(GuiMainMenu gui, FontRenderer font, int width, int height, String splashText) {
+        return null;
     }
 
     @Redirect(
@@ -105,11 +105,34 @@ public abstract class MixinGuiMainMenu extends GuiScreen {
             method = "Lnet/minecraft/client/gui/GuiMainMenu;drawScreen(IIF)V",
             at = @At(
                     value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/GuiMainMenu;drawRect(IIIII)V",
+                    ordinal = 0
+            ))
+    public void skipDrawCopyrightUnderline(int left, int top, int right, int bottom, int color) {
+    }
+
+    @Redirect(
+            method = "Lnet/minecraft/client/gui/GuiMainMenu;drawScreen(IIF)V",
+            at = @At(
+                    value = "INVOKE",
                     target = "Lnet/minecraft/client/renderer/texture/TextureManager;bindTexture(Lnet/minecraft/util/ResourceLocation;)V",
                     ordinal = 0
             ))
-    public void removeMenuLogoInit(TextureManager textureManager, ResourceLocation resource) {
+    public void drawBanner(TextureManager textureManager, ResourceLocation resource) {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         pepsimod.resources().mainMenu().banner().draw(this.width / 2 - 150, 50, 300);
+    }
+
+    @Inject(
+            method = "Lnet/minecraft/client/gui/GuiMainMenu;drawScreen(IIF)V",
+            at = @At("RETURN")
+    )
+    public void addDrawPepsiStuff(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
+        RAINBOW.update()
+                .renderString("Hello World!", 2, this.height - 10 * 4)
+                .renderString("Lorem Ipsum dolor set amit", 2, this.height - 10 * 3)
+                .renderString("Other placeholder text", 2, this.height - 10 * 2)
+                .renderString("Made by DaPorkchop_", 2, this.height - 10)
+                .renderString("Copyright Mojang AB. Do not distribute!", this.width - this.fontRenderer.getStringWidth("Copyright Mojang AB. Do not distribute!") - 2, this.height - 10);
     }
 }
