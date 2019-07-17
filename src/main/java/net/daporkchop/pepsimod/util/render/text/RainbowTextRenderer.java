@@ -67,7 +67,7 @@ import static net.minecraft.util.math.MathHelper.clamp;
  */
 @Getter
 @Accessors(fluent = true)
-public final class RainbowTextRenderer implements TextRenderer<RainbowTextRenderer>, PepsiConstants {
+public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
     protected static final double TWO_THIRDS_PI  = PI * 0.66666666666666d;
     protected static final double FOUR_THIRDS_PI = PI * 1.33333333333333d;
     protected static final double TWO_PI         = PI * 2.0d;

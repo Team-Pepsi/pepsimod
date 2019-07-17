@@ -38,7 +38,7 @@ import static net.minecraft.util.math.MathHelper.clamp;
 @RequiredArgsConstructor
 @Getter
 @Accessors(fluent = true)
-public final class FixedColorTextRenderer implements TextRenderer<FixedColorTextRenderer>, PepsiConstants {
+public final class FixedColorTextRenderer implements TextRenderer, PepsiConstants {
     protected final float r;
     protected final float g;
     protected final float b;

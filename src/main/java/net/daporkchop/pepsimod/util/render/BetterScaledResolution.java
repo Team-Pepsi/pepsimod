@@ -24,7 +24,7 @@ import net.minecraft.client.gui.ScaledResolution;
  *
  * @author DaPorkchop_
  */
-public interface BetterScaledResolution extends Updateable {
+public interface BetterScaledResolution extends Updateable<BetterScaledResolution> {
     /**
      * A {@link BetterScaledResolution} that does nothing at all, and can serve as a placeholder instead of {@code null}.
      */

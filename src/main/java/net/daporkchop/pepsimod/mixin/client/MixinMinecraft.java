@@ -19,7 +19,9 @@ package net.daporkchop.pepsimod.mixin.client;
 import net.daporkchop.pepsimod.PepsimodMixinLoader;
 import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.PepsiUtil;
+import net.daporkchop.pepsimod.util.render.BetterScaledResolution;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.Timer;
 import net.minecraft.util.Util;
 import org.lwjgl.opengl.Display;
@@ -31,6 +33,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.image.BufferedImage;
@@ -87,7 +90,44 @@ abstract class MixinMinecraft implements PepsiConstants {
                     ordinal = 0,
                     shift = At.Shift.AFTER
             ))
-    public void firePreRender(CallbackInfo ci) { //TODO: see if this Inject could be effectively replaced with a Redirect to avoid creating a CallbackInfo
+    private void firePreRender(CallbackInfo ci) { //TODO: see if this Inject could be effectively replaced with a Redirect to avoid creating a CallbackInfo
         EVENT_MANAGER.firePreRender(this.timer.renderPartialTicks);
+    }
+
+    //
+    //
+    //microoptimization
+    //
+    //
+
+    //prevent allocations of ScaledResolution
+    @Redirect(
+            method = "Lnet/minecraft/client/Minecraft;displayGuiScreen(Lnet/minecraft/client/gui/GuiScreen;)V",
+            at = @At(
+                    value = "NEW",
+                    target = "(Lnet/minecraft/client/Minecraft;)Lnet/minecraft/client/gui/ScaledResolution;"
+            ))
+    private ScaledResolution dontCreateScaledResolutionInstance_displayGuiScreen(Minecraft mc)  {
+        return PepsiConstants.RESOLUTION.getAsMinecraft();
+    }
+
+    @Redirect(
+            method = "Lnet/minecraft/client/Minecraft;resize(II)V",
+            at = @At(
+                    value = "NEW",
+                    target = "(Lnet/minecraft/client/Minecraft;)Lnet/minecraft/client/gui/ScaledResolution;"
+            ))
+    private ScaledResolution dontCreateScaledResolutionInstance_resize(Minecraft mc)  {
+        return PepsiConstants.RESOLUTION == BetterScaledResolution.NOOP ? new ScaledResolution(mc) : PepsiConstants.RESOLUTION.updateChained().getAsMinecraft(); //don't create new instance if pepsimod isn't initialized yet
+    }
+
+    @Redirect(
+            method = "Lnet/minecraft/client/Minecraft;runGameLoop()V",
+            at = @At(
+                    value = "NEW",
+                    target = "(Lnet/minecraft/client/Minecraft;)Lnet/minecraft/client/gui/ScaledResolution;"
+            ))
+    private ScaledResolution dontCreateScaledResolutionInstance_runGameLoop(Minecraft mc)  {
+        return PepsiConstants.RESOLUTION.getAsMinecraft();
     }
 }

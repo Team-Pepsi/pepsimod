@@ -22,9 +22,22 @@ package net.daporkchop.pepsimod.util.capability;
  * @author DaPorkchop_
  */
 @FunctionalInterface
-public interface Updateable {
+public interface Updateable<I extends Updateable<I>> {
     /**
      * Updates this type.
      */
     void update();
+
+    /**
+     * Updates this type.
+     * <p>
+     * Does nothing but invoke {@link #update()} and then return itself (for method chaining).
+     *
+     * @return this instance
+     */
+    @SuppressWarnings("unchecked")
+    default I updateChained() {
+        this.update();
+        return (I) this;
+    }
 }
