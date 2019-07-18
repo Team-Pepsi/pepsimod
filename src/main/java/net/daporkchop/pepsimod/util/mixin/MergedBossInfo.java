@@ -37,20 +37,18 @@ import java.util.IdentityHashMap;
 @Getter
 @Accessors(fluent = true)
 public final class MergedBossInfo {
-    private final ITextComponent name;
-    private final String         formattedName;
+    private final String name;
     private final Collection<BossInfoClient> entries = Collections.newSetFromMap(new IdentityHashMap<>());
 
     private BossInfo.Color   color;
     private BossInfo.Overlay overlay;
 
-    public MergedBossInfo(@NonNull ITextComponent name) {
+    public MergedBossInfo(@NonNull String name) {
         this.name = name;
-        this.formattedName = name.getFormattedText();
     }
 
     public void add(@NonNull BossInfoClient info) {
-        if (!this.name.equals(info.getName())) {
+        if (!this.name.equals(info.getName().getFormattedText())) {
             throw new IllegalStateException("Incompatible names!");
         } else if (this.entries.add(info)) {
             this.update();
@@ -58,7 +56,7 @@ public final class MergedBossInfo {
     }
 
     public boolean remove(@NonNull BossInfoClient info) {
-        if (!this.name.equals(info.getName())) {
+        if (!this.name.equals(info.getName().getFormattedText())) {
             throw new IllegalStateException("Incompatible names!");
         } else {
             return this.entries.remove(info) && this.update();
@@ -74,5 +72,9 @@ public final class MergedBossInfo {
         } else {
             return true;
         }
+    }
+
+    public int count()    {
+        return this.entries.size();
     }
 }

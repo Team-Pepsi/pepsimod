@@ -23,7 +23,6 @@ import net.minecraft.client.gui.GuiBossOverlay;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.network.play.server.SPacketUpdateBossInfo;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.BossInfo;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,7 +40,7 @@ import static net.daporkchop.pepsimod.util.PepsiConstants.mc;
  * Inspired by the version I made for Future.
  * <p>
  * This merges boss bars with identical names together and adds a count behind boss bars that appear multiple times.
- *
+ * <p>
  * A major difference from the Future version (aside from the implementation, which is basically completely different) is that it renders all boss bars
  * simultaneously, adjusting the opacity according to the count.
  *
@@ -56,7 +55,7 @@ abstract class MixinGuiBossOverlay extends Gui {
     @Final
     private        Map<UUID, BossInfoClient> mapBossInfos;
 
-    private final Map<ITextComponent, MergedBossInfo> mergedBossInfos = new HashMap<>();
+    private final Map<String, MergedBossInfo> mergedBossInfos = new HashMap<>();
 
     /**
      * This method is overwritten because I change nearly the whole thing.
@@ -75,7 +74,7 @@ abstract class MixinGuiBossOverlay extends Gui {
             for (MergedBossInfo merged : this.mergedBossInfos.values()) {
                 mc.getTextureManager().bindTexture(GUI_BARS_TEXTURES);
                 this.render(center - 91, y, merged);
-                String s = merged.formattedName();
+                String s = merged.count() == 1 ? merged.name() : String.format("%s \u00A7r\u00A77(\u00A7fx%d\u00A77)", merged.name(), merged.count());
                 mc.fontRenderer.drawStringWithShadow(s, center - mc.fontRenderer.getStringWidth(s) * 0.5f, y - 9.0f, 16777215);
 
                 y += 10 + mc.fontRenderer.FONT_HEIGHT;
@@ -116,28 +115,28 @@ abstract class MixinGuiBossOverlay extends Gui {
             case ADD: {
                 BossInfoClient info = new BossInfoClient(packetIn);
                 this.mapBossInfos.put(packetIn.getUniqueId(), info);
-                this.mergedBossInfos.computeIfAbsent(info.getName(), MergedBossInfo::new).add(info);
+                this.mergedBossInfos.computeIfAbsent(info.getName().getFormattedText(), MergedBossInfo::new).add(info);
             }
             break;
             case REMOVE: {
                 BossInfoClient info = this.mapBossInfos.remove(packetIn.getUniqueId());
-                if (info != null) {
-                    MergedBossInfo merged = this.mergedBossInfos.get(info.getName());
-                    if (merged != null && merged.remove(info)) { //remove the old MergedBossInfo if it's empty
-                        this.mergedBossInfos.remove(info.getName());
-                    }
+                String text = info.getName().getFormattedText();
+                MergedBossInfo merged = this.mergedBossInfos.get(text);
+                if (merged != null && merged.remove(info)) { //remove the old MergedBossInfo if it's empty
+                    this.mergedBossInfos.remove(text);
                 }
             }
             break;
             case UPDATE_NAME: {
                 //remove this entry from the old name and add it to the new name
                 BossInfoClient info = this.mapBossInfos.get(packetIn.getUniqueId());
-                MergedBossInfo merged = this.mergedBossInfos.get(info.getName());
+                String text = info.getName().getFormattedText();
+                MergedBossInfo merged = this.mergedBossInfos.get(text);
                 if (merged != null && merged.remove(info)) {
-                    this.mergedBossInfos.remove(info.getName());
+                    this.mergedBossInfos.remove(text);
                 }
                 info.setName(packetIn.getName());
-                this.mergedBossInfos.computeIfAbsent(info.getName(), MergedBossInfo::new).add(info);
+                this.mergedBossInfos.computeIfAbsent(info.getName().getFormattedText(), MergedBossInfo::new).add(info);
             }
             break;
             default:
