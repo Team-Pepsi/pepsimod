@@ -16,6 +16,7 @@
 
 package net.daporkchop.pepsimod.util.event;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -37,22 +38,20 @@ import static net.daporkchop.pepsimod.util.event.EventManager.EVENT_CLASSES;
  */
 @UtilityClass
 class EventUtil {
-    private final Map<Class<? extends Event>, Map<Class<? extends Event>, EventCache>> CACHE = new ConcurrentHashMap<>();
+    private final Map<Class<? extends Event>, List<CachedData>> CACHE = new ConcurrentHashMap<>();
 
-    Map<Class<? extends Event>, EventCache> getCache(@NonNull Class<? extends Event> clazz) {
+    List<CachedData> getCache(@NonNull Class<? extends Event> clazz) {
         return CACHE.computeIfAbsent(clazz, EventUtil::computeCache);
     }
 
-    private Map<Class<? extends Event>, EventCache> computeCache(@NonNull Class<? extends Event> clazz) {
+    private List<CachedData> computeCache(@NonNull Class<? extends Event> clazz) {
         return computeAllHandlers(clazz).stream()
-                .collect(ImmutableMap.toImmutableMap(
-                        interfaz -> interfaz,
-                        interfaz -> {
-                            Method implementation = findImplementationOf(clazz, interfaz);
-                            EventHandler eventHandler = implementation.getAnnotation(EventHandler.class);
-                            return eventHandler == null ? new EventCache(clazz, EventPriority.NORMAL, true) : new EventCache(clazz, eventHandler.priority(), eventHandler.addByDefault());
-                        }
-                ));
+                .map(interfaz -> {
+                    Method implementation = findImplementationOf(clazz, interfaz);
+                    EventHandler eventHandler = implementation.getAnnotation(EventHandler.class);
+                    return eventHandler == null ? new CachedData(clazz, EventPriority.NORMAL, true) : new CachedData(clazz, eventHandler.priority(), eventHandler.addByDefault());
+                })
+                .collect(ImmutableList.toImmutableList());
     }
 
     private Method findImplementationOf(@NonNull Class<? extends Event> clazz, @NonNull Class<? extends Event> interfaz) {
@@ -87,7 +86,7 @@ class EventUtil {
     }
 
     @RequiredArgsConstructor
-    class EventCache {
+    class CachedData {
         @NonNull
         protected final Class<? extends Event> clazz;
         @NonNull

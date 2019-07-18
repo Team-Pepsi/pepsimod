@@ -17,6 +17,7 @@
 package net.daporkchop.pepsimod.util;
 
 import lombok.NonNull;
+import net.daporkchop.pepsimod.util.event.EventPriority;
 import net.daporkchop.pepsimod.util.event.render.PreRenderEvent;
 import net.daporkchop.pepsimod.util.render.text.RainbowTextRenderer;
 import net.daporkchop.pepsimod.util.render.text.TextRenderer;
@@ -92,7 +93,7 @@ public final class PepsiUtil implements PepsiConstants {
                 EVENT_MANAGER.register(PreRenderEvent.class, partialTicks -> {
                     TEXT_RENDERER.update();
                     RESOLUTION.update();
-                });
+                }, EventPriority.MONITOR);
             } else {
                 throw new IllegalStateException("Standard events already registered!");
             }

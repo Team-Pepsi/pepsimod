@@ -29,4 +29,7 @@ public enum EventPriority {
     NORMAL,
     LOW,
     LOWEST;
+
+    static final EventPriority[] VALUES        = values();
+    static final int             ITERATE_START = LOWEST.ordinal();
 }
