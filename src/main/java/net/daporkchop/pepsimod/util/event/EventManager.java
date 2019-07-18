@@ -16,8 +16,10 @@
 
 package net.daporkchop.pepsimod.util.event;
 
+import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 import net.daporkchop.pepsimod.util.PepsiConstants;
+import net.daporkchop.pepsimod.util.event.annotation.EventHandler;
 import net.daporkchop.pepsimod.util.event.render.PreRenderEvent;
 import net.daporkchop.pepsimod.util.event.render.RenderHUDEvent;
 
@@ -25,7 +27,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -42,18 +46,18 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @author DaPorkchop_
  */
 public final class EventManager implements EveryEvent, PepsiConstants {
-    protected static final Constructor<Collection<? extends Event>> IDENTITY_LINKED_LIST_CONSTRUCTOR;
-    public static final    Collection<Class<? extends Event>>       EVENT_CLASSES;
+    protected static final Constructor<List<? extends Event>> IDENTITY_LINKED_LIST_CONSTRUCTOR;
+    public static final    Collection<Class<? extends Event>> EVENT_CLASSES;
 
     static {
-        Constructor<Collection<? extends Event>> identityLinkedListConstructor = null;
-        Collection<Class<? extends Event>> eventClasses = Collections.newSetFromMap(new IdentityHashMap<>());
+        Constructor<List<? extends Event>> identityLinkedListConstructor = null;
+        Collection<Class<? extends Event>> eventClasses = new HashSet<>();
         try {
             {
                 //i hate java
                 @SuppressWarnings("unchecked")
-                Constructor<Collection<? extends Event>> identityLinkedListConstructor_butINeedItToBeUnchecked
-                        = (Constructor<Collection<? extends Event>>) Class.forName("sun.awt.util.IdentityLinkedList").getConstructor();
+                Constructor<List<? extends Event>> identityLinkedListConstructor_butINeedItToBeUnchecked
+                        = (Constructor<List<? extends Event>>) Class.forName("sun.awt.util.IdentityLinkedList").getConstructor();
                 identityLinkedListConstructor = identityLinkedListConstructor_butINeedItToBeUnchecked;
             }
             @SuppressWarnings("unchecked")
@@ -69,7 +73,7 @@ public final class EventManager implements EveryEvent, PepsiConstants {
             throw new RuntimeException(e);
         } finally {
             IDENTITY_LINKED_LIST_CONSTRUCTOR = identityLinkedListConstructor;
-            EVENT_CLASSES = Collections.unmodifiableCollection(eventClasses);
+            EVENT_CLASSES = ImmutableSet.copyOf(eventClasses);
         }
     }
 
@@ -79,7 +83,7 @@ public final class EventManager implements EveryEvent, PepsiConstants {
      *
      * @return a new instance of {@link sun.awt.util.IdentityLinkedList}
      */
-    protected static Collection<? extends Event> createIdentityLinkedList() {
+    protected static List<? extends Event> createIdentityLinkedList() {
         try {
             return IDENTITY_LINKED_LIST_CONSTRUCTOR.newInstance();
         } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
@@ -87,7 +91,7 @@ public final class EventManager implements EveryEvent, PepsiConstants {
         }
     }
 
-    protected final Map<Class<? extends Event>, Collection<? extends Event>> activeHandlers = new IdentityHashMap<>();
+    protected final Map<Class<? extends Event>, List<? extends Event>> activeHandlers = new IdentityHashMap<>();
     protected final Lock readLock;
     protected final Lock writeLock;
 
@@ -98,7 +102,7 @@ public final class EventManager implements EveryEvent, PepsiConstants {
 
         //intialize active handlers map
         for (Class<? extends Event> clazz : EVENT_CLASSES) {
-            this.activeHandlers.put(clazz, createIdentityLinkedList());
+            this.activeHandlers.put(clazz, Collections.emptyList());
         }
 
         //eliminate pointer chasing by directly referencing the read and the write lock
@@ -108,14 +112,24 @@ public final class EventManager implements EveryEvent, PepsiConstants {
     }
 
     /**
+     * @see #register(Class, Event, EventPriority)
+     */
+    public <E extends Event> boolean register(@NonNull Class<E> eventClass, @NonNull E handler) {
+        return this.register(eventClass, handler, EventPriority.NORMAL);
+    }
+
+    /**
      * Registers an new event handler that will listen for the given event class.
+     * <p>
+     * This will ignore any annotations applied to the event handler class, as this is intended for lambdas.
      *
      * @param eventClass the class of the event that will be listened for
      * @param handler    the handler for the given event
+     * @param priority   the priority of the new handler
      * @param <E>        the event type (same as the class)
      * @return whether or not the handler was registered (if {@code false}, it was already added)
      */
-    public <E extends Event> boolean register(@NonNull Class<E> eventClass, @NonNull E handler) {
+    public <E extends Event> boolean register(@NonNull Class<E> eventClass, @NonNull E handler, @NonNull EventPriority priority) {
         this.writeLock.lock();
         try {
             Collection<E> handlers = this.getHandlers(eventClass);
@@ -131,15 +145,36 @@ public final class EventManager implements EveryEvent, PepsiConstants {
     }
 
     /**
+     * Registers all handlers defined in the given object, excluding those with the {@link EventHandler} where {@link EventHandler#addByDefault()} is set
+     * to {@code false}.
+     *
+     * @param handler the method handler
+     */
+    @SuppressWarnings("unchecked")
+    public void register(@NonNull Event handler) {
+        Map<Class<? extends Event>, EventUtil.EventCache> cache = EventUtil.getCache(handler.getClass());
+        this.writeLock.lock();
+        try {
+            for (EventUtil.EventCache cache1 : cache.values())  {
+                if (cache1.def) {
+                    this.register((Class<Event>) cache1.clazz, handler, cache1.priority);
+                }
+            }
+        } finally {
+            this.writeLock.lock();
+        }
+    }
+
+    /**
      * Gets all the currently active handlers for the given event class.
      *
      * @param clazz the event class
      * @param <E>   the event type (same as the class)
      * @return currently active handlers for the given event class
      */
-    protected <E extends Event> Collection<E> getHandlers(@NonNull Class<E> clazz) {
+    protected <E extends Event> List<E> getHandlers(@NonNull Class<E> clazz) {
         @SuppressWarnings("unchecked")
-        Collection<E> handlers = (Collection<E>) this.activeHandlers.get(clazz);
+        List<E> handlers = (List<E>) this.activeHandlers.get(clazz);
         if (handlers != null) {
             return handlers;
         } else { //put throw last to avoid unnecessary branch
@@ -171,7 +206,7 @@ public final class EventManager implements EveryEvent, PepsiConstants {
         try {
             EventStatus status = EventStatus.OK;
             for (RenderHUDEvent.Pre event : this.getHandlers(RenderHUDEvent.Pre.class)) {
-                switch (event.firePreRenderHUD(partialTicks, width, height))    {
+                switch (event.firePreRenderHUD(partialTicks, width, height)) {
                     case CANCEL:
                         status = EventStatus.CANCEL;
                         break;
