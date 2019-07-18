@@ -14,14 +14,25 @@
  *
  */
 
-package net.daporkchop.pepsimod.util.event;
+package net.daporkchop.pepsimod.util.event.annotation;
+
+import net.daporkchop.pepsimod.util.event.Event;
+import net.daporkchop.pepsimod.util.event.EventStatus;
+
+import java.lang.annotation.Annotation;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * An event that can be cancelled.
+ * An annotation used to decorate an event that can be cancelled.
  * <p>
  * This means that the event method will return {@link EventStatus} instead of {@code void}.
  *
  * @author DaPorkchop_
  */
-public interface CancellableEvent extends Event {
+@Retention(RetentionPolicy.CLASS)
+@Target(ElementType.TYPE)
+public @interface CancellableEvent {
 }

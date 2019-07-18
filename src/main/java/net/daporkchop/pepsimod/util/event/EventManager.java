@@ -23,6 +23,7 @@ import net.daporkchop.pepsimod.util.event.annotation.EventHandler;
 import net.daporkchop.pepsimod.util.event.render.PreRenderEvent;
 import net.daporkchop.pepsimod.util.event.render.RenderHUDEvent;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;

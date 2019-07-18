@@ -16,7 +16,7 @@
 
 package net.daporkchop.pepsimod.util.event.render;
 
-import net.daporkchop.pepsimod.util.event.CancellableEvent;
+import net.daporkchop.pepsimod.util.event.annotation.CancellableEvent;
 import net.daporkchop.pepsimod.util.event.Event;
 import net.daporkchop.pepsimod.util.event.EventStatus;
 
@@ -33,8 +33,9 @@ public interface RenderHUDEvent extends Event {
      *
      * @author DaPorkchop_
      */
+    @CancellableEvent
     @FunctionalInterface
-    interface Pre extends RenderHUDEvent, CancellableEvent {
+    interface Pre extends RenderHUDEvent {
         EventStatus firePreRenderHUD(float partialTicks, int width, int height);
     }
 
