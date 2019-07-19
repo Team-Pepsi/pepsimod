@@ -38,20 +38,20 @@ import static net.daporkchop.pepsimod.util.event.EventManager.EVENT_CLASSES;
  */
 @UtilityClass
 class EventUtil {
-    private final Map<Class<? extends Event>, List<CachedData>> CACHE = new ConcurrentHashMap<>();
+    private final Map<Class<? extends Event>, CachedData[]> CACHE = new ConcurrentHashMap<>();
 
-    List<CachedData> getCache(@NonNull Class<? extends Event> clazz) {
+    CachedData[] getCache(@NonNull Class<? extends Event> clazz) {
         return CACHE.computeIfAbsent(clazz, EventUtil::computeCache);
     }
 
-    private List<CachedData> computeCache(@NonNull Class<? extends Event> clazz) {
+    private CachedData[] computeCache(@NonNull Class<? extends Event> clazz) {
         return computeAllHandlers(clazz).stream()
                 .map(interfaz -> {
                     Method implementation = findImplementationOf(clazz, interfaz);
                     PepsiEvent pepsiEvent = implementation.getAnnotation(PepsiEvent.class);
                     return pepsiEvent == null ? new CachedData(clazz, EventPriority.NORMAL, true) : new CachedData(clazz, pepsiEvent.priority(), pepsiEvent.addByDefault());
                 })
-                .collect(ImmutableList.toImmutableList());
+                .toArray(CachedData[]::new);
     }
 
     private Method findImplementationOf(@NonNull Class<? extends Event> clazz, @NonNull Class<? extends Event> interfaz) {

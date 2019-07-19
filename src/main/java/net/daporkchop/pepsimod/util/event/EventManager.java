@@ -27,7 +27,6 @@ import net.daporkchop.pepsimod.util.event.impl.render.RenderHUDEvent;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -37,12 +36,12 @@ import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.stream.Collectors;
 
 /**
  * pepsimod's event manager.
  * <p>
- * This class is used to actually fire events and add/remove handlers, and is accessed via {@link PepsiConstants#EVENT_MANAGER}.
+ * This class is used to actually fire events and add/remove handlers, and is accessed via {@link PepsiConstants#EVENT_MANAGER}. It's optimized to cause
+ * as few object allocations as reasonably possible, with quality of code being marginal as a result.
  * <p>
  * This is superior to other annotation+class-based event handlers as it doesn't require object allocations every time an event is fired, however
  * it requires a method to be added for every event, and all event fields must be passed as method parameters.
@@ -96,7 +95,7 @@ public final class EventManager implements AllEvents, PepsiConstants {
         }
     }
 
-    protected final Map<Class<? extends Event>, List<List<? extends Event>>> activeHandlers = new IdentityHashMap<>();
+    protected final Map<Class<? extends Event>, List<? extends Event>[]> activeHandlers = new IdentityHashMap<>();
     protected final Lock readLock;
     protected final Lock writeLock;
 
@@ -105,9 +104,15 @@ public final class EventManager implements AllEvents, PepsiConstants {
             throw new IllegalStateException("Event manager already instantiated!");
         }
 
+        @SuppressWarnings("unchecked")
+        List<? extends Event>[] templateArray = new List[EventPriority.VALUES.length];
+        for (int i = templateArray.length - 1; i >= 0; i--) {
+            templateArray[i] = Collections.emptyList();
+        }
+
         //intialize active handlers map
         for (Class<? extends Event> clazz : EVENT_CLASSES) {
-            this.activeHandlers.put(clazz, Arrays.stream(EventPriority.VALUES).map(p -> Collections.<Event>emptyList()).collect(Collectors.toList()));
+            this.activeHandlers.put(clazz, templateArray.clone());
         }
 
         //eliminate pointer chasing by directly referencing the read and the write lock
@@ -129,9 +134,9 @@ public final class EventManager implements AllEvents, PepsiConstants {
      * @param <E>   the event type (same as the class)
      * @return currently active handlers for the given event class
      */
-    protected <E extends Event> List<List<E>> getHandlers(@NonNull Class<E> clazz) {
+    protected <E extends Event> List<E>[] getHandlers(@NonNull Class<E> clazz) {
         @SuppressWarnings("unchecked")
-        List<List<E>> handlers = (List<List<E>>) (Object) this.activeHandlers.get(clazz);
+        List<E>[] handlers = (List<E>[]) this.activeHandlers.get(clazz);
         if (handlers != null) {
             return handlers;
         } else { //put throw last to avoid unnecessary branch
@@ -153,11 +158,10 @@ public final class EventManager implements AllEvents, PepsiConstants {
      */
     @SuppressWarnings("unchecked")
     public void register(@NonNull Event handler) {
-        List<EventUtil.CachedData> cache = EventUtil.getCache(handler.getClass());
+        EventUtil.CachedData[] cache = EventUtil.getCache(handler.getClass());
         this.writeLock.lock();
         try {
-            for (int i = cache.size() - 1; i >= 0; i--) {
-                EventUtil.CachedData data = cache.get(i);
+            for (EventUtil.CachedData data : cache) {
                 if (data.def) {
                     this.register((Class<Event>) data.clazz, handler, data.priority);
                 }
@@ -175,11 +179,10 @@ public final class EventManager implements AllEvents, PepsiConstants {
      */
     @SuppressWarnings("unchecked")
     public void registerAll(@NonNull Event handler) {
-        List<EventUtil.CachedData> cache = EventUtil.getCache(handler.getClass());
+        EventUtil.CachedData[] cache = EventUtil.getCache(handler.getClass());
         this.writeLock.lock();
         try {
-            for (int i = cache.size() - 1; i >= 0; i--) {
-                EventUtil.CachedData data = cache.get(i);
+            for (EventUtil.CachedData data : cache) {
                 this.register((Class<Event>) data.clazz, handler, data.priority);
             }
         } finally {
@@ -208,13 +211,13 @@ public final class EventManager implements AllEvents, PepsiConstants {
     public <E extends Event> boolean register(@NonNull Class<E> eventClass, @NonNull E handler, @NonNull EventPriority priority) {
         this.writeLock.lock();
         try {
-            List<List<E>> handlers = this.getHandlers(eventClass);
-            List<E> list = handlers.get(priority.ordinal());
+            List<E>[] handlers = this.getHandlers(eventClass);
+            List<E> list = handlers[priority.ordinal()];
             if (list.isEmpty()) {
                 //we need to add the handler
                 list = createList();
                 list.add(handler);
-                handlers.set(priority.ordinal(), list);
+                handlers[priority.ordinal()] = list;
                 return true;
             } else if (!list.contains(handler)) {
                 list.add(handler);
@@ -234,11 +237,10 @@ public final class EventManager implements AllEvents, PepsiConstants {
      */
     @SuppressWarnings("unchecked")
     public void deregister(@NonNull Event handler) {
-        List<EventUtil.CachedData> cache = EventUtil.getCache(handler.getClass());
+        EventUtil.CachedData[] cache = EventUtil.getCache(handler.getClass());
         this.writeLock.lock();
         try {
-            for (int i = cache.size() - 1; i >= 0; i--) {
-                EventUtil.CachedData data = cache.get(i);
+            for (EventUtil.CachedData data : cache) {
                 this.deregister((Class<Event>) data.clazz, handler, data.priority);
             }
         } finally {
@@ -266,24 +268,24 @@ public final class EventManager implements AllEvents, PepsiConstants {
     public <E extends Event> boolean deregister(@NonNull Class<E> eventClass, @NonNull E handler, EventPriority priority) {
         this.writeLock.lock();
         try {
-            List<List<E>> handlers = this.getHandlers(eventClass);
+            List<E>[] handlers = this.getHandlers(eventClass);
             if (priority == null) {
                 for (int i = 5; i >= 0; i--) {
-                    List<E> list = handlers.get(i);
+                    List<E> list = handlers[i];
                     if (!list.isEmpty() && list.remove(handler)) {
                         if (list.isEmpty()) {
                             //replace with empty list if all handlers are removed
-                            handlers.set(i, Collections.emptyList());
+                            handlers[i] = Collections.emptyList();
                         }
                         return true;
                     }
                 }
             } else {
-                List<E> list = handlers.get(priority.ordinal());
+                List<E> list = handlers[priority.ordinal()];
                 if (!list.isEmpty() && list.remove(handler)) {
                     if (list.isEmpty()) {
                         //replace with empty list if all handlers are removed
-                        handlers.set(priority.ordinal(), Collections.emptyList());
+                        handlers[priority.ordinal()] = Collections.emptyList();
                     }
                     return true;
                 }
@@ -304,11 +306,9 @@ public final class EventManager implements AllEvents, PepsiConstants {
     public void firePreRender(float partialTicks) {
         this.readLock.lock();
         try {
-            List<List<PreRenderEvent>> handlers = this.getHandlers(PreRenderEvent.class);
-            for (int i = 5; i >= 0; i--) {
-                List<PreRenderEvent> list = handlers.get(i);
-                for (int j = list.size() - 1; j >= 0; j--) {
-                    list.get(j).firePreRender(partialTicks);
+            for (List<PreRenderEvent> handlers : this.getHandlers(PreRenderEvent.class)) {
+                for (int i = handlers.size() - 1; i >= 0; i--) {
+                    handlers.get(i).firePreRender(partialTicks);
                 }
             }
         } finally {
@@ -321,11 +321,9 @@ public final class EventManager implements AllEvents, PepsiConstants {
         this.readLock.lock();
         try {
             EventStatus status = EventStatus.OK;
-            List<List<RenderHUDEvent.Pre>> handlers = this.getHandlers(RenderHUDEvent.Pre.class);
-            for (int i = 5; i >= 0; i--) {
-                List<RenderHUDEvent.Pre> list = handlers.get(i);
-                for (int j = list.size() - 1; j >= 0; j--) {
-                    switch (list.get(j).firePreRenderHUD(partialTicks, width, height)) {
+            for (List<RenderHUDEvent.Pre> handlers : this.getHandlers(RenderHUDEvent.Pre.class)) {
+                for (int i = handlers.size() - 1; i >= 0; i--) {
+                    switch (handlers.get(i).firePreRenderHUD(partialTicks, width, height)) {
                         case CANCEL:
                             status = EventStatus.CANCEL;
                             break;
@@ -344,11 +342,9 @@ public final class EventManager implements AllEvents, PepsiConstants {
     public void firePostRenderHUD(float partialTicks, int width, int height) {
         this.readLock.lock();
         try {
-            List<List<RenderHUDEvent.Post>> handlers = this.getHandlers(RenderHUDEvent.Post.class);
-            for (int i = 5; i >= 0; i--) {
-                List<RenderHUDEvent.Post> list = handlers.get(i);
-                for (int j = list.size() - 1; j >= 0; j--) {
-                    list.get(j).firePostRenderHUD(partialTicks, width, height);
+            for (List<RenderHUDEvent.Post> handlers : this.getHandlers(RenderHUDEvent.Post.class)) {
+                for (int i = handlers.size() - 1; i >= 0; i--) {
+                    handlers.get(i).firePostRenderHUD(partialTicks, width, height);
                 }
             }
         } finally {
