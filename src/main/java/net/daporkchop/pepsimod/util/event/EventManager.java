@@ -19,11 +19,12 @@ package net.daporkchop.pepsimod.util.event;
 import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 import net.daporkchop.pepsimod.util.PepsiConstants;
-import net.daporkchop.pepsimod.util.event.annotation.EventHandler;
-import net.daporkchop.pepsimod.util.event.render.PreRenderEvent;
-import net.daporkchop.pepsimod.util.event.render.RenderHUDEvent;
+import net.daporkchop.pepsimod.util.event.annotation.PepsiEvent;
+import net.daporkchop.pepsimod.util.event.impl.AllEvents;
+import net.daporkchop.pepsimod.util.event.impl.Event;
+import net.daporkchop.pepsimod.util.event.impl.render.PreRenderEvent;
+import net.daporkchop.pepsimod.util.event.impl.render.RenderHUDEvent;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -46,7 +47,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  *
  * @author DaPorkchop_
  */
-public final class EventManager implements EveryEvent, PepsiConstants {
+public final class EventManager implements AllEvents, PepsiConstants {
     protected static final Constructor<List<? extends Event>> LIST_CONSTRUCTOR;
     public static final    Collection<Class<? extends Event>> EVENT_CLASSES;
 
@@ -62,12 +63,12 @@ public final class EventManager implements EveryEvent, PepsiConstants {
                 listConstructor = listConstructor_butINeedItToBeUnchecked;
             }
             @SuppressWarnings("unchecked")
-            Class<? extends Event>[] interfaces = (Class<? extends Event>[]) EveryEvent.class.getInterfaces();
+            Class<? extends Event>[] interfaces = (Class<? extends Event>[]) AllEvents.class.getInterfaces();
             for (Class<? extends Event> clazz : interfaces) {
                 if (Event.class.isAssignableFrom(clazz)) {
                     eventClasses.add(clazz);
                 } else {
-                    log.warn("%s holds non-event interface: %s", EveryEvent.class, clazz);
+                    log.warn("%s holds non-event interface: %s", AllEvents.class, clazz);
                 }
             }
         } catch (Exception e) {
@@ -143,7 +144,7 @@ public final class EventManager implements EveryEvent, PepsiConstants {
     //
 
     /**
-     * Registers all handlers defined in the given object's class, excluding those with the {@link EventHandler} where {@link EventHandler#addByDefault()} is set
+     * Registers all handlers defined in the given object's class, excluding those with the {@link PepsiEvent} where {@link PepsiEvent#addByDefault()} is set
      * to {@code false}.
      *
      * @param handler the event handler
@@ -165,7 +166,7 @@ public final class EventManager implements EveryEvent, PepsiConstants {
     }
 
     /**
-     * Registers all handlers defined in the given object's class, including those with the {@link EventHandler} where {@link EventHandler#addByDefault()} is set
+     * Registers all handlers defined in the given object's class, including those with the {@link PepsiEvent} where {@link PepsiEvent#addByDefault()} is set
      * to {@code false}.
      *
      * @param handler the event handler

@@ -14,9 +14,9 @@
  *
  */
 
-package net.daporkchop.pepsimod.util.event.render;
+package net.daporkchop.pepsimod.util.event.impl.render;
 
-import net.daporkchop.pepsimod.util.event.Event;
+import net.daporkchop.pepsimod.util.event.impl.Event;
 
 /**
  * Fired before a world render pass is started.

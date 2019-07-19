@@ -16,10 +16,11 @@
 
 package net.daporkchop.pepsimod.util.event;
 
-import net.daporkchop.pepsimod.util.event.annotation.CancellableEvent;
+import net.daporkchop.pepsimod.util.event.annotation.Cancellable;
+import net.daporkchop.pepsimod.util.event.impl.Event;
 
 /**
- * The status with which a {@link Event} annotated with {@link CancellableEvent} may complete.
+ * The status with which a {@link Event} annotated with {@link Cancellable} may complete.
  *
  * @author DaPorkchop_
  */

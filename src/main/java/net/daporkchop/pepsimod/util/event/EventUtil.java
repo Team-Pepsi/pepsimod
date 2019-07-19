@@ -17,11 +17,11 @@
 package net.daporkchop.pepsimod.util.event;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
-import net.daporkchop.pepsimod.util.event.annotation.EventHandler;
+import net.daporkchop.pepsimod.util.event.annotation.PepsiEvent;
+import net.daporkchop.pepsimod.util.event.impl.Event;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -48,8 +48,8 @@ class EventUtil {
         return computeAllHandlers(clazz).stream()
                 .map(interfaz -> {
                     Method implementation = findImplementationOf(clazz, interfaz);
-                    EventHandler eventHandler = implementation.getAnnotation(EventHandler.class);
-                    return eventHandler == null ? new CachedData(clazz, EventPriority.NORMAL, true) : new CachedData(clazz, eventHandler.priority(), eventHandler.addByDefault());
+                    PepsiEvent pepsiEvent = implementation.getAnnotation(PepsiEvent.class);
+                    return pepsiEvent == null ? new CachedData(clazz, EventPriority.NORMAL, true) : new CachedData(clazz, pepsiEvent.priority(), pepsiEvent.addByDefault());
                 })
                 .collect(ImmutableList.toImmutableList());
     }

@@ -14,36 +14,13 @@
  *
  */
 
-package net.daporkchop.pepsimod.util.event.annotation;
-
-import net.daporkchop.pepsimod.util.event.Event;
-import net.daporkchop.pepsimod.util.event.EventPriority;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package net.daporkchop.pepsimod.util.event.impl;
 
 /**
- * An optional annotation that may be used to specify things about a specific handler method, such as the handler's priority or whether or not it should
- * be added by default.
+ * An interface identifying an event handler. All specific event handler interfaces inherit from this, as a fast way of identifying which interfaces
+ * on a class are actually events.
  *
  * @author DaPorkchop_
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface EventHandler {
-    /**
-     * @return this handler's priority
-     * @see EventPriority
-     */
-    EventPriority priority() default EventPriority.NORMAL;
-
-    /**
-     * Whether or not the annotated event handler should be registered by default when an instance of the class containing the method is registered using
-     * {@link net.daporkchop.pepsimod.util.event.EventManager#register(Event)}.
-     *
-     * @return whether or not the annotated event handler should be registered by default
-     */
-    boolean addByDefault() default true;
+public interface Event {
 }

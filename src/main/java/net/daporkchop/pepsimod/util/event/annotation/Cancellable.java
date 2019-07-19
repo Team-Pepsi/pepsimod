@@ -16,10 +16,8 @@
 
 package net.daporkchop.pepsimod.util.event.annotation;
 
-import net.daporkchop.pepsimod.util.event.Event;
 import net.daporkchop.pepsimod.util.event.EventStatus;
 
-import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -34,5 +32,5 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-public @interface CancellableEvent {
+public @interface Cancellable {
 }

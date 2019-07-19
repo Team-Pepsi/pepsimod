@@ -18,7 +18,7 @@ package net.daporkchop.pepsimod.util;
 
 import lombok.NonNull;
 import net.daporkchop.pepsimod.util.event.EventPriority;
-import net.daporkchop.pepsimod.util.event.render.PreRenderEvent;
+import net.daporkchop.pepsimod.util.event.impl.render.PreRenderEvent;
 import net.daporkchop.pepsimod.util.render.text.RainbowTextRenderer;
 import net.daporkchop.pepsimod.util.render.text.TextRenderer;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;

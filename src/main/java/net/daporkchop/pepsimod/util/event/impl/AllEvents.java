@@ -14,13 +14,30 @@
  *
  */
 
-package net.daporkchop.pepsimod.util.event;
+package net.daporkchop.pepsimod.util.event.impl;
+
+import net.daporkchop.pepsimod.util.event.EventManager;
+import net.daporkchop.pepsimod.util.event.EventStatus;
+import net.daporkchop.pepsimod.util.event.impl.render.PreRenderEvent;
+import net.daporkchop.pepsimod.util.event.impl.render.RenderHUDEvent;
 
 /**
- * An interface identifying an event handler. All specific event handler interfaces inherit from this, as a fast way of identifying which interfaces
- * on a class are actually events.
+ * A type that listens for every event.
+ * <p>
+ * Currently only used by {@link EventManager}.
  *
  * @author DaPorkchop_
  */
-public interface Event {
+public interface AllEvents extends
+        PreRenderEvent,
+        RenderHUDEvent.Pre,
+        RenderHUDEvent.Post {
+    @Override
+    void firePreRender(float partialTicks);
+
+    @Override
+    EventStatus firePreRenderHUD(float partialTicks, int width, int height);
+
+    @Override
+    void firePostRenderHUD(float partialTicks, int width, int height);
 }

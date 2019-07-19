@@ -14,28 +14,38 @@
  *
  */
 
-package net.daporkchop.pepsimod.util.event;
+package net.daporkchop.pepsimod.util.event.impl.render;
 
-import net.daporkchop.pepsimod.util.event.render.PreRenderEvent;
-import net.daporkchop.pepsimod.util.event.render.RenderHUDEvent;
+import net.daporkchop.pepsimod.util.event.annotation.Cancellable;
+import net.daporkchop.pepsimod.util.event.impl.Event;
+import net.daporkchop.pepsimod.util.event.EventStatus;
 
 /**
- * A type that listens for every event.
- * <p>
- * Currently only used by {@link EventManager}.
+ * Container class for events related to rendering the HUD.
  *
  * @author DaPorkchop_
  */
-public interface EveryEvent extends
-        PreRenderEvent,
-        RenderHUDEvent.Pre,
-        RenderHUDEvent.Post {
-    @Override
-    void firePreRender(float partialTicks);
+public interface RenderHUDEvent extends Event {
+    /**
+     * Fired before the HUD is rendered.
+     * <p>
+     * If cancelled, the HUD will not be rendered.
+     *
+     * @author DaPorkchop_
+     */
+    @Cancellable
+    @FunctionalInterface
+    interface Pre extends RenderHUDEvent {
+        EventStatus firePreRenderHUD(float partialTicks, int width, int height);
+    }
 
-    @Override
-    EventStatus firePreRenderHUD(float partialTicks, int width, int height);
-
-    @Override
-    void firePostRenderHUD(float partialTicks, int width, int height);
+    /**
+     * Fired after the HUD has been rendered.
+     *
+     * @author DaPorkchop_
+     */
+    @FunctionalInterface
+    interface Post extends RenderHUDEvent {
+        void firePostRenderHUD(float partialTicks, int width, int height);
+    }
 }

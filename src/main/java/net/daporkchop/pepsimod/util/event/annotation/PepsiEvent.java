@@ -14,38 +14,36 @@
  *
  */
 
-package net.daporkchop.pepsimod.util.event.render;
+package net.daporkchop.pepsimod.util.event.annotation;
 
-import net.daporkchop.pepsimod.util.event.annotation.CancellableEvent;
-import net.daporkchop.pepsimod.util.event.Event;
-import net.daporkchop.pepsimod.util.event.EventStatus;
+import net.daporkchop.pepsimod.util.event.impl.Event;
+import net.daporkchop.pepsimod.util.event.EventPriority;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Container class for events related to rendering the HUD.
+ * An optional annotation that may be used to specify things about a specific handler method, such as the handler's priority or whether or not it should
+ * be added by default.
  *
  * @author DaPorkchop_
  */
-public interface RenderHUDEvent extends Event {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface PepsiEvent {
     /**
-     * Fired before the HUD is rendered.
-     * <p>
-     * If cancelled, the HUD will not be rendered.
-     *
-     * @author DaPorkchop_
+     * @return this handler's priority
+     * @see EventPriority
      */
-    @CancellableEvent
-    @FunctionalInterface
-    interface Pre extends RenderHUDEvent {
-        EventStatus firePreRenderHUD(float partialTicks, int width, int height);
-    }
+    EventPriority priority() default EventPriority.NORMAL;
 
     /**
-     * Fired after the HUD has been rendered.
+     * Whether or not the annotated event handler should be registered by default when an instance of the class containing the method is registered using
+     * {@link net.daporkchop.pepsimod.util.event.EventManager#register(Event)}.
      *
-     * @author DaPorkchop_
+     * @return whether or not the annotated event handler should be registered by default
      */
-    @FunctionalInterface
-    interface Post extends RenderHUDEvent {
-        void firePostRenderHUD(float partialTicks, int width, int height);
-    }
+    boolean addByDefault() default true;
 }
