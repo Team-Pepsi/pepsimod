@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2019 DaPorkchop_
+ * Copyright (c) 2016-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -14,7 +14,7 @@
  *
  */
 
-package net.daporkchop.pepsimod;
+package net.daporkchop.pepsimod.asm;
 
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
@@ -39,7 +39,13 @@ public final class PepsimodMixinLoader implements IFMLLoadingPlugin {
     public PepsimodMixinLoader() {
         FMLLog.log.info("\n\n\nPepsimod Mixin init\n\n");
         MixinBootstrap.init();
-        Mixins.addConfiguration("mixins.pepsimod.json");
+        Mixins.addConfigurations(
+                "mixin/pepsimod/mixins.events.json",
+                "mixin/pepsimod/mixins.hacks.json",
+                "mixin/pepsimod/mixins.optimization.json",
+                "mixin/pepsimod/mixins.tweaks.json",
+                "mixin/pepsimod/mixins.utilities.json"
+        );
 
         MixinEnvironment.getDefaultEnvironment().setObfuscationContext("searge");
 

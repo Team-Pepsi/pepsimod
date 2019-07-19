@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2019 DaPorkchop_
+ * Copyright (c) 2016-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -14,7 +14,7 @@
  *
  */
 
-package net.daporkchop.pepsimod.mixin.client.gui;
+package net.daporkchop.pepsimod.asm.tweaks.minecraft.client.gui;
 
 import net.daporkchop.pepsimod.util.render.BetterScaledResolution;
 import net.minecraft.client.gui.ScaledResolution;
@@ -27,6 +27,9 @@ import org.spongepowered.asm.mixin.Shadow;
 import static net.daporkchop.pepsimod.util.PepsiConstants.mc;
 
 /**
+ * This modifies {@link ScaledResolution} to implement {@link BetterScaledResolution}, which in turn allows me to re-use the same ScaledResolution instance
+ * forever instead of the vanilla behavior of every GUI and renderer creating their own new instance every frame.
+ *
  * @author DaPorkchop_
  */
 @Mixin(ScaledResolution.class)

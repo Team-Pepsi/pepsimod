@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2019 DaPorkchop_
+ * Copyright (c) 2016-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -14,9 +14,9 @@
  *
  */
 
-package net.daporkchop.pepsimod.mixin.client.gui;
+package net.daporkchop.pepsimod.asm.tweaks.minecraft.client.gui;
 
-import net.daporkchop.pepsimod.util.mixin.MergedBossInfo;
+import net.daporkchop.pepsimod.util.mixin.client.gui.GuiBossOverlay.MergedBossInfo;
 import net.minecraft.client.gui.BossInfoClient;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiBossOverlay;
@@ -69,37 +69,48 @@ abstract class MixinGuiBossOverlay extends Gui {
             int abortHeight = RESOLUTION.height() / 3; //the Y position at which we will stop rendering boss bars to avoid filling the screen
 
             int center = RESOLUTION.width() >> 1;
+            int x = center - 91;
             int y = 12;
 
             for (MergedBossInfo merged : this.mergedBossInfos.values()) {
-                mc.getTextureManager().bindTexture(GUI_BARS_TEXTURES);
-                this.render(center - 91, y, merged);
-                String s = merged.count() == 1 ? merged.name() : String.format("%s \u00A7r\u00A77(\u00A7fx%d\u00A77)", merged.name(), merged.count());
-                mc.fontRenderer.drawStringWithShadow(s, center - mc.fontRenderer.getStringWidth(s) * 0.5f, y - 9.0f, 16777215);
+                { //render boss bars
+                    mc.getTextureManager().bindTexture(GUI_BARS_TEXTURES);
+                    GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 
+                    //draw background
+                    this.drawTexturedModalRect(x, y, 0, merged.color().ordinal() * 10, 182, 5);
+
+                    //draw health bars
+                    //we use an alpha level equal to 1/count to make sure that one can see the health of all of the bars individually, even though they're drawn on top of each other.
+                    //TODO: for whatever reason the alpha seems to be more of an exponential curve than a linear one, or maybe that's just an illusion. either way it's hard to differentiate between individual boss bars, maybe i need to improve the contrast somehow or add a marker.
+                    GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f / merged.entries().size());
+                    for (BossInfoClient info : merged.entries()) {
+                        int progress = (int) (info.getPercent() * 183.0f);
+                        if (progress > 0) {
+                            this.drawTexturedModalRect(x, y, 0, info.getColor().ordinal() * 10 + 5, progress, 5);
+                        }
+                    }
+
+                    //draw progress overlay thing (has notches for steps)
+                    GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+                    if (merged.overlay() != BossInfo.Overlay.PROGRESS) {
+                        this.drawTexturedModalRect(x, y, 0, 80 + (merged.overlay().ordinal() - 1) * 10, 182, 5);
+                    }
+                }
+
+                { //draw name
+                    //we only add the count suffix if there's multiple boss bars on top of each other
+                    String s = merged.count() == 1 ? merged.name() : String.format("%s§r §7(§fx%d§7)", merged.name(), merged.count());
+                    mc.fontRenderer.drawStringWithShadow(s, center - mc.fontRenderer.getStringWidth(s) * 0.5f, y - 9.0f, 16777215);
+                }
+
+                //move down
                 y += 10 + mc.fontRenderer.FONT_HEIGHT;
                 if (y >= abortHeight) {
+                    //abort if the vertical position is too far down the screen
                     break;
                 }
             }
-        }
-    }
-
-    private void render(int x, int y, MergedBossInfo merged) {
-        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-        this.drawTexturedModalRect(x, y, 0, merged.color().ordinal() * 10, 182, 5);
-
-        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f / merged.entries().size());
-        for (BossInfoClient info : merged.entries()) {
-            int progress = (int) (info.getPercent() * 183.0f);
-            if (progress > 0) {
-                this.drawTexturedModalRect(x, y, 0, info.getColor().ordinal() * 10 + 5, progress, 5);
-            }
-        }
-
-        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-        if (merged.overlay() != BossInfo.Overlay.PROGRESS) {
-            this.drawTexturedModalRect(x, y, 0, 80 + (merged.overlay().ordinal() - 1) * 10, 182, 5);
         }
     }
 

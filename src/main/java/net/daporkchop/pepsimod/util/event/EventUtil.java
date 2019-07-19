@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2019 DaPorkchop_
+ * Copyright (c) 2016-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -65,7 +65,7 @@ class EventUtil {
 
     @SuppressWarnings("unchecked")
     private List<Class<? extends Event>> computeAllHandlers(@NonNull Class<? extends Event> clazz) {
-        return (List<Class<? extends Event>>) findClassHeirachy(clazz).stream().filter(EVENT_CLASSES::contains).collect(Collectors.toList());
+        return (List<Class<? extends Event>>) (Object) findClassHeirachy(clazz).stream().filter(EVENT_CLASSES::contains).collect(Collectors.toList());
     }
 
     private Collection<Class<?>> findClassHeirachy(@NonNull Class<? extends Event> clazz) {

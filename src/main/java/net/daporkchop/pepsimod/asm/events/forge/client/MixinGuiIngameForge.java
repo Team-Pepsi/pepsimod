@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2019 DaPorkchop_
+ * Copyright (c) 2016-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -14,7 +14,7 @@
  *
  */
 
-package net.daporkchop.pepsimod.mixin.forge.client;
+package net.daporkchop.pepsimod.asm.events.forge.client;
 
 import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.event.EventStatus;
@@ -40,35 +40,31 @@ abstract class MixinGuiIngameForge extends GuiIngame {
         super(null);
     }
 
-    @Redirect(
-            method = "Lnet/minecraftforge/client/GuiIngameForge;renderGameOverlay(F)V",
-            at = @At(
-                    value = "NEW",
-                    target = "(Lnet/minecraft/client/Minecraft;)Lnet/minecraft/client/gui/ScaledResolution;"
-            ))
-    private ScaledResolution preventNewScaledResolutionInstance(Minecraft mc) {
-        return PepsiConstants.RESOLUTION.getAsMinecraft();
-    }
-
+    /**
+     * Calls {@link net.daporkchop.pepsimod.util.event.EventManager#firePreRenderHUD(float, int, int)} before the Minecraft Forge event is called.
+     */
     @Redirect(
             method = "Lnet/minecraftforge/client/GuiIngameForge;renderGameOverlay(F)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraftforge/client/GuiIngameForge;pre(Lnet/minecraftforge/client/event/RenderGameOverlayEvent$ElementType;)Z"
             ))
-    private boolean checkIfOverlayShouldBeSkipped(GuiIngameForge gui, RenderGameOverlayEvent.ElementType type, float partialTicks) {
+    private boolean inject_preRenderHUD(GuiIngameForge gui, RenderGameOverlayEvent.ElementType type, float partialTicks) {
         return EVENT_MANAGER.firePreRenderHUD(partialTicks, RESOLUTION.width(), RESOLUTION.height()) != EventStatus.OK | this.pre(type);
     }
 
+    /**
+     * Calls {@link net.daporkchop.pepsimod.util.event.EventManager#firePostRenderHUD(float, int, int)} after the Minecraft Forge event is called.
+     */
     @Redirect(
             method = "Lnet/minecraftforge/client/GuiIngameForge;renderGameOverlay(F)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraftforge/client/GuiIngameForge;post(Lnet/minecraftforge/client/event/RenderGameOverlayEvent$ElementType;)V"
             ))
-    private void firePostRenderHUD(GuiIngameForge gui, RenderGameOverlayEvent.ElementType type, float partialTicks) {
-        EVENT_MANAGER.firePostRenderHUD(partialTicks, RESOLUTION.width(), RESOLUTION.height());
+    private void inject_postRenderHUD(GuiIngameForge gui, RenderGameOverlayEvent.ElementType type, float partialTicks) {
         this.post(type);
+        EVENT_MANAGER.firePostRenderHUD(partialTicks, RESOLUTION.width(), RESOLUTION.height());
     }
 
     @Shadow

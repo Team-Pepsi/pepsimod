@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_8",
+  "package": "net.daporkchop.pepsimod.asm.tweaks",
+  "refmap": "mixins.pepsimod.refmap.json",
+  "client": [
+    "minecraft.client.gui.MixinGuiBossOverlay",
+    "minecraft.client.gui.MixinGuiMainMenu",
+    "minecraft.client.gui.MixinScaledResolution",
+    "minecraft.client.MixinMinecraft"
+  ]
+}
