@@ -14,33 +14,46 @@
  *
  */
 
-package net.daporkchop.pepsimod.module.annotation;
+package net.daporkchop.pepsimod.module.util;
 
-import net.daporkchop.pepsimod.module.Mods;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.experimental.Accessors;
+import net.daporkchop.pepsimod.module.Module;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.function.Supplier;
 
 /**
- * Classes decorated with this type are considered to be a valid {@link net.daporkchop.pepsimod.module.Module}.
+ * A container for a module.
  * <p>
- * This allows for more detailed control over the properties of a module than simply implementing {@link net.daporkchop.pepsimod.module.Module}.
+ * Note that the actual module instance referenced by this instance can change between module manager init cycles, or even be {@code null} if the module
+ * manager is not currently active.
  *
  * @author DaPorkchop_
  */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface ModInfo {
-    /**
-     * The internal ID of the mod. This is never displayed to the end user, but rather is used for things such as config saving.
-     */
-    String value();
+@Getter
+@Accessors(fluent = true)
+public class Mod<M extends Module> {
+    protected       M           instance; //global module instance reference
+    protected final Class<M>    clazz; //the module's class
+    protected final Supplier<M> factory; //supplies new instances for use after module manager reloads
 
-    /**
-     * Indicates a "ghost" module. Ghost modules are virtual modules that are never directly displayed to the end user, but still need to be registered
-     * as a module.
-     */
-    boolean ghost() default false;
+    protected final String id;
+    protected final String name;
+
+    protected boolean enabled;
+    protected boolean visible;
+
+    public Mod(@NonNull Class<M> clazz, @NonNull Supplier<M> factory) {
+        this.clazz = clazz;
+        this.factory = factory;
+
+        Module.Info info = clazz.getAnnotation(Module.Info.class);
+        if (info != null) {
+            this.id = info.id();
+            this.name = info.name().isEmpty() ? clazz.getSimpleName() : info.name();
+        } else {
+            throw new IllegalArgumentException(String.format("Class %s is missing @Module.Info annotation!", clazz.getCanonicalName()));
+        }
+    }
 }

@@ -18,6 +18,11 @@ package net.daporkchop.pepsimod.module;
 
 import net.daporkchop.pepsimod.util.event.impl.Event;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  * The root of most pepsimod utilities are modules. These are individual, toggleable utilities with a distinct function that
  * <p>
@@ -26,11 +31,34 @@ import net.daporkchop.pepsimod.util.event.impl.Event;
  *
  * @author DaPorkchop_
  */
-public interface Module extends Event {
+public interface Module extends Event, AutoCloseable {
+    /**
+     * Initializes a newly created instance of this module.
+     * <p>
+     * This is guaranteed to be the first method that is called after the instance is created.
+     */
+    default void init() {
+    }
+
+    /**
+     * Called before this module instance is discarded to release any additional resources.
+     * <p>
+     * This method will be called every time the module manager is reset, which will happen every time we disconnect from a server (dedicated or internal)
+     * or change dimensions.
+     * <p>
+     * No guarantees are made as to what state the module will be in when this is called, as the player can disconnect, get kicked or be teleported to
+     * another dimension at any moment.
+     */
+    @Override
+    default void close() {
+    }
+
     /**
      * Called when this module is enabled.
      * <p>
      * Any events registered by this module will be registered automatically before this method is called.
+     * <p>
+     * {@link #init()} is guaranteed to be called before this method.
      */
     default void enabled() {
     }
@@ -41,5 +69,35 @@ public interface Module extends Event {
      * Any events registered by this module will be deregistered automatically before this method is called.
      */
     default void disabled() {
+    }
+
+    /**
+     * Required annotation for all implementations of {@link Module}. Provides additional static information about the module.
+     *
+     * @author DaPorkchop_
+     */
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Info {
+        /**
+         * The unique ID of the module.
+         * <p>
+         * This is never displayed directly to the user, but rather is used internally for things such as serialization.
+         */
+        String id();
+
+        /**
+         * The display name of the module.
+         * <p>
+         * If empty (which is the default), the name of the class will be used instead.
+         */
+        String name() default "";
+
+        /**
+         * An array of module classes that this module requires to be enabled before it may be enabled itself.
+         * <p>
+         * Currently unused.
+         */
+        Class<? extends Module>[] requires() default {};
     }
 }

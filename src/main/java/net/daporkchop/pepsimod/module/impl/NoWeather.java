@@ -17,11 +17,10 @@
 package net.daporkchop.pepsimod.module.impl;
 
 import net.daporkchop.pepsimod.module.Module;
-import net.daporkchop.pepsimod.module.annotation.ModInfo;
 
 /**
  * @author DaPorkchop_
  */
-@ModInfo("noweather")
-public class NoWeatherMod implements Module {
+@Module.Info(id = "noweather")
+public class NoWeather implements Module {
 }

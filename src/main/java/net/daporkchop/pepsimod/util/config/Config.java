@@ -22,7 +22,4 @@ import net.daporkchop.pepsimod.module.Mods;
  * @author DaPorkchop_
  */
 public class Config {
-    {
-        Mods.NoWeather.name();
-    }
 }

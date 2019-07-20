@@ -16,36 +16,16 @@
 
 package net.daporkchop.pepsimod.module;
 
-import lombok.NonNull;
-import lombok.experimental.Accessors;
-import net.daporkchop.pepsimod.module.annotation.ModInfo;
-import net.daporkchop.pepsimod.module.impl.NoWeatherMod;
+import net.daporkchop.pepsimod.module.impl.NoWeather;
+import net.daporkchop.pepsimod.module.util.Mod;
 
 /**
- * An enum containing all mods in pepsimod.
- * <p>
- * Ordinals should not be considered persistent, as they can and will change with the addition/removal of new modules.
+ * An interface containing all mods in pepsimod.
  * <p>
  * Entries are sorted alphabetically.
  *
  * @author DaPorkchop_
  */
-@Accessors(fluent = true)
-public enum Mods {
-    NoWeather(NoWeatherMod.class);
-
-    protected final Class<? extends Module> clazz;
-    protected final String id;
-    protected final boolean ghost;
-
-    Mods(@NonNull Class<? extends Module> clazz)    {
-        this.clazz = clazz;
-        ModInfo info = clazz.getAnnotation(ModInfo.class);
-        if (info != null)     {
-            this.id = info.value();
-            this.ghost = info.ghost();
-        } else {
-            throw new IllegalStateException("Module doesn't have @ModInfo annotation!");
-        }
-    }
+public interface Mods {
+    Mod<NoWeather> NO_WEATHER = new Mod<>(NoWeather.class, NoWeather::new);
 }

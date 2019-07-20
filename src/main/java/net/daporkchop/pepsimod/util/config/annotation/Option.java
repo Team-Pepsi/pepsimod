@@ -22,11 +22,22 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Fields decorated with this annotation are marked as being a configuration option for a module.
+ * Fields decorated with this annotation are marked as being a configuration option.
  *
  * @author DaPorkchop_
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ModuleOption {
+public @interface Option {
+    /**
+     * The unique ID of the option.
+     * <p>
+     * This is never displayed directly to the user, but rather is used internally for things such as serialization.
+     */
+    String id();
+
+    /**
+     * The display name of the option.
+     */
+    String name();
 }
