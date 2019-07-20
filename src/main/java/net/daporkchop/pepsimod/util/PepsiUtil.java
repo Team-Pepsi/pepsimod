@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2019 DaPorkchop_
+ * Copyright (c) 2016-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -17,13 +17,15 @@
 package net.daporkchop.pepsimod.util;
 
 import lombok.NonNull;
+import lombok.experimental.UtilityClass;
 import net.daporkchop.pepsimod.util.event.EventPriority;
 import net.daporkchop.pepsimod.util.event.impl.render.PreRenderEvent;
-import net.daporkchop.pepsimod.util.render.text.RainbowTextRenderer;
+import net.daporkchop.pepsimod.util.render.text.FixedColorTextRenderer;
 import net.daporkchop.pepsimod.util.render.text.TextRenderer;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import javax.imageio.ImageIO;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -35,15 +37,16 @@ import java.util.Arrays;
  *
  * @author DaPorkchop_
  */
+@UtilityClass
 public final class PepsiUtil implements PepsiConstants {
-    public static final int[]           PEPSI_LOGO_SIZES = {16, 32, 64, 128, 256};
-    public static final BufferedImage[] PEPSI_LOGOS      = new BufferedImage[PEPSI_LOGO_SIZES.length];
-    public static final char[]          RANDOM_COLORS    = {'c', '9', 'f', '1', '4'};
-    public static       TextRenderer    TEXT_RENDERER    = new RainbowTextRenderer(0.2d, 0.03d, 45.0d);
-    public static final Field           FIELD_MODIFIERS  = getField(Field.class, "modifiers");
+    public final int[]           PEPSI_LOGO_SIZES = {16, 32, 64, 128, 256};
+    public final BufferedImage[] PEPSI_LOGOS      = new BufferedImage[PEPSI_LOGO_SIZES.length];
+    public final char[]          RANDOM_COLORS    = {'c', '9', 'f', '1', '4'};
+    public       TextRenderer    TEXT_RENDERER    = new FixedColorTextRenderer(Color.RED);
+    public final Field           FIELD_MODIFIERS  = getField(Field.class, "modifiers");
 
-    protected static final Object  PEPSIUTIL_MUTEX            = new Object[0];
-    protected static       boolean STANDARD_EVENTS_REGISTERED = false;
+    protected final Object  PEPSIUTIL_MUTEX            = new Object[0];
+    protected       boolean STANDARD_EVENTS_REGISTERED = false;
 
     static {
         for (int i = PEPSI_LOGOS.length - 1; i >= 0; i--) {
@@ -63,7 +66,7 @@ public final class PepsiUtil implements PepsiConstants {
      * @return {@code null}
      */
     @SuppressWarnings("unchecked")
-    public static <T> T getNull() {
+    public <T> T getNull() {
         Object[] o = new Object[1];
         return (T) o[0];
     }
@@ -76,7 +79,7 @@ public final class PepsiUtil implements PepsiConstants {
      * @param <T> the type of value to get
      * @return the input value
      */
-    public static <T> T getInputValue(T val) {
+    public <T> T getInputValue(T val) {
         return val;
     }
 
@@ -85,7 +88,7 @@ public final class PepsiUtil implements PepsiConstants {
      * <p>
      * May only be invoked once by {@link net.daporkchop.pepsimod.Pepsimod#preInit(FMLPreInitializationEvent)}.
      */
-    public static void registerStandardEvents() {
+    public void registerStandardEvents() {
         synchronized (PEPSIUTIL_MUTEX) {
             if (!STANDARD_EVENTS_REGISTERED) {
                 STANDARD_EVENTS_REGISTERED = true;
@@ -108,7 +111,7 @@ public final class PepsiUtil implements PepsiConstants {
      * @return a {@link Field} with one of the given names
      * @throws IllegalStateException if no field with any of the given names could be found in the given class
      */
-    public static Field getField(@NonNull Class<?> clazz, @NonNull String... names) throws IllegalStateException {
+    public Field getField(@NonNull Class<?> clazz, @NonNull String... names) throws IllegalStateException {
         Field field = null;
         for (String name : names) {
             if (name == null) {
@@ -136,7 +139,7 @@ public final class PepsiUtil implements PepsiConstants {
      * @param names all of the possible names of the field
      * @throws IllegalStateException if no field with any of the given names could be found in the given class
      */
-    public static void putStaticFinalField(Object val, @NonNull Class<?> clazz, @NonNull String... names) throws IllegalStateException {
+    public void putStaticFinalField(Object val, @NonNull Class<?> clazz, @NonNull String... names) throws IllegalStateException {
         putFinalField(null, val, clazz, names);
     }
 
@@ -149,13 +152,26 @@ public final class PepsiUtil implements PepsiConstants {
      * @param names all of the possible names of the field
      * @throws IllegalStateException if no field with any of the given names could be found in the given class
      */
-    public static void putFinalField(Object obj, Object val, @NonNull Class<?> clazz, @NonNull String... names) throws IllegalStateException {
+    public void putFinalField(Object obj, Object val, @NonNull Class<?> clazz, @NonNull String... names) throws IllegalStateException {
         try {
             Field field = getField(clazz, names);
             FIELD_MODIFIERS.setInt(field, field.getModifiers() & ~Modifier.FINAL);
             field.set(obj, val);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Replaces the global text renderer instance.
+     *
+     * @param renderer the new text renderer to use
+     */
+    public void setTextRenderer(@NonNull TextRenderer renderer) {
+        synchronized (PEPSIUTIL_MUTEX) {
+            TextRenderer old = TEXT_RENDERER;
+            TEXT_RENDERER = renderer;
+            old.close();
         }
     }
 }

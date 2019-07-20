@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2019 DaPorkchop_
+ * Copyright (c) 2016-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -21,11 +21,15 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.Accessors;
 import net.daporkchop.pepsimod.util.PepsiConstants;
+import net.daporkchop.pepsimod.util.render.shader.Shader;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import org.lwjgl.BufferUtils;
+
+import java.nio.FloatBuffer;
 
 import static java.lang.Math.*;
-import static net.minecraft.util.math.MathHelper.clamp;
 
 /**
  * Used for managing rainbow-color text in a simple manner.
@@ -73,21 +77,55 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
     protected static final double TWO_PI         = PI * 2.0d;
     protected static final double BASE_SPEED     = 159.15494309d;
 
-    protected final double speed;
-    protected final double scale;
-    protected final double rotationX;
-    protected final double rotationY;
+    @Getter(AccessLevel.NONE)
+    protected final Shader shader;
+    @Getter(AccessLevel.NONE)
+    protected final FloatBuffer settings = BufferUtils.createFloatBuffer(4);
 
     @Getter(AccessLevel.NONE)
-    protected double time;
+    protected final int settingsLocation;
+    @Getter(AccessLevel.NONE)
+    protected final int timeLocation;
 
-    public RainbowTextRenderer(double speed, double scale, double rotation) {
-        this.speed = speed;
-        this.scale = scale;
+    protected float speed;
+    protected float scale;
+    protected float rotation;
 
-        rotation = Math.toRadians(rotation) + PI;
-        this.rotationX = sin(rotation);
-        this.rotationY = cos(rotation);
+    public RainbowTextRenderer(float speed, float scale, float rotation) {
+        this.shader = new Shader("dummy.vsh", "rainbow.fsh");
+        this.settingsLocation = this.shader.getFragmentUniformLocation("settings");
+        this.timeLocation = this.shader.getFragmentUniformLocation("time");
+
+        this.setup(speed, scale, rotation);
+    }
+
+    /**
+     * Sets all three options that may be configured with the rainbow text renderer.
+     *
+     * @param speed    the speed of the effect
+     * @param scale    the scale of the effect
+     * @param rotation the rotation of the effect
+     * @return this instance
+     */
+    public RainbowTextRenderer setup(float speed, float scale, float rotation) {
+        synchronized (this.settings) {
+            this.speed = speed;
+            this.scale = scale;
+            this.rotation = rotation;
+            mc.addScheduledTask(() -> {
+                this.settings.clear();
+                this.settings
+                        .put(speed)
+                        .put(scale)
+                        .put((float) sin(Math.toRadians(rotation) + PI))
+                        .put((float) cos(Math.toRadians(rotation) + PI))
+                        .flip();
+                try (Shader shader = this.shader.use()) {
+                    OpenGlHelper.glUniform1(this.settingsLocation, this.settings);
+                }
+            });
+            return this;
+        }
     }
 
     /**
@@ -97,7 +135,10 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
      */
     @Override
     public void update() {
-        this.time = System.currentTimeMillis() / BASE_SPEED * this.speed;
+        try (Shader shader = this.shader.use()) {
+            //sure, this'll wrap around, but i don't really care too much. it's only every 2 billion milliseconds :P
+            OpenGlHelper.glUniform1i(this.timeLocation, (int) (System.currentTimeMillis() & Integer.MAX_VALUE));
+        }
     }
 
     /**
@@ -107,13 +148,15 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
      * @param y the Y coordinate
      */
     public void setColor(double x, double y) {
-        double d = -(x * this.rotationX + y * this.rotationY) * this.scale;
+        int i = 0;
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 0.5f);
+        /*double d = -(x * this.rotationX + y * this.rotationY) * this.scale;
 
         GlStateManager.color(
                 (float) clamp(0.5d + sin(this.time + d), 0.0d, 1.0d),
                 (float) clamp(0.5d + sin(this.time + d + TWO_THIRDS_PI), 0.0d, 1.0d),
                 (float) clamp(0.5d + sin(this.time + d + FOUR_THIRDS_PI), 0.0d, 1.0d)
-        );
+        );*/
     }
 
     @Override
@@ -141,9 +184,9 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
         renderer.posX = x;
         renderer.posY = y;
 
-        for (CharSequence text : textSegments)  {
+        for (CharSequence text : textSegments) {
             int length = text.length();
-            for (int i = 0; i < length; i++)    {
+            for (int i = 0; i < length; i++) {
                 this.setColor(renderer.posX, renderer.posY);
                 renderer.posX += renderer.renderChar(text.charAt(i), false);
             }
@@ -158,9 +201,9 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
         renderer.posX = x;
         renderer.posY = y;
 
-        for (CharSequence text : lines)  {
+        for (CharSequence text : lines) {
             int length = text.length();
-            for (int i = 0; i < length; i++)    {
+            for (int i = 0; i < length; i++) {
                 this.setColor(renderer.posX, renderer.posY);
                 renderer.posX += renderer.renderChar(text.charAt(i), false);
             }
@@ -177,19 +220,26 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
         renderer.posX = x;
         renderer.posY = y;
 
-        for (CharSequence text : lines)  {
-            if (text != null) {
-                int length = text.length();
-                for (int i = 0; i < length; i++) {
-                    this.setColor(renderer.posX, renderer.posY);
-                    renderer.posX += renderer.renderChar(text.charAt(i), false);
+        this.setColor(renderer.posX, renderer.posY);
+        try (Shader shader = this.shader.use()) {
+            for (CharSequence text : lines) {
+                if (text != null) {
+                    int length = text.length();
+                    for (int i = 0; i < length; i++) {
+                        renderer.posX += renderer.renderChar(text.charAt(i), false);
+                    }
+                } else {
+                    renderer.posX = x;
+                    renderer.posY += 10.0f;
                 }
-            } else {
-                renderer.posX = x;
-                renderer.posY += 10.0f;
             }
         }
 
         return this;
+    }
+
+    @Override
+    public void close() {
+        this.shader.dispose();
     }
 }

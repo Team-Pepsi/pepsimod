@@ -21,6 +21,7 @@ import lombok.experimental.Accessors;
 import net.daporkchop.pepsimod.asm.PepsimodMixinLoader;
 import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.PepsiUtil;
+import net.daporkchop.pepsimod.util.render.text.RainbowTextRenderer;
 import net.daporkchop.pepsimod.util.resources.Resources;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -105,6 +106,7 @@ public final class Pepsimod implements PepsiConstants {
     public void preInit(FMLPreInitializationEvent event) {
         //MinecraftForge.EVENT_BUS.register(new KeyRegistry());
 
+        PepsiUtil.setTextRenderer(new RainbowTextRenderer(0.2f, 0.03f, 45.0f));
         PepsiUtil.registerStandardEvents();
     }
 

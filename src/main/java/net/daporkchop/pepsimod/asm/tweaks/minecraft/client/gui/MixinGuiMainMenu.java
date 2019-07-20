@@ -23,7 +23,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.spongepowered.asm.lib.Opcodes;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -45,7 +44,7 @@ import static net.daporkchop.pepsimod.util.PepsiUtil.*;
 @Mixin(GuiMainMenu.class)
 abstract class MixinGuiMainMenu extends GuiScreen {
     protected String[] versionText;
-    private int scaledBannerHeight;
+    private   int      scaledBannerHeight;
 
     @Shadow
     private String splashText;
@@ -137,7 +136,7 @@ abstract class MixinGuiMainMenu extends GuiScreen {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/renderer/GlStateManager;translate(FFF)V"
             ))
-    private void moveSplashText(float x, float y, float z)   {
+    private void moveSplashText(float x, float y, float z) {
         GlStateManager.translate(this.width / 2 + 300.0f / 2.0f, this.height / 4 + this.scaledBannerHeight * 0.5f * 0.0f, 0.0f);
     }
 
@@ -149,7 +148,7 @@ abstract class MixinGuiMainMenu extends GuiScreen {
             at = @At("TAIL")
     )
     private void addDrawPepsiStuff(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
-        TEXT_RENDERER
+        TEXT_RENDERER.updateChained()
                 .renderLinesSmart(this.versionText, 2, this.height - 10 * 2)
                 .render("Copyright Mojang AB. Do not distribute!", this.width - this.fontRenderer.getStringWidth("Copyright Mojang AB. Do not distribute!") - 2, this.height - 10);
     }
