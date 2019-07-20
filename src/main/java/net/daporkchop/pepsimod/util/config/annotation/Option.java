@@ -24,6 +24,8 @@ import java.lang.annotation.Target;
 /**
  * Fields decorated with this annotation are marked as being a configuration option.
  *
+ * Values may be defined better using the annotations provided in {@link Value}.
+ *
  * @author DaPorkchop_
  */
 @Target(ElementType.FIELD)

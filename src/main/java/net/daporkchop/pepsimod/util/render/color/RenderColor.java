@@ -14,13 +14,65 @@
  *
  */
 
-package net.daporkchop.pepsimod.module.impl;
+package net.daporkchop.pepsimod.util.render.color;
 
-import net.daporkchop.pepsimod.module.Module;
+import net.minecraft.client.renderer.GlStateManager;
 
 /**
+ * A container around a single color.
+ *
  * @author DaPorkchop_
  */
-@Module.Info(id = "noweather")
-public final class NoWeather implements Module {
+public interface RenderColor {
+    /**
+     * Binds this color to the renderer, using {@link net.minecraft.client.renderer.GlStateManager}.
+     */
+    default void bind() {
+        GlStateManager.color(this.fR(), this.fG(), this.fB(), this.fA());
+    }
+
+    /**
+     * @return this color as a 32-bit ARGB int
+     */
+    int argb();
+
+    /**
+     * @return this color's alpha channel as an int from 0-255
+     */
+    int iA();
+
+    /**
+     * @return this color's red channel as an int from 0-255
+     */
+    int iR();
+
+    /**
+     * @return this color's green channel as an int from 0-255
+     */
+    int iG();
+
+    /**
+     * @return this color's blue channel as an int from 0-255
+     */
+    int iB();
+
+    /**
+     * @return this color's alpha channel as a float from 0-1
+     */
+    float fA();
+
+    /**
+     * @return this color's red channel as a float from 0-1
+     */
+    float fR();
+
+    /**
+     * @return this color's green channel as a float from 0-1
+     */
+    float fG();
+
+    /**
+     * @return this color's blue channel as a float from 0-1
+     */
+    float fB();
 }
