@@ -18,18 +18,19 @@ package net.daporkchop.pepsimod.util;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
+import net.daporkchop.pepsimod.asm.PepsimodMixinLoader;
 import net.daporkchop.pepsimod.util.event.EventPriority;
 import net.daporkchop.pepsimod.util.event.impl.render.PreRenderEvent;
 import net.daporkchop.pepsimod.util.render.text.FixedColorTextRenderer;
 import net.daporkchop.pepsimod.util.render.text.TextRenderer;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import org.lwjgl.opengl.ARBShaderObjects;
-import org.lwjgl.opengl.GL20;
 
 import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -175,6 +176,27 @@ public final class PepsiUtil implements PepsiConstants {
             TextRenderer old = TEXT_RENDERER;
             TEXT_RENDERER = renderer;
             old.close();
+        }
+    }
+
+    /**
+     * Gets a resource as an {@link InputStream}.
+     * <p>
+     * Functions the same as {@link Class#getResourceAsStream(String)}, with the only major difference being that this is is hot-swap safe for dev
+     * environments.
+     *
+     * @param name the name of the resource
+     * @return an {@link InputStream} allowing the reading of the resource with the given name, or {@code null} if it could not be found
+     */
+    public InputStream getResourceAsStream(@NonNull String name) {
+        if (PepsimodMixinLoader.OBFUSCATED) {
+            return PepsiUtil.class.getResourceAsStream(name);
+        } else {
+            try {
+                return new FileInputStream(new File(mc.gameDir.getParentFile(), "src/main/resources/" + name));
+            } catch (FileNotFoundException e) {
+                return null;
+            }
         }
     }
 }

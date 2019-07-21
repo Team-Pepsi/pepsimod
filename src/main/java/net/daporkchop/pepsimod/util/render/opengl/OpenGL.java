@@ -22,6 +22,7 @@ import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.ContextCapabilities;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.util.glu.GLU;
 
 import java.nio.ByteBuffer;
 
@@ -36,7 +37,7 @@ public class OpenGL {
 
     public int VERSION = -1;
 
-    public int GL_FALSE        = GL11.GL_FALSE;
+    public int GL_FALSE           = GL11.GL_FALSE;
     public int GL_NO_ERROR        = GL11.GL_NO_ERROR;
     public int GL_LINK_STATUS     = GL20.GL_LINK_STATUS;
     public int GL_COMPILE_STATUS  = GL20.GL_COMPILE_STATUS;
@@ -85,164 +86,121 @@ public class OpenGL {
             VERSION = 11;
         }
 
-        if (VERSION < 21)   {
+        if (VERSION < 21) {
             throw new IllegalStateException("Requires at least OpenGL 2.1, but found " + VERSION);
         }
     }
 
     public int glCreateShader(int type) {
-        return VERSION >= 21 ? ARBShaderObjects.glCreateShaderObjectARB(type) : GL20.glCreateShader(type);
+        return ARBShaderObjects.glCreateShaderObjectARB(type);
     }
 
     public void glDeleteShader(int shader) {
-        if (VERSION >= 21) {
-            ARBShaderObjects.glDeleteObjectARB(shader);
-        } else {
-            GL20.glDeleteShader(shader);
-        }
+        ARBShaderObjects.glDeleteObjectARB(shader);
     }
 
     public void glShaderSource(int type, @NonNull ByteBuffer buffer) {
-        if (VERSION >= 21) {
-            ARBShaderObjects.glShaderSourceARB(type, buffer);
-        } else {
-            GL20.glShaderSource(type, buffer);
-        }
+        ARBShaderObjects.glShaderSourceARB(type, buffer);
     }
 
     public void glShaderSource(int type, @NonNull CharSequence text) {
-        if (VERSION >= 21) {
-            ARBShaderObjects.glShaderSourceARB(type, text);
-        } else {
-            GL20.glShaderSource(type, text);
-        }
+        ARBShaderObjects.glShaderSourceARB(type, text);
     }
 
     public void glCompileShader(int id) {
-        if (VERSION >= 21) {
-            ARBShaderObjects.glCompileShaderARB(id);
-        } else {
-            GL20.glCompileShader(id);
-        }
+        ARBShaderObjects.glCompileShaderARB(id);
     }
 
     public int glGetShaderi(int shader, int pname) {
-        return VERSION >= 21 ? ARBShaderObjects.glGetObjectParameteriARB(shader, pname) : GL20.glGetShaderi(shader, pname);
+        return ARBShaderObjects.glGetObjectParameteriARB(shader, pname);
     }
 
     public String glGetShaderInfoLog(int shader, int maxLength) {
-        return VERSION >= 21 ? ARBShaderObjects.glGetInfoLogARB(shader, maxLength) : GL20.glGetShaderInfoLog(shader, maxLength);
+        return ARBShaderObjects.glGetInfoLogARB(shader, maxLength);
     }
 
     public String glGetProgramInfoLog(int program, int maxLength) {
-        return VERSION >= 21 ? ARBShaderObjects.glGetInfoLogARB(program, maxLength) : GL20.glGetProgramInfoLog(program, maxLength);
+        return ARBShaderObjects.glGetInfoLogARB(program, maxLength);
     }
 
     public int glCreateProgram() {
-        return VERSION >= 21 ? ARBShaderObjects.glCreateProgramObjectARB() : GL20.glCreateProgram();
+        return ARBShaderObjects.glCreateProgramObjectARB();
     }
 
     public void glDeleteProgram(int program) {
-        if (VERSION >= 21) {
-            ARBShaderObjects.glDeleteObjectARB(program);
-        } else {
-            GL20.glDeleteProgram(program);
-        }
+        ARBShaderObjects.glDeleteObjectARB(program);
     }
 
     public void glUseProgram(int program) {
-        if (VERSION >= 21) {
-            ARBShaderObjects.glUseProgramObjectARB(program);
-        } else {
-            GL20.glUseProgram(program);
-        }
+        ARBShaderObjects.glUseProgramObjectARB(program);
     }
 
     public void glAttachShader(int program, int shader) {
-        if (VERSION >= 21) {
-            ARBShaderObjects.glAttachObjectARB(program, shader);
-        } else {
-            GL20.glAttachShader(program, shader);
-        }
+        ARBShaderObjects.glAttachObjectARB(program, shader);
     }
 
     public void glLinkProgram(int program) {
-        if (VERSION >= 21) {
-            ARBShaderObjects.glLinkProgramARB(program);
-        } else {
-            GL20.glLinkProgram(program);
-        }
+        ARBShaderObjects.glLinkProgramARB(program);
+    }
+
+    public void glValidateProgram(int program) {
+        ARBShaderObjects.glValidateProgramARB(program);
     }
 
     public String glGetLogInfo(int program) {
-            return ARBShaderObjects.glGetInfoLogARB(program, ARBShaderObjects.glGetObjectParameteriARB(program, ARBShaderObjects.GL_OBJECT_INFO_LOG_LENGTH_ARB));
+        return ARBShaderObjects.glGetInfoLogARB(program, ARBShaderObjects.glGetObjectParameteriARB(program, ARBShaderObjects.GL_OBJECT_INFO_LOG_LENGTH_ARB));
     }
 
     public int glGetUniformLocation(int program, @NonNull CharSequence name) {
-        return VERSION >= 21 ? ARBShaderObjects.glGetUniformLocationARB(program, name) : GL20.glGetUniformLocation(program, name);
+        return ARBShaderObjects.glGetUniformLocationARB(program, name);
     }
 
     public void glUniform1i(int location, int v0) {
-        if (VERSION >= 21) {
-            ARBShaderObjects.glUniform1iARB(location, v0);
-        } else {
-            GL20.glUniform1i(location, v0);
-        }
+        ARBShaderObjects.glUniform1iARB(location, v0);
     }
 
     public void glUniform2i(int location, int v0, int v1) {
-        if (VERSION >= 21) {
-            ARBShaderObjects.glUniform2iARB(location, v0, v1);
-        } else {
-            GL20.glUniform2i(location, v0, v1);
-        }
+        ARBShaderObjects.glUniform2iARB(location, v0, v1);
     }
 
     public void glUniform3i(int location, int v0, int v1, int v2) {
-        if (VERSION >= 21) {
-            ARBShaderObjects.glUniform3iARB(location, v0, v1, v2);
-        } else {
-            GL20.glUniform3i(location, v0, v1, v2);
-        }
+        ARBShaderObjects.glUniform3iARB(location, v0, v1, v2);
     }
 
     public void glUniform4i(int location, int v0, int v1, int v2, int v3) {
-        if (VERSION >= 21) {
-            ARBShaderObjects.glUniform4iARB(location, v0, v1, v2, v3);
-        } else {
-            GL20.glUniform4i(location, v0, v1, v2, v3);
-        }
+        ARBShaderObjects.glUniform4iARB(location, v0, v1, v2, v3);
     }
 
     public void glUniform1f(int location, float v0) {
-        if (VERSION >= 21) {
-            ARBShaderObjects.glUniform1fARB(location, v0);
-        } else {
-            GL20.glUniform1f(location, v0);
-        }
+        ARBShaderObjects.glUniform1fARB(location, v0);
     }
 
     public void glUniform2f(int location, float v0, float v1) {
-        if (VERSION >= 21) {
-            ARBShaderObjects.glUniform2fARB(location, v0, v1);
-        } else {
-            GL20.glUniform2f(location, v0, v1);
-        }
+        ARBShaderObjects.glUniform2fARB(location, v0, v1);
     }
 
     public void glUniform3f(int location, float v0, float v1, float v2) {
-        if (VERSION >= 21) {
-            ARBShaderObjects.glUniform3fARB(location, v0, v1, v2);
-        } else {
-            GL20.glUniform3f(location, v0, v1, v2);
-        }
+        ARBShaderObjects.glUniform3fARB(location, v0, v1, v2);
     }
 
     public void glUniform4f(int location, float v0, float v1, float v2, float v3) {
-        if (VERSION >= 21) {
-            ARBShaderObjects.glUniform4fARB(location, v0, v1, v2, v3);
-        } else {
-            GL20.glUniform4f(location, v0, v1, v2, v3);
+        ARBShaderObjects.glUniform4fARB(location, v0, v1, v2, v3);
+    }
+
+    public void checkGLError() {
+        checkGLError("unknown");
+    }
+
+    public void checkGLError(@NonNull String msg) {
+        int i = 0;
+        int error;
+        while ((error = GL11.glGetError()) != GL_NO_ERROR)  {
+            if (++i == 1) {
+                System.err.printf("########## GL ERROR ##########\n@ %s\n%d: %s\n", msg, error, GLU.gluErrorString(error));
+            } else {
+                System.err.printf("########## GL ERROR ##########\n@ %s (x%d)\n%d: %s\n", msg, i, error, GLU.gluErrorString(error));
+            }
         }
+        System.err.flush();
     }
 }

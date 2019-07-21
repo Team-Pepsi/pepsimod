@@ -16,6 +16,7 @@
 
 package net.daporkchop.pepsimod.asm.tweaks.minecraft.client.gui;
 
+import net.daporkchop.pepsimod.util.render.text.RainbowTextRenderer;
 import net.daporkchop.pepsimod.util.render.texture.Texture;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiMainMenu;
@@ -148,6 +149,7 @@ abstract class MixinGuiMainMenu extends GuiScreen {
             at = @At("TAIL")
     )
     private void addDrawPepsiStuff(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
+        ((RainbowTextRenderer) TEXT_RENDERER).scale(0.00001f);
         TEXT_RENDERER
                 .renderLinesSmart(this.versionText, 2, this.height - 10 * 2)
                 .render("Copyright Mojang AB. Do not distribute!", this.width - this.fontRenderer.getStringWidth("Copyright Mojang AB. Do not distribute!") - 2, this.height - 10);
