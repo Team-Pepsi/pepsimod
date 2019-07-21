@@ -16,12 +16,20 @@
 
 package net.daporkchop.pepsimod.util.render.shader;
 
+import com.google.common.base.Joiner;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
-import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.GL20;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 /**
  * The different types of shaders.
@@ -32,10 +40,78 @@ import org.lwjgl.opengl.GL20;
 @Getter
 @Accessors(fluent = true)
 public enum ShaderType {
-    FRAGMENT("frag", GL20.GL_FRAGMENT_SHADER),
-    VERTEX("vert", GL20.GL_VERTEX_SHADER);
+    VERTEX("vert", GL20.GL_VERTEX_SHADER) {
+        @Override
+        protected Shader construct(@NonNull String name, @NonNull String code, @NonNull JsonObject meta) {
+            return new Shader(name, code, meta) {
+                @Getter
+                @Accessors(fluent = true)
+                protected final Collection<String> provides = new HashSet<>();
 
+                @Override
+                protected ShaderType type() {
+                    return VERTEX;
+                }
+
+                @Override
+                protected void load(@NonNull JsonObject meta) {
+                    if (!this.provides.isEmpty()) {
+                        throw new IllegalStateException("Already initialized!");
+                    } else if (!meta.has("provides") || !meta.get("provides").isJsonArray()) {
+                        throw new IllegalArgumentException(String.format("Metadata for vertex shader \"%s\" does not define provided variables!", this.name));
+                    }
+                    for (JsonElement element : meta.getAsJsonArray("provides")) {
+                        this.provides.add(element.getAsString());
+                    }
+                }
+            };
+        }
+    },
+    FRAGMENT("frag", GL20.GL_FRAGMENT_SHADER) {
+        @Override
+        protected Shader construct(@NonNull String name, @NonNull String code, @NonNull JsonObject meta) {
+            return new Shader(name, code, meta) {
+                @Getter
+                @Accessors(fluent = true)
+                protected final Collection<String> requires = new HashSet<>();
+
+                @Override
+                protected ShaderType type() {
+                    return FRAGMENT;
+                }
+
+                @Override
+                protected void load(@NonNull JsonObject meta) {
+                    if (!this.requires.isEmpty()) {
+                        throw new IllegalStateException("Already initialized!");
+                    } else if (!meta.has("requires") || !meta.get("requires").isJsonArray()) {
+                        throw new IllegalArgumentException(String.format("Metadata for fragment shader \"%s\" does not define required variables!", this.name));
+                    }
+                    for (JsonElement element : meta.getAsJsonArray("requires")) {
+                        this.requires.add(element.getAsString());
+                    }
+                }
+
+                @Override
+                protected void assertCompatible(@NonNull Shader counterpart) throws IllegalArgumentException {
+                    super.assertCompatible(counterpart);
+                    if (!counterpart.provides().containsAll(this.requires)) {
+                        throw new IllegalArgumentException(String.format(
+                                "Missing required parameters! Required: [%s], provided: [%s]",
+                                Joiner.on(", ").join(this.requires),
+                                Joiner.on(", ").join(counterpart.provides())
+                        ));
+                    }
+                }
+            };
+        }
+    };
+
+    @Getter(AccessLevel.NONE)
+    protected final Map<String, Shader> compiledShaders = new HashMap<>();
     @NonNull
     protected final String extension;
-    protected final int openGlId;
+    protected final int    openGlId;
+
+    protected abstract Shader construct(@NonNull String name, @NonNull String code, @NonNull JsonObject meta);
 }

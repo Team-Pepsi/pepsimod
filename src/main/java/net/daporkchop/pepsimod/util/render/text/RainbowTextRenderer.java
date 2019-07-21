@@ -21,11 +21,13 @@ import lombok.NonNull;
 import lombok.experimental.Accessors;
 import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.render.opengl.OpenGL;
+import net.daporkchop.pepsimod.util.render.shader.ShaderManager;
 import net.daporkchop.pepsimod.util.render.shader.ShaderProgram;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 
-import static java.lang.Math.*;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 
 /**
  * Used for managing rainbow-color text in a simple manner.
@@ -67,19 +69,19 @@ import static java.lang.Math.*;
  */
 @Accessors(fluent = true)
 public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
-    protected static final double BASE_SPEED        = 159.15494309d;
-    protected static final long   RESTART_THRESHOLD = 16777215L;
-    protected static final long   START_TIME        = System.currentTimeMillis();
+    protected static final double PI         = 3.1415926535897932384626433832795d;
+    protected static final double TWO_PI     = 6.2831853071795864769252867665590d;
+    protected static final double BASE_SPEED = 159.15494309d;
 
-    protected final ShaderProgram shader;
+    protected ShaderProgram shader;
 
-    protected final int speedLocation;
+    //protected final int speedLocation;
     protected final int scaleLocation;
     protected final int rotationLocation;
     protected final int timeLocation;
 
     @Getter
-    protected float speed;
+    protected int   speed;
     @Getter
     protected float scale;
     protected float rotationX;
@@ -90,24 +92,28 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
     protected float rotation;
     protected boolean changed = true;
 
-    public RainbowTextRenderer(float speed, float scale, float rotation) {
-        this.shader = new ShaderProgram("vert/dummy.vert", "frag/rainbow.frag");
+    public RainbowTextRenderer(int speed, float scale, float rotation) {
+        this.shader = ShaderManager.get("rainbow");
         OpenGL.checkGLError("Constructor");
 
-        this.speedLocation = this.shader.uniformLocation("speed");
-        OpenGL.checkGLError("speed");
+        //this.speedLocation = this.shader.uniformLocation("speed");
+        //OpenGL.checkGLError("speed");
         this.scaleLocation = this.shader.uniformLocation("scale");
         OpenGL.checkGLError("scale");
         this.rotationLocation = this.shader.uniformLocation("rotation");
         OpenGL.checkGLError("rotation");
         this.timeLocation = this.shader.uniformLocation("time");
         OpenGL.checkGLError("time");
-        
+
         //TODO: a better system for uniforms
 
-        this.speed = speed;
-        this.scale = scale;
-        this.rotation = rotation;
+        this.speed(speed)
+                .scale(scale)
+                .rotation(rotation);
+    }
+
+    public void reloadShader() {
+        this.shader = ShaderManager.reload(this.shader);
     }
 
     /**
@@ -116,12 +122,10 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
      * @param speed the speed of the effect
      * @return this instance
      */
-    public RainbowTextRenderer speed(float speed) {
-        synchronized (this.shader) {
-            this.changed = true;
+    public synchronized RainbowTextRenderer speed(int speed) {
+        this.changed = true;
 
-            this.speed = speed;
-        }
+        this.speed = speed;
         return this;
     }
 
@@ -131,12 +135,10 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
      * @param scale the scale of the effect
      * @return this instance
      */
-    public RainbowTextRenderer scale(float scale) {
-        synchronized (this.shader) {
-            this.changed = true;
+    public synchronized RainbowTextRenderer scale(float scale) {
+        this.changed = true;
 
-            this.scale = scale;
-        }
+        this.scale = scale;
         return this;
     }
 
@@ -146,14 +148,13 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
      * @param rotation the rotation of the effect
      * @return this instance
      */
-    public RainbowTextRenderer rotation(float rotation) {
-        synchronized (this.shader) {
-            this.changed = true;
+    public synchronized RainbowTextRenderer rotation(float rotation) {
+        this.changed = true;
 
-            this.rotationX = (float) sin(Math.toRadians(rotation) + PI);
-            this.rotationY = (float) cos(Math.toRadians(rotation) + PI);
-            this.rotation = rotation;
-        }
+        double offsetRadians = Math.toRadians(rotation) + PI;
+        this.rotationX = (float) -sin(offsetRadians);
+        this.rotationY = (float) cos(offsetRadians);
+        this.rotation = rotation;
         return this;
     }
 
@@ -163,28 +164,15 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
      * This should be called once per frame to update the rainbow pattern's step.
      */
     @Override
-    public void update() {
-        synchronized (this.shader) {
-            try (ShaderProgram shader = this.prepare()) {
-                if (this.changed) {
-                    this.changed = false;
-
-                    /*OpenGL.glUniform1f(this.speedLocation, this.speed);
-                    OpenGL.glUniform1f(this.scaleLocation, this.scale);
-                    OpenGL.glUniform2f(this.rotationLocation, this.rotationX, this.rotationY);*/
-                }
-
-                //OpenGL.glUniform1f(this.timeLocation, ThreadLocalRandom.current().nextFloat());
-                this.time = (float) ((System.currentTimeMillis() - START_TIME) / BASE_SPEED * this.speed);
-            }
-        }
+    public synchronized void update() {
+        this.time = (float) ((System.currentTimeMillis() % this.speed) * TWO_PI / (double) this.speed);
     }
 
     /**
      * Prepares the shader for rendering by initializing all uniforms.
      * <p>
      * The shader must not be bound before this method is invoked.
-     * 
+     *
      * @return the shader, to be used in a try-with-resources block
      */
     protected ShaderProgram prepare() {
@@ -194,7 +182,7 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
         OpenGL.glUniform1f(this.scaleLocation, this.scale);
         OpenGL.glUniform2f(this.rotationLocation, this.rotationX, this.rotationY);
         OpenGL.glUniform1f(this.timeLocation, this.time);*/
-        OpenGL.glUniform1f(shader.uniformLocation("speed"), this.speed);
+        //OpenGL.glUniform1f(shader.uniformLocation("speed"), this.speed);
         OpenGL.glUniform1f(shader.uniformLocation("scale"), this.scale);
         OpenGL.glUniform2f(shader.uniformLocation("rotation"), this.rotationX, this.rotationY);
         OpenGL.glUniform1f(shader.uniformLocation("time"), this.time);
@@ -288,6 +276,6 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
 
     @Override
     public void close() {
-        this.shader.dispose();
+        this.shader.release();
     }
 }

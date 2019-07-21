@@ -16,8 +16,10 @@
 
 package net.daporkchop.pepsimod.asm.tweaks.minecraft.client.gui;
 
+import net.daporkchop.pepsimod.asm.PepsimodMixinLoader;
 import net.daporkchop.pepsimod.util.render.text.RainbowTextRenderer;
 import net.daporkchop.pepsimod.util.render.texture.Texture;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
@@ -149,7 +151,7 @@ abstract class MixinGuiMainMenu extends GuiScreen {
             at = @At("TAIL")
     )
     private void addDrawPepsiStuff(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
-        ((RainbowTextRenderer) TEXT_RENDERER).scale(0.00001f);
+        ((RainbowTextRenderer) TEXT_RENDERER).scale(0.003f);
         TEXT_RENDERER
                 .renderLinesSmart(this.versionText, 2, this.height - 10 * 2)
                 .render("Copyright Mojang AB. Do not distribute!", this.width - this.fontRenderer.getStringWidth("Copyright Mojang AB. Do not distribute!") - 2, this.height - 10);
@@ -173,5 +175,21 @@ abstract class MixinGuiMainMenu extends GuiScreen {
             ))
     private List<String> skipReverseForgeBrandingList(List<String> list) {
         return list;
+    }
+
+    @Redirect(
+            method = "Lnet/minecraft/client/gui/GuiMainMenu;actionPerformed(Lnet/minecraft/client/gui/GuiButton;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/Minecraft;displayGuiScreen(Lnet/minecraft/client/gui/GuiScreen;)V",
+                    ordinal = 1
+            ),
+            require = 0)
+    private void debug_reloadRainbowTextOnLanguageButton(Minecraft mc, GuiScreen screen) {
+        if (PepsimodMixinLoader.OBFUSCATED) {
+            mc.displayGuiScreen(screen);
+        } else {
+            ((RainbowTextRenderer) TEXT_RENDERER).reloadShader();
+        }
     }
 }

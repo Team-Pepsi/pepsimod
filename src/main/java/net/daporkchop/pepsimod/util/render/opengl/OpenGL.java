@@ -40,8 +40,9 @@ public class OpenGL {
 
     public int GL_FALSE           = GL11.GL_FALSE;
     public int GL_NO_ERROR        = GL11.GL_NO_ERROR;
-    public int GL_LINK_STATUS     = GL20.GL_LINK_STATUS;
     public int GL_COMPILE_STATUS  = GL20.GL_COMPILE_STATUS;
+    public int GL_LINK_STATUS     = GL20.GL_LINK_STATUS;
+    public int GL_VALIDATE_STATUS = GL20.GL_VALIDATE_STATUS;
     public int GL_VERTEX_SHADER   = GL20.GL_VERTEX_SHADER;
     public int GL_FRAGMENT_SHADER = GL20.GL_FRAGMENT_SHADER;
 
@@ -92,10 +93,10 @@ public class OpenGL {
         }
     }
 
-    public boolean checkOpenGL()   {
+    public boolean checkOpenGL() {
         try {
             GLContext.getCapabilities();
-        } catch (RuntimeException e)    {
+        } catch (RuntimeException e) {
             if (e.getMessage() == "No OpenGL context found in the current thread.") {
                 return false;
             } else {
@@ -105,7 +106,7 @@ public class OpenGL {
         return true;
     }
 
-    public void assertOpenGL()   {
+    public void assertOpenGL() {
         GLContext.getCapabilities();
     }
 
@@ -212,7 +213,7 @@ public class OpenGL {
     public void checkGLError(@NonNull String msg) {
         int i = 0;
         int error;
-        while ((error = GL11.glGetError()) != GL_NO_ERROR)  {
+        while ((error = GL11.glGetError()) != GL_NO_ERROR) {
             if (++i == 1) {
                 System.err.printf("########## GL ERROR ##########\n@ %s\n%d: %s\n", msg, error, GLU.gluErrorString(error));
             } else {

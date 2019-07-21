@@ -100,7 +100,7 @@ public final class Pepsimod implements PepsiConstants {
                 "https://raw.githubusercontent.com/Team-Pepsi/pepsimod/master/resources/resources.json",
                 new File(mc.gameDir, "pepsimod/resources/")
         );
-        PepsiUtil.setTextRenderer(new RainbowTextRenderer(0.2f, 0.03f, 45.0f));
+        PepsiUtil.setTextRenderer(new RainbowTextRenderer(3000, 0.03f, 45.0f));
     }
 
     @Mod.EventHandler

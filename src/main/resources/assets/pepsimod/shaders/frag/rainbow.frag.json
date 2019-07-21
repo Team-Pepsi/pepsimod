@@ -17,7 +17,7 @@
       "type": "float"
     }
   ],
-  "requires": {
-    "gl_TexCoord": true
-  }
+  "requires": [
+    "gl_TexCoord"
+  ]
 }

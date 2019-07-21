@@ -16,120 +16,94 @@
 
 package net.daporkchop.pepsimod.util.render.shader;
 
+import lombok.Getter;
 import lombok.NonNull;
-import net.daporkchop.lib.unsafe.PCleaner;
+import lombok.experimental.Accessors;
 import net.daporkchop.pepsimod.util.PepsiConstants;
-import net.daporkchop.pepsimod.util.PepsiUtil;
 import net.daporkchop.pepsimod.util.render.opengl.OpenGL;
-import org.apache.commons.io.IOUtils;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Basic wrapper around a shader.
  *
  * @author DaPorkchop_
  */
+@Accessors(fluent = true)
 public final class ShaderProgram implements PepsiConstants, AutoCloseable {
-    protected static String getResource(@NonNull String name) {
-        try (InputStream in = PepsiUtil.getResourceAsStream(String.format("/assets/pepsimod/shaders/%s", name))) {
-            if (in == null) {
-                throw new RuntimeException(String.format("Unable to find shader \"%s\"!", name));
-            }
-            /*byte[] b = IOUtils.toByteArray(in);
-            ByteBuffer buffer = BufferUtils.createByteBuffer(b.length);
-            buffer.put(b).flip();
-            return buffer;*/
-            return IOUtils.toString(in, StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(String.format("Unable to read shader \"%s\"!", name), e);
-        }
-    }
-
-    protected static int compileShader(@NonNull String name, int type) {
-        if (type != OpenGL.GL_FRAGMENT_SHADER && type != OpenGL.GL_VERTEX_SHADER) {
-            throw new IllegalArgumentException(String.format("Illegal shader type: %d", type));
-        }
-        int id = OpenGL.glCreateShader(type);
-        try {
-            OpenGL.glShaderSource(id, getResource(name));
-            OpenGL.glCompileShader(id);
-
-            if (OpenGL.glGetShaderi(id, OpenGL.GL_COMPILE_STATUS) == OpenGL.GL_FALSE) {
-                String error = String.format("Couldn't compile shader \"%s\": %s", name, OpenGL.glGetLogInfo(id));
-                System.err.println(error);
-                throw new IllegalStateException(error);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            OpenGL.glDeleteShader(id);
-            throw new RuntimeException(String.format("Unable to compile shader \"%s\"!", name), e);
-        }
-        return id;
-    }
-
-    protected final PCleaner cleaner;
-    protected final AtomicBoolean active = new AtomicBoolean(false);
-    protected final int vertexId;
-    protected final int fragmentId;
-    protected final int programId;
+    @Getter
+    protected final String name;
+    protected final Shader vertex;
+    protected final Shader fragment;
+    protected       int    id;
+    protected       int    usages;
 
     /**
-     * Loads a new shader with the given file name and type.
+     * Creates a new shader program by attaching the given vertex shader with the given fragment shader.
      *
-     * @param vertexName   the resource name of the vertex shader
-     * @param fragmentName the resource name of the fragment shader
+     * @param name     the program's name
+     * @param vertex   the vertex shader
+     * @param fragment fragment shader
      */
-    public ShaderProgram(@NonNull String vertexName, @NonNull String fragmentName) {
-        int vertexId = 0;
-        int fragmentId = 0;
-        int programId = 0;
+    protected ShaderProgram(@NonNull String name, @NonNull Shader vertex, @NonNull Shader fragment) {
+        OpenGL.assertOpenGL();
+        this.name = name;
+        this.id = -1;
+
         try {
-            vertexId = this.vertexId = compileShader(vertexName, OpenGL.GL_VERTEX_SHADER);
-            fragmentId = this.fragmentId = compileShader(fragmentName, OpenGL.GL_FRAGMENT_SHADER);
+            //allocate program
+            this.id = OpenGL.glCreateProgram();
 
-            programId = this.programId = OpenGL.glCreateProgram();
-            OpenGL.glAttachShader(programId, vertexId);
-            OpenGL.glAttachShader(programId, fragmentId);
-            OpenGL.glLinkProgram(programId);
-            if (OpenGL.glGetShaderi(programId, OpenGL.GL_LINK_STATUS) == OpenGL.GL_FALSE) {
-                String error = String.format("Couldn't link shader \"%s\"+\"%s\": %s", vertexName, fragmentName, OpenGL.glGetLogInfo(programId));
-                System.err.println(error);
-                throw new IllegalStateException(error);
-            }
-            OpenGL.glValidateProgram(programId);
+            //attach shaders
+            vertex.attach(this);
+            fragment.attach(this);
 
-            if (OpenGL.glGetShaderi(programId, OpenGL.GL_LINK_STATUS) == OpenGL.GL_FALSE) {
-                String error = String.format("Couldn't link shader \"%s\"+\"%s\": %s", vertexName, fragmentName, OpenGL.glGetLogInfo(programId));
-                System.err.println(error);
-                throw new IllegalStateException(error);
-            }
-        } catch (RuntimeException e)   {
-            e.printStackTrace();
-            if (vertexId != 0)  {
-                OpenGL.glDeleteShader(vertexId);
-            }
-            if (fragmentId != 0)  {
-                OpenGL.glDeleteShader(fragmentId);
-            }
-            if (programId != 0)  {
-                OpenGL.glDeleteProgram(programId);
-            }
-            throw e;
+            //link and validate
+            OpenGL.glLinkProgram(this.id);
+            ShaderManager.validate(this.name, this.id, OpenGL.GL_LINK_STATUS);
+            OpenGL.glValidateProgram(this.id);
+            ShaderManager.validate(this.name, this.id, OpenGL.GL_VALIDATE_STATUS);
+        } catch (Exception e) {
+            vertex.detachSoft(this);
+            fragment.detachSoft(this);
+            this.release();
         }
 
-        int the_vertexId = vertexId;
-        int the_fragmentId = fragmentId;
-        int the_programId = programId;
-        this.cleaner = PCleaner.cleaner(this, () -> mc.addScheduledTask(() -> {
-            OpenGL.glDeleteShader(the_vertexId);
-            OpenGL.glDeleteShader(the_fragmentId);
-            OpenGL.glDeleteProgram(the_programId);
-        }));
+        this.vertex = vertex;
+        this.fragment = fragment;
+    }
+
+    protected ShaderProgram incrementUsages() {
+        OpenGL.assertOpenGL();
+        if (this.id == -1) {
+            throw new IllegalStateException("Already deleted!");
+        } else {
+            this.usages++;
+            return this;
+        }
+    }
+
+    /**
+     * Decrements the shader's usage count by 1, deleting it if the usage count reaches 0.
+     * <p>
+     * This must only be called when you are no longer using the shader.
+     */
+    public void release() {
+        OpenGL.assertOpenGL();
+        if (this.id == -1) {
+            throw new IllegalStateException("Already deleted!");
+        } else {
+            if (this.vertex != null) {
+                this.vertex.detach(this);
+            }
+            if (this.fragment != null) {
+                this.fragment.detach(this);
+            }
+            OpenGL.glDeleteProgram(this.id);
+            this.id = -1;
+            ShaderManager.LINKED_PROGRAMS.remove(this.name, this);
+            /*if (!ShaderManager.LINKED_PROGRAMS.remove(this.name, this)) {
+                throw new IllegalStateException("Couldn't remove self from linked programs registry!");
+            }*/
+        }
     }
 
     /**
@@ -139,7 +113,11 @@ public final class ShaderProgram implements PepsiConstants, AutoCloseable {
      * @return the uniform's location
      */
     public int uniformLocation(@NonNull String name) {
-        return OpenGL.glGetUniformLocation(this.programId, name);
+        if (this.id == -1) {
+            throw new IllegalStateException("Already deleted!");
+        } else {
+            return OpenGL.glGetUniformLocation(this.id, name);
+        }
     }
 
     /**
@@ -147,42 +125,17 @@ public final class ShaderProgram implements PepsiConstants, AutoCloseable {
      * <p>
      * This method returns itself, for use in a try-with-resources block.
      */
-    public synchronized ShaderProgram use() {
-        if (this.active.getAndSet(true)) {
-            throw new IllegalStateException("Shader already active!");
+    public ShaderProgram use() {
+        if (this.id == -1) {
+            throw new IllegalStateException("Already deleted!");
         } else {
-            try {
-                OpenGL.glUseProgram(this.programId);
-                return this;
-            } catch (RuntimeException e) {
-                //not in a gl context
-                this.active.set(false);
-                e.printStackTrace();
-                throw e;
-            }
+            OpenGL.glUseProgram(this.id);
+            return this;
         }
     }
 
     @Override
     public synchronized void close() {
-        if (!this.active.getAndSet(false)) {
-            throw new IllegalStateException("Shader not currently active!");
-        } else {
-            try {
-                OpenGL.glUseProgram(0);
-            } catch (RuntimeException e) {
-                //not in a gl context
-                this.active.set(true);
-                e.printStackTrace();
-                throw e;
-            }
-        }
-    }
-
-    /**
-     * Releases this shader.
-     */
-    public void dispose() {
-        this.cleaner.clean();
+        OpenGL.glUseProgram(0);
     }
 }
