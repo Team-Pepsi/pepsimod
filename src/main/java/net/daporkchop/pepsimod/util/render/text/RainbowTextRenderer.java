@@ -21,7 +21,7 @@ import lombok.NonNull;
 import lombok.experimental.Accessors;
 import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.render.opengl.OpenGL;
-import net.daporkchop.pepsimod.util.render.shader.LinkedShader;
+import net.daporkchop.pepsimod.util.render.shader.ShaderProgram;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 
@@ -71,7 +71,7 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
     protected static final long   RESTART_THRESHOLD = 16777215L;
     protected static final long   START_TIME        = System.currentTimeMillis();
 
-    protected final LinkedShader shader;
+    protected final ShaderProgram shader;
 
     protected final int speedLocation;
     protected final int scaleLocation;
@@ -91,7 +91,7 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
     protected boolean changed = true;
 
     public RainbowTextRenderer(float speed, float scale, float rotation) {
-        this.shader = new LinkedShader("vert/dummy.vert", "fract/rainbow.fract");
+        this.shader = new ShaderProgram("vert/dummy.vert", "frag/rainbow.frag");
         OpenGL.checkGLError("Constructor");
 
         this.speedLocation = this.shader.uniformLocation("speed");
@@ -165,7 +165,7 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
     @Override
     public void update() {
         synchronized (this.shader) {
-            try (LinkedShader shader = this.prepare()) {
+            try (ShaderProgram shader = this.prepare()) {
                 if (this.changed) {
                     this.changed = false;
 
@@ -187,8 +187,8 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
      * 
      * @return the shader, to be used in a try-with-resources block
      */
-    protected LinkedShader prepare() {
-        LinkedShader shader = this.shader.use();
+    protected ShaderProgram prepare() {
+        ShaderProgram shader = this.shader.use();
 
         /*OpenGL.glUniform1f(this.speedLocation, this.speed);
         OpenGL.glUniform1f(this.scaleLocation, this.scale);
@@ -212,7 +212,7 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
         renderer.posY = y;
 
         GlStateManager.color(1.0f, 1.0f, 1.0f, 0.0f);
-        try (LinkedShader shader = this.prepare()) {
+        try (ShaderProgram shader = this.prepare()) {
             length += startIndex;
             for (; startIndex < length; startIndex++) {
                 renderer.posX += renderer.renderChar(text.charAt(startIndex), false);
@@ -229,7 +229,7 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
         renderer.posY = y;
 
         GlStateManager.color(1.0f, 1.0f, 1.0f, 0.0f);
-        try (LinkedShader shader = this.prepare()) {
+        try (ShaderProgram shader = this.prepare()) {
             for (CharSequence text : textSegments) {
                 int length = text.length();
                 for (int i = 0; i < length; i++) {
@@ -248,7 +248,7 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
         renderer.posY = y;
 
         GlStateManager.color(1.0f, 1.0f, 1.0f, 0.0f);
-        try (LinkedShader shader = this.prepare()) {
+        try (ShaderProgram shader = this.prepare()) {
             for (CharSequence text : lines) {
                 int length = text.length();
                 for (int i = 0; i < length; i++) {
@@ -269,7 +269,7 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
         renderer.posY = y;
 
         GlStateManager.color(1.0f, 1.0f, 1.0f, 0.0f);
-        try (LinkedShader shader = this.prepare()) {
+        try (ShaderProgram shader = this.prepare()) {
             for (CharSequence text : lines) {
                 if (text != null) {
                     int length = text.length();

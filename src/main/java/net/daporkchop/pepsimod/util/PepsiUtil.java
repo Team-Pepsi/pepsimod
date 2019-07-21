@@ -193,7 +193,7 @@ public final class PepsiUtil implements PepsiConstants {
             return PepsiUtil.class.getResourceAsStream(name);
         } else {
             try {
-                return new FileInputStream(new File(mc.gameDir.getParentFile(), "src/main/resources/" + name));
+                return new FileInputStream(new File(mc.gameDir, "../src/main/resources" + name));
             } catch (FileNotFoundException e) {
                 return null;
             }

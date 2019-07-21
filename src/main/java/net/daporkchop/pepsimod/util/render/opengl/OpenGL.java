@@ -22,6 +22,7 @@ import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.ContextCapabilities;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.GLU;
 
 import java.nio.ByteBuffer;
@@ -89,6 +90,23 @@ public class OpenGL {
         if (VERSION < 21) {
             throw new IllegalStateException("Requires at least OpenGL 2.1, but found " + VERSION);
         }
+    }
+
+    public boolean checkOpenGL()   {
+        try {
+            GLContext.getCapabilities();
+        } catch (RuntimeException e)    {
+            if (e.getMessage() == "No OpenGL context found in the current thread.") {
+                return false;
+            } else {
+                throw e;
+            }
+        }
+        return true;
+    }
+
+    public void assertOpenGL()   {
+        GLContext.getCapabilities();
     }
 
     public int glCreateShader(int type) {

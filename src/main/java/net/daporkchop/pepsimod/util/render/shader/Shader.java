@@ -16,8 +16,15 @@
 
 package net.daporkchop.pepsimod.util.render.shader;
 
+import com.google.gson.JsonObject;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.experimental.Accessors;
+import net.daporkchop.pepsimod.util.render.opengl.OpenGL;
+
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Set;
 
 /**
  * A container for a shader.
@@ -26,5 +33,52 @@ import lombok.experimental.Accessors;
  */
 @Getter
 @Accessors(fluent = true)
-public final class Shader {
+public abstract class Shader {
+    protected final Set<ShaderProgram> usages = Collections.newSetFromMap(new IdentityHashMap<>());
+    protected       int                id     ;
+
+    protected Shader(@NonNull String shaderText, @NonNull JsonObject descriptor)  {
+
+    }
+
+    /**
+     * Attaches this shader to the given shader program.
+     *
+     * @param program the program to which to attach this shader
+     */
+    protected void attach(@NonNull ShaderProgram program) {
+        OpenGL.assertOpenGL();
+        if (this.id == -1) {
+            throw new IllegalStateException("Already deleted!");
+        } else if (!this.usages.add(program)) {
+            throw new IllegalStateException("Already attached to the given shader!");
+        } else {
+            OpenGL.glAttachShader(program.programId, this.id);
+        }
+    }
+
+    /**
+     * Detaches this shader from the given shader program.
+     *
+     * @param program the program from which to detach this shader
+     * @return whether or not this shader has been disposed
+     */
+    protected boolean detach(@NonNull ShaderProgram program) {
+        OpenGL.assertOpenGL();
+        if (this.id == -1) {
+            throw new IllegalStateException("Already deleted!");
+        } else if (!this.usages.remove(program)) {
+            throw new IllegalStateException("Not attached to the given shader!");
+        } else if (this.usages.isEmpty()) {
+            OpenGL.glDeleteShader(this.id);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @return this shader's type
+     */
+    public abstract ShaderType type();
 }

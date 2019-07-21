@@ -33,11 +33,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author DaPorkchop_
  */
-public final class LinkedShader implements PepsiConstants, AutoCloseable {
+public final class ShaderProgram implements PepsiConstants, AutoCloseable {
     protected static String getResource(@NonNull String name) {
         try (InputStream in = PepsiUtil.getResourceAsStream(String.format("/assets/pepsimod/shaders/%s", name))) {
             if (in == null) {
-                throw new IOException();
+                throw new RuntimeException(String.format("Unable to find shader \"%s\"!", name));
             }
             /*byte[] b = IOUtils.toByteArray(in);
             ByteBuffer buffer = BufferUtils.createByteBuffer(b.length);
@@ -46,7 +46,7 @@ public final class LinkedShader implements PepsiConstants, AutoCloseable {
             return IOUtils.toString(in, StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException(String.format("Unable to find shader named \"%s\"!", name));
+            throw new RuntimeException(String.format("Unable to read shader \"%s\"!", name), e);
         }
     }
 
@@ -67,7 +67,7 @@ public final class LinkedShader implements PepsiConstants, AutoCloseable {
         } catch (Exception e) {
             e.printStackTrace();
             OpenGL.glDeleteShader(id);
-            throw new RuntimeException(e);
+            throw new RuntimeException(String.format("Unable to compile shader \"%s\"!", name), e);
         }
         return id;
     }
@@ -84,7 +84,7 @@ public final class LinkedShader implements PepsiConstants, AutoCloseable {
      * @param vertexName   the resource name of the vertex shader
      * @param fragmentName the resource name of the fragment shader
      */
-    public LinkedShader(@NonNull String vertexName, @NonNull String fragmentName) {
+    public ShaderProgram(@NonNull String vertexName, @NonNull String fragmentName) {
         int vertexId = 0;
         int fragmentId = 0;
         int programId = 0;
@@ -147,7 +147,7 @@ public final class LinkedShader implements PepsiConstants, AutoCloseable {
      * <p>
      * This method returns itself, for use in a try-with-resources block.
      */
-    public synchronized LinkedShader use() {
+    public synchronized ShaderProgram use() {
         if (this.active.getAndSet(true)) {
             throw new IllegalStateException("Shader already active!");
         } else {
