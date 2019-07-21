@@ -22,7 +22,10 @@ import net.daporkchop.pepsimod.util.event.EventPriority;
 import net.daporkchop.pepsimod.util.event.impl.render.PreRenderEvent;
 import net.daporkchop.pepsimod.util.render.text.FixedColorTextRenderer;
 import net.daporkchop.pepsimod.util.render.text.TextRenderer;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import org.lwjgl.opengl.ARBShaderObjects;
+import org.lwjgl.opengl.GL20;
 
 import javax.imageio.ImageIO;
 import java.awt.Color;

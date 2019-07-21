@@ -7,6 +7,7 @@
     "minecraft.client.gui.MixinGuiBossOverlay",
     "minecraft.client.gui.MixinGuiMainMenu",
     "minecraft.client.gui.MixinScaledResolution",
+    "minecraft.client.renderer.MixinOpenGlHelper",
     "minecraft.client.MixinMinecraft"
   ]
 }

@@ -1,30 +1,21 @@
-#version 110
+#version 120
 
 const float OFFSET = 0.5;
-const float PI = 3.14159265358979323846;
-const float SPEED = 159.15494309;
-const vec3 BASE = PI * vec3(0., 0.66666666666666, 1.33333333333333);
+const vec3  BASE = 3.14159265358979323846 * vec3(0., 0.66666666666666, 1.33333333333333);
 
-//settings index 0: speed
-//settings index 1: scale
-//settings index 2: rotationX
-//settings index 3: rotationY
-//settings index 4: time
-uniform float settings[5];
-//uniform int time;
+uniform float speed = 0.2;
+uniform float scale = 0.03;
+uniform vec2  rotation = vec2(0.068485271, 0.997652128);
+uniform float time;
 
 uniform sampler2D texSampler;
 
 void main() {
     if (gl_Color.a == 0.0)   {
-        gl_FragColor = vec4(1., 0., 0., 1.);
-    } else if (gl_Color.a < 0.3)   {
-        gl_FragColor = texture2D(0, gl_TexCoord[0].st);
-    } else if (gl_Color.a < 0.6)   {
-        float pos = (gl_FragCoord.x * settings[2] - gl_FragCoord.y * settings[3]) * settings[1];
-        float scaledTime = settings[4];//float(time) * (0.001 / SPEED) * settings[0];
-        gl_FragColor = vec4(OFFSET + sin(BASE + scaledTime + pos), 1.);
+        //gl_FragColor = texture2D(texSampler, gl_TexCoord[0].xy);
+        float pos = (gl_FragCoord.x * rotation.x - gl_FragCoord.y * rotation.y) * scale;
+        gl_FragColor = vec4(OFFSET + sin(BASE + float(time) / 159.15494309 * speed + pos), 1.) * texture2D(texSampler, gl_TexCoord[0].xy);
     } else {
-        gl_FragColor = gl_Color;
+        gl_FragColor = gl_Color * texture2D(texSampler, gl_TexCoord[0].xy);
     }
 }

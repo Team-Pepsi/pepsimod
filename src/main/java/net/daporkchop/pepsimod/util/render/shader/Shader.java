@@ -19,6 +19,7 @@ package net.daporkchop.pepsimod.util.render.shader;
 import lombok.NonNull;
 import net.daporkchop.lib.unsafe.PCleaner;
 import net.daporkchop.pepsimod.util.PepsiConstants;
+import net.daporkchop.pepsimod.util.render.opengl.OpenGL;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import org.apache.commons.io.IOUtils;
@@ -28,6 +29,7 @@ import org.lwjgl.opengl.GL11;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -36,33 +38,39 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author DaPorkchop_
  */
 public final class Shader implements PepsiConstants, AutoCloseable {
-    protected static byte[] getResource(@NonNull String name) {
+    protected static String getResource(@NonNull String name) {
         try (InputStream in = Shader.class.getResourceAsStream(String.format("/assets/pepsimod/shaders/%s", name))) {
             if (in == null) {
                 throw new IOException();
             }
-            return IOUtils.toByteArray(in);
+            /*byte[] b = IOUtils.toByteArray(in);
+            ByteBuffer buffer = BufferUtils.createByteBuffer(b.length);
+            buffer.put(b).flip();
+            return buffer;*/
+            return IOUtils.toString(in, StandardCharsets.UTF_8);
         } catch (IOException e) {
+            e.printStackTrace();
             throw new RuntimeException(String.format("Unable to find shader named \"%s\"!", name));
         }
     }
 
-    protected static int compileShader(@NonNull String name, @NonNull byte[] bytes, int type) {
-        if (type != OpenGlHelper.GL_FRAGMENT_SHADER && type != OpenGlHelper.GL_VERTEX_SHADER) {
+    protected static int compileShader(@NonNull String name, int type) {
+        if (type != OpenGL.GL_FRAGMENT_SHADER && type != OpenGL.GL_VERTEX_SHADER) {
             throw new IllegalArgumentException(String.format("Illegal shader type: %d", type));
         }
-        int id = OpenGlHelper.glCreateShader(type);
+        int id = OpenGL.glCreateShader(type);
         try {
-            ByteBuffer buffer = BufferUtils.createByteBuffer(bytes.length);
-            buffer.put(bytes).flip();
-            OpenGlHelper.glShaderSource(id, buffer);
-            OpenGlHelper.glCompileShader(id);
+            OpenGL.glShaderSource(id, getResource(name));
+            OpenGL.glCompileShader(id);
 
-            if (OpenGlHelper.glGetShaderi(id, OpenGlHelper.GL_COMPILE_STATUS) == GL11.GL_NO_ERROR) {
-                throw new IllegalStateException(String.format("Couldn't compile shader \"%s\": %s", name, OpenGlHelper.glGetShaderInfoLog(id, 32768).trim()));
+            if (OpenGL.glGetShaderi(id, OpenGL.GL_COMPILE_STATUS) == OpenGL.GL_FALSE) {
+                String error = String.format("Couldn't compile shader \"%s\": %s", name, OpenGL.glGetShaderInfoLog(id, 32768).trim());
+                System.err.println(error);
+                throw new IllegalStateException(error);
             }
         } catch (Exception e) {
-            OpenGlHelper.glDeleteShader(id);
+            e.printStackTrace();
+            OpenGL.glDeleteShader(id);
             throw new RuntimeException(e);
         }
         return id;
@@ -85,26 +93,29 @@ public final class Shader implements PepsiConstants, AutoCloseable {
         int fragmentId = 0;
         int programId = 0;
         try {
-            vertexId = this.vertexId = compileShader(vertexName, getResource(vertexName), OpenGlHelper.GL_VERTEX_SHADER);
-            fragmentId = this.fragmentId = compileShader(fragmentName, getResource(fragmentName), OpenGlHelper.GL_FRAGMENT_SHADER);
+            vertexId = this.vertexId = compileShader(vertexName, OpenGL.GL_VERTEX_SHADER);
+            fragmentId = this.fragmentId = compileShader(fragmentName, OpenGL.GL_FRAGMENT_SHADER);
 
-            programId = this.programId = OpenGlHelper.glCreateProgram();
-            OpenGlHelper.glAttachShader(programId, vertexId);
-            OpenGlHelper.glAttachShader(programId, fragmentId);
-            OpenGlHelper.glLinkProgram(programId);
+            programId = this.programId = OpenGL.glCreateProgram();
+            OpenGL.glAttachShader(programId, vertexId);
+            OpenGL.glAttachShader(programId, fragmentId);
+            OpenGL.glLinkProgram(programId);
 
-            if (OpenGlHelper.glGetShaderi(programId, OpenGlHelper.GL_LINK_STATUS) == GL11.GL_NO_ERROR) {
-                throw new IllegalStateException(String.format("Couldn't link shader \"%s\"+\"%s\": %s", vertexName, fragmentName, OpenGlHelper.glGetShaderInfoLog(programId, 32768).trim()));
+            if (OpenGL.glGetShaderi(programId, OpenGL.GL_LINK_STATUS) == OpenGL.GL_FALSE) {
+                String error = String.format("Couldn't link shader \"%s\"+\"%s\": %s", vertexName, fragmentName, OpenGL.glGetShaderInfoLog(programId, 32768).trim());
+                System.err.println(error);
+                throw new IllegalStateException(error);
             }
         } catch (RuntimeException e)   {
+            e.printStackTrace();
             if (vertexId != 0)  {
-                OpenGlHelper.glDeleteShader(vertexId);
+                OpenGL.glDeleteShader(vertexId);
             }
             if (fragmentId != 0)  {
-                OpenGlHelper.glDeleteShader(fragmentId);
+                OpenGL.glDeleteShader(fragmentId);
             }
             if (programId != 0)  {
-                OpenGlHelper.glDeleteProgram(programId);
+                OpenGL.glDeleteProgram(programId);
             }
             throw e;
         }
@@ -113,9 +124,9 @@ public final class Shader implements PepsiConstants, AutoCloseable {
         int the_fragmentId = fragmentId;
         int the_programId = programId;
         this.cleaner = PCleaner.cleaner(this, () -> mc.addScheduledTask(() -> {
-            OpenGlHelper.glDeleteShader(the_vertexId);
-            OpenGlHelper.glDeleteShader(the_fragmentId);
-            OpenGlHelper.glDeleteProgram(the_programId);
+            OpenGL.glDeleteShader(the_vertexId);
+            OpenGL.glDeleteShader(the_fragmentId);
+            OpenGL.glDeleteProgram(the_programId);
         }));
     }
 
@@ -126,7 +137,7 @@ public final class Shader implements PepsiConstants, AutoCloseable {
      * @return the uniform's location
      */
     public int getVertexUniformLocation(@NonNull String name) {
-        return OpenGlHelper.glGetUniformLocation(this.vertexId, name);
+        return OpenGL.glGetUniformLocation(this.vertexId, name);
     }
 
     /**
@@ -136,7 +147,7 @@ public final class Shader implements PepsiConstants, AutoCloseable {
      * @return the uniform's location
      */
     public int getFragmentUniformLocation(@NonNull String name) {
-        return OpenGlHelper.glGetUniformLocation(this.fragmentId, name);
+        return OpenGL.glGetUniformLocation(this.fragmentId, name);
     }
 
     /**
@@ -149,11 +160,12 @@ public final class Shader implements PepsiConstants, AutoCloseable {
             throw new IllegalStateException("Shader already active!");
         } else {
             try {
-                OpenGlHelper.glUseProgram(this.programId);
+                OpenGL.glUseProgram(this.programId);
                 return this;
             } catch (RuntimeException e) {
                 //not in a gl context
                 this.active.set(false);
+                e.printStackTrace();
                 throw e;
             }
         }
@@ -165,10 +177,11 @@ public final class Shader implements PepsiConstants, AutoCloseable {
             throw new IllegalStateException("Shader not currently active!");
         } else {
             try {
-                OpenGlHelper.glUseProgram(0);
+                OpenGL.glUseProgram(0);
             } catch (RuntimeException e) {
                 //not in a gl context
                 this.active.set(true);
+                e.printStackTrace();
                 throw e;
             }
         }

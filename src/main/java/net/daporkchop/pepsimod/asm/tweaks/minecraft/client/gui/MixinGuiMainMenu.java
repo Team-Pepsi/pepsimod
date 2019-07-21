@@ -148,7 +148,7 @@ abstract class MixinGuiMainMenu extends GuiScreen {
             at = @At("TAIL")
     )
     private void addDrawPepsiStuff(int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
-        TEXT_RENDERER.updateChained()
+        TEXT_RENDERER
                 .renderLinesSmart(this.versionText, 2, this.height - 10 * 2)
                 .render("Copyright Mojang AB. Do not distribute!", this.width - this.fontRenderer.getStringWidth("Copyright Mojang AB. Do not distribute!") - 2, this.height - 10);
     }

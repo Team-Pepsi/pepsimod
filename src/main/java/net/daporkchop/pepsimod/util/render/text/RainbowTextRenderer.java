@@ -21,13 +21,12 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.Accessors;
 import net.daporkchop.pepsimod.util.PepsiConstants;
+import net.daporkchop.pepsimod.util.render.opengl.OpenGL;
 import net.daporkchop.pepsimod.util.render.shader.Shader;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import org.lwjgl.BufferUtils;
 
-import java.nio.FloatBuffer;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static java.lang.Math.*;
 
@@ -72,60 +71,82 @@ import static java.lang.Math.*;
 @Getter
 @Accessors(fluent = true)
 public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
-    protected static final double TWO_THIRDS_PI  = PI * 0.66666666666666d;
-    protected static final double FOUR_THIRDS_PI = PI * 1.33333333333333d;
-    protected static final double TWO_PI         = PI * 2.0d;
-    protected static final double BASE_SPEED     = 159.15494309d;
+    protected static final double BASE_SPEED        = 159.15494309d;
+    protected static final long   RESTART_THRESHOLD = 16777215L;
+    protected static final long   START_TIME        = System.currentTimeMillis();
 
     @Getter(AccessLevel.NONE)
     protected final Shader shader;
-    @Getter(AccessLevel.NONE)
-    protected final FloatBuffer settings = BufferUtils.createFloatBuffer(4);
 
     @Getter(AccessLevel.NONE)
-    protected final int settingsLocation;
+    protected final int speedLocation;
+    @Getter(AccessLevel.NONE)
+    protected final int scaleLocation;
+    @Getter(AccessLevel.NONE)
+    protected final int rotationLocation;
     @Getter(AccessLevel.NONE)
     protected final int timeLocation;
 
     protected float speed;
     protected float scale;
     protected float rotation;
+    protected boolean changed = true;
 
     public RainbowTextRenderer(float speed, float scale, float rotation) {
         this.shader = new Shader("dummy.vsh", "rainbow.fsh");
-        this.settingsLocation = this.shader.getFragmentUniformLocation("settings");
+        this.speedLocation = this.shader.getFragmentUniformLocation("speed");
+        this.scaleLocation = this.shader.getFragmentUniformLocation("scale");
+        this.rotationLocation = this.shader.getFragmentUniformLocation("rotation");
         this.timeLocation = this.shader.getFragmentUniformLocation("time");
 
-        this.setup(speed, scale, rotation);
+        this.speed = speed;
+        this.scale = scale;
+        this.rotation = rotation;
     }
 
     /**
-     * Sets all three options that may be configured with the rainbow text renderer.
+     * Sets the speed of the rainbow effect.
      *
-     * @param speed    the speed of the effect
-     * @param scale    the scale of the effect
+     * @param speed the speed of the effect
+     * @return this instance
+     */
+    public RainbowTextRenderer speed(float speed) {
+        synchronized (this.shader) {
+            this.changed = true;
+
+            this.speed = speed;
+        }
+        return this;
+    }
+
+    /**
+     * Sets the scale of the rainbow effect.
+     *
+     * @param scale the scale of the effect
+     * @return this instance
+     */
+    public RainbowTextRenderer scale(float scale) {
+        synchronized (this.shader) {
+            this.changed = true;
+
+            this.scale = scale;
+        }
+        return this;
+    }
+
+    /**
+     * Sets the rotation of the rainbow effect.
+     *
      * @param rotation the rotation of the effect
      * @return this instance
      */
-    public RainbowTextRenderer setup(float speed, float scale, float rotation) {
-        synchronized (this.settings) {
-            this.speed = speed;
-            this.scale = scale;
+    public RainbowTextRenderer rotation(float rotation) {
+        synchronized (this.shader) {
+            this.changed = true;
+
             this.rotation = rotation;
-            mc.addScheduledTask(() -> {
-                this.settings.clear();
-                this.settings
-                        .put(speed)
-                        .put(scale)
-                        .put((float) sin(Math.toRadians(rotation) + PI))
-                        .put((float) cos(Math.toRadians(rotation) + PI))
-                        .flip();
-                try (Shader shader = this.shader.use()) {
-                    OpenGlHelper.glUniform1(this.settingsLocation, this.settings);
-                }
-            });
-            return this;
         }
+        return this;
     }
 
     /**
@@ -135,28 +156,19 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
      */
     @Override
     public void update() {
-        try (Shader shader = this.shader.use()) {
-            //sure, this'll wrap around, but i don't really care too much. it's only every 2 billion milliseconds :P
-            OpenGlHelper.glUniform1i(this.timeLocation, (int) (System.currentTimeMillis() & Integer.MAX_VALUE));
+        synchronized (this.shader) {
+            try (Shader shader = this.shader.use()) {
+                if (this.changed) {
+                    this.changed = false;
+
+                    OpenGL.glUniform1f(this.speedLocation, this.speed);
+                    OpenGL.glUniform1f(this.scaleLocation, this.scale);
+                    OpenGL.glUniform2f(this.rotationLocation, (float) sin(Math.toRadians(this.rotation) + PI), (float) cos(Math.toRadians(this.rotation) + PI));
+                }
+
+                OpenGL.glUniform1f(this.timeLocation, ThreadLocalRandom.current().nextFloat());
+            }
         }
-    }
-
-    /**
-     * Updates the render color based on the given coordinates.
-     *
-     * @param x the X coordinate
-     * @param y the Y coordinate
-     */
-    public void setColor(double x, double y) {
-        int i = 0;
-        GlStateManager.color(1.0f, 1.0f, 1.0f, 0.5f);
-        /*double d = -(x * this.rotationX + y * this.rotationY) * this.scale;
-
-        GlStateManager.color(
-                (float) clamp(0.5d + sin(this.time + d), 0.0d, 1.0d),
-                (float) clamp(0.5d + sin(this.time + d + TWO_THIRDS_PI), 0.0d, 1.0d),
-                (float) clamp(0.5d + sin(this.time + d + FOUR_THIRDS_PI), 0.0d, 1.0d)
-        );*/
     }
 
     @Override
@@ -169,10 +181,12 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
         renderer.posX = x;
         renderer.posY = y;
 
-        length += startIndex;
-        for (; startIndex < length; startIndex++) {
-            this.setColor(renderer.posX, renderer.posY);
-            renderer.posX += renderer.renderChar(text.charAt(startIndex), false);
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 0.0f);
+        try (Shader shader = this.shader.use()) {
+            length += startIndex;
+            for (; startIndex < length; startIndex++) {
+                renderer.posX += renderer.renderChar(text.charAt(startIndex), false);
+            }
         }
 
         return this;
@@ -184,11 +198,13 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
         renderer.posX = x;
         renderer.posY = y;
 
-        for (CharSequence text : textSegments) {
-            int length = text.length();
-            for (int i = 0; i < length; i++) {
-                this.setColor(renderer.posX, renderer.posY);
-                renderer.posX += renderer.renderChar(text.charAt(i), false);
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 0.0f);
+        try (Shader shader = this.shader.use()) {
+            for (CharSequence text : textSegments) {
+                int length = text.length();
+                for (int i = 0; i < length; i++) {
+                    renderer.posX += renderer.renderChar(text.charAt(i), false);
+                }
             }
         }
 
@@ -201,14 +217,16 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
         renderer.posX = x;
         renderer.posY = y;
 
-        for (CharSequence text : lines) {
-            int length = text.length();
-            for (int i = 0; i < length; i++) {
-                this.setColor(renderer.posX, renderer.posY);
-                renderer.posX += renderer.renderChar(text.charAt(i), false);
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 0.0f);
+        try (Shader shader = this.shader.use()) {
+            for (CharSequence text : lines) {
+                int length = text.length();
+                for (int i = 0; i < length; i++) {
+                    renderer.posX += renderer.renderChar(text.charAt(i), false);
+                }
+                renderer.posX = x;
+                renderer.posY += 10.0f;
             }
-            renderer.posX = x;
-            renderer.posY += 10.0f;
         }
 
         return this;
@@ -220,7 +238,7 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
         renderer.posX = x;
         renderer.posY = y;
 
-        this.setColor(renderer.posX, renderer.posY);
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 0.0f);
         try (Shader shader = this.shader.use()) {
             for (CharSequence text : lines) {
                 if (text != null) {
