@@ -50,6 +50,7 @@ public final class Resources implements PepsiConstants {
     protected final String url;
     protected final File   cacheDir;
 
+    protected final Lang     lang     = new Lang();
     protected final MainMenu mainMenu = new MainMenu();
 
     @Getter(AccessLevel.NONE)
@@ -83,6 +84,7 @@ public final class Resources implements PepsiConstants {
             this.baseUrl = root.get("baseurl").getAsString();
             JsonObject data = root.getAsJsonObject("data");
 
+            this.lang.load(this, this.getJson(data.get("lang").getAsString()));
             this.mainMenu.load(this, this.getJson(data.get("mainmenu").getAsString()));
         }
     }
@@ -104,8 +106,9 @@ public final class Resources implements PepsiConstants {
                 File cacheFile = this.baseUrl.isEmpty() ? null : new File(this.cacheDir, url);
 
                 try (InputStream in = new URL(this.baseUrl + url).openStream()) {
-                    while (buf.writeBytes(in, (2 << 20) - buf.readableBytes()) >= 0)
+                    while (buf.writeBytes(in, (2 << 20) - buf.readableBytes()) >= 0) {
                         ;
+                    }
                 } catch (IOException e) {
                     //try to load from cache
                     if (cacheFile != null && cacheFile.exists() && cacheFile.isFile()) {

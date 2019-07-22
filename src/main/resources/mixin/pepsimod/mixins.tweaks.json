@@ -8,6 +8,7 @@
     "minecraft.client.gui.MixinGuiMainMenu",
     "minecraft.client.gui.MixinScaledResolution",
     "minecraft.client.renderer.MixinOpenGlHelper",
+    "minecraft.client.resources.MixinLocale",
     "minecraft.client.MixinMinecraft"
   ]
 }

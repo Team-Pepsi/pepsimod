@@ -14,27 +14,47 @@
  *
  */
 
-package net.daporkchop.pepsimod.util.config.annotation;
+package net.daporkchop.pepsimod.util.resources;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.google.gson.JsonObject;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.experimental.Accessors;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
- * Fields decorated with this annotation are marked as being a configuration option.
- *
- * Values may be defined better using the annotations provided in {@link Value}.
+ * Locale data because why should I do things the correct way?
  *
  * @author DaPorkchop_
  */
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Option {
+@Getter
+@Accessors(fluent = true)
+public final class Lang implements Resource {
+    protected Map<String, String> translations = Collections.emptyMap();
+
+    @Override
+    public synchronized void load(@NonNull Resources resources, JsonObject obj) throws IOException {
+        if (obj == null) {
+            this.translations = Collections.emptyMap();
+        } else {
+            this.translations = obj.getAsJsonObject("translations").entrySet().stream()
+                    .collect(Collectors.toMap(
+                            Map.Entry::getKey,
+                            entry -> entry.getValue().getAsString()
+                    ));
+        }
+    }
+
     /**
-     * The unique ID of the option.
-     * <p>
-     * This is never displayed directly to the user, but rather is used internally for things such as serialization.
+     * Injects all pepsimod locale keys into the locale manager.
+     *
+     * @param locale the map containing the locale data
      */
-    String value();
+    public synchronized void inject(@NonNull Map<String, String> locale) {
+        locale.putAll(this.translations);
+    }
 }

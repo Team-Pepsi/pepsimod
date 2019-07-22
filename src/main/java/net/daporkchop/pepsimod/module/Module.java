@@ -87,17 +87,17 @@ public interface Module extends Event, AutoCloseable {
         String id();
 
         /**
-         * The display name of the module.
-         * <p>
-         * If empty (which is the default), the name of the class will be used instead.
-         */
-        String name() default "";
-
-        /**
          * An array of module classes that this module requires to be enabled before it may be enabled itself.
          * <p>
          * Currently unused.
          */
         Class<? extends Module>[] requires() default {};
+
+        /**
+         * An array of module classes that this module is incompatible with.
+         * <p>
+         * Currently unused.
+         */
+        Class<? extends Module>[] incompatible() default {};
     }
 }
