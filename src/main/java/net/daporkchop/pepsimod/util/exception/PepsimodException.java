@@ -14,12 +14,34 @@
  *
  */
 
-package net.daporkchop.pepsimod.util.config;
-
-import net.daporkchop.pepsimod.module.Mods;
+package net.daporkchop.pepsimod.util.exception;
 
 /**
+ * Base type for all exceptions thrown by pepsimod.
+ *
  * @author DaPorkchop_
  */
-public class Config {
+public abstract class PepsimodException extends RuntimeException {
+    public PepsimodException() {
+    }
+
+    public PepsimodException(String message) {
+        super(message);
+    }
+
+    public PepsimodException(Throwable cause, String message) {
+        super(message, cause);
+    }
+
+    public PepsimodException(Throwable cause) {
+        super(cause);
+    }
+
+    public PepsimodException(String message, String... format)  {
+        super(String.format(message, format));
+    }
+
+    public PepsimodException(Throwable cause, String message, String... format)  {
+        super(String.format(message, format), cause);
+    }
 }

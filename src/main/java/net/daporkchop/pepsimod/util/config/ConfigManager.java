@@ -14,44 +14,19 @@
  *
  */
 
-package net.daporkchop.pepsimod.module.util;
+package net.daporkchop.pepsimod.util.config;
 
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.experimental.Accessors;
-import net.daporkchop.pepsimod.module.Module;
-
-import java.util.function.Supplier;
 
 /**
- * A container for a module.
- * <p>
- * Note that the actual module instance referenced by this instance can change between module manager init cycles, or even be {@code null} if the module
- * manager is not currently active.
- *
  * @author DaPorkchop_
  */
-@Getter
-@Accessors(fluent = true)
-public class Mod<M extends Module> {
-    protected       M           instance; //global module instance reference
-    protected final Class<M>    clazz; //the module's class
-    protected final Supplier<M> factory; //supplies new instances for use after module manager reloads
+public final class ConfigManager {
+    /*static {
+        String s = String.format("Testing %s java %s with %s varargs %s!", "how", "deals", "constant", "arrays");
+    }*/
 
-    protected final String id;
-
-    protected boolean enabled;
-    protected boolean visible;
-
-    public Mod(@NonNull Class<M> clazz, @NonNull Supplier<M> factory) {
-        this.clazz = clazz;
-        this.factory = factory;
-
-        Module.Info info = clazz.getAnnotation(Module.Info.class);
-        if (info != null) {
-            this.id = info.id();
-        } else {
-            throw new IllegalArgumentException(String.format("Class %s is missing @Module.Info annotation!", clazz.getCanonicalName()));
-        }
-    }
+    //protip: it doesn't
+    //it just makes a new array and inserts the values one-by-one every time
+    //it's stupid
 }

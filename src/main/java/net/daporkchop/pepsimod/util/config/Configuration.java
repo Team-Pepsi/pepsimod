@@ -14,44 +14,33 @@
  *
  */
 
-package net.daporkchop.pepsimod.module.util;
+package net.daporkchop.pepsimod.util.config;
 
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.experimental.Accessors;
-import net.daporkchop.pepsimod.module.Module;
-
-import java.util.function.Supplier;
 
 /**
- * A container for a module.
+ * A key => value store for settings, using strings as keys.
  * <p>
- * Note that the actual module instance referenced by this instance can change between module manager init cycles, or even be {@code null} if the module
- * manager is not currently active.
+ * Note that many instances of this may store only some (or none) of the settings, delegating requests to other configuration instances. This system allows
+ * for e.g. server-, world- or even dimension-specific configurations, where only the differences between the current configuration and the base are
+ * stored, enabling much more fine-grained control over config.
  *
  * @author DaPorkchop_
  */
-@Getter
-@Accessors(fluent = true)
-public class Mod<M extends Module> {
-    protected       M           instance; //global module instance reference
-    protected final Class<M>    clazz; //the module's class
-    protected final Supplier<M> factory; //supplies new instances for use after module manager reloads
+public interface Configuration {
+    /**
+     * Gets a configuration object.
+     *
+     * @param qualifiedName the qualified name of the object, separated with periods
+     * @return the configuration object
+     */
+    Configuration getObj(@NonNull String qualifiedName);
 
-    protected final String id;
-
-    protected boolean enabled;
-    protected boolean visible;
-
-    public Mod(@NonNull Class<M> clazz, @NonNull Supplier<M> factory) {
-        this.clazz = clazz;
-        this.factory = factory;
-
-        Module.Info info = clazz.getAnnotation(Module.Info.class);
-        if (info != null) {
-            this.id = info.id();
-        } else {
-            throw new IllegalArgumentException(String.format("Class %s is missing @Module.Info annotation!", clazz.getCanonicalName()));
-        }
-    }
+    /**
+     * Gets a configuration field.
+     *
+     * @param qualifiedName the qualified name of the field, separated with periods
+     * @return the field's value
+     */
+    int getInt(@NonNull String qualifiedName);
 }

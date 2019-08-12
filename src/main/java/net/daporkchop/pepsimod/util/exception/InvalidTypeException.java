@@ -14,44 +14,31 @@
  *
  */
 
-package net.daporkchop.pepsimod.module.util;
+package net.daporkchop.pepsimod.util.exception;
 
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.experimental.Accessors;
-import net.daporkchop.pepsimod.module.Module;
-
-import java.util.function.Supplier;
+import net.daporkchop.pepsimod.util.config.storage.ConfNode;
+import net.daporkchop.pepsimod.util.config.storage.ValueType;
 
 /**
- * A container for a module.
- * <p>
- * Note that the actual module instance referenced by this instance can change between module manager init cycles, or even be {@code null} if the module
- * manager is not currently active.
+ * Thrown when a config value is accessed with an accessor for the wrong type.
  *
  * @author DaPorkchop_
  */
-@Getter
-@Accessors(fluent = true)
-public class Mod<M extends Module> {
-    protected       M           instance; //global module instance reference
-    protected final Class<M>    clazz; //the module's class
-    protected final Supplier<M> factory; //supplies new instances for use after module manager reloads
+public final class InvalidTypeException extends PepsimodException {
+    public InvalidTypeException(String message) {
+        super(message);
+    }
 
-    protected final String id;
+    public InvalidTypeException(@NonNull ValueType expected) {
+        this(String.format("Invalid type! Expected: %s", expected.name()));
+    }
 
-    protected boolean enabled;
-    protected boolean visible;
+    public InvalidTypeException(String found, String expected) {
+        super(String.format("Invalid type! Found: %s, expected: %s", found, expected));
+    }
 
-    public Mod(@NonNull Class<M> clazz, @NonNull Supplier<M> factory) {
-        this.clazz = clazz;
-        this.factory = factory;
-
-        Module.Info info = clazz.getAnnotation(Module.Info.class);
-        if (info != null) {
-            this.id = info.id();
-        } else {
-            throw new IllegalArgumentException(String.format("Class %s is missing @Module.Info annotation!", clazz.getCanonicalName()));
-        }
+    public InvalidTypeException(@NonNull ValueType found, @NonNull ValueType expected) {
+        this(found.name(), expected.name());
     }
 }
