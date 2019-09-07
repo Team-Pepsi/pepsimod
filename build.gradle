@@ -34,12 +34,9 @@ buildscript {
     }
 }
 
-plugins {
-    id "io.franzbecker.gradle-lombok" version "1.14"
-}
-
 apply plugin: "net.minecraftforge.gradle.forge"
 apply plugin: "org.spongepowered.mixin"
+apply plugin: "java"
 
 ext {
     //general things
@@ -53,6 +50,7 @@ ext {
 
     //dependency things
     guavaVersion = "21.0"
+    lombokVersion = "1.18.8"
     mixinVersion = "0.7.11-SNAPSHOT"
     porklibVersion = "0.4.0-SNAPSHOT"
 }
@@ -60,10 +58,18 @@ ext {
 group "net.daporkchop"
 version "$pepsimodVersion"
 
-sourceCompatibility = targetCompatibility = "$javaVersion"
+compileJava {
+    sourceCompatibility = targetCompatibility = "$javaVersion"
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
 
 configurations {
     shade
+    compile.extendsFrom shade
+
     all {
         resolutionStrategy {
             force("com.google.guava:guava:$guavaVersion")
@@ -76,10 +82,6 @@ minecraft {
     runDir = "run"
     mappings = "$mcpmappingsVersion"
     makeObfSourceJar = false
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
 }
 
 repositories {
@@ -103,10 +105,12 @@ dependencies {
         exclude module: "commons-io"
         exclude module: "log4j-core"
     }
+    annotationProcessor("org.spongepowered:mixin:$mixinVersion")
 
     shade "net.daporkchop.lib:common:$porklibVersion"
 
-    compile configurations.shade.dependencies
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
 }
 
 processResources {
@@ -117,6 +121,7 @@ processResources {
         include "mcmod.info"
         expand "version": "$pepsimodVersion-$minecraftVersion", "mcversion": "$minecraftVersion"
     }
+
     from(sourceSets.main.resources.srcDirs) {
         exclude "mcmod.info"
     }
@@ -124,7 +129,13 @@ processResources {
 }
 
 mixin {
-    defaultObfuscationEnv srg
+    defaultObfuscationEnv searge
+    add sourceSets.main, "mixins.pepsimod.refmap.json"
+}
+
+reobf.jar {
+    mappingType = "SEARGE"
+    classpath = sourceSets.main.compileClasspath
 }
 
 jar {
@@ -132,15 +143,14 @@ jar {
 
     from {
         configurations.shade.collect {
-            zipTree(it)
-        }
+            it.isDirectory() ? it : zipTree(it)
+        }.unique(true)
     } {
-        exclude "META-INF/*.SF"
-        exclude "META-INF/*.DSA"
-        exclude "META-INF/*.RSA"
+        exclude "META-INF/*"
         exclude "LICENSE.txt"
         exclude "dummyThing"
     }
+
     manifest {
         attributes(
                 "MixinConfigs": "" +
