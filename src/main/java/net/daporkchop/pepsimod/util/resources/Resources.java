@@ -24,6 +24,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.Accessors;
 import net.daporkchop.lib.common.misc.file.PFiles;
+import net.daporkchop.pepsimod.Pepsimod.SystemConfig;
 import net.daporkchop.pepsimod.asm.PepsimodMixinLoader;
 import net.daporkchop.pepsimod.util.PepsiConstants;
 
@@ -47,19 +48,15 @@ import java.net.URL;
 @Getter
 @Accessors(fluent = true)
 public final class Resources implements PepsiConstants {
-    protected final String url;
-    protected final File   cacheDir;
+    protected final File cacheDir = PFiles.ensureDirectoryExists(new File(mc.gameDir, "pepsimod/resources/"));
 
     protected final Lang     lang     = new Lang();
     protected final MainMenu mainMenu = new MainMenu();
 
     @Getter(AccessLevel.NONE)
+    protected final boolean enabled = SystemConfig.resources.enable;
+    @Getter(AccessLevel.NONE)
     protected String baseUrl;
-
-    public Resources(@NonNull String url, @NonNull File cacheDir) {
-        this.url = url;
-        this.cacheDir = PFiles.ensureDirectoryExists(cacheDir);
-    }
 
     /**
      * Attempts to (re)load all resources, printing a warning to the log in case of failure.
@@ -78,8 +75,11 @@ public final class Resources implements PepsiConstants {
      * @throws IOException if an IO exception occurs you dummy
      */
     public void load() throws IOException {
+        if (!this.enabled)  {
+            return;
+        }
         this.baseUrl = "";
-        JsonObject root = this.getJson(PepsimodMixinLoader.OBFUSCATED ? this.url : "resources.json");
+        JsonObject root = this.getJson(PepsimodMixinLoader.OBFUSCATED ? SystemConfig.resources.baseUrl : "resources.json");
         if (root != null) {
             this.baseUrl = root.get("baseurl").getAsString();
             JsonObject data = root.getAsJsonObject("data");

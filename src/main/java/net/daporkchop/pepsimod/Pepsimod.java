@@ -16,8 +16,11 @@
 
 package net.daporkchop.pepsimod;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import lombok.experimental.UtilityClass;
 import net.daporkchop.pepsimod.asm.PepsimodMixinLoader;
 import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.PepsiUtil;
@@ -26,6 +29,7 @@ import net.daporkchop.pepsimod.util.resources.Resources;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Config;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModContainer;
@@ -93,18 +97,14 @@ public final class Pepsimod implements PepsiConstants {
         PepsiUtil.putStaticFinalField(version, PepsiConstants.class, "VERSION");
         PepsiUtil.putStaticFinalField(String.format("%s-%s", VERSION, MinecraftForge.MC_VERSION), PepsiConstants.class, "VERSION_FULL");
         PepsiUtil.putStaticFinalField(new ScaledResolution(mc), PepsiConstants.class, "RESOLUTION");
-
-        log.info("Loading pepsimod %s...\n", VERSION_FULL);
-
-        this.resources = new Resources(
-                "https://raw.githubusercontent.com/Team-Pepsi/pepsimod/master/resources/resources.json",
-                new File(mc.gameDir, "pepsimod/resources/")
-        );
-        PepsiUtil.setTextRenderer(new RainbowTextRenderer(3000, 0.03f, 45.0f));
     }
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        log.info("Loading pepsimod %s...\n", VERSION_FULL);
+
+        this.resources = new Resources();
+        PepsiUtil.setTextRenderer(new RainbowTextRenderer(3000, 0.03f, 45.0f));
         //MinecraftForge.EVENT_BUS.register(new KeyRegistry());
 
         PepsiUtil.registerStandardEvents();
@@ -117,5 +117,37 @@ public final class Pepsimod implements PepsiConstants {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         this.resources.tryLoad();
+    }
+
+    @Config(modid = Pepsimod.MOD_ID)
+    @UtilityClass
+    public static class SystemConfig    {
+        @Config.Comment({
+                "pepsimod's resources system.",
+                "This loads various data from the network, such as capes, icons and special players."
+        })
+        public ResourcesConfig resources = new ResourcesConfig();
+
+        @NoArgsConstructor(access = AccessLevel.PRIVATE)
+        public static class ResourcesConfig    {
+            @Config.Comment({
+                    "Toggles the resources system.",
+                    "There's generally no reason to disable this unless you're worried about GitHub stealing your IP address, which is stupid."
+            })
+            @Config.RequiresMcRestart
+            public boolean enable = true;
+
+            @Config.Comment({
+                    "Whether or not to cache resources locally.",
+                    "Disabling this is generally safe, but may cause issues if your internet connection is bad."
+            })
+            public boolean useCache = true;
+
+            @Config.Comment({
+                    "The base url to fetch resources from.",
+                    "Use this if you want to use your own resources server!"
+            })
+            public String baseUrl = "https://raw.githubusercontent.com/Team-Pepsi/pepsimod/master/resources/resources.json";
+        }
     }
 }
