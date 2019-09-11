@@ -111,7 +111,8 @@ public final class Pepsimod implements PepsiConstants {
 
         PepsiUtil.registerStandardEvents();
 
-        log.info(event.getAsmData().getAnnotationsFor(FMLCommonHandler.instance().findContainerFor(this)));
+        String name = Module.Info.class.getName();
+        log.info(event.getAsmData().getAll(name));
         log.info("jeff");
 
         System.exit(0);
