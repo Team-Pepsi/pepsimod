@@ -20,7 +20,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.Accessors;
 import net.daporkchop.pepsimod.util.PepsiConstants;
-import net.daporkchop.pepsimod.util.render.opengl.OpenGL;
+import net.daporkchop.pepsimod.util.render.OpenGL;
 
 /**
  * Basic wrapper around a shader.

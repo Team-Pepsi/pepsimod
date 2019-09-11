@@ -20,7 +20,7 @@ import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.Accessors;
-import net.daporkchop.pepsimod.util.render.opengl.OpenGL;
+import net.daporkchop.pepsimod.util.render.OpenGL;
 
 import java.util.Collection;
 import java.util.Collections;

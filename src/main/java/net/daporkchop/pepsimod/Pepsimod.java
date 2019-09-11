@@ -22,8 +22,10 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
 import net.daporkchop.pepsimod.asm.PepsimodMixinLoader;
+import net.daporkchop.pepsimod.module.Module;
 import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.PepsiUtil;
+import net.daporkchop.pepsimod.util.event.impl.Event;
 import net.daporkchop.pepsimod.util.render.text.RainbowTextRenderer;
 import net.daporkchop.pepsimod.util.resources.Resources;
 import net.minecraft.client.Minecraft;
@@ -108,6 +110,11 @@ public final class Pepsimod implements PepsiConstants {
         //MinecraftForge.EVENT_BUS.register(new KeyRegistry());
 
         PepsiUtil.registerStandardEvents();
+
+        log.info(event.getAsmData().getAnnotationsFor(FMLCommonHandler.instance().findContainerFor(this)));
+        log.info("jeff");
+
+        System.exit(0);
     }
 
     @Mod.EventHandler

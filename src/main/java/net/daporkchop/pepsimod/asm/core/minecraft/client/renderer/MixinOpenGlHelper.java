@@ -16,7 +16,7 @@
 
 package net.daporkchop.pepsimod.asm.core.minecraft.client.renderer;
 
-import net.daporkchop.pepsimod.util.render.opengl.OpenGL;
+import net.daporkchop.pepsimod.util.render.OpenGL;
 import net.minecraft.client.renderer.OpenGlHelper;
 import org.lwjgl.opengl.ContextCapabilities;
 import org.lwjgl.opengl.GLContext;

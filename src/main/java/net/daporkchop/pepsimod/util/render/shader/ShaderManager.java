@@ -22,7 +22,7 @@ import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import net.daporkchop.lib.common.function.io.IOFunction;
 import net.daporkchop.pepsimod.util.PepsiUtil;
-import net.daporkchop.pepsimod.util.render.opengl.OpenGL;
+import net.daporkchop.pepsimod.util.render.OpenGL;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;

@@ -29,7 +29,7 @@ import static net.minecraft.util.math.MathHelper.floor;
  */
 @Getter
 @Accessors(fluent = true)
-public final class FastColor implements RenderColor {
+public final class SimpleColor implements RenderColor {
     protected final float r;
     protected final float g;
     protected final float b;
@@ -37,28 +37,28 @@ public final class FastColor implements RenderColor {
     protected final int   argb;
 
     /**
-     * Constructs a {@link FastColor} instance from a 32-bit ARGB int.
+     * Constructs a {@link SimpleColor} instance from a 32-bit ARGB int.
      *
      * @param argb the ARGB value
      */
-    public FastColor(int argb) {
+    public SimpleColor(int argb) {
         this((argb >>> 24) & 0xFF, (argb >>> 16) & 0xFF, (argb >>> 8) & 0xFF, argb & 0xFF);
     }
 
     /**
-     * Constructs an opaque {@link FastColor} instance from 3 8-bit integer color values.
+     * Constructs an opaque {@link SimpleColor} instance from 3 8-bit integer color values.
      *
      * @param r the red channel
      * @param g the green channel
      * @param b the blue channel
      * @throws IllegalArgumentException if any of the color channels are not in the range 0-255
      */
-    public FastColor(int r, int g, int b) {
+    public SimpleColor(int r, int g, int b) {
         this(0xFF, r, g, b);
     }
 
     /**
-     * Constructs a {@link FastColor} instance from 4 8-bit integer color values.
+     * Constructs a {@link SimpleColor} instance from 4 8-bit integer color values.
      *
      * @param a the alpha channel
      * @param r the red channel
@@ -66,7 +66,7 @@ public final class FastColor implements RenderColor {
      * @param b the blue channel
      * @throws IllegalArgumentException if any of the color channels are not in the range 0-255
      */
-    public FastColor(int a, int r, int g, int b) {
+    public SimpleColor(int a, int r, int g, int b) {
         if ((a & ~0xFF) != 0) {
             throw new IllegalArgumentException(String.format("Invalid alpha value. Must be in range 0-255 (found: %d)", a));
         } else if ((r & ~0xFF) != 0) {
@@ -84,19 +84,19 @@ public final class FastColor implements RenderColor {
     }
 
     /**
-     * Constructs an opaque {@link FastColor} instance from 3 float color values.
+     * Constructs an opaque {@link SimpleColor} instance from 3 float color values.
      *
      * @param r the red channel
      * @param g the green channel
      * @param b the blue channel
      * @throws IllegalArgumentException if any of the color channels are not in the range 0-1
      */
-    public FastColor(float r, float g, float b) {
+    public SimpleColor(float r, float g, float b) {
         this(1.0f, r, g, b);
     }
 
     /**
-     * Constructs a {@link FastColor} instance from 4 float color values.
+     * Constructs a {@link SimpleColor} instance from 4 float color values.
      *
      * @param a the alpha channel
      * @param r the red channel
@@ -104,7 +104,7 @@ public final class FastColor implements RenderColor {
      * @param b the blue channel
      * @throws IllegalArgumentException if any of the color channels are not in the range 0-1
      */
-    public FastColor(float a, float r, float g, float b) {
+    public SimpleColor(float a, float r, float g, float b) {
         if (a < 0.0f || a > 1.0f) {
             throw new IllegalArgumentException(String.format("Invalid alpha value. Must be in range 0-1 (found: %f)", a));
         } else if (r < 0.0f || r > 1.0f) {

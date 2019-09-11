@@ -14,7 +14,7 @@
  *
  */
 
-package net.daporkchop.pepsimod.util.render.opengl;
+package net.daporkchop.pepsimod.util.render;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
