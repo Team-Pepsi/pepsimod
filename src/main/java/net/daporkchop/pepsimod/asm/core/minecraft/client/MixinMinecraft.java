@@ -14,7 +14,7 @@
  *
  */
 
-package net.daporkchop.pepsimod.asm.tweaks.minecraft.client;
+package net.daporkchop.pepsimod.asm.core.minecraft.client;
 
 import net.daporkchop.pepsimod.asm.PepsimodMixinLoader;
 import net.daporkchop.pepsimod.util.PepsiUtil;

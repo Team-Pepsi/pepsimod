@@ -20,7 +20,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.Accessors;
 import net.minecraft.client.gui.BossInfoClient;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.BossInfo;
 
 import java.util.Collection;
@@ -28,7 +27,7 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 
 /**
- * Used by {@link net.daporkchop.pepsimod.asm.tweaks.minecraft.client.gui.MixinGuiBossOverlay} to actually have boss bars merged together.
+ * Used by {@link net.daporkchop.pepsimod.asm.core.minecraft.client.gui.MixinGuiBossOverlay} to actually have boss bars merged together.
  * <p>
  * I can't have this as an inner class because Mixin so it's going here.
  *

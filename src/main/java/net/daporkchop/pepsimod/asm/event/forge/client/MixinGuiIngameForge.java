@@ -14,13 +14,10 @@
  *
  */
 
-package net.daporkchop.pepsimod.asm.events.forge.client;
+package net.daporkchop.pepsimod.asm.event.forge.client;
 
-import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.event.EventStatus;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.client.GuiIngameForge;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.spongepowered.asm.mixin.Mixin;

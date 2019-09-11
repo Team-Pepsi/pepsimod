@@ -15,8 +15,10 @@
  */
 
 /**
- * These Mixins make minor tweaks to the game mechanics, however none major enough to warrant being considered either a hack or utility.
+ * These Mixins inject all of the events into the required places.
  *
  * @author DaPorkchop_
+ * @see net.daporkchop.pepsimod.util.event.impl.AllEvents
+ * @see net.daporkchop.pepsimod.util.event.EventManager
  */
-package net.daporkchop.pepsimod.asm.tweaks;
+package net.daporkchop.pepsimod.asm.event;

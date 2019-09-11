@@ -14,9 +14,30 @@
  *
  */
 
+package net.daporkchop.pepsimod.asm.core.minecraft.client.renderer;
+
+import net.daporkchop.pepsimod.util.render.opengl.OpenGL;
+import net.minecraft.client.renderer.OpenGlHelper;
+import org.lwjgl.opengl.ContextCapabilities;
+import org.lwjgl.opengl.GLContext;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
+
 /**
- * These Mixins make all required modifications to game code to make the various utilities work.
- *
  * @author DaPorkchop_
  */
-package net.daporkchop.pepsimod.asm.utilities;
+@Mixin(OpenGlHelper.class)
+abstract class MixinOpenGlHelper {
+    @Redirect(
+            method = "Lnet/minecraft/client/renderer/OpenGlHelper;initializeTextures()V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lorg/lwjgl/opengl/GLContext;getCapabilities()Lorg/lwjgl/opengl/ContextCapabilities;"
+            ))
+    private static ContextCapabilities initPepsimodOpenGL() {
+        ContextCapabilities capabilities = GLContext.getCapabilities();
+        OpenGL.init(capabilities);
+        return capabilities;
+    }
+}

@@ -14,7 +14,7 @@
  *
  */
 
-package net.daporkchop.pepsimod.asm.tweaks.minecraft.client.gui;
+package net.daporkchop.pepsimod.asm.core.minecraft.client.gui;
 
 import net.daporkchop.pepsimod.util.mixin.client.gui.GuiBossOverlay.MergedBossInfo;
 import net.minecraft.client.gui.BossInfoClient;

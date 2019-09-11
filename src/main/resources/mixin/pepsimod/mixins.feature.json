@@ -1,7 +1,7 @@
 {
   "required": true,
   "compatibilityLevel": "JAVA_8",
-  "package": "net.daporkchop.pepsimod.asm.hacks",
+  "package": "net.daporkchop.pepsimod.asm.feature",
   "refmap": "mixins.pepsimod.refmap.json",
   "client": [
   ]

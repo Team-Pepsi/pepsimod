@@ -40,14 +40,13 @@ public final class PepsimodMixinLoader implements IFMLLoadingPlugin {
         FMLLog.log.info("\n\n\nPepsimod Mixin init\n\n");
         MixinBootstrap.init();
         Mixins.addConfigurations(
-                "mixin/pepsimod/mixins.events.json",
-                "mixin/pepsimod/mixins.hacks.json",
-                "mixin/pepsimod/mixins.optimization.json",
-                "mixin/pepsimod/mixins.tweaks.json",
-                "mixin/pepsimod/mixins.utilities.json"
+                "mixin/pepsimod/mixins.core.json",
+                "mixin/pepsimod/mixins.event.json",
+                "mixin/pepsimod/mixins.feature.json",
+                "mixin/pepsimod/mixins.optimization.json"
         );
 
-        MixinEnvironment.getDefaultEnvironment().setObfuscationContext("searge");
+        //MixinEnvironment.getDefaultEnvironment().setObfuscationContext("searge");
 
         FMLLog.log.info(MixinEnvironment.getDefaultEnvironment().getObfuscationContext());
     }
