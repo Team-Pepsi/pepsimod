@@ -25,6 +25,7 @@ import net.daporkchop.pepsimod.asm.PepsimodMixinLoader;
 import net.daporkchop.pepsimod.module.Module;
 import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.PepsiUtil;
+import net.daporkchop.pepsimod.util.config.ConfigManager;
 import net.daporkchop.pepsimod.util.event.impl.Event;
 import net.daporkchop.pepsimod.util.render.text.RainbowTextRenderer;
 import net.daporkchop.pepsimod.util.resources.Resources;
@@ -105,17 +106,13 @@ public final class Pepsimod implements PepsiConstants {
     public void preInit(FMLPreInitializationEvent event) {
         log.info("Loading pepsimod %s...\n", VERSION_FULL);
 
+        ConfigManager.init(event.getAsmData()); //initialize config manager
+
         this.resources = new Resources();
         PepsiUtil.setTextRenderer(new RainbowTextRenderer(3000, 0.03f, 45.0f));
         //MinecraftForge.EVENT_BUS.register(new KeyRegistry());
 
         PepsiUtil.registerStandardEvents();
-
-        String name = Module.Info.class.getName();
-        log.info(event.getAsmData().getAll(name));
-        log.info("jeff");
-
-        System.exit(0);
     }
 
     @Mod.EventHandler

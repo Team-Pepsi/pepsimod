@@ -22,16 +22,40 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Decorates a callback method that will be invoked when an option is updated.
+ * Decorates a class that contains static (global) options.
  *
  * @author DaPorkchop_
  */
-@Target(ElementType.METHOD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-//TODO: refactor this somehow, also use annotations for encoder/decoder functions
-public @interface OptionListener {
+public @interface OptionRoot {
     /**
-     * The ID of the option to listen for changes to.
+     * The path to this option group.
      */
-    String value();
+    String id();
+
+    /**
+     * The type of this option root.
+     */
+    Type type() default Type.NORMAL;
+
+    /**
+     * The different option root types.
+     *
+     * @author DaPorkchop_
+     */
+    enum Type {
+        /**
+         * Global options are unaffected by profiles, and are loaded statically.
+         */
+        GLOBAL,
+        /**
+         * Normal values are affected by config profiles.
+         */
+        NORMAL,
+        /**
+         * The same as {@link #NORMAL}, however stored relative to a module-specific config section.
+         */
+        MODULE;
+    }
 }

@@ -28,7 +28,7 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@interface Option {
+public @interface Option {
     /**
      * The unique ID of this option.
      * <p>
@@ -182,5 +182,18 @@ import java.lang.annotation.Target;
      */
     @interface Text {
         String value() default "";
+    }
+
+    /**
+     * Allows setting the default value for an enum value.
+     * <p>
+     * Must be applied to an enum field with the {@link Option} annotation.
+     *
+     * @author DaPorkchop_
+     */
+    @interface Enum {
+        String value() default "";
+
+        String[] whitelist() default {};
     }
 }

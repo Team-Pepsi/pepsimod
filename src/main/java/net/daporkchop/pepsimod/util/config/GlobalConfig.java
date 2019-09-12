@@ -14,24 +14,17 @@
  *
  */
 
-package net.daporkchop.pepsimod.util.config.annotation;
+package net.daporkchop.pepsimod.util.config;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import lombok.experimental.UtilityClass;
+import net.daporkchop.pepsimod.util.config.annotation.Option;
+import net.daporkchop.pepsimod.util.config.annotation.OptionRoot;
+import net.daporkchop.pepsimod.util.config.annotation.OptionRoot.Type;
 
 /**
- * Decorates a callback method that will be invoked when an option is updated.
- *
  * @author DaPorkchop_
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-//TODO: refactor this somehow, also use annotations for encoder/decoder functions
-public @interface OptionListener {
-    /**
-     * The ID of the option to listen for changes to.
-     */
-    String value();
+@UtilityClass
+@OptionRoot(id = "general", type = Type.GLOBAL)
+public class GlobalConfig {
 }
