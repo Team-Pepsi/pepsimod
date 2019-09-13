@@ -31,7 +31,6 @@ import net.minecraft.util.text.TextFormatting;
  */
 @RequiredArgsConstructor
 @Getter
-@Accessors(fluent = true)
 public enum ChatColor implements RenderColor {
     BLACK(TextFormatting.BLACK, 0x000000),
     DARK_BLUE(TextFormatting.DARK_BLUE, 0x0000AA),

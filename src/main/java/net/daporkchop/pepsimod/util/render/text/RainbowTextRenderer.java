@@ -67,7 +67,6 @@ import static java.lang.Math.sin;
  *
  * @author DaPorkchop_
  */
-@Accessors(fluent = true)
 public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
     protected static final double PI         = 3.1415926535897932384626433832795d;
     protected static final double TWO_PI     = 6.2831853071795864769252867665590d;
@@ -91,6 +90,10 @@ public final class RainbowTextRenderer implements TextRenderer, PepsiConstants {
     @Getter
     protected float rotation;
     protected boolean changed = true;
+
+    public RainbowTextRenderer() {
+        this(0, 0.0f, 0.0f);
+    }
 
     public RainbowTextRenderer(int speed, float scale, float rotation) {
         this.shader = ShaderManager.get("rainbow");

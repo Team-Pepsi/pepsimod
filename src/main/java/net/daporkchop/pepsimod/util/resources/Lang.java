@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
  * @author DaPorkchop_
  */
 @Getter
-@Accessors(fluent = true)
 public final class Lang implements Resource {
     protected Map<String, String> translations = Collections.emptyMap();
 

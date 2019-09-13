@@ -28,7 +28,6 @@ import static net.minecraft.util.math.MathHelper.floor;
  * @author DaPorkchop_
  */
 @Getter
-@Accessors(fluent = true)
 public final class SimpleColor implements RenderColor {
     protected final float r;
     protected final float g;

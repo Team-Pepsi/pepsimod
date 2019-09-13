@@ -16,8 +16,10 @@
 
 package net.daporkchop.pepsimod.util.render.text;
 
+import lombok.Getter;
 import lombok.NonNull;
 import net.daporkchop.pepsimod.util.capability.Updateable;
+import net.daporkchop.pepsimod.util.config.GlobalConfig;
 
 /**
  * Exposes the ability to render text on the screen in 2d space.
@@ -155,5 +157,47 @@ public interface TextRenderer extends Updateable<TextRenderer>, AutoCloseable {
 
     @Override
     default void close() {
+    }
+
+    /**
+     * The default text renderer types.
+     *
+     * @author DaPorkchop_
+     */
+    enum Type {
+        NORMAL {
+            @Override
+            public TextRenderer renderer() {
+                return null;
+            }
+
+            @Override
+            public void update() {
+
+            }
+        },
+        RAINBOW {
+            @Getter
+            private final RainbowTextRenderer renderer = new RainbowTextRenderer();
+
+            @Override
+            public void update() {
+                this.renderer.speed(GlobalConfig.Text.Rainbow.speed)
+                        .scale(GlobalConfig.Text.Rainbow.scale)
+                        .rotation(GlobalConfig.Text.Rainbow.rotation);
+            }
+        };
+
+        /**
+         * Creates a new {@link TextRenderer} instance using the current settings.
+         */
+        public abstract TextRenderer renderer();
+
+        /**
+         * Updates the text renderer.
+         * <p>
+         * Should be fired whenever a config value changed, but otherwise may be safely left alone.
+         */
+        public abstract void update();
     }
 }

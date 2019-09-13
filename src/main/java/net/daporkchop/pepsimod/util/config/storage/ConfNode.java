@@ -86,7 +86,6 @@ public interface ConfNode {
      * @author DaPorkchop_
      */
     @Getter
-    @Accessors(fluent = true)
     abstract class AbstractConfNode implements ConfNode {
         protected final String[] path;
         protected       String   qualifiedName;

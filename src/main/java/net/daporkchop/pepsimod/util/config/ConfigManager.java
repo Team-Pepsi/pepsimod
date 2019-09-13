@@ -102,7 +102,6 @@ public class ConfigManager implements PepsiConstants {
 
     @Getter
     @Setter
-    @Accessors(fluent = true)
     private final class OptionImpl implements Option {
         private static final String[] EMPTY_STRING_ARRAY = new String[0];
 

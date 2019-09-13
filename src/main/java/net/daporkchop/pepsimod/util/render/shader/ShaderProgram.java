@@ -27,7 +27,6 @@ import net.daporkchop.pepsimod.util.render.OpenGL;
  *
  * @author DaPorkchop_
  */
-@Accessors(fluent = true)
 public final class ShaderProgram implements PepsiConstants, AutoCloseable {
     @Getter
     protected final String name;

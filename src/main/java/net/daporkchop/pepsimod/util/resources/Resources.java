@@ -22,7 +22,6 @@ import io.netty.buffer.PooledByteBufAllocator;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.experimental.Accessors;
 import net.daporkchop.lib.common.misc.file.PFiles;
 import net.daporkchop.pepsimod.Pepsimod.SystemConfig;
 import net.daporkchop.pepsimod.asm.PepsimodMixinLoader;
@@ -46,7 +45,6 @@ import java.net.URL;
  * @author DaPorkchop_
  */
 @Getter
-@Accessors(fluent = true)
 public final class Resources implements PepsiConstants {
     protected final File cacheDir = PFiles.ensureDirectoryExists(new File(mc.gameDir, "pepsimod/resources/"));
 
@@ -75,7 +73,7 @@ public final class Resources implements PepsiConstants {
      * @throws IOException if an IO exception occurs you dummy
      */
     public void load() throws IOException {
-        if (!this.enabled)  {
+        if (!this.enabled) {
             return;
         }
         this.baseUrl = "";

@@ -38,14 +38,12 @@ import java.util.Map;
  */
 @RequiredArgsConstructor
 @Getter
-@Accessors(fluent = true)
 public enum ShaderType {
     VERTEX("vert", GL20.GL_VERTEX_SHADER) {
         @Override
         protected Shader construct(@NonNull String name, @NonNull String code, @NonNull JsonObject meta) {
             return new Shader(name, code, meta) {
                 @Getter
-                @Accessors(fluent = true)
                 protected final Collection<String> provides = new HashSet<>();
 
                 @Override
@@ -72,7 +70,6 @@ public enum ShaderType {
         protected Shader construct(@NonNull String name, @NonNull String code, @NonNull JsonObject meta) {
             return new Shader(name, code, meta) {
                 @Getter
-                @Accessors(fluent = true)
                 protected final Collection<String> requires = new HashSet<>();
 
                 @Override

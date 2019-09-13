@@ -34,7 +34,6 @@ import java.util.IdentityHashMap;
  * @author DaPorkchop_
  */
 @Getter
-@Accessors(fluent = true)
 public final class MergedBossInfo {
     private final String name;
     private final Collection<BossInfoClient> entries = Collections.newSetFromMap(new IdentityHashMap<>());

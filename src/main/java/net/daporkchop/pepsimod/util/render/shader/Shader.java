@@ -33,7 +33,6 @@ import java.util.Set;
  * @author DaPorkchop_
  */
 @Getter
-@Accessors(fluent = true)
 abstract class Shader {
     protected final Set<ShaderProgram> usages = Collections.newSetFromMap(new IdentityHashMap<>());
     protected final String name;

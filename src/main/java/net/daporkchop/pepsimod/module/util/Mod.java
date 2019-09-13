@@ -32,7 +32,6 @@ import java.util.function.Supplier;
  * @author DaPorkchop_
  */
 @Getter
-@Accessors(fluent = true)
 public class Mod<M extends Module> {
     protected       M           instance; //global module instance reference
     protected final Class<M>    clazz; //the module's class

@@ -28,6 +28,7 @@ import net.daporkchop.pepsimod.util.PepsiUtil;
 import net.daporkchop.pepsimod.util.config.ConfigManager;
 import net.daporkchop.pepsimod.util.event.impl.Event;
 import net.daporkchop.pepsimod.util.render.text.RainbowTextRenderer;
+import net.daporkchop.pepsimod.util.render.text.TextRenderer;
 import net.daporkchop.pepsimod.util.resources.Resources;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -56,7 +57,6 @@ import java.util.regex.Pattern;
         useMetadata = true
 )
 @Getter
-@Accessors(fluent = true)
 public final class Pepsimod implements PepsiConstants {
     @Getter(onMethod_ = {@Mod.InstanceFactory})
     private static final Pepsimod INSTANCE = new Pepsimod();
@@ -109,7 +109,7 @@ public final class Pepsimod implements PepsiConstants {
         ConfigManager.init(event.getAsmData()); //initialize config manager
 
         this.resources = new Resources();
-        PepsiUtil.setTextRenderer(new RainbowTextRenderer(3000, 0.03f, 45.0f));
+        PepsiUtil.setTextRenderer(TextRenderer.Type.RAINBOW.renderer());
         //MinecraftForge.EVENT_BUS.register(new KeyRegistry());
 
         PepsiUtil.registerStandardEvents();
