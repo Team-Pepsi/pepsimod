@@ -107,93 +107,27 @@ public @interface Option {
     }
 
     /**
-     * Allows setting the default value for a boolean value.
+     * Sets the default value for an option.
      * <p>
-     * Must be applied to a boolean field with the {@link Option} annotation.
+     * Must be applied to a field with the {@link Option} annotation.
+     *
+     * Any annotation values that do not correspond to the type will be ignored.
      *
      * @author DaPorkchop_
      */
-    @interface Boolean {
-        boolean value() default false;
-    }
+    @interface Default  {
+        boolean booleanValue() default false;
 
-    /**
-     * Allows setting the constraints for an int value.
-     * <p>
-     * Must be applied to an int field with the {@link Option} annotation.
-     *
-     * @author DaPorkchop_
-     */
-    @interface Int {
-        int value() default 0;
+        int intValue() default 0;
 
-        int min() default Integer.MIN_VALUE;
-        int max() default Integer.MAX_VALUE;
-    }
+        long longValue() default 0L;
 
-    /**
-     * Allows setting the constraints for a long value.
-     * <p>
-     * Must be applied to a long field with the {@link Option} annotation.
-     *
-     * @author DaPorkchop_
-     */
-    @interface Long {
-        long value() default 0L;
+        float floatValue() default 0.0f;
 
-        long min() default java.lang.Long.MIN_VALUE;
-        long max() default java.lang.Long.MAX_VALUE;
-    }
+        double doubleValue() default 0.0d;
 
-    /**
-     * Allows setting the constraints for a float value.
-     * <p>
-     * Must be applied to a float field with the {@link Option} annotation.
-     *
-     * @author DaPorkchop_
-     */
-    @interface Float {
-        float value() default 0.0f;
+        String textValue() default "";
 
-        float min() default java.lang.Float.MIN_VALUE;
-        float max() default java.lang.Float.MAX_VALUE;
-    }
-
-    /**
-     * Allows setting the constraints for a double value.
-     * <p>
-     * Must be applied to a double field with the {@link Option} annotation.
-     *
-     * @author DaPorkchop_
-     */
-    @interface Double {
-        double value() default 0.0d;
-
-        double min() default java.lang.Double.MIN_VALUE;
-        double max() default java.lang.Double.MAX_VALUE;
-    }
-
-    /**
-     * Allows setting the default value for a string value.
-     * <p>
-     * Must be applied to a string field with the {@link Option} annotation.
-     *
-     * @author DaPorkchop_
-     */
-    @interface Text {
-        String value() default "";
-    }
-
-    /**
-     * Allows setting the default value for an enum value.
-     * <p>
-     * Must be applied to an enum field with the {@link Option} annotation.
-     *
-     * @author DaPorkchop_
-     */
-    @interface Enum {
-        String value() default "";
-
-        String[] whitelist() default {};
+        String enumValue() default "";
     }
 }

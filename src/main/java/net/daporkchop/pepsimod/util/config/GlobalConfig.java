@@ -35,7 +35,7 @@ public class GlobalConfig {
                 "The renderer used for displaying most pepsimod text.",
                 "Valid options are: NORMAL, RAINBOW"
         })
-        @Option.Enum("RAINBOW")
+        @Option.Default(enumValue = "RAINBOW")
         public TextRenderer.Type type;
 
         @UtilityClass
@@ -45,21 +45,21 @@ public class GlobalConfig {
                     "The speed at which the rainbow effect will run.",
                     "Unit: ms per full color cycle"
             })
-            @Option.Int(3000)
+            @Option.Default(intValue = 3000)
             public int speed;
 
             @Option(comment = {
                     "The scale of the rainbow effect.",
                     "Unit: (not sure)"
             })
-            @Option.Float(0.03f)
+            @Option.Default(floatValue = 0.03f)
             public float scale;
 
             @Option(comment = {
                     "The direction that the rainbow effect will move towards.",
                     "Unit: degrees"
             })
-            @Option.Float(value = 45.0f, min = -180.0f, max = 180.0f)
+            @Option.Default(floatValue = 45.0f)
             public float rotation;
         }
     }
