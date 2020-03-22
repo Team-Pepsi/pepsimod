@@ -1,0 +1,10 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_8",
+  "package": "net.daporkchop.pepsimod.asm.event",
+  "refmap": "mixins.pepsimod.refmap.json",
+  "client": [
+    "forge.client.MixinGuiIngameForge",
+    "minecraft.client.MixinMinecraft"
+  ]
+}

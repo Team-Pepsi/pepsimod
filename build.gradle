@@ -18,126 +18,182 @@
  *
  */
 
+import java.util.concurrent.atomic.AtomicReference
+
 buildscript {
     repositories {
         jcenter()
         maven {
-            name = "forge"
+            name = "MinecraftForge"
             url = "http://files.minecraftforge.net/maven"
         }
         maven {
-            name = 'SpongePowered'
-            url = 'http://repo.spongepowered.org/maven'
+            name = "SpongePowered"
+            url = "http://repo.spongepowered.org/maven"
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-        classpath 'org.spongepowered:mixingradle:0.4-SNAPSHOT'
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+        classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
+        classpath "org.spongepowered:mixingradle:0.6-SNAPSHOT"
     }
 }
 
 apply plugin: "net.minecraftforge.gradle.forge"
-apply plugin: 'org.spongepowered.mixin'
-apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: "org.spongepowered.mixin"
+apply plugin: "java"
 
-group = "net.daporkchop"
-archivesBaseName = "pepsimod"
+ext {
+    //general things
+    javaVersion = "1.8"
+    pepsimodVersion = "12.0"
 
-sourceCompatibility = targetCompatibility = '1.8'
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
+    //minecraft things
+    mcpmappingsVersion = "stable_39"
+    minecraftforgeVersion = "14.23.5.2836"
+    minecraftVersion = "1.12.2"
+
+    //dependency things
+    guavaVersion = "21.0"
+    lombokVersion = "1.18.8"
+    mixinVersion = "0.7.11-SNAPSHOT"
+    porklibVersion = "0.4.0-SNAPSHOT"
 }
 
-configurations.all {
-    resolutionStrategy {
-        force("com.google.guava:guava:21.0")
+group "net.daporkchop"
+version "$pepsimodVersion"
+
+compileJava {
+    sourceCompatibility = targetCompatibility = "$javaVersion"
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+configurations {
+    shade
+    compile.extendsFrom shade
+
+    all {
+        resolutionStrategy {
+            force("com.google.guava:guava:$guavaVersion")
+        }
     }
 }
 
 minecraft {
-    version = "1.12.2-14.23.5.2836"
+    version = "$minecraftVersion-$minecraftforgeVersion"
     runDir = "run"
-    mappings = "stable_39"
+    mappings = "$mcpmappingsVersion"
     makeObfSourceJar = false
-    coreMod = "net.daporkchop.pepsimod.PepsimodMixinLoader"
 }
-
-version = "v11.1-" + project.minecraft.version
 
 repositories {
     mavenLocal()
     maven {
-        name = 'DaPorkchop_'
-        url = 'https://maven.daporkchop.net/'
+        name = "DaPorkchop_"
+        url = "https://maven.daporkchop.net/"
     }
     maven {
-        name = 'spongepowered-repo'
-        url = 'http://repo.spongepowered.org/maven/'
+        name = "spongepowered-repo"
+        url = "http://repo.spongepowered.org/maven/"
     }
     mavenCentral()
 }
 
 dependencies {
-    compile("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
-        exclude module: 'launchwrapper'
-        exclude module: 'guava'
-        exclude module: 'gson'
-        exclude module: 'commons-io'
-        exclude module: 'log4j-core'
+    shade("org.spongepowered:mixin:$mixinVersion") {
+        exclude module: "launchwrapper"
+        exclude module: "guava"
+        exclude module: "gson"
+        exclude module: "commons-io"
+        exclude module: "log4j-core"
     }
+    annotationProcessor("org.spongepowered:mixin:$mixinVersion")
 
-    compile "net.daporkchop.lib:common:0.4.1"
+    shade "net.daporkchop.lib:common:$porklibVersion"
+
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
 }
 
 processResources {
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
+
     from(sourceSets.main.resources.srcDirs) {
         include "mcmod.info"
-        expand "version": project.version, "mcversion": project.minecraft.version
+        expand "version": "$pepsimodVersion-$minecraftVersion", "mcversion": "$minecraftVersion"
     }
+
     from(sourceSets.main.resources.srcDirs) {
         exclude "mcmod.info"
     }
-    rename '(.+_at.cfg)', 'META-INF/$1'
+    rename '(.+_at.cfg)', 'META-INF/$1' //i hate gradle for not letting me use double quotes here
 }
 
 mixin {
-    defaultObfuscationEnv notch
+    defaultObfuscationEnv searge
     add sourceSets.main, "mixins.pepsimod.refmap.json"
 }
 
-reobf {
-    shadowJar {
-        mappingType = 'SEARGE'
-        classpath = sourceSets.main.compileClasspath
-    }
+reobf.jar {
+    mappingType = "SEARGE"
+    classpath = sourceSets.main.compileClasspath
 }
-
-shadowJar {
-    dependencies {
-        include(dependency('org.spongepowered:mixin'))
-
-        include(dependency('net.daporkchop.lib:unsafe'))
-        include(dependency('net.daporkchop.lib:common'))
-    }
-    exclude 'dummyThing'
-    exclude 'LICENSE.txt'
-    classifier = null
-}
-
-build.dependsOn(shadowJar)
 
 jar {
+    archiveName "pepsimod-v$pepsimodVersion-$minecraftVersion" + ".jar"
+
+    from {
+        configurations.shade.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }.unique(true)
+    } {
+        exclude "META-INF/*"
+        exclude "LICENSE.txt"
+        exclude "dummyThing"
+    }
+
     manifest {
         attributes(
-                "MixinConfigs": 'mixins.pepsimod.json',
-                "tweakClass": 'org.spongepowered.asm.launch.MixinTweaker',
+                "MixinConfigs": "" +
+                        "mixin/pepsimod/mixins.events.json," +
+                        "mixin/pepsimod/mixins.hacks.json," +
+                        "mixin/pepsimod/mixins.optimization.json," +
+                        "mixin/pepsimod/mixins.tweaks.json," +
+                        "mixin/pepsimod/mixins.utilities.json,",
+                "tweakClass": "org.spongepowered.asm.launch.MixinTweaker",
                 "TweakOrder": 0,
-                'FMLCorePluginContainsFMLMod': 'true',
-                'FMLCorePlugin': 'net.daporkchop.pepsimod.PepsimodMixinLoader',
-                'ForceLoadAsMod': 'true'
+                "FMLCorePluginContainsFMLMod": "true",
+                "FMLCorePlugin": "net.daporkchop.pepsimod.asm.PepsimodMixinLoader",
+                "ForceLoadAsMod": "true",
+                "FMLAT": "pepsimod_at.cfg"
         )
     }
+}
+
+//sets JVM args for genIntellijRuns
+AtomicReference<String> mixinPath = new AtomicReference<>(null);
+configurations.compile.each {
+    String absolutePath = it.absolutePath
+    if(absolutePath.contains("mixin")) {
+        mixinPath.set(absolutePath)
+    }
+}
+if (mixinPath != null)  {
+    minecraft.clientJvmArgs = minecraft.serverJvmArgs = Arrays.asList(
+            "-Dfml.coreMods.load=net.daporkchop.pepsimod.asm.PepsimodMixinLoader",
+            "-Dmixin.checks.interfaces=true",
+            "-Dmixin.debug.export=true",
+            "-Dmixin.debug.verbose=true",
+            "-Dmixin.hotSwap=true",
+            "-javaagent:" + mixinPath,
+            "-Xmx2G",
+            "-XX:+UseG1GC",
+            "-ea",
+            "-da:io.netty..."
+    )
+} else {
+    throw new IllegalStateException("Unable to find mixin path!")
 }

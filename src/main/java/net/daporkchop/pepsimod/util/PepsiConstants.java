@@ -20,11 +20,28 @@
 
 package net.daporkchop.pepsimod.util;
 
+import com.google.gson.JsonParser;
 import net.daporkchop.pepsimod.Pepsimod;
+import net.daporkchop.pepsimod.util.event.EventManager;
+import net.daporkchop.pepsimod.util.render.BetterScaledResolution;
 import net.minecraft.client.Minecraft;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public abstract class PepsiConstants {
-    public static Minecraft mc = null;
-    public static Pepsimod pepsimod = null;
-    public static boolean mcStartedSuccessfully = false;
+/**
+ * Constant values used throughout the mod.
+ *
+ * @author DaPorkchop_
+ */
+public interface PepsiConstants {
+    Minecraft              mc            = PepsiUtil.getNull();
+    Pepsimod               pepsimod      = Pepsimod.INSTANCE();
+    Logger                 log           = LogManager.getFormatterLogger("pepsimod");
+    EventManager           EVENT_MANAGER = PepsiUtil.getInputValue(new EventManager());
+    JsonParser             JSON_PARSER   = new JsonParser();
+    BetterScaledResolution RESOLUTION    = BetterScaledResolution.NOOP;
+
+    String MOD_ID       = "pepsimod";
+    String VERSION      = PepsiUtil.getInputValue("unknown");
+    String VERSION_FULL = PepsiUtil.getInputValue("unknown");
 }
