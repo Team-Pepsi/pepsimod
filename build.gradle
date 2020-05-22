@@ -87,7 +87,7 @@ dependencies {
         exclude module: 'log4j-core'
     }
 
-    compile "net.daporkchop.lib:common:0.4.1"
+    compile "net.daporkchop.lib:common:0.5.4-SNAPSHOT"
 }
 
 processResources {
