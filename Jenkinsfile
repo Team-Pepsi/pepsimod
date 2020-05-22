@@ -59,12 +59,12 @@ pipeline {
     stages {
         stage("Prepare Workspace") {
             steps {
-                sh "./gradlew setupCiWorkspace --no-daemon"
+                sh "bash gradlew setupCiWorkspace --no-daemon"
             }
         }
         stage("Build") {
             steps {
-                sh "./gradlew build --no-daemon"
+                sh "bash gradlew build --no-daemon"
             }
             post {
                 success {
