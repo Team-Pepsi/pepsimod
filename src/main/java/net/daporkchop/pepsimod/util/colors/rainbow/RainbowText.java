@@ -31,6 +31,8 @@ import net.minecraft.client.gui.Gui;
 
 import java.awt.Color;
 
+import static net.minecraft.util.math.MathHelper.*;
+
 public class RainbowText extends ColorizedText {
     private final ColorizedElement[] elements;
     private final int width;
@@ -65,20 +67,29 @@ public class RainbowText extends ColorizedText {
         this.text = text;
     }
 
-    //int debug = 0;
+    @Override
     public void drawAtPos(Gui screen, int x, int y) {
         int i = 0;
-        RainbowCycle cycle = PepsiUtils.rainbowCycle(this.offset, PepsiUtils.rainbowCycle.clone());
         for (ColorizedElement element : this.elements) {
             if (element instanceof FixedColorElement) {
                 screen.drawString(Minecraft.getMinecraft().fontRenderer, element.text, x + i, y, ((FixedColorElement) element).color);
                 return;
             }
-            cycle = PepsiUtils.rainbowCycle(1, cycle);
-            Color color = new Color(PepsiUtils.ensureRange(cycle.r, 0, 255), PepsiUtils.ensureRange(cycle.g, 0, 255), PepsiUtils.ensureRange(cycle.b, 0, 255));
-            screen.drawString(Minecraft.getMinecraft().fontRenderer, element.text, x + i, y, color.getRGB());
+            int color = rainbow(x + i, y);
+            screen.drawString(Minecraft.getMinecraft().fontRenderer, element.text, x + i, y, color);
             i += element.width;
         }
+    }
+
+    private static int rainbow(double x, double y) {
+        double scale = 4.0d / 255.0d;
+        double speed = 5000.0d; //time (in ms) per full rainbow cycle
+        double d = 0.7071067811865483d; //cos((360° - 45°) + 180°)
+        double pos = (x * d + y * d) * scale + (System.currentTimeMillis() % speed) * 2.0d * Math.PI / speed;
+        return 0xFF000000
+               | clamp(floor(255.0d * (0.5d + Math.sin(0.0d / 3.0d * Math.PI + pos))), 0, 255) << 16
+               | clamp(floor(255.0d * (0.5d + Math.sin(2.0d / 3.0d * Math.PI + pos))), 0, 255) << 8
+               | clamp(floor(255.0d * (0.5d + Math.sin(4.0d / 3.0d * Math.PI + pos))), 0, 255);
     }
 
     public void drawAtPos(Gui screen, int x, int y, int offset) {

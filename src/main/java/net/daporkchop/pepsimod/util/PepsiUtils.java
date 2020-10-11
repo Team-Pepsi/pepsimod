@@ -25,8 +25,6 @@ import net.daporkchop.pepsimod.optimization.BlockID;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
 import net.daporkchop.pepsimod.util.colors.FixedColorElement;
 import net.daporkchop.pepsimod.util.colors.GradientText;
-import net.daporkchop.pepsimod.util.colors.rainbow.ColorChangeType;
-import net.daporkchop.pepsimod.util.colors.rainbow.RainbowCycle;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
 import net.daporkchop.pepsimod.util.config.impl.GeneralTranslator;
 import net.daporkchop.pepsimod.util.config.impl.TargettingTranslator;
@@ -42,10 +40,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.Vector3d;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
@@ -91,8 +85,6 @@ public class PepsiUtils extends PepsiConstants {
     };
     public static final BufferedImage PEPSI_LOGO;
     public static String buttonPrefix = COLOR_ESCAPE + "c";
-    public static RainbowCycle rainbowCycle = new RainbowCycle();
-    public static Color RAINBOW_COLOR = new Color(0, 0, 0);
     public static RainbowText PEPSI_NAME = new RainbowText(Pepsimod.NAME_VERSION);
     public static ArrayList<IWurstRenderListener> wurstRenderListeners = new ArrayList<>();
     public static ArrayList<IWurstRenderListener> toRemoveWurstRenderListeners = new ArrayList<>();
@@ -126,52 +118,6 @@ public class PepsiUtils extends PepsiConstants {
                 }
             }
         }, 1000, 1000);
-
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() { //rainbow
-                //red
-                if (rainbowCycle.red == ColorChangeType.INCREASE) {
-                    rainbowCycle.r += 4;
-                    if (rainbowCycle.r > 255) {
-                        rainbowCycle.red = ColorChangeType.DECRASE;
-                        rainbowCycle.green = ColorChangeType.INCREASE;
-                    }
-                } else if (rainbowCycle.red == ColorChangeType.DECRASE) {
-                    rainbowCycle.r -= 4;
-                    if (rainbowCycle.r == 0) {
-                        rainbowCycle.red = ColorChangeType.NONE;
-                    }
-                }
-                //green
-                if (rainbowCycle.green == ColorChangeType.INCREASE) {
-                    rainbowCycle.g += 4;
-                    if (rainbowCycle.g > 255) {
-                        rainbowCycle.green = ColorChangeType.DECRASE;
-                        rainbowCycle.blue = ColorChangeType.INCREASE;
-                    }
-                } else if (rainbowCycle.green == ColorChangeType.DECRASE) {
-                    rainbowCycle.g -= 4;
-                    if (rainbowCycle.g == 0) {
-                        rainbowCycle.green = ColorChangeType.NONE;
-                    }
-                }
-                //blue
-                if (rainbowCycle.blue == ColorChangeType.INCREASE) {
-                    rainbowCycle.b += 4;
-                    if (rainbowCycle.b > 255) {
-                        rainbowCycle.blue = ColorChangeType.DECRASE;
-                        rainbowCycle.red = ColorChangeType.INCREASE;
-                    }
-                } else if (rainbowCycle.blue == ColorChangeType.DECRASE) {
-                    rainbowCycle.b -= 4;
-                    if (rainbowCycle.b == 0) {
-                        rainbowCycle.blue = ColorChangeType.NONE;
-                    }
-                }
-                RAINBOW_COLOR = new Color(ensureRange(rainbowCycle.r, 0, 255), ensureRange(rainbowCycle.g, 0, 255), ensureRange(rainbowCycle.b, 0, 255));
-            }
-        }, 0, 50);
 
         BufferedImage pepsiLogo = null;
         try (InputStream in = PepsiUtils.class.getResourceAsStream("/pepsilogo.png")) {
@@ -226,98 +172,6 @@ public class PepsiUtils extends PepsiConstants {
     public static int ensureRange(int value, int min, int max) {
         int toReturn = Math.min(Math.max(value, min), max);
         return toReturn;
-    }
-
-    public static RainbowCycle rainbowCycle(int count, RainbowCycle toRunOn) {
-        for (int i = 0; i < count; i++) {
-            //red
-            if (toRunOn.red == ColorChangeType.INCREASE) {
-                toRunOn.r += 4;
-                if (toRunOn.r > 255) {
-                    toRunOn.red = ColorChangeType.DECRASE;
-                    toRunOn.green = ColorChangeType.INCREASE;
-                }
-            } else if (toRunOn.red == ColorChangeType.DECRASE) {
-                toRunOn.r -= 4;
-                if (toRunOn.r == 0) {
-                    toRunOn.red = ColorChangeType.NONE;
-                }
-            }
-            //green
-            if (toRunOn.green == ColorChangeType.INCREASE) {
-                toRunOn.g += 4;
-                if (toRunOn.g > 255) {
-                    toRunOn.green = ColorChangeType.DECRASE;
-                    toRunOn.blue = ColorChangeType.INCREASE;
-                }
-            } else if (toRunOn.green == ColorChangeType.DECRASE) {
-                toRunOn.g -= 4;
-                if (toRunOn.g == 0) {
-                    toRunOn.green = ColorChangeType.NONE;
-                }
-            }
-            //blue
-            if (toRunOn.blue == ColorChangeType.INCREASE) {
-                toRunOn.b += 4;
-                if (toRunOn.b > 255) {
-                    toRunOn.blue = ColorChangeType.DECRASE;
-                    toRunOn.red = ColorChangeType.INCREASE;
-                }
-            } else if (toRunOn.blue == ColorChangeType.DECRASE) {
-                toRunOn.b -= 4;
-                if (toRunOn.b == 0) {
-                    toRunOn.blue = ColorChangeType.NONE;
-                }
-            }
-        }
-        return toRunOn;
-    }
-
-    public static RainbowCycle rainbowCycleBackwards(int count, RainbowCycle toRunOn) {
-        for (int i = 0; i < count; i++) {
-            //red
-            if (toRunOn.red == ColorChangeType.INCREASE) { //decrease value
-                toRunOn.r -= 8;
-                if (toRunOn.r == 0) {
-                    toRunOn.red = ColorChangeType.NONE;
-                }
-            } else if (toRunOn.red == ColorChangeType.DECRASE) {
-                toRunOn.r += 8;
-                if (toRunOn.r > 255) {
-                    toRunOn.red = ColorChangeType.INCREASE;
-                    toRunOn.green = ColorChangeType.DECRASE;
-                }
-            }
-
-            //green
-            if (toRunOn.green == ColorChangeType.INCREASE) { //decrease value
-                toRunOn.g -= 8;
-                if (toRunOn.g == 0) {
-                    toRunOn.green = ColorChangeType.NONE;
-                }
-            } else if (toRunOn.green == ColorChangeType.DECRASE) {
-                toRunOn.g += 8;
-                if (toRunOn.g > 255) {
-                    toRunOn.green = ColorChangeType.INCREASE;
-                    toRunOn.blue = ColorChangeType.DECRASE;
-                }
-            }
-
-            //blue
-            if (toRunOn.blue == ColorChangeType.INCREASE) { //decrease value
-                toRunOn.b -= 8;
-                if (toRunOn.b == 0) {
-                    toRunOn.blue = ColorChangeType.NONE;
-                }
-            } else if (toRunOn.blue == ColorChangeType.DECRASE) {
-                toRunOn.b += 8;
-                if (toRunOn.b > 255) {
-                    toRunOn.blue = ColorChangeType.INCREASE;
-                    toRunOn.red = ColorChangeType.DECRASE;
-                }
-            }
-        }
-        return toRunOn;
     }
 
     public static boolean canEntityBeSeen(Entity entityIn, EntityPlayer player, TargettingTranslator.TargetBone bone) {
