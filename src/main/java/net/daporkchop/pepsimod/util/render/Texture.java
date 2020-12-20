@@ -21,7 +21,7 @@
 package net.daporkchop.pepsimod.util.render;
 
 import net.daporkchop.lib.unsafe.PCleaner;
-import net.daporkchop.pepsimod.util.PepsiConstants;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -35,26 +35,25 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static org.lwjgl.opengl.GL11.GL_QUADS;
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Simple texture class, originally loaded a bufferedimage from file and stored a texture id like you would expect, but I decided to take advantage of Minecraft's resource shiz.
  * There's a slight chance that this is skidded from Huzuni.
  * kek
  */
-public class Texture extends PepsiConstants implements AutoCloseable {
-    protected static DynamicTexture loadTexture(BufferedImage image)  {
+public class Texture implements AutoCloseable {
+    protected static DynamicTexture loadTexture(BufferedImage image) {
         try {
             return new DynamicTexture(image);
-        } catch (RuntimeException e)    {
-            if ("No OpenGL context found in the current thread.".equalsIgnoreCase(e.getMessage()))  {
+        } catch (RuntimeException e) {
+            if ("No OpenGL context found in the current thread.".equalsIgnoreCase(e.getMessage())) {
                 //load async
                 try {
-                    return mc.addScheduledTask(() -> new DynamicTexture(image)).get();
-                } catch (InterruptedException | ExecutionException e1)   {
+                    return Minecraft.getMinecraft().addScheduledTask(() -> new DynamicTexture(image)).get();
+                } catch (InterruptedException | ExecutionException e1) {
                     throw new RuntimeException(e1);
                 }
             } else {
@@ -75,7 +74,7 @@ public class Texture extends PepsiConstants implements AutoCloseable {
     }
 
     public Texture(BufferedImage img) {
-        this(mc.getTextureManager().getDynamicTextureLocation(UUID.randomUUID().toString(), loadTexture(img)), true);
+        this(Minecraft.getMinecraft().getTextureManager().getDynamicTextureLocation(UUID.randomUUID().toString(), loadTexture(img)), true);
     }
 
     public Texture(ResourceLocation texture) {
@@ -84,7 +83,7 @@ public class Texture extends PepsiConstants implements AutoCloseable {
 
     public Texture(ResourceLocation texture, boolean clean) {
         this.texture = texture;
-        this.cleaner = clean ? PCleaner.cleaner(this, () -> mc.addScheduledTask(() -> mc.getTextureManager().deleteTexture(texture))) : null;
+        this.cleaner = clean ? PCleaner.cleaner(this, () -> Minecraft.getMinecraft().addScheduledTask(() -> Minecraft.getMinecraft().getTextureManager().deleteTexture(texture))) : null;
     }
 
     public void render(float x, float y, float width, float height) {
@@ -100,7 +99,7 @@ public class Texture extends PepsiConstants implements AutoCloseable {
     }
 
     public void bindTexture() {
-        mc.getTextureManager().bindTexture(this.texture);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(this.texture);
         GlStateManager.enableTexture2D();
     }
 

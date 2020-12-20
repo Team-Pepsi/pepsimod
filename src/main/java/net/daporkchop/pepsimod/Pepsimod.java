@@ -20,20 +20,20 @@
 
 package net.daporkchop.pepsimod;
 
-import net.daporkchop.pepsimod.command.impl.ReloadCommand;
-import net.daporkchop.pepsimod.gui.clickgui.ClickGUI;
 import net.daporkchop.pepsimod.command.CommandRegistry;
 import net.daporkchop.pepsimod.command.impl.GoToCommand;
 import net.daporkchop.pepsimod.command.impl.HelpCommand;
 import net.daporkchop.pepsimod.command.impl.InvSeeCommand;
 import net.daporkchop.pepsimod.command.impl.ListCommand;
 import net.daporkchop.pepsimod.command.impl.PeekCommand;
+import net.daporkchop.pepsimod.command.impl.ReloadCommand;
 import net.daporkchop.pepsimod.command.impl.SaveCommand;
 import net.daporkchop.pepsimod.command.impl.SetRotCommand;
 import net.daporkchop.pepsimod.command.impl.SortModulesCommand;
 import net.daporkchop.pepsimod.command.impl.ToggleCommand;
 import net.daporkchop.pepsimod.event.GuiRenderHandler;
 import net.daporkchop.pepsimod.event.MiscEventHandler;
+import net.daporkchop.pepsimod.gui.clickgui.ClickGUI;
 import net.daporkchop.pepsimod.gui.clickgui.window.WindowCombat;
 import net.daporkchop.pepsimod.gui.clickgui.window.WindowMisc;
 import net.daporkchop.pepsimod.gui.clickgui.window.WindowMovement;
@@ -119,12 +119,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.TimerTask;
 
-@Mod(
-        modid = "pepsimod",
+import static net.daporkchop.pepsimod.Lite.*;
+
+@Mod(modid = "pepsimod",
         version = "v11.1",
-        useMetadata = true
-)
-public class Pepsimod extends PepsiConstants {
+        dependencies = "required-after:pepsimod-lite;",
+        useMetadata = true)
+public class Pepsimod {
     public static final String VERSION;
     public static final String CHAT_PREFIX = "\u00A70\u00A7l[\u00A7c\u00A7lpepsi\u00A79\u00A7lmod\u00A70\u00A7l]\u00A7r";
     public static final String NAME_VERSION;
@@ -132,7 +133,7 @@ public class Pepsimod extends PepsiConstants {
     static {
         {
             String version = Pepsimod.class.getAnnotation(Mod.class).version();
-            if (version.indexOf('-') == -1)  {
+            if (version.indexOf('-') == -1) {
                 version += String.format("-%s", MinecraftForge.MC_VERSION);
             }
             VERSION = version;
@@ -140,39 +141,43 @@ public class Pepsimod extends PepsiConstants {
         NAME_VERSION = String.format("pepsimod %s", VERSION);
     }
 
-    public DataLoader data;
     public boolean isMcLeaksAccount = false;
     public Session originalSession = null;
     public boolean hasInitializedModules = false;
     public boolean isInitialized = false;
 
-    {
-        PepsiConstants.pepsimod = this;
+    public Pepsimod() {
+        if (!LITE) {
+            PepsiConstants.pepsimod = this;
+        }
     }
 
     @Mod.EventHandler
     public void construction(FMLConstructionEvent event) {
-        mc = Minecraft.getMinecraft();
-        pepsimod = this;
+        if (LITE) {
+            return;
+        }
 
-        ReflectionStuff.init();
-
-        this.data = new DataLoader(
-                "https://raw.githubusercontent.com/Team-Pepsi/pepsimod/master/resources/resources.json",
-                new File(mc.gameDir, "pepsimod/resources/")
-        );
+        PepsiConstants.mc = Minecraft.getMinecraft();
+        PepsiConstants.pepsimod = this;
     }
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        mcStartedSuccessfully = true;
+        if (LITE) {
+            return;
+        }
+
+        PepsiConstants.mcStartedSuccessfully = true;
 
         MinecraftForge.EVENT_BUS.register(new KeyRegistry());
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        this.data.load();
+        if (LITE) {
+            return;
+        }
 
         new ClickGUI();
         ClickGUI.INSTANCE.setWindows(
@@ -259,6 +264,10 @@ public class Pepsimod extends PepsiConstants {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        if (LITE) {
+            return;
+        }
+
         MinecraftForge.EVENT_BUS.register(new GuiRenderHandler());
         MinecraftForge.EVENT_BUS.register(new MiscEventHandler());
         PepsiUtils.timer.schedule(new TimerTask() {
@@ -271,7 +280,7 @@ public class Pepsimod extends PepsiConstants {
 
     public void loadConfig() {
         String launcherJson = "{}";
-        File file = new File(mc.gameDir, "pepsimodConf.json");
+        File file = new File(PepsiConstants.mc.gameDir, "pepsimodConf.json");
         try (InputStream in = new FileInputStream(file)) {
             launcherJson = IOUtils.toString(in, "UTF-8");
         } catch (IOException e) {
@@ -283,7 +292,7 @@ public class Pepsimod extends PepsiConstants {
     public void saveConfig() {
         String config = Config.saveConfig();
         try {
-            File file = new File(mc.gameDir, "pepsimodConf.json");
+            File file = new File(PepsiConstants.mc.gameDir, "pepsimodConf.json");
             if (!file.exists() && !file.createNewFile()) {
                 throw new IllegalStateException(String.format("Unable to create file: %s", file.getAbsolutePath()));
             }

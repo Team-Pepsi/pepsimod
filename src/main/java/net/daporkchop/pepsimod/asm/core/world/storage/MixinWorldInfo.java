@@ -18,21 +18,26 @@
  *
  */
 
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.asm.core.world.storage;
 
-import net.daporkchop.pepsimod.Pepsimod;
-import net.minecraft.client.Minecraft;
+import net.daporkchop.pepsimod.module.impl.render.NoWeatherMod;
+import net.daporkchop.pepsimod.util.config.impl.NoWeatherTranslator;
+import net.minecraft.world.storage.WorldInfo;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static net.daporkchop.pepsimod.Lite.*;
-
-public abstract class PepsiConstants {
-    public static Minecraft mc = null;
-    public static Pepsimod pepsimod = null;
-    public static boolean mcStartedSuccessfully = false;
-
-    static {
-        if (LITE) {
-            throw new IllegalStateException("lite mode");
+@Mixin(WorldInfo.class)
+public abstract class MixinWorldInfo {
+    @Inject(
+            method = "Lnet/minecraft/world/storage/WorldInfo;getWorldTime()J",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    public void preGetWorldTime(CallbackInfoReturnable<Long> callbackInfoReturnable) {
+        if (NoWeatherMod.INSTANCE.state.enabled && NoWeatherTranslator.INSTANCE.changeTime) {
+            callbackInfoReturnable.setReturnValue((long) NoWeatherTranslator.INSTANCE.time);
         }
     }
 }

@@ -18,21 +18,34 @@
  *
  */
 
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.asm.lite.client.renderer.entity;
 
-import net.daporkchop.pepsimod.Pepsimod;
-import net.minecraft.client.Minecraft;
+import net.daporkchop.pepsimod.misc.data.Group;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static net.daporkchop.pepsimod.Lite.*;
 
-public abstract class PepsiConstants {
-    public static Minecraft mc = null;
-    public static Pepsimod pepsimod = null;
-    public static boolean mcStartedSuccessfully = false;
-
-    static {
-        if (LITE) {
-            throw new IllegalStateException("lite mode");
+/**
+ * @author DaPorkchop_
+ */
+@Mixin(Render.class)
+abstract class MixinRender {
+    @Inject(
+            method = "Lnet/minecraft/client/renderer/entity/Render;getTeamColor(Lnet/minecraft/entity/Entity;)I",
+            at = @At("HEAD"))
+    public void changeDefaultTeamColor(Entity entity, CallbackInfoReturnable<Integer> ci) {
+        if (entity instanceof EntityPlayer) {
+            Group group = DATA.getGroup((EntityPlayer) entity);
+            if (group != null && group.color != 0) {
+                ci.setReturnValue(group.color);
+                ci.cancel();
+            }
         }
     }
 }

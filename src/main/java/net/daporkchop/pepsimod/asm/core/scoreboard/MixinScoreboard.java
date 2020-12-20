@@ -18,21 +18,37 @@
  *
  */
 
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.asm.core.scoreboard;
 
-import net.daporkchop.pepsimod.Pepsimod;
-import net.minecraft.client.Minecraft;
+import com.google.common.collect.Maps;
+import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.scoreboard.Scoreboard;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
-import static net.daporkchop.pepsimod.Lite.*;
+import java.util.Map;
 
-public abstract class PepsiConstants {
-    public static Minecraft mc = null;
-    public static Pepsimod pepsimod = null;
-    public static boolean mcStartedSuccessfully = false;
+@Mixin(Scoreboard.class)
+public abstract class MixinScoreboard {
+    @Shadow
+    private final Map<String, ScorePlayerTeam> teamMemberships = Maps.<String, ScorePlayerTeam>newHashMap();
 
-    static {
-        if (LITE) {
-            throw new IllegalStateException("lite mode");
+    @Overwrite
+    public void removePlayerFromTeam(String username, ScorePlayerTeam playerTeam) {
+        try {
+            if (this.getPlayersTeam(username) != playerTeam) {
+                throw new IllegalStateException("Player is either on another team or not on any team. Cannot remove from team '" + playerTeam.getName() + "'.");
+            } else {
+                this.teamMemberships.remove(username);
+                playerTeam.getMembershipCollection().remove(username);
+            }
+        } catch (NullPointerException e) {
         }
+    }
+
+    @Shadow
+    public ScorePlayerTeam getPlayersTeam(String username) {
+        return null;
     }
 }

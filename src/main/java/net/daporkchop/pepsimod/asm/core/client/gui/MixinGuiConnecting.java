@@ -18,21 +18,23 @@
  *
  */
 
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.asm.core.client.gui;
 
-import net.daporkchop.pepsimod.Pepsimod;
-import net.minecraft.client.Minecraft;
+import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.minecraft.client.multiplayer.GuiConnecting;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static net.daporkchop.pepsimod.Lite.*;
-
-public abstract class PepsiConstants {
-    public static Minecraft mc = null;
-    public static Pepsimod pepsimod = null;
-    public static boolean mcStartedSuccessfully = false;
-
-    static {
-        if (LITE) {
-            throw new IllegalStateException("lite mode");
-        }
+@Mixin(GuiConnecting.class)
+public abstract class MixinGuiConnecting {
+    @Inject(
+            method = "Lnet/minecraft/client/multiplayer/GuiConnecting;connect(Ljava/lang/String;I)V",
+            at = @At("HEAD")
+    )
+    public void preConnect(String ip, int port, CallbackInfo callbackInfo) {
+        PepsiUtils.lastIp = ip;
+        PepsiUtils.lastPort = port;
     }
 }

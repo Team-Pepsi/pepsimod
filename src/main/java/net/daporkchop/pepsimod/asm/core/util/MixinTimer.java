@@ -18,21 +18,43 @@
  *
  */
 
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.asm.core.util;
 
-import net.daporkchop.pepsimod.Pepsimod;
+import net.daporkchop.pepsimod.module.impl.misc.TimerMod;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.Timer;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
-import static net.daporkchop.pepsimod.Lite.*;
+@Mixin(Timer.class)
+public abstract class MixinTimer {
+    @Shadow
+    public int elapsedTicks;
 
-public abstract class PepsiConstants {
-    public static Minecraft mc = null;
-    public static Pepsimod pepsimod = null;
-    public static boolean mcStartedSuccessfully = false;
+    @Shadow
+    public float renderPartialTicks;
 
-    static {
-        if (LITE) {
-            throw new IllegalStateException("lite mode");
-        }
+    @Shadow
+    public float elapsedPartialTicks;
+
+    @Shadow
+    private long lastSyncSysClock;
+
+    @Shadow
+    private float tickLength;
+
+    @Overwrite
+    public void updateTimer() {
+        float timerSpeed = (TimerMod.INSTANCE == null ?
+                1.0f :
+                TimerMod.INSTANCE.getMultiplier());
+
+        long i = Minecraft.getSystemTime();
+        this.elapsedPartialTicks = (float) (i - this.lastSyncSysClock) / this.tickLength * timerSpeed;
+        this.lastSyncSysClock = i;
+        this.renderPartialTicks += this.elapsedPartialTicks;
+        this.elapsedTicks = (int) this.renderPartialTicks;
+        this.renderPartialTicks -= this.elapsedTicks;
     }
 }

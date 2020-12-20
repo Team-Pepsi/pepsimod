@@ -18,21 +18,33 @@
  *
  */
 
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.asm.lite.util.text.translation;
 
-import net.daporkchop.pepsimod.Pepsimod;
-import net.minecraft.client.Minecraft;
+import net.minecraft.util.text.translation.LanguageMap;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
+
+import java.util.Map;
 
 import static net.daporkchop.pepsimod.Lite.*;
+import static net.daporkchop.pepsimod.util.PepsiConstants.pepsimod;
 
-public abstract class PepsiConstants {
-    public static Minecraft mc = null;
-    public static Pepsimod pepsimod = null;
-    public static boolean mcStartedSuccessfully = false;
-
-    static {
-        if (LITE) {
-            throw new IllegalStateException("lite mode");
+/**
+ * @author DaPorkchop_
+ */
+@Mixin(LanguageMap.class)
+public abstract class MixinLanguageMap {
+    @Redirect(
+            method = "Lnet/minecraft/util/text/translation/LanguageMap;replaceWith(Ljava/util/Map;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Ljava/util/Map;putAll(Ljava/util/Map;)V"
+            ))
+    private static void postReplaceWith(Map<String, String> languageList, Map<String, String> newMap) {
+        languageList.putAll(newMap);
+        if (DATA != null)   {
+            languageList.putAll(DATA.localeKeys);
         }
     }
 }

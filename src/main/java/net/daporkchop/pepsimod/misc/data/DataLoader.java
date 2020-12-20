@@ -27,16 +27,12 @@ import com.mojang.authlib.GameProfile;
 import net.daporkchop.lib.common.function.io.IOConsumer;
 import net.daporkchop.lib.common.function.io.IOFunction;
 import net.daporkchop.lib.common.function.io.IOSupplier;
-import net.daporkchop.pepsimod.PepsimodMixinLoader;
-import net.daporkchop.pepsimod.util.PepsiConstants;
-import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.asm.PepsimodMixinLoader;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 import net.daporkchop.pepsimod.util.render.Texture;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
-import org.lwjgl.opengl.GLContext;
 
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -60,7 +56,7 @@ import java.util.stream.StreamSupport;
 /**
  * @author DaPorkchop_
  */
-public class DataLoader extends PepsiConstants {
+public class DataLoader {
     protected final String resourcesUrl;
     protected final File cache;
     protected final JsonObject root;
@@ -230,8 +226,7 @@ public class DataLoader extends PepsiConstants {
                     null,
                     String.format("Unable to load resource: \"%s\"", path),
                     "pepsimod load error",
-                    JOptionPane.ERROR_MESSAGE,
-                    new ImageIcon(PepsiUtils.PEPSI_LOGO)
+                    JOptionPane.ERROR_MESSAGE
             );
             throw e;
         }

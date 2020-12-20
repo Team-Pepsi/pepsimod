@@ -20,7 +20,6 @@
 
 package net.daporkchop.pepsimod.misc.data;
 
-import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.render.Texture;
 
 import java.util.Collections;
@@ -36,7 +35,7 @@ import java.util.function.Consumer;
  *
  * @author DaPorkchop_
  */
-public class Group extends PepsiConstants implements AutoCloseable {
+public class Group implements AutoCloseable {
     public final String id;
     public final String name;
     public final Set<UUID> members;
@@ -70,7 +69,7 @@ public class Group extends PepsiConstants implements AutoCloseable {
     @Override
     public void close() {
         this.cape.updateAndGet(loc -> {
-            if (loc != null)    {
+            if (loc != null) {
                 loc.close();
             }
             return null;

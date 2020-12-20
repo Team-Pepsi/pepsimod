@@ -52,7 +52,7 @@ import java.util.Map;
 import java.util.Set;
 
 //TODO: replace this with Unsafe or access transformers
-public class ReflectionStuff extends PepsiConstants {
+public class ReflectionStuff {
     public static Field renderPosX;
     public static Field renderPosY;
     public static Field renderPosZ;
@@ -198,7 +198,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setCurrentPlayerItem(int i) {
         try {
-            currentPlayerItem.setInt(mc.playerController, i);
+            currentPlayerItem.setInt(Minecraft.getMinecraft().playerController, i);
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
@@ -238,7 +238,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void rightClickMouse() {
         try {
-            rightClickMouse.invoke(mc);
+            rightClickMouse.invoke(Minecraft.getMinecraft());
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -265,7 +265,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static float getCurBlockDamageMP() {
         try {
-            return curBlockDamageMP.getFloat(mc.playerController);
+            return curBlockDamageMP.getFloat(Minecraft.getMinecraft().playerController);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -274,7 +274,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setCurBlockDamageMP(float val) {
         try {
-            curBlockDamageMP.setFloat(mc.playerController, val);
+            curBlockDamageMP.setFloat(Minecraft.getMinecraft().playerController, val);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -283,7 +283,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static int getBlockHitDelay() {
         try {
-            return blockHitDelay.getInt(mc.playerController);
+            return blockHitDelay.getInt(Minecraft.getMinecraft().playerController);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -292,7 +292,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setBlockHitDelay(int val) {
         try {
-            blockHitDelay.setInt(mc.playerController, val);
+            blockHitDelay.setInt(Minecraft.getMinecraft().playerController, val);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -301,7 +301,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setRightClickDelayTimer(int val) {
         try {
-            rightClickDelayTimer.setInt(mc, val);
+            rightClickDelayTimer.setInt(Minecraft.getMinecraft(), val);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -355,7 +355,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static void setHorseJumpPower(float value) {
         try {
-            horseJumpPower.setFloat(mc.player, value);
+            horseJumpPower.setFloat(Minecraft.getMinecraft().player, value);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -391,7 +391,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static RenderItem getItemRenderer() {
         try {
-            return (RenderItem) itemRenderer.get(mc.getItemRenderer());
+            return (RenderItem) itemRenderer.get(Minecraft.getMinecraft().getItemRenderer());
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -418,7 +418,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static Timer getTimer() {
         try {
-            return (Timer) timer.get(mc);
+            return (Timer) timer.get(Minecraft.getMinecraft());
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -580,7 +580,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static double getRenderPosX() {
         try {
-            return renderPosX.getDouble(mc.getRenderManager());
+            return renderPosX.getDouble(Minecraft.getMinecraft().getRenderManager());
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -589,7 +589,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static double getRenderPosY() {
         try {
-            return renderPosY.getDouble(mc.getRenderManager());
+            return renderPosY.getDouble(Minecraft.getMinecraft().getRenderManager());
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);
@@ -598,7 +598,7 @@ public class ReflectionStuff extends PepsiConstants {
 
     public static double getRenderPosZ() {
         try {
-            return renderPosZ.getDouble(mc.getRenderManager());
+            return renderPosZ.getDouble(Minecraft.getMinecraft().getRenderManager());
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalStateException(e);

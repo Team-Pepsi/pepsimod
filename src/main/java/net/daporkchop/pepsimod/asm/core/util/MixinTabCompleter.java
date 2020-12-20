@@ -18,21 +18,38 @@
  *
  */
 
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.asm.core.util;
 
-import net.daporkchop.pepsimod.Pepsimod;
-import net.minecraft.client.Minecraft;
+import net.daporkchop.pepsimod.command.CommandRegistry;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.util.TabCompleter;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static net.daporkchop.pepsimod.Lite.*;
+@Mixin(TabCompleter.class)
+public abstract class MixinTabCompleter {
+    @Shadow
+    @Final
+    protected GuiTextField textField;
 
-public abstract class PepsiConstants {
-    public static Minecraft mc = null;
-    public static Pepsimod pepsimod = null;
-    public static boolean mcStartedSuccessfully = false;
-
-    static {
-        if (LITE) {
-            throw new IllegalStateException("lite mode");
+    @Inject(
+            method = "Lnet/minecraft/util/TabCompleter;complete()V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    public void preComplete(CallbackInfo callbackInfo) {
+        if (this.textField.getText().startsWith(".")) {
+            String completed = CommandRegistry.getSuggestionFor(this.textField.getText());
+            if (completed == null || completed.isEmpty() || completed.length() <= this.textField.getText().length()) {
+                return;
+                //run vanilla code
+            }
+            this.textField.setText(completed);
+            callbackInfo.cancel();
         }
     }
 }

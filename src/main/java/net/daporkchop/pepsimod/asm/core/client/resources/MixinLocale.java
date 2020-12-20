@@ -18,21 +18,35 @@
  *
  */
 
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.asm.core.client.resources;
 
-import net.daporkchop.pepsimod.Pepsimod;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.Locale;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static net.daporkchop.pepsimod.Lite.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.List;
 
-public abstract class PepsiConstants {
-    public static Minecraft mc = null;
-    public static Pepsimod pepsimod = null;
-    public static boolean mcStartedSuccessfully = false;
+@Mixin(Locale.class)
+public abstract class MixinLocale {
+    @Shadow
+    private void loadLocaleData(InputStream inputStreamIn) throws IOException {
+    }
 
-    static {
-        if (LITE) {
-            throw new IllegalStateException("lite mode");
+    @Inject(
+            method = "Lnet/minecraft/client/resources/Locale;loadLocaleDataFiles(Lnet/minecraft/client/resources/IResourceManager;Ljava/util/List;)V",
+            at = @At("RETURN")
+    )
+    public void postLoad(IResourceManager resourceManager, List<String> languageList, CallbackInfo callbackInfo) {
+        try (InputStream in = new URL("https://gist.githubusercontent.com/DaMatrix/f7106cad11fa86495915941d6c308f5e/raw/273c86250f74f3258c39789d5b0984e539609888/en_US.lang").openStream()) {
+            this.loadLocaleData(in);
+        } catch (IOException e) {
         }
     }
 }

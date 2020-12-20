@@ -18,21 +18,49 @@
  *
  */
 
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.asm.core.client.settings;
 
-import net.daporkchop.pepsimod.Pepsimod;
-import net.minecraft.client.Minecraft;
+import net.daporkchop.pepsimod.optimization.OverrideCounter;
+import net.minecraft.client.settings.KeyBinding;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
-import static net.daporkchop.pepsimod.Lite.*;
+/**
+ * @author DaPorkchop_
+ */
+@Mixin(KeyBinding.class)
+public abstract class MixinKeyBinding implements OverrideCounter {
+    @Shadow
+    private boolean pressed;
 
-public abstract class PepsiConstants {
-    public static Minecraft mc = null;
-    public static Pepsimod pepsimod = null;
-    public static boolean mcStartedSuccessfully = false;
+    public int overrideCounter = 0;
 
-    static {
-        if (LITE) {
-            throw new IllegalStateException("lite mode");
+    @Override
+    public void incrementOverride() {
+        this.overrideCounter++;
+    }
+
+    @Override
+    public void decrementOverride() {
+        if (--this.overrideCounter < 0) {
+            this.overrideCounter = 0;
         }
+    }
+
+    @Override
+    public int getOverride() {
+        return this.overrideCounter;
+    }
+
+    @Redirect(
+            method = "Lnet/minecraft/client/settings/KeyBinding;isKeyDown()Z",
+            at = @At(
+                    value = "FIELD",
+                    target = "Lnet/minecraft/client/settings/KeyBinding;pressed:Z"
+            ))
+    public boolean modifyIsKeyDown(KeyBinding binding)  {
+        return this.pressed || this.isOverriden();
     }
 }

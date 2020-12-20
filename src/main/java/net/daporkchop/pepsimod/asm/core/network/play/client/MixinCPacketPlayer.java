@@ -18,21 +18,38 @@
  *
  */
 
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.asm.core.network.play.client;
 
-import net.daporkchop.pepsimod.Pepsimod;
-import net.minecraft.client.Minecraft;
+import net.daporkchop.pepsimod.module.impl.misc.AntiHungerMod;
+import net.daporkchop.pepsimod.module.impl.misc.NoFallMod;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.play.client.CPacketPlayer;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 
-import static net.daporkchop.pepsimod.Lite.*;
+import java.io.IOException;
 
-public abstract class PepsiConstants {
-    public static Minecraft mc = null;
-    public static Pepsimod pepsimod = null;
-    public static boolean mcStartedSuccessfully = false;
+@Mixin(CPacketPlayer.class)
+public abstract class MixinCPacketPlayer {
+    @Shadow
+    protected boolean onGround;
 
-    static {
-        if (LITE) {
-            throw new IllegalStateException("lite mode");
+    @Overwrite
+    public void writePacketData(PacketBuffer buf) throws IOException {
+        if (NoFallMod.NO_FALL && AntiHungerMod.ANTI_HUNGER) {
+            buf.writeByte(this.onGround ? 0 : 1);
+            /*
+             * This inverts the value sent to the server
+             * If the player is falling, it says that it's on the ground
+             * And antihunger will run while the player's on the ground (it says it's not on the ground)
+             */
+        } else if (NoFallMod.NO_FALL) {
+            buf.writeByte(1); //on ground
+        } else if (AntiHungerMod.ANTI_HUNGER) {
+            buf.writeByte(0); //on ground
+        } else {
+            buf.writeByte(this.onGround ? 1 : 0);
         }
     }
 }

@@ -18,21 +18,35 @@
  *
  */
 
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.asm.core.block;
 
-import net.daporkchop.pepsimod.Pepsimod;
-import net.minecraft.client.Minecraft;
+import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockSlab;
+import net.minecraft.block.state.IBlockState;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static net.daporkchop.pepsimod.Lite.*;
+import static net.daporkchop.pepsimod.util.PepsiConstants.pepsimod;
 
-public abstract class PepsiConstants {
-    public static Minecraft mc = null;
-    public static Pepsimod pepsimod = null;
-    public static boolean mcStartedSuccessfully = false;
+@Mixin(BlockSlab.class)
+public abstract class MixinBlockSlab extends Block {
+    protected MixinBlockSlab() {
+        super(null);
+    }
 
-    static {
-        if (LITE) {
-            throw new IllegalStateException("lite mode");
+    @Inject(
+            method = "Lnet/minecraft/block/BlockSlab;isFullCube(Lnet/minecraft/block/state/IBlockState;)Z",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    public void preIsFullCube(IBlockState state, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
+        if (pepsimod.hasInitializedModules) {
+            if (FreecamMod.INSTANCE.state.enabled) {
+                callbackInfoReturnable.setReturnValue(false);
+            }
         }
     }
 }

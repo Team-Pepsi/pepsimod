@@ -35,8 +35,8 @@ public class MainMenu implements AutoCloseable {
     protected String[] splashes;
     public Texture banner;
 
-    public void setup(String[] splashes, Texture banner)    {
-        if (this.banner != null)    {
+    public void setup(String[] splashes, Texture banner) {
+        if (this.banner != null) {
             this.close();
         }
         this.splashes = Objects.requireNonNull(splashes, "splashes");
@@ -44,6 +44,10 @@ public class MainMenu implements AutoCloseable {
     }
 
     public String getRandomSplash() {
+        if (this.splashes == null) {
+            return "\u00A7cerror";
+        }
+
         Random r = ThreadLocalRandom.current();
         String[] colors = {
                 "\u00A71",

@@ -20,8 +20,6 @@
 
 package net.daporkchop.pepsimod.misc.data;
 
-import net.daporkchop.pepsimod.util.PepsiConstants;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,7 +30,7 @@ import java.util.UUID;
 /**
  * @author DaPorkchop_
  */
-public class Groups extends PepsiConstants implements AutoCloseable {
+public class Groups implements AutoCloseable {
     protected Map<UUID, Group> playerToGroup = Collections.emptyMap();
     protected Collection<Group> groups = Collections.emptyList();
 

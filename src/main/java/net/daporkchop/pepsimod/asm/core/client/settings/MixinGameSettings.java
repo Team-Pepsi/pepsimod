@@ -18,21 +18,24 @@
  *
  */
 
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.asm.core.client.settings;
 
-import net.daporkchop.pepsimod.Pepsimod;
-import net.minecraft.client.Minecraft;
+import net.daporkchop.pepsimod.module.impl.render.ZoomMod;
+import net.minecraft.client.settings.GameSettings;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static net.daporkchop.pepsimod.Lite.*;
-
-public abstract class PepsiConstants {
-    public static Minecraft mc = null;
-    public static Pepsimod pepsimod = null;
-    public static boolean mcStartedSuccessfully = false;
-
-    static {
-        if (LITE) {
-            throw new IllegalStateException("lite mode");
+@Mixin(GameSettings.class)
+public abstract class MixinGameSettings {
+    @Inject(
+            method = "Lnet/minecraft/client/settings/GameSettings;setOptionFloatValue(Lnet/minecraft/client/settings/GameSettings$Options;F)V",
+            at = @At("HEAD")
+    )
+    public void preSetOptionFloatValue(GameSettings.Options settingsOption, float value, CallbackInfo callbackInfo) {
+        if (settingsOption == GameSettings.Options.FOV) {
+            ZoomMod.INSTANCE.fov = value;
         }
     }
 }

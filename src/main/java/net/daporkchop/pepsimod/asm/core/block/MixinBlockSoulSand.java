@@ -18,21 +18,22 @@
  *
  */
 
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.asm.core.block;
 
-import net.daporkchop.pepsimod.Pepsimod;
-import net.minecraft.client.Minecraft;
+import net.daporkchop.pepsimod.module.impl.movement.NoSlowdownMod;
+import net.minecraft.block.BlockSoulSand;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
-import static net.daporkchop.pepsimod.Lite.*;
-
-public abstract class PepsiConstants {
-    public static Minecraft mc = null;
-    public static Pepsimod pepsimod = null;
-    public static boolean mcStartedSuccessfully = false;
-
-    static {
-        if (LITE) {
-            throw new IllegalStateException("lite mode");
-        }
+@Mixin(BlockSoulSand.class)
+public abstract class MixinBlockSoulSand {
+    @ModifyConstant(
+            method = "Lnet/minecraft/block/BlockSoulSand;onEntityCollision(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/entity/Entity;)V",
+            constant = @Constant(
+                    doubleValue = 0.4d
+            ))
+    public double changeSpeed(double oldMultiplier) {
+        return NoSlowdownMod.INSTANCE.state.enabled ? 1.0d : oldMultiplier;
     }
 }

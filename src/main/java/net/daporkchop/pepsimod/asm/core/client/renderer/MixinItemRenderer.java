@@ -18,21 +18,36 @@
  *
  */
 
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.asm.core.client.renderer;
 
-import net.daporkchop.pepsimod.Pepsimod;
-import net.minecraft.client.Minecraft;
+import net.daporkchop.pepsimod.module.impl.render.NoOverlayMod;
+import net.minecraft.client.renderer.ItemRenderer;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static net.daporkchop.pepsimod.Lite.*;
+@Mixin(ItemRenderer.class)
+public abstract class MixinItemRenderer {
+    @Inject(
+            method = "Lnet/minecraft/client/renderer/ItemRenderer;renderWaterOverlayTexture(F)V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    public void preRenderWaterOverlayTexture(float partialTicks, CallbackInfo callbackInfo) {
+        if (NoOverlayMod.INSTANCE.state.enabled) {
+            callbackInfo.cancel();
+        }
+    }
 
-public abstract class PepsiConstants {
-    public static Minecraft mc = null;
-    public static Pepsimod pepsimod = null;
-    public static boolean mcStartedSuccessfully = false;
-
-    static {
-        if (LITE) {
-            throw new IllegalStateException("lite mode");
+    @Inject(
+            method = "Lnet/minecraft/client/renderer/ItemRenderer;renderFireInFirstPerson()V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    public void preRenderFireInFirstPerson(CallbackInfo callbackInfo) {
+        if (NoOverlayMod.INSTANCE.state.enabled) {
+            callbackInfo.cancel();
         }
     }
 }

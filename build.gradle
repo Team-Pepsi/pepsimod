@@ -33,7 +33,7 @@ buildscript {
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
         classpath 'org.spongepowered:mixingradle:0.4-SNAPSHOT'
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.0'
     }
 }
 
@@ -60,10 +60,17 @@ minecraft {
     runDir = "run"
     mappings = "stable_39"
     makeObfSourceJar = false
-    coreMod = "net.daporkchop.pepsimod.PepsimodMixinLoader"
+    coreMod = "net.daporkchop.pepsimod.asm.PepsimodMixinLoader"
 }
 
 version = "v11.1-" + project.minecraft.version
+
+configurations {
+    relocate
+    shade
+    shade.extendsFrom relocate
+    compile.extendsFrom shade
+}
 
 repositories {
     mavenLocal()
@@ -79,7 +86,7 @@ repositories {
 }
 
 dependencies {
-    compile("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
+    shade("org.spongepowered:mixin:0.8.2") {
         exclude module: 'launchwrapper'
         exclude module: 'guava'
         exclude module: 'gson'
@@ -87,7 +94,9 @@ dependencies {
         exclude module: 'log4j-core'
     }
 
-    compile "net.daporkchop.lib:common:0.5.4-SNAPSHOT"
+    relocate "net.daporkchop.lib:common:0.5.4-SNAPSHOT"
+
+    annotationProcessor "org.spongepowered:mixin:0.8.2:processor"
 }
 
 processResources {
@@ -108,6 +117,12 @@ mixin {
     add sourceSets.main, "mixins.pepsimod.refmap.json"
 }
 
+shadowJar {
+    classifier = null
+    configurations = [project.configurations.shade]
+}
+build.dependsOn shadowJar
+
 reobf {
     shadowJar {
         mappingType = 'SEARGE'
@@ -115,28 +130,27 @@ reobf {
     }
 }
 
-shadowJar {
-    dependencies {
-        include(dependency('org.spongepowered:mixin'))
-
-        include(dependency('net.daporkchop.lib:unsafe'))
-        include(dependency('net.daporkchop.lib:common'))
+class PepsiRelocate extends com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation {
+    @Override
+    List<Configuration> getConfigurations() {
+        return [project.configurations.relocate]
     }
-    exclude 'dummyThing'
-    exclude 'LICENSE.txt'
-    classifier = null
 }
 
-build.dependsOn(shadowJar)
+//relocate all shaded dependencies
+task relocateShadowJar(type: PepsiRelocate) {
+    target = tasks.shadowJar
+    prefix = "net.daporkchop.pepsimod.dep"
+}
+shadowJar.dependsOn relocateShadowJar
 
 jar {
     manifest {
         attributes(
-                "MixinConfigs": 'mixins.pepsimod.json',
                 "tweakClass": 'org.spongepowered.asm.launch.MixinTweaker',
                 "TweakOrder": 0,
                 'FMLCorePluginContainsFMLMod': 'true',
-                'FMLCorePlugin': 'net.daporkchop.pepsimod.PepsimodMixinLoader',
+                'FMLCorePlugin': 'net.daporkchop.pepsimod.asm.PepsimodMixinLoader',
                 'ForceLoadAsMod': 'true'
         )
     }

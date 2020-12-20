@@ -18,21 +18,30 @@
  *
  */
 
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.asm.core.client.multiplayer;
 
-import net.daporkchop.pepsimod.Pepsimod;
-import net.minecraft.client.Minecraft;
+import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
+import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.world.World;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static net.daporkchop.pepsimod.Lite.*;
+@Mixin(WorldClient.class)
+public abstract class MixinWorldClient extends World {
+    public MixinWorldClient() {
+        super(null, null, null, null, false);
+    }
 
-public abstract class PepsiConstants {
-    public static Minecraft mc = null;
-    public static Pepsimod pepsimod = null;
-    public static boolean mcStartedSuccessfully = false;
-
-    static {
-        if (LITE) {
-            throw new IllegalStateException("lite mode");
+    @Inject(
+            method = "Lnet/minecraft/client/multiplayer/WorldClient;doVoidFogParticles(III)V",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    public void preDoVoidFogParticles(int posX, int posY, int posZ, CallbackInfo callbackInfo) {
+        if (FreecamMod.INSTANCE.state.enabled) {
+            callbackInfo.cancel();
         }
     }
 }

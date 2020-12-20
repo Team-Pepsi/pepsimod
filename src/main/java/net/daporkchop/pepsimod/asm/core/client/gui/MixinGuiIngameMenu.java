@@ -18,21 +18,29 @@
  *
  */
 
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.asm.core.client.gui;
 
-import net.daporkchop.pepsimod.Pepsimod;
-import net.minecraft.client.Minecraft;
+import net.daporkchop.pepsimod.module.ModuleManager;
+import net.daporkchop.pepsimod.module.impl.render.ZoomMod;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiIngameMenu;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static net.daporkchop.pepsimod.Lite.*;
+import static net.daporkchop.pepsimod.util.PepsiConstants.mc;
 
-public abstract class PepsiConstants {
-    public static Minecraft mc = null;
-    public static Pepsimod pepsimod = null;
-    public static boolean mcStartedSuccessfully = false;
-
-    static {
-        if (LITE) {
-            throw new IllegalStateException("lite mode");
+@Mixin(GuiIngameMenu.class)
+public abstract class MixinGuiIngameMenu {
+    @Inject(
+            method = "Lnet/minecraft/client/gui/GuiIngameMenu;actionPerformed(Lnet/minecraft/client/gui/GuiButton;)V",
+            at = @At("HEAD")
+    )
+    public void preActionPerformed(GuiButton button, CallbackInfo callbackInfo) {
+        if (ZoomMod.INSTANCE.state.enabled) {
+            ModuleManager.disableModule(ZoomMod.INSTANCE);
+            mc.gameSettings.fovSetting = ZoomMod.INSTANCE.fov;
         }
     }
 }

@@ -14,5 +14,21 @@
     "logoFile": "assets/pepsimod/textures/gui/pepsimod.png",
     "screenshots": [],
     "dependencies": []
+  },
+  {
+    "modid": "pepsimod-lite",
+    "name": "pepsimod lite",
+    "description": "pepsimod cosmetic features",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "https://github.com/Team-Pepsi/pepsimod",
+    "updateUrl": "https://raw.githubusercontent.com/Team-Pepsi/pepsimod/master/update.json",
+    "authorList": [
+      "DaPorkchop_"
+    ],
+    "credits": "Pepsi, for being amazing",
+    "logoFile": "assets/pepsimod/textures/gui/pepsimod.png",
+    "screenshots": [],
+    "dependencies": []
   }
 ]

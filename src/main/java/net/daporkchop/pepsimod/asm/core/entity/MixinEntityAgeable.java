@@ -18,21 +18,24 @@
  *
  */
 
-package net.daporkchop.pepsimod.util;
+package net.daporkchop.pepsimod.asm.core.entity;
 
-import net.daporkchop.pepsimod.Pepsimod;
-import net.minecraft.client.Minecraft;
+import net.daporkchop.pepsimod.optimization.SizeSettable;
+import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityCreature;
+import org.spongepowered.asm.mixin.Mixin;
 
-import static net.daporkchop.pepsimod.Lite.*;
+/**
+ * @author DaPorkchop_
+ */
+@Mixin(EntityAgeable.class)
+public abstract class MixinEntityAgeable extends EntityCreature implements SizeSettable {
+    public MixinEntityAgeable() {
+        super(null);
+    }
 
-public abstract class PepsiConstants {
-    public static Minecraft mc = null;
-    public static Pepsimod pepsimod = null;
-    public static boolean mcStartedSuccessfully = false;
-
-    static {
-        if (LITE) {
-            throw new IllegalStateException("lite mode");
-        }
+    @Override
+    public void forceSetSize(float width, float height) {
+        super.setSize(width, height);
     }
 }

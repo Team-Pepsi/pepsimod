@@ -22,6 +22,8 @@ package net.daporkchop.pepsimod.command.impl;
 
 import net.daporkchop.pepsimod.command.api.Command;
 
+import static net.daporkchop.pepsimod.Lite.*;
+
 public class ReloadCommand extends Command {
     public ReloadCommand() {
         super("reload");
@@ -32,7 +34,7 @@ public class ReloadCommand extends Command {
         clientMessage("Reloading resources...");
         new Thread(() -> {
             try {
-                pepsimod.data.load();
+                DATA.load();
             } catch (Exception e)   {
                 clientMessage("Error loading resources! See log for more info.");
                 e.printStackTrace();
