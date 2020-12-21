@@ -32,7 +32,7 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-        classpath 'org.spongepowered:mixingradle:0.4-SNAPSHOT'
+        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
         classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.0'
     }
 }
@@ -86,17 +86,12 @@ repositories {
 }
 
 dependencies {
-    shade("org.spongepowered:mixin:0.8.2") {
-        exclude module: 'launchwrapper'
-        exclude module: 'guava'
-        exclude module: 'gson'
-        exclude module: 'commons-io'
-        exclude module: 'log4j-core'
+    shade("org.spongepowered:mixin:0.8") {
+        transitive = false
     }
+    annotationProcessor "org.spongepowered:mixin:0.8:processor"
 
     relocate "net.daporkchop.lib:common:0.5.4-SNAPSHOT"
-
-    annotationProcessor "org.spongepowered:mixin:0.8.2:processor"
 }
 
 processResources {

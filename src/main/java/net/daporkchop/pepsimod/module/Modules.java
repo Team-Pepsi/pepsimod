@@ -18,25 +18,20 @@
  *
  */
 
-package net.daporkchop.pepsimod.command.impl;
+package net.daporkchop.pepsimod.module;
 
-import net.daporkchop.pepsimod.PepsiConfig;
-import net.daporkchop.pepsimod.command.api.Command;
+import net.daporkchop.pepsimod.Pepsimod;
+import net.daporkchop.pepsimod.module.impl.render.XrayMod;
+import net.minecraftforge.common.config.Config;
 
-public class SaveCommand extends Command {
-    public SaveCommand() {
-        super("save");
-    }
+/**
+ * @author DaPorkchop_
+ */
+@Config(modid = Pepsimod.MODID, category = "modules")
+public final class Modules {
+    public static XrayMod.State xray = new XrayMod.State();
 
-    @Override
-    public void execute(String cmd, String[] args) {
-        PepsiConfig.sync();
-        pepsimod.saveConfig();
-        clientMessage("Saved config!");
-    }
-
-    @Override
-    public String getSuggestion(String cmd, String[] args) {
-        return ".save";
+    private Modules() {
+        throw new UnsupportedOperationException();
     }
 }

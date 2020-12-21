@@ -49,14 +49,13 @@ import net.daporkchop.pepsimod.util.config.impl.TargettingTranslator;
 import net.daporkchop.pepsimod.util.config.impl.TimerTranslator;
 import net.daporkchop.pepsimod.util.config.impl.TracersTranslator;
 import net.daporkchop.pepsimod.util.config.impl.VelocityTranslator;
-import net.daporkchop.pepsimod.util.config.impl.XrayTranslator;
 import net.minecraftforge.fml.common.FMLLog;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Config {
-    private static Hashtable<String, IConfigTranslator> translators = new Hashtable<>();
+    private static Map<String, IConfigTranslator> TRANSLATORS = new HashMap<>();
 
     static {
         registerConfigTranslator(AnnouncerTranslator.INSTANCE);
@@ -84,11 +83,10 @@ public class Config {
         registerConfigTranslator(TimerTranslator.INSTANCE);
         registerConfigTranslator(TracersTranslator.INSTANCE);
         registerConfigTranslator(VelocityTranslator.INSTANCE);
-        registerConfigTranslator(XrayTranslator.INSTANCE);
     }
 
     public static void registerConfigTranslator(IConfigTranslator element) {
-        translators.put(element.name(), element);
+        TRANSLATORS.put(element.name(), element);
     }
 
     public static void loadConfig(String configJson) {
@@ -104,14 +102,14 @@ public class Config {
             return;
         }
         for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
-            translators.getOrDefault(entry.getKey(), NullConfigTranslator.INSTANCE).decode(entry.getKey(), entry.getValue().getAsJsonObject());
+            TRANSLATORS.getOrDefault(entry.getKey(), NullConfigTranslator.INSTANCE).decode(entry.getKey(), entry.getValue().getAsJsonObject());
         }
     }
 
     public static String saveConfig() {
         JsonObject object = new JsonObject();
 
-        for (IConfigTranslator translator : translators.values()) {
+        for (IConfigTranslator translator : TRANSLATORS.values()) {
             JsonObject elementObj = new JsonObject();
             translator.encode(elementObj);
             object.add(translator.name(), elementObj);

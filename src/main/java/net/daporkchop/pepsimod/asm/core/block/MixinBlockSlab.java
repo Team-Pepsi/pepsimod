@@ -40,8 +40,7 @@ public abstract class MixinBlockSlab extends Block {
     @Inject(
             method = "Lnet/minecraft/block/BlockSlab;isFullCube(Lnet/minecraft/block/state/IBlockState;)Z",
             at = @At("HEAD"),
-            cancellable = true
-    )
+            cancellable = true)
     public void preIsFullCube(IBlockState state, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (pepsimod.hasInitializedModules) {
             if (FreecamMod.INSTANCE.state.enabled) {

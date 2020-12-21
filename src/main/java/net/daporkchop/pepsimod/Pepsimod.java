@@ -121,11 +121,12 @@ import java.util.TimerTask;
 
 import static net.daporkchop.pepsimod.Lite.*;
 
-@Mod(modid = "pepsimod",
+@Mod(modid = Pepsimod.MODID,
         version = "v11.1",
         dependencies = "required-after:pepsimod-lite;",
         useMetadata = true)
 public class Pepsimod {
+    public static final String MODID = "pepsimod";
     public static final String VERSION;
     public static final String CHAT_PREFIX = "\u00A70\u00A7l[\u00A7c\u00A7lpepsi\u00A79\u00A7lmod\u00A70\u00A7l]\u00A7r";
     public static final String NAME_VERSION;
@@ -279,6 +280,8 @@ public class Pepsimod {
     }
 
     public void loadConfig() {
+        PepsiConfig.sync();
+
         String launcherJson = "{}";
         File file = new File(PepsiConstants.mc.gameDir, "pepsimodConf.json");
         try (InputStream in = new FileInputStream(file)) {
@@ -290,6 +293,8 @@ public class Pepsimod {
     }
 
     public void saveConfig() {
+        PepsiConfig.sync();
+
         String config = Config.saveConfig();
         try {
             File file = new File(PepsiConstants.mc.gameDir, "pepsimodConf.json");

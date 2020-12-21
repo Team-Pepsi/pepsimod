@@ -47,8 +47,10 @@ abstract class MixinGuiMainMenu extends GuiScreen {
             method = "Lnet/minecraft/client/gui/GuiMainMenu;<init>()V",
             at = @At("RETURN")
     )
-    public void postConstructor(CallbackInfo callbackInfo)  {
+    public void postConstructor(CallbackInfo callbackInfo) {
+        if (DATA != null) {
             this.splashText = DATA.mainMenu.getRandomSplash();
+        }
     }
 
     @Redirect(
@@ -70,7 +72,7 @@ abstract class MixinGuiMainMenu extends GuiScreen {
                     target = "Lnet/minecraft/client/gui/GuiMainMenu;splashText:Ljava/lang/String;",
                     opcode = Opcodes.PUTFIELD
             ))
-    public void preventSettingSplashInInitGui(GuiMainMenu menu, String val)   {
+    public void preventSettingSplashInInitGui(GuiMainMenu menu, String val) {
     }
 
     @Redirect(
@@ -80,7 +82,7 @@ abstract class MixinGuiMainMenu extends GuiScreen {
                     target = "Lnet/minecraft/client/gui/GuiMainMenu;splashText:Ljava/lang/String;",
                     opcode = Opcodes.PUTFIELD
             ))
-    public void preventSettingSplashInDrawScreen(GuiMainMenu menu, String val)   {
+    public void preventSettingSplashInDrawScreen(GuiMainMenu menu, String val) {
     }
 
     @Redirect(

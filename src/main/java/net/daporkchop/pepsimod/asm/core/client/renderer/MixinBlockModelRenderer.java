@@ -20,8 +20,8 @@
 
 package net.daporkchop.pepsimod.asm.core.client.renderer;
 
+import net.daporkchop.pepsimod.module.Modules;
 import net.daporkchop.pepsimod.module.impl.render.XrayMod;
-import net.daporkchop.pepsimod.util.config.impl.XrayTranslator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.BlockModelRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -42,7 +42,7 @@ public abstract class MixinBlockModelRenderer {
     )
     public void preRenderModel(IBlockAccess blockAccessIn, IBakedModel modelIn, IBlockState blockStateIn, BlockPos blockPosIn, BufferBuilder buffer, boolean checkSides, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (XrayMod.INSTANCE.state.enabled) {
-            if (!XrayTranslator.INSTANCE.isTargeted(blockStateIn.getBlock())) {
+            if (!Modules.xray.isVisible(blockStateIn.getBlock())) {
                 callbackInfoReturnable.setReturnValue(false);
                 callbackInfoReturnable.cancel();
             }
@@ -57,7 +57,7 @@ public abstract class MixinBlockModelRenderer {
     )
     public void preRenderQuadsSmooth(IBlockAccess access, IBakedModel model, IBlockState stateIn, BlockPos pos, BufferBuilder bufferBuilder, boolean idk, long ok, CallbackInfoReturnable<Boolean> returnable) {
         if (XrayMod.INSTANCE.state.enabled) {
-            if (!XrayTranslator.INSTANCE.isTargeted(stateIn.getBlock())) {
+            if (!Modules.xray.isVisible(stateIn.getBlock())) {
                 returnable.setReturnValue(false);
                 returnable.cancel();
             }

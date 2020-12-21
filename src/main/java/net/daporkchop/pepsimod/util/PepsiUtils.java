@@ -68,10 +68,15 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Consumer;
+
+import static net.daporkchop.lib.common.util.PorkUtil.*;
 
 public class PepsiUtils extends PepsiConstants {
     public static final char COLOR_ESCAPE = '\u00A7';
@@ -466,6 +471,19 @@ public class PepsiUtils extends PepsiConstants {
             double y = entity.prevPosY + (entity.posY - entity.prevPosY) * partialTicks;
             double z = entity.prevPosZ + (entity.posZ - entity.prevPosZ) * partialTicks;
             return new Vec3d(x, y, z);
+        }
+    }
+
+    public static <I, T> void forEachFieldTyped(Class<I> clazz, I instance, Class<T> type, Consumer<T> callback) {
+        int checkFlag = instance == null ? Modifier.STATIC : 0;
+        for (Field field : clazz.getFields()) {
+            if ((field.getModifiers() & Modifier.STATIC) == checkFlag && type.isAssignableFrom(field.getType())) {
+                try {
+                    callback.accept(uncheckedCast(field.get(instance)));
+                } catch (IllegalAccessException e) {
+                    throw new IllegalStateException("unable to access field: " + field, e);
+                }
+            }
         }
     }
 }

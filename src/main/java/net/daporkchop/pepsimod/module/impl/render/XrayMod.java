@@ -20,14 +20,21 @@
 
 package net.daporkchop.pepsimod.module.impl.render;
 
+import net.daporkchop.pepsimod.PepsiConfig;
 import net.daporkchop.pepsimod.module.ModuleCategory;
+import net.daporkchop.pepsimod.module.Modules;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.optimization.BlockID;
 import net.daporkchop.pepsimod.util.PepsiUtils;
-import net.daporkchop.pepsimod.util.config.impl.XrayTranslator;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 public class XrayMod extends Module {
     public static XrayMod INSTANCE;
@@ -89,37 +96,44 @@ public class XrayMod extends Module {
 
     @Override
     public String getSuggestion(String cmd, String[] args) {
-        if (args.length == 2 && args[1].equals("add")) {
-            return cmd + " " + Block.REGISTRY.getObjectById(7).getRegistryName().toString();
-        } else if (args.length == 3 && args[1].equals("add")) {
-            if (args[2].isEmpty()) {
-                return cmd + Block.REGISTRY.getObjectById(7).getRegistryName().toString();
-            } else {
-                String arg = args[2];
-                for (Block b : Block.REGISTRY) {
-                    String s = b.getRegistryName().toString();
-                    if (s.startsWith(arg)) {
-                        return args[0] + " " + args[1] + " " + s;
-                    }
-                }
+        if (args.length >= 2) {
+            switch (args[1]) {
+                case "add":
+                    switch (args.length) {
+                        case 3:
+                            if (!args[2].isEmpty()) {
+                                String arg = args[2];
+                                for (Block b : Block.REGISTRY) {
+                                    String s = b.getRegistryName().toString();
+                                    if (s.startsWith(arg)) {
+                                        return args[0] + " " + args[1] + " " + s;
+                                    }
+                                }
 
-                return "";
-            }
-        } else if (args.length == 2 && args[1].equals("remove")) {
-            return cmd + " " + Block.REGISTRY.getObjectById(XrayTranslator.INSTANCE.target_blocks.iterator().nextInt()).getRegistryName();
-        } else if (args.length == 3 && args[1].equals("remove")) {
-            if (args[2].isEmpty()) {
-                return cmd + Block.REGISTRY.getObjectById(XrayTranslator.INSTANCE.target_blocks.iterator().nextInt()).getRegistryName();
-            } else {
-                String arg = args[2];
-                for (Integer i : XrayTranslator.INSTANCE.target_blocks) {
-                    String s = Block.REGISTRY.getObjectById(i).getRegistryName().toString();
-                    if (s.startsWith(arg)) {
-                        return args[0] + " " + args[1] + " " + s;
+                                return "";
+                            }
+                        case 2:
+                            return args[0] + " " + args[1] + " " + Block.REGISTRY.getObjectById(7).getRegistryName().toString();
                     }
-                }
-
-                return "";
+                    break;
+                case "remove":
+                    switch (args.length) {
+                        case 3:
+                            if (!args[2].isEmpty()) {
+                                return args[0] + " " + args[1] + " " + Modules.xray.fastLookup.stream()
+                                        .mapToObj(i -> Block.REGISTRY.getObjectById(i).getRegistryName().toString())
+                                        .filter(s -> s.startsWith(args[2]))
+                                        .findFirst()
+                                        .orElse("");
+                            }
+                        case 2:
+                            if (Modules.xray.fastLookup.isEmpty()) {
+                                return "";
+                            } else {
+                                return args[0] + " " + args[1] + " " + Block.REGISTRY.getObjectById(Modules.xray.fastLookup.nextSetBit(0)).getRegistryName();
+                            }
+                    }
+                    break;
             }
         }
 
@@ -136,7 +150,7 @@ public class XrayMod extends Module {
                 if (block == null) {
                     clientMessage("Not a valid block ID: " + PepsiUtils.COLOR_ESCAPE + "o" + args[2]);
                 } else {
-                    XrayTranslator.INSTANCE.target_blocks.add(id);
+                    Modules.xray.add(id);
                     clientMessage("Added " + PepsiUtils.COLOR_ESCAPE + "o" + block.getRegistryName().toString() + PepsiUtils.COLOR_ESCAPE + "r to the Xray list");
                     if (this.state.enabled) {
                         mc.renderGlobal.loadRenderers();
@@ -149,7 +163,7 @@ public class XrayMod extends Module {
                     if (block == null) {
                         clientMessage("Invalid id: " + PepsiUtils.COLOR_ESCAPE + "o" + s);
                     } else {
-                        XrayTranslator.INSTANCE.target_blocks.add(((BlockID) block).getBlockId());
+                        Modules.xray.add(((BlockID) block).getBlockId());
                         clientMessage("Added " + PepsiUtils.COLOR_ESCAPE + "o" + block.getRegistryName().toString() + PepsiUtils.COLOR_ESCAPE + "r to the Xray list");
                         if (this.state.enabled) {
                             mc.renderGlobal.loadRenderers();
@@ -164,8 +178,7 @@ public class XrayMod extends Module {
             String s = args[2].toLowerCase();
             try {
                 int id = Integer.parseInt(s);
-                if (XrayTranslator.INSTANCE.target_blocks.contains(id)) {
-                    XrayTranslator.INSTANCE.target_blocks.remove((Integer) id);
+                if (Modules.xray.remove(id)) {
                     clientMessage("Removed " + PepsiUtils.COLOR_ESCAPE + "o" + id + PepsiUtils.COLOR_ESCAPE + "r from the Xray list");
                     if (this.state.enabled) {
                         mc.renderGlobal.loadRenderers();
@@ -181,8 +194,7 @@ public class XrayMod extends Module {
                         clientMessage("Invalid id: " + PepsiUtils.COLOR_ESCAPE + "o" + s);
                     } else {
                         int id = ((BlockID) block).getBlockId();
-                        if (XrayTranslator.INSTANCE.target_blocks.contains(id)) {
-                            XrayTranslator.INSTANCE.target_blocks.remove(id);
+                        if (Modules.xray.remove(id)) {
                             clientMessage("Removed " + PepsiUtils.COLOR_ESCAPE + "o" + s + PepsiUtils.COLOR_ESCAPE + "r from the Xray list");
                             if (this.state.enabled) {
                                 mc.renderGlobal.loadRenderers();
@@ -203,5 +215,77 @@ public class XrayMod extends Module {
 
     public ModuleCategory getCategory() {
         return ModuleCategory.RENDER;
+    }
+
+    //TODO: make the state be part of the module instance itself
+    public static final class State implements PepsiConfig.ConfigNode {
+        private static String[] toStrings(Stream<Block> blocks) {
+            return blocks.map(Block::getRegistryName).filter(Objects::nonNull).map(ResourceLocation::toString).toArray(String[]::new);
+        }
+
+        public String[] blocks = toStrings(Stream.of(
+                Blocks.COAL_ORE,
+                Blocks.IRON_ORE,
+                Blocks.GOLD_ORE,
+                Blocks.DIAMOND_ORE,
+                Blocks.EMERALD_ORE,
+                Blocks.LAPIS_ORE,
+                Blocks.REDSTONE_ORE,
+                Blocks.LIT_REDSTONE_ORE
+        ));
+
+        private final BitSet fastLookup = new BitSet();
+
+        public boolean isVisible(Block block) {
+            return this.isVisible(((BlockID) block).getBlockId());
+        }
+
+        public boolean isVisible(int blockId) {
+            return this.fastLookup.get(blockId);
+        }
+
+        public boolean add(int blockId) {
+            if (!this.fastLookup.get(blockId)) {
+                this.fastLookup.set(blockId);
+                PepsiConfig.sync(); //save config
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public boolean remove(int blockId) {
+            if (this.fastLookup.get(blockId)) {
+                this.fastLookup.clear(blockId);
+                PepsiConfig.sync(); //save config
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        @Override
+        public void save() {
+            PepsiConfig.ConfigNode.super.save();
+
+            if (this.blocks == null) { //don't load from config the first time around
+                this.blocks = toStrings(this.fastLookup.stream().mapToObj(Block::getBlockById));
+            }
+        }
+
+        @Override
+        public void load() {
+            PepsiConfig.ConfigNode.super.save();
+
+            this.fastLookup.clear();
+            if (this.blocks != null) {
+                Stream.of(this.blocks)
+                        .map(Block::getBlockFromName)
+                        .filter(Objects::nonNull)
+                        .mapToInt(BlockID.GET_BLOCK_ID)
+                        .forEach(this.fastLookup::set);
+                this.blocks = null;
+            }
+        }
     }
 }

@@ -24,6 +24,7 @@ import net.minecraft.block.Block;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.ToIntFunction;
 
 /**
  * Injected into {@link net.minecraft.block.Block} at runtime for fast access to block IDs.
@@ -31,10 +32,7 @@ import java.util.List;
  * @author DaPorkchop_
  */
 public interface BlockID {
-    /**
-     * A lookup table of block IDs to block instances.
-     */
-    List<Block> BLOCK_LOOKUP = new ArrayList<>(); //basically as fast as it gets
+    ToIntFunction<Block> GET_BLOCK_ID = block -> ((BlockID) block).getBlockId();
 
     /**
      * Gets the numeric ID of this block.

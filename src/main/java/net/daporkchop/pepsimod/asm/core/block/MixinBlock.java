@@ -20,12 +20,12 @@
 
 package net.daporkchop.pepsimod.asm.core.block;
 
+import net.daporkchop.pepsimod.module.Modules;
 import net.daporkchop.pepsimod.module.impl.misc.AnnouncerMod;
 import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
 import net.daporkchop.pepsimod.module.impl.movement.NoClipMod;
 import net.daporkchop.pepsimod.module.impl.render.XrayMod;
 import net.daporkchop.pepsimod.optimization.BlockID;
-import net.daporkchop.pepsimod.util.config.impl.XrayTranslator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
@@ -62,7 +62,7 @@ public abstract class MixinBlock extends net.minecraftforge.registries.IForgeReg
     public void preIsFullCube(IBlockState state, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (pepsimod.hasInitializedModules) {
             if (XrayMod.INSTANCE.state.enabled) {
-                callbackInfoReturnable.setReturnValue(XrayTranslator.INSTANCE.isTargeted(this));
+                callbackInfoReturnable.setReturnValue(Modules.xray.isVisible(this.pepsimod_id));
             } else if (FreecamMod.INSTANCE.state.enabled || NoClipMod.INSTANCE.state.enabled) {
                 callbackInfoReturnable.setReturnValue(false);
             }
