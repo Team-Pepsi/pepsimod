@@ -62,7 +62,7 @@ public abstract class MixinBlock extends net.minecraftforge.registries.IForgeReg
     public void preIsFullCube(IBlockState state, CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         if (pepsimod.hasInitializedModules) {
             if (XrayMod.INSTANCE.state.enabled) {
-                callbackInfoReturnable.setReturnValue(Modules.xray.isVisible(this.pepsimod_id));
+                callbackInfoReturnable.setReturnValue(Modules.xray.isVisible((Block) (Object) this));
             } else if (FreecamMod.INSTANCE.state.enabled || NoClipMod.INSTANCE.state.enabled) {
                 callbackInfoReturnable.setReturnValue(false);
             }

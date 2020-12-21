@@ -169,6 +169,8 @@ public class Pepsimod {
             return;
         }
 
+        PepsiConfig.load();
+
         PepsiConstants.mcStartedSuccessfully = true;
 
         MinecraftForge.EVENT_BUS.register(new KeyRegistry());

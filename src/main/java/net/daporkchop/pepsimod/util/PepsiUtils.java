@@ -474,16 +474,4 @@ public class PepsiUtils extends PepsiConstants {
         }
     }
 
-    public static <I, T> void forEachFieldTyped(Class<I> clazz, I instance, Class<T> type, Consumer<T> callback) {
-        int checkFlag = instance == null ? Modifier.STATIC : 0;
-        for (Field field : clazz.getFields()) {
-            if ((field.getModifiers() & Modifier.STATIC) == checkFlag && type.isAssignableFrom(field.getType())) {
-                try {
-                    callback.accept(uncheckedCast(field.get(instance)));
-                } catch (IllegalAccessException e) {
-                    throw new IllegalStateException("unable to access field: " + field, e);
-                }
-            }
-        }
-    }
 }

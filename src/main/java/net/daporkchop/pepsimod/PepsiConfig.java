@@ -21,12 +21,15 @@
 package net.daporkchop.pepsimod;
 
 import net.daporkchop.pepsimod.module.Modules;
-import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.function.Consumer;
 
 import static net.daporkchop.lib.common.util.PorkUtil.*;
 
@@ -45,13 +48,17 @@ public final class PepsiConfig {
 
     public static void sync() {
         for (Class root : CONFIG_ROOTS) {
-            PepsiUtils.forEachFieldTyped(root, null, ConfigNode.class, ConfigNode::save);
+            forEachFieldTyped(root, null, ConfigNode.class, ConfigNode::save);
         }
 
         ConfigManager.sync(Pepsimod.MODID, Config.Type.INSTANCE);
 
+        load();
+    }
+
+    public static void load() {
         for (Class root : CONFIG_ROOTS) {
-            PepsiUtils.forEachFieldTyped(root, null, ConfigNode.class, ConfigNode::load);
+            forEachFieldTyped(root, null, ConfigNode.class, ConfigNode::load);
         }
     }
 
@@ -63,6 +70,19 @@ public final class PepsiConfig {
     public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
         if (event.getModID().equals(Pepsimod.MODID)) {
             sync();
+        }
+    }
+
+    private static <I, T> void forEachFieldTyped(Class<I> clazz, I instance, Class<T> type, Consumer<T> callback) {
+        int checkFlag = instance == null ? Modifier.STATIC : 0;
+        for (Field field : clazz.getFields()) {
+            if ((field.getModifiers() & Modifier.STATIC) == checkFlag && type.isAssignableFrom(field.getType())) {
+                try {
+                    callback.accept(uncheckedCast(field.get(instance)));
+                } catch (IllegalAccessException e) {
+                    throw new IllegalStateException("unable to access field: " + field, e);
+                }
+            }
         }
     }
 
@@ -80,14 +100,14 @@ public final class PepsiConfig {
          * Saves complex values from their parsed state into a format serializable by Forge.
          */
         default void save() {
-            PepsiUtils.forEachFieldTyped(uncheckedCast(this.getClass()), this, ConfigNode.class, ConfigNode::save);
+            forEachFieldTyped(uncheckedCast(this.getClass()), this, ConfigNode.class, ConfigNode::save);
         }
 
         /**
          * Loads complex values from a format serializable by Forge into their parsed state.
          */
         default void load() {
-            PepsiUtils.forEachFieldTyped(uncheckedCast(this.getClass()), this, ConfigNode.class, ConfigNode::load);
+            forEachFieldTyped(uncheckedCast(this.getClass()), this, ConfigNode.class, ConfigNode::load);
         }
     }
 }
