@@ -1,9 +1,0 @@
-{
-  "version": 1,
-  "groups": [
-    //applied top-to-bottom, so people in multiple groups will only end up in the lowermost one they appear in
-    "data/groups/2b2t.json",
-    "data/groups/pepsi.json",
-    "data/groups/pepsiboy.json"
-  ]
-}
