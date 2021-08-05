@@ -1,7 +1,7 @@
 /*
  * Adapted from The MIT License (MIT)
  *
- * Copyright (c) 2016-2020 DaPorkchop_
+ * Copyright (c) 2016-2021 DaPorkchop_
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -35,8 +35,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -51,14 +51,17 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
     @Shadow
     protected Minecraft mc;
 
-    public MoveEvent event = new MoveEvent();
+    @Unique
+    private MoveEvent event = new MoveEvent();
 
     public MixinEntityPlayerSP() {
         super(null, null);
     }
 
-    @Overwrite
-    public void move(MoverType type, double x, double y, double z) {
+    @Redirect(method = "Lnet/minecraft/client/entity/EntityPlayerSP;move(Lnet/minecraft/entity/MoverType;DDD)V",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/client/entity/AbstractClientPlayer;move(Lnet/minecraft/entity/MoverType;DDD)V"))
+    private void pepsimod_move_fireOnPlayerMoveModuleEvent(AbstractClientPlayer entity, MoverType type, double x, double y, double z) {
         this.event.x = x;
         this.event.y = y;
         this.event.z = z;
@@ -68,19 +71,11 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
         super.move(type, this.event.x, this.event.y, this.event.z);
     }
 
-    @Redirect(
-            method = "Lnet/minecraft/client/entity/EntityPlayerSP;onLivingUpdate()V",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/entity/Entity;isRiding()Z"
-            ))
-    public boolean fixNoSlowdown(Entity entity) {
+    @Redirect(method = "Lnet/minecraft/client/entity/EntityPlayerSP;onLivingUpdate()V",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/client/entity/EntityPlayerSP;isRiding()Z"))
+    public boolean fixNoSlowdown(EntityPlayerSP entity) {
         return entity.isRiding() && NoSlowdownMod.INSTANCE.state.enabled;
-    }
-
-    @Shadow
-    protected boolean isCurrentViewEntity() {
-        return false;
     }
 
     @Inject(
@@ -110,7 +105,7 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
                     target = "Lnet/minecraft/client/entity/EntityPlayerSP;closeScreen()V",
                     ordinal = 0
             ))
-    public void fixPortalGUIs_1(EntityPlayerSP player)  {
+    public void fixPortalGUIs_1(EntityPlayerSP player) {
     }
 
     @Redirect(
@@ -120,6 +115,6 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
                     target = "Lnet/minecraft/client/Minecraft;displayGuiScreen(Lnet/minecraft/client/gui/GuiScreen;)V",
                     ordinal = 0
             ))
-    public void fixPortalGUIs_2(Minecraft mc, GuiScreen screen)  {
+    public void fixPortalGUIs_2(Minecraft mc, GuiScreen screen) {
     }
 }

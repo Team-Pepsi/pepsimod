@@ -70,7 +70,6 @@ minecraft {
             "-Dmixin.debug.export=true",
             "-Dmixin.debug.verbose=true",
             "-Dmixin.hotSwap=true",
-            "-Dfp2.debug=true",
             "-Xmx2G",
             "-XX:+UseG1GC",
             "-ea",

@@ -3,6 +3,9 @@
   "compatibilityLevel": "JAVA_8",
   "package": "net.daporkchop.pepsimod.asm.core",
   "refmap": "mixins.pepsimod.refmap.json",
+  "injectors": {
+    "defaultRequire": 1
+  },
   "mixins": [
     "client.gui.MixinGuiMainMenu",
     "client.network.MixinNetHandlerLoginClient",
