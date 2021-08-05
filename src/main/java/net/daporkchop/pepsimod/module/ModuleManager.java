@@ -1,7 +1,7 @@
 /*
  * Adapted from The MIT License (MIT)
  *
- * Copyright (c) 2016-2020 DaPorkchop_
+ * Copyright (c) 2016-2021 DaPorkchop_
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -20,14 +20,20 @@
 
 package net.daporkchop.pepsimod.module;
 
+import net.daporkchop.lib.common.util.PArrays;
+import net.daporkchop.pepsimod.Pepsimod;
 import net.daporkchop.pepsimod.module.api.Module;
 import net.daporkchop.pepsimod.module.api.ModuleSortType;
-import net.daporkchop.pepsimod.util.PepsiUtils;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.config.impl.GeneralTranslator;
 import net.minecraft.network.Packet;
 
 import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 public class ModuleManager {
 
@@ -39,7 +45,7 @@ public class ModuleManager {
     /**
      * All modules that are currently enabled
      */
-    public static ArrayList<Module> ENABLED_MODULES = new ArrayList<>();
+    public static List<Module> ENABLED_MODULES = new CopyOnWriteArrayList<>();
 
     /**
      * Adds a module to the registry
@@ -83,6 +89,7 @@ public class ModuleManager {
             if (AVALIBLE_MODULES.contains(toEnable)) {
                 ENABLED_MODULES.add(toEnable);
                 toEnable.setEnabled(true);
+                sortModules(GeneralTranslator.INSTANCE.sortType);
             } else {
                 throw new IllegalStateException("Attempted to enable an unregistered Module!");
             }
@@ -101,6 +108,7 @@ public class ModuleManager {
             if (AVALIBLE_MODULES.contains(toDisable)) {
                 ENABLED_MODULES.remove(toDisable);
                 toDisable.setEnabled(false);
+                sortModules(GeneralTranslator.INSTANCE.sortType);
             } else {
                 throw new IllegalStateException("Attempted to disable an unregistered Module!");
             }
@@ -141,56 +149,27 @@ public class ModuleManager {
 
     @SuppressWarnings("unchecked")
     public static void sortModules(ModuleSortType type) {
-        GeneralTranslator.INSTANCE.sortType = type;
+        if (!PepsiConstants.pepsimod.isInitialized) {
+            return;
+        }
+
         switch (type) {
             case ALPHABETICAL:
-                ArrayList<Module> tempArrayList = (ArrayList<Module>) ENABLED_MODULES.clone();
-                ArrayList<Module> newArrayList = new ArrayList<>();
-                ESCAPE:
-                for (Module module : tempArrayList) {
-                    for (int i = 0; i < newArrayList.size(); i++) {
-                        if (module.name.compareTo(newArrayList.get(i).name) < 0) {
-                            newArrayList.add(i, module);
-                            continue ESCAPE;
-                        }
-                    }
-                    newArrayList.add(module);
-                }
-                ENABLED_MODULES = newArrayList;
+                ENABLED_MODULES = new CopyOnWriteArrayList<>(ENABLED_MODULES.stream()
+                        .sorted(Comparator.<Module, String>comparing(m -> m.name).reversed())
+                        .collect(Collectors.toList()));
                 break;
             case DEFAULT: //hehe do nothing lol
                 break;
             case SIZE:
-                ArrayList<Module> tempArrayList1 = (ArrayList<Module>) ENABLED_MODULES.clone();
-                ArrayList<Module> newArrayList1 = new ArrayList<>();
-                ESCAPE:
-                for (Module module : tempArrayList1) {
-                    if (module.text == null) {
-                        return;
-                    }
-                    for (int i = 0; i < newArrayList1.size(); i++) {
-                        Module existingModule = newArrayList1.get(i);
-                        if (module.text.width() > existingModule.text.width()) {
-                            newArrayList1.add(i, module);
-                            continue ESCAPE;
-                        } else if (module.text.width() == existingModule.text.width()) {
-                            if (module.name.compareTo(existingModule.name) < 0) {
-                                newArrayList1.add(i, module);
-                                continue ESCAPE;
-                            }
-                        }
-                    }
-                    newArrayList1.add(module);
-                }
-                ENABLED_MODULES = newArrayList1;
+                ENABLED_MODULES = new CopyOnWriteArrayList<>(ENABLED_MODULES.stream()
+                        .sorted(Comparator.<Module>comparingInt(m -> m.text.width()).thenComparing(Comparator.comparing(m -> m.name)).reversed())
+                        .collect(Collectors.toList()));
                 break;
             case RANDOM:
-                ArrayList<Module> tempArrayList2 = (ArrayList<Module>) ENABLED_MODULES.clone();
-                ArrayList<Module> newArrayList2 = new ArrayList<>();
-                for (Module module : tempArrayList2) {
-                    newArrayList2.add(ThreadLocalRandom.current().nextInt(newArrayList2.size()), module);
-                }
-                ENABLED_MODULES = newArrayList2;
+                Module[] modules = ENABLED_MODULES.toArray(new Module[0]);
+                PArrays.shuffle(modules);
+                ENABLED_MODULES = new CopyOnWriteArrayList<>(Arrays.asList(modules));
         }
     }
 
