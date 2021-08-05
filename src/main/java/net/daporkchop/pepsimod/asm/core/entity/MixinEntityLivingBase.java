@@ -1,7 +1,7 @@
 /*
  * Adapted from The MIT License (MIT)
  *
- * Copyright (c) 2016-2020 DaPorkchop_
+ * Copyright (c) 2016-2021 DaPorkchop_
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -20,7 +20,9 @@
 
 package net.daporkchop.pepsimod.asm.core.entity;
 
+import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
 import net.daporkchop.pepsimod.module.impl.movement.ElytraFlyMod;
+import net.daporkchop.pepsimod.module.impl.movement.FlightMod;
 import net.daporkchop.pepsimod.module.impl.render.AntiBlindMod;
 import net.daporkchop.pepsimod.util.config.impl.ElytraFlyTranslator;
 import net.minecraft.entity.Entity;
@@ -31,22 +33,14 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static net.daporkchop.pepsimod.util.PepsiConstants.mc;
+import static net.daporkchop.pepsimod.util.PepsiConstants.*;
 
 @Mixin(EntityLivingBase.class)
 public abstract class MixinEntityLivingBase extends Entity {
-    @Shadow
-    public float jumpMovementFactor;
-    @Shadow
-    public float prevLimbSwingAmount;
-    @Shadow
-    public float limbSwingAmount;
-    @Shadow
-    public float limbSwing;
-
     public MixinEntityLivingBase() {
         super(null);
     }
@@ -68,8 +62,7 @@ public abstract class MixinEntityLivingBase extends Entity {
             at = @At("HEAD")
     )
     public void preOnLivingUpdate(CallbackInfo callbackInfo) {
-        EntityLivingBase thisAsEntity = EntityLivingBase.class.cast(this);
-        if (thisAsEntity == mc.player && ElytraFlyMod.INSTANCE.state.enabled && ElytraFlyTranslator.INSTANCE.mode == ElytraFlyTranslator.ElytraFlyMode.PACKET) {
+        if ((Object) this == mc.player && ElytraFlyMod.INSTANCE.state.enabled && ElytraFlyTranslator.INSTANCE.mode == ElytraFlyTranslator.ElytraFlyMode.PACKET) {
             this.motionY = 0;
         }
     }
@@ -79,9 +72,15 @@ public abstract class MixinEntityLivingBase extends Entity {
             at = @At("HEAD")
     )
     public void preTravel(float x, float y, float z, CallbackInfo callbackInfo) {
-        EntityLivingBase thisAsEntity = EntityLivingBase.class.cast(this);
-        if (thisAsEntity == mc.player && ElytraFlyMod.INSTANCE.state.enabled && ElytraFlyTranslator.INSTANCE.mode == ElytraFlyTranslator.ElytraFlyMode.PACKET) {
+        if ((Object) this == mc.player && ElytraFlyMod.INSTANCE.state.enabled && ElytraFlyTranslator.INSTANCE.mode == ElytraFlyTranslator.ElytraFlyMode.PACKET) {
             this.motionY = 0;
         }
+    }
+
+    @Redirect(method = "Lnet/minecraft/entity/EntityLivingBase;travel(FFF)V",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/entity/EntityLivingBase;hasNoGravity()Z"))
+    private boolean pepsimod_travel_dontFallWithFreecam(EntityLivingBase entity) {
+        return ((Object) this == mc.player && (FreecamMod.INSTANCE.state.enabled || FlightMod.INSTANCE.state.enabled)) || entity.hasNoGravity();
     }
 }
