@@ -1,7 +1,7 @@
 /*
  * Adapted from The MIT License (MIT)
  *
- * Copyright (c) 2016-2020 DaPorkchop_
+ * Copyright (c) 2016-2021 DaPorkchop_
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -95,11 +95,9 @@ public class StorageESPMod extends Module {
                 AxisAlignedBB bb = PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(mc.world, te.getPos())), te.getPos());
 
                 if (chestTe.adjacentChestXNeg != null) {
-                    ReflectionStuff.setMinX(bb, bb.minX - 1);
-                    //PepsiUtils.unionBB(bb, PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(mc.world, chestTe.adjacentChestXNeg.getPos())), chestTe.adjacentChestXNeg.getPos()));
+                    ReflectionStuff.setMinX(bb, bb.minX - 15.0d / 16.0d);
                 } else if (chestTe.adjacentChestZNeg != null) {
-                    ReflectionStuff.setMinZ(bb, bb.minZ - 1);
-                    //PepsiUtils.unionBB(bb, PepsiUtils.offsetBB(PepsiUtils.cloneBB(getBoundingBox(mc.world, chestTe.adjacentChestZNeg.getPos())), chestTe.adjacentChestZNeg.getPos()));
+                    ReflectionStuff.setMinZ(bb, bb.minZ - 15.0d / 16.0d);
                 }
 
                 if (chestTe.getChestType() == BlockChest.Type.TRAP) {

@@ -1,7 +1,7 @@
 /*
  * Adapted from The MIT License (MIT)
  *
- * Copyright (c) 2016-2020 DaPorkchop_
+ * Copyright (c) 2016-2021 DaPorkchop_
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -21,18 +21,22 @@
 package net.daporkchop.pepsimod.util.render;
 
 import net.daporkchop.pepsimod.util.RenderColor;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
+import java.awt.Color;
 
 import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Helps with drawing things in the world.
- * 
+ *
  * @author DaPorkchop_
  */
 public class WorldRenderer implements AutoCloseable {
@@ -46,51 +50,15 @@ public class WorldRenderer implements AutoCloseable {
 
     protected final float partialTicks;
 
-    public WorldRenderer(double startX, double startY, double startZ, double x, double y, double z, float partialTicks) {
-        this.startX = startX;
-        this.startY = startY;
-        this.startZ = startZ;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.partialTicks = partialTicks;
+    protected final Tessellator tessellator = Tessellator.getInstance();
+    protected final BufferBuilder buffer = this.tessellator.getBuffer();
 
-        this.init();
-    }
+    protected float width = 1.0f;
 
-    public WorldRenderer init()  {
-        glEnable(GL11.GL_BLEND);
-        glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GL11.GL_LINE_SMOOTH);
-        glLineWidth(2.0f);
-        glDisable(GL11.GL_TEXTURE_2D);
-        glEnable(GL11.GL_CULL_FACE);
-        glDisable(GL11.GL_DEPTH_TEST);
-
-        return this.resume();
-    }
-
-    @Override
-    public void close() {
-        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        this.pause();
-
-        glEnable(GL11.GL_DEPTH_TEST);
-        glEnable(GL11.GL_TEXTURE_2D);
-        glDisable(GL11.GL_CULL_FACE);
-        glDisable(GL11.GL_LINE_SMOOTH);
-        glDisable(GL11.GL_BLEND);
-    }
-
-    public WorldRenderer resume()    {
-        glBegin(GL11.GL_LINES);
-        return this;
-    }
-
-    public WorldRenderer pause() {
-        glEnd();
-        return this;
-    }
+    protected int r = 0xFF;
+    protected int g = 0xFF;
+    protected int b = 0xFF;
+    protected int a = 0xFF;
 
     public WorldRenderer(Vec3d start, double x, double y, double z, float partialTicks) {
         this(start.x, start.y, start.z, x, y, z, partialTicks);
@@ -100,83 +68,126 @@ public class WorldRenderer implements AutoCloseable {
         this(start.x, start.y, start.z, pos.x, pos.y, pos.z, partialTicks);
     }
 
-    public WorldRenderer color(float r, float g, float b) {
-        glColor4f(r, g, b, 1.0f);
+    public WorldRenderer(double startX, double startY, double startZ, double x, double y, double z, float partialTicks) {
+        this.startX = startX + x;
+        this.startY = startY + y;
+        this.startZ = startZ + z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.partialTicks = partialTicks;
+
+        this.init();
+    }
+
+    public WorldRenderer init() {
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        glEnable(GL11.GL_LINE_SMOOTH);
+        glLineWidth(2.0f);
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableCull();
+        GlStateManager.disableDepth();
+
+        this.buffer.setTranslation(-this.x, -this.y, -this.z);
+
+        return this.resume();
+    }
+
+    @Override
+    public void close() {
+        this.flush();
+
+        this.buffer.setTranslation(0.0d, 0.0d, 0.0d);
+
+        GlStateManager.enableDepth();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableCull();
+        glDisable(GL11.GL_LINE_SMOOTH);
+        GlStateManager.disableBlend();
+    }
+
+    public WorldRenderer resume() {
+        this.buffer.begin(GL_LINES, DefaultVertexFormats.POSITION_COLOR);
         return this;
     }
 
-    public WorldRenderer color(float r, float g, float b, float a) {
-        glColor4f(r, g, b, a);
+    public WorldRenderer flush() {
+        glLineWidth(this.width);
+        this.tessellator.draw();
         return this;
     }
 
     public WorldRenderer color(int r, int g, int b) {
-        glColor4f(r * 0.003921569f, g * 0.003921569f, b * 0.003921569f, 1.0f);
-        return this;
+        return this.color(r, g, b, 0xFF);
     }
 
     public WorldRenderer color(int r, int g, int b, int a) {
-        glColor4f(r * 0.003921569f, g * 0.003921569f, b * 0.003921569f, a * 0.003921569f);
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this.a = a;
         return this;
     }
 
-    public WorldRenderer color(RenderColor color)    {
-        glColor4b(color.r, color.g, color.b, color.a);
+    public WorldRenderer color(RenderColor color) {
+        this.r = color.rOrig;
+        this.g = color.gOrig;
+        this.b = color.bOrig;
+        this.a = color.aOrig;
         return this;
     }
 
-    public WorldRenderer color(Color color)    {
-        glColor4f(color.getRed() * 0.003921569f, color.getGreen() * 0.003921569f, color.getBlue() * 0.003921569f, color.getAlpha() * 0.003921569f);
+    public WorldRenderer color(Color color) {
+        this.r = color.getRed();
+        this.g = color.getGreen();
+        this.b = color.getBlue();
+        this.a = color.getAlpha();
         return this;
     }
 
-    public WorldRenderer width(float width)  {
-        this.pause();
-        glLineWidth(width);
-        return this.resume();
-    }
-
-    public WorldRenderer line(double x1, double y1, double z1, double x2, double y2, double z2)  {
-        glVertex3d(x1 - this.x, y1 - this.y, z1 - this.z);
-        glVertex3d(x2 - this.x, y2 - this.y, z2 - this.z);
+    public WorldRenderer width(float width) {
+        if (width != this.width) {
+            this.flush();
+            this.width = width;
+            this.resume();
+        }
         return this;
     }
 
-    public WorldRenderer line(float x1, float y1, float z1, float x2, float y2, float z2)  {
-        glVertex3d(x1 - this.x, y1 - this.y, z1 - this.z);
-        glVertex3d(x2 - this.x, y2 - this.y, z2 - this.z);
-        return this;
+    public WorldRenderer line(double x1, double y1, double z1, double x2, double y2, double z2) {
+        return this.vertex(x1, y1, z1).vertex(x2, y2, z2);
     }
 
-    public WorldRenderer line(int x1, int y1, int z1, int x2, int y2, int z2)  {
-        glVertex3d(x1 - this.x, y1 - this.y, z1 - this.z);
-        glVertex3d(x2 - this.x, y2 - this.y, z2 - this.z);
-        return this;
+    public WorldRenderer line(float x1, float y1, float z1, float x2, float y2, float z2) {
+        return this.vertex(x1, y1, z1).vertex(x2, y2, z2);
     }
 
-    public WorldRenderer line(Vec3d pos1, Vec3d pos2)  {
+    public WorldRenderer line(int x1, int y1, int z1, int x2, int y2, int z2) {
+        return this.vertex(x1, y1, z1).vertex(x2, y2, z2);
+    }
+
+    public WorldRenderer line(Vec3d pos1, Vec3d pos2) {
         return this.line(pos1.x, pos1.y, pos1.z, pos2.x, pos2.y, pos2.z);
     }
 
-    public WorldRenderer line(Vec3d pos1, Entity pos2)  {
+    public WorldRenderer line(Vec3d pos1, Entity pos2) {
         return this.line(pos1.x, pos1.y, pos1.z, pos2.posX, pos2.posY, pos2.posZ);
     }
 
-    public WorldRenderer line(Entity pos1, Entity pos2)  {
+    public WorldRenderer line(Entity pos1, Entity pos2) {
         return this.line(pos1.posX, pos1.posY, pos1.posZ, pos2.posX, pos2.posY, pos2.posZ);
     }
-    
-    public WorldRenderer lineFromEyes(double x, double y, double z)  {
-        glVertex3d(this.startX, this.startY, this.startZ);
-        glVertex3d(x - this.x, y - this.y, z - this.z);
-        return this;
+
+    public WorldRenderer lineFromEyes(double x, double y, double z) {
+        return this.vertex(this.startX, this.startY, this.startZ).vertex(x, y, z);
     }
 
-    public WorldRenderer lineFromEyes(Vec3d pos)  {
+    public WorldRenderer lineFromEyes(Vec3d pos) {
         return this.lineFromEyes(pos.x, pos.y, pos.z);
     }
 
-    public WorldRenderer lineFromEyes(Entity entity, float partialTicks)  {
+    public WorldRenderer lineFromEyes(Entity entity, float partialTicks) {
         if (partialTicks == 1.0F) {
             return this.lineFromEyes(entity.posX, entity.posY, entity.posZ);
         } else {
@@ -187,18 +198,18 @@ public class WorldRenderer implements AutoCloseable {
         }
     }
 
-    public WorldRenderer lineFromEyes(Entity entity)  {
+    public WorldRenderer lineFromEyes(Entity entity) {
         return this.lineFromEyes(entity, this.partialTicks);
     }
 
-    public WorldRenderer outline(AxisAlignedBB bb)   {
+    public WorldRenderer outline(AxisAlignedBB bb) {
         return this.outline(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ);
     }
 
-    public WorldRenderer outline(Entity entity)   {
-        double x = entity.prevPosX + (entity.posX - entity.prevPosX) * partialTicks;
-        double y = entity.prevPosY + (entity.posY - entity.prevPosY) * partialTicks;
-        double z = entity.prevPosZ + (entity.posZ - entity.prevPosZ) * partialTicks;
+    public WorldRenderer outline(Entity entity) {
+        double x = entity.prevPosX + (entity.posX - entity.prevPosX) * this.partialTicks;
+        double y = entity.prevPosY + (entity.posY - entity.prevPosY) * this.partialTicks;
+        double z = entity.prevPosZ + (entity.posZ - entity.prevPosZ) * this.partialTicks;
         double halfwidth = entity.width * 0.5d;
         return this.outline(
                 x - halfwidth, y, z - halfwidth,
@@ -206,49 +217,30 @@ public class WorldRenderer implements AutoCloseable {
         );
     }
 
-    public WorldRenderer outline(double minX, double minY, double minZ, double maxX, double maxY, double maxZ)   {
+    public WorldRenderer outline(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
         return this.internal_outline(
-                minX - this.x, minY - this.y, minZ - this.z,
-                maxX - this.x, maxY - this.y, maxZ - this.z
+                minX, minY, minZ,
+                maxX, maxY, maxZ
         );
     }
 
     protected WorldRenderer internal_outline(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
-        glVertex3d(minX, minY, minZ);
-        glVertex3d(maxX, minY, minZ);
+        return this.line(minX, minY, minZ, maxX, minY, minZ)
+                .line(maxX, minY, minZ, maxX, minY, maxZ)
+                .line(maxX, minY, maxZ, minX, minY, maxZ)
+                .line(minX, minY, maxZ, minX, minY, minZ)
+                .line(minX, minY, minZ, minX, maxY, minZ)
+                .line(maxX, minY, minZ, maxX, maxY, minZ)
+                .line(maxX, minY, maxZ, maxX, maxY, maxZ)
+                .line(minX, minY, maxZ, minX, maxY, maxZ)
+                .line(minX, maxY, minZ, maxX, maxY, minZ)
+                .line(maxX, maxY, minZ, maxX, maxY, maxZ)
+                .line(maxX, maxY, maxZ, minX, maxY, maxZ)
+                .line(minX, maxY, maxZ, minX, maxY, minZ);
+    }
 
-        glVertex3d(maxX, minY, minZ);
-        glVertex3d(maxX, minY, maxZ);
-
-        glVertex3d(maxX, minY, maxZ);
-        glVertex3d(minX, minY, maxZ);
-
-        glVertex3d(minX, minY, maxZ);
-        glVertex3d(minX, minY, minZ);
-
-        glVertex3d(minX, minY, minZ);
-        glVertex3d(minX, maxY, minZ);
-
-        glVertex3d(maxX, minY, minZ);
-        glVertex3d(maxX, maxY, minZ);
-
-        glVertex3d(maxX, minY, maxZ);
-        glVertex3d(maxX, maxY, maxZ);
-
-        glVertex3d(minX, minY, maxZ);
-        glVertex3d(minX, maxY, maxZ);
-
-        glVertex3d(minX, maxY, minZ);
-        glVertex3d(maxX, maxY, minZ);
-
-        glVertex3d(maxX, maxY, minZ);
-        glVertex3d(maxX, maxY, maxZ);
-
-        glVertex3d(maxX, maxY, maxZ);
-        glVertex3d(minX, maxY, maxZ);
-
-        glVertex3d(minX, maxY, maxZ);
-        glVertex3d(minX, maxY, minZ);
+    protected WorldRenderer vertex(double x, double y, double z) {
+        this.buffer.pos(x, y, z).color(this.r, this.g, this.b, this.a).endVertex();
         return this;
     }
 }
