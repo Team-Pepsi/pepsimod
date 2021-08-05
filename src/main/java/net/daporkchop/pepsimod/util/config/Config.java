@@ -1,7 +1,7 @@
 /*
  * Adapted from The MIT License (MIT)
  *
- * Copyright (c) 2016-2020 DaPorkchop_
+ * Copyright (c) 2016-2021 DaPorkchop_
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -30,7 +30,6 @@ import net.daporkchop.pepsimod.util.config.impl.AutoEatTranslator;
 import net.daporkchop.pepsimod.util.config.impl.BedBomberTranslator;
 import net.daporkchop.pepsimod.util.config.impl.ClickGUITranslator;
 import net.daporkchop.pepsimod.util.config.impl.CpuLimitTranslator;
-import net.daporkchop.pepsimod.util.config.impl.CriticalsTranslator;
 import net.daporkchop.pepsimod.util.config.impl.CrystalAuraTranslator;
 import net.daporkchop.pepsimod.util.config.impl.ESPTranslator;
 import net.daporkchop.pepsimod.util.config.impl.ElytraFlyTranslator;
@@ -64,7 +63,6 @@ public class Config {
         registerConfigTranslator(BedBomberTranslator.INSTANCE);
         registerConfigTranslator(ClickGUITranslator.INSTANCE);
         registerConfigTranslator(CpuLimitTranslator.INSTANCE);
-        registerConfigTranslator(CriticalsTranslator.INSTANCE);
         registerConfigTranslator(CrystalAuraTranslator.INSTANCE);
         registerConfigTranslator(ElytraFlyTranslator.INSTANCE);
         registerConfigTranslator(EntitySpeedTranslator.INSTANCE);
@@ -89,6 +87,7 @@ public class Config {
         TRANSLATORS.put(element.name(), element);
     }
 
+    @SuppressWarnings("deprecation")
     public static void loadConfig(String configJson) {
         System.out.println("Loading config!");
         System.out.println(configJson);
