@@ -58,6 +58,23 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
         super(null, null);
     }
 
+    @Override
+    public void setInWeb() {
+        if (!NoSlowdownMod.INSTANCE.state.enabled) {
+            super.setInWeb();
+        }
+    }
+
+    @Override
+    public boolean isPushedByWater() {
+        return !NoSlowdownMod.INSTANCE.state.enabled && super.isPushedByWater();
+    }
+
+    @Override
+    protected float getWaterSlowDown() {
+        return NoSlowdownMod.INSTANCE.state.enabled ? 0.6f : super.getWaterSlowDown();
+    }
+
     @Redirect(method = "Lnet/minecraft/client/entity/EntityPlayerSP;move(Lnet/minecraft/entity/MoverType;DDD)V",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/client/entity/AbstractClientPlayer;move(Lnet/minecraft/entity/MoverType;DDD)V"))
@@ -73,9 +90,9 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
 
     @Redirect(method = "Lnet/minecraft/client/entity/EntityPlayerSP;onLivingUpdate()V",
             at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/client/entity/EntityPlayerSP;isRiding()Z"))
-    public boolean fixNoSlowdown(EntityPlayerSP entity) {
-        return entity.isRiding() && NoSlowdownMod.INSTANCE.state.enabled;
+                    target = "Lnet/minecraft/client/entity/EntityPlayerSP;isHandActive()Z"))
+    public boolean pepsimod_onLivingUpdate_noSlowdownMakesHandInactive(EntityPlayerSP entity) {
+        return !NoSlowdownMod.INSTANCE.state.enabled && entity.isHandActive();
     }
 
     @Inject(

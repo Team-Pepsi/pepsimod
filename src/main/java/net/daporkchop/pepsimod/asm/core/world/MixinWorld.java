@@ -20,12 +20,19 @@
 
 package net.daporkchop.pepsimod.asm.core.world;
 
+import net.daporkchop.pepsimod.module.impl.movement.VelocityMod;
 import net.daporkchop.pepsimod.module.impl.render.NoWeatherMod;
+import net.daporkchop.pepsimod.util.PepsiConstants;
 import net.daporkchop.pepsimod.util.config.impl.NoWeatherTranslator;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(World.class)
@@ -33,12 +40,23 @@ public abstract class MixinWorld {
     @Inject(
             method = "Lnet/minecraft/world/World;getRainStrength(F)F",
             at = @At("HEAD"),
-            cancellable = true
-    )
+            cancellable = true)
     public void preGetRainStrength(float partialTicks, CallbackInfoReturnable<Float> callbackInfoReturnable) {
         if (NoWeatherMod.INSTANCE.state.enabled && NoWeatherTranslator.INSTANCE.disableRain) {
             callbackInfoReturnable.setReturnValue(0.0f);
-            callbackInfoReturnable.cancel();
         }
+    }
+
+    @Redirect(method = "Lnet/minecraft/world/World;handleMaterialAcceleration(Lnet/minecraft/util/math/AxisAlignedBB;Lnet/minecraft/block/material/Material;Lnet/minecraft/entity/Entity;)Z",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/util/math/Vec3d;normalize()Lnet/minecraft/util/math/Vec3d;"))
+    private Vec3d pepsimod_handleMaterialAcceleration_velocityChangesWaterPushFactor(
+            Vec3d vec3d,
+            AxisAlignedBB bb, Material materialIn, Entity entityIn) {
+        vec3d = vec3d.normalize();
+        if (entityIn == PepsiConstants.mc.player) {
+            vec3d = vec3d.scale(VelocityMod.INSTANCE.getVelocity());
+        }
+        return vec3d;
     }
 }

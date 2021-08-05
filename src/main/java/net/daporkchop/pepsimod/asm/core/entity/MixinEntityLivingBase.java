@@ -23,6 +23,7 @@ package net.daporkchop.pepsimod.asm.core.entity;
 import net.daporkchop.pepsimod.module.impl.misc.FreecamMod;
 import net.daporkchop.pepsimod.module.impl.movement.ElytraFlyMod;
 import net.daporkchop.pepsimod.module.impl.movement.FlightMod;
+import net.daporkchop.pepsimod.module.impl.movement.NoSlowdownMod;
 import net.daporkchop.pepsimod.module.impl.render.AntiBlindMod;
 import net.daporkchop.pepsimod.util.config.impl.ElytraFlyTranslator;
 import net.minecraft.entity.Entity;
@@ -30,9 +31,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -75,6 +77,12 @@ public abstract class MixinEntityLivingBase extends Entity {
         if ((Object) this == mc.player && ElytraFlyMod.INSTANCE.state.enabled && ElytraFlyTranslator.INSTANCE.mode == ElytraFlyTranslator.ElytraFlyMode.PACKET) {
             this.motionY = 0;
         }
+    }
+
+    @ModifyConstant(method = "Lnet/minecraft/entity/EntityLivingBase;travel(FFF)V",
+            constant = @Constant(floatValue = 0.02f))
+    private float pepsimod_travel_changeFluidFriction(float friction) {
+        return (Object) this == mc.player && NoSlowdownMod.INSTANCE.state.enabled ? 0.09999999f : friction;
     }
 
     @Redirect(method = "Lnet/minecraft/entity/EntityLivingBase;travel(FFF)V",
