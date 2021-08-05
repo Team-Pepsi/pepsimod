@@ -1,7 +1,7 @@
 /*
  * Adapted from The MIT License (MIT)
  *
- * Copyright (c) 2016-2020 DaPorkchop_
+ * Copyright (c) 2016-2021 DaPorkchop_
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -77,6 +77,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
 import static net.daporkchop.lib.common.util.PorkUtil.*;
+import static org.lwjgl.opengl.GL11.*;
 
 public class PepsiUtils extends PepsiConstants {
     public static final char COLOR_ESCAPE = '\u00A7';
@@ -91,8 +92,6 @@ public class PepsiUtils extends PepsiConstants {
     public static final BufferedImage PEPSI_LOGO;
     public static String buttonPrefix = COLOR_ESCAPE + "c";
     public static RainbowText PEPSI_NAME = new RainbowText(Pepsimod.NAME_VERSION);
-    public static ArrayList<IWurstRenderListener> wurstRenderListeners = new ArrayList<>();
-    public static ArrayList<IWurstRenderListener> toRemoveWurstRenderListeners = new ArrayList<>();
     public static GuiButton reconnectButton;
     public static GuiButton autoReconnectButton;
     public static int autoReconnectWaitTime = 5;
@@ -325,6 +324,11 @@ public class PepsiUtils extends PepsiConstants {
     }
 
     public static void drawNameplateNoScale(FontRenderer fontRendererIn, String str, float x, float y, float z, int verticalShift, float viewerYaw, float viewerPitch, boolean isThirdPersonFrontal, float offset, float size) {
+        boolean wasFog = glGetBoolean(GL_FOG);
+        if (wasFog) {
+            GlStateManager.disableFog();
+        }
+
         GlStateManager.pushMatrix();
 
         double dist = new Vec3d(x, y + offset, z).length();
@@ -363,6 +367,10 @@ public class PepsiUtils extends PepsiConstants {
         GlStateManager.disableBlend();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.popMatrix();
+
+        if (wasFog) {
+            GlStateManager.enableFog();
+        }
 
         //TODO: draw items in name tag
     }

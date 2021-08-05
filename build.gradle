@@ -18,6 +18,10 @@
  *
  */
 
+import java.util.stream.StreamSupport
+
+
+
 buildscript {
     repositories {
         maven {
@@ -60,6 +64,20 @@ minecraft {
     mappings = "stable_39"
     makeObfSourceJar = false
     coreMod = "net.daporkchop.pepsimod.asm.PepsimodMixinLoader"
+
+    def args = [
+            "-Dmixin.checks.interfaces=true",
+            "-Dmixin.debug.export=true",
+            "-Dmixin.debug.verbose=true",
+            "-Dmixin.hotSwap=true",
+            "-Dfp2.debug=true",
+            "-Xmx2G",
+            "-XX:+UseG1GC",
+            "-ea",
+            "-da:io.netty..."
+    ]
+    clientJvmArgs += args
+    serverJvmArgs += args
 }
 
 version = "v11.1-" + project.minecraft.version
@@ -84,10 +102,18 @@ repositories {
 }
 
 dependencies {
-    shade("org.spongepowered:mixin:0.8") {
-        transitive = false
+    if ("true".equalsIgnoreCase(System.getProperty("idea.sync.active"))) {
+        //intellij is present - we don't want it to register mixin as an annotation processor, so we just add it as a standard dependency.
+        //  if we don't do this, the intellij annotation processors will get totally screwed up
+        compile "org.spongepowered:mixin:0.8"
+    } else {
+        //register mixin as a standard annotation processor
+        shade("org.spongepowered:mixin:0.8") {
+            transitive = false
+        }
+
+        annotationProcessor "org.spongepowered:mixin:0.8:processor"
     }
-    annotationProcessor "org.spongepowered:mixin:0.8:processor"
 
     relocate "net.daporkchop.lib:common:0.5.4-SNAPSHOT"
 }
@@ -148,3 +174,15 @@ jar {
         )
     }
 }
+
+task preIntellijRuns {
+    doFirst {
+        StreamSupport.stream(configurations.compile.spliterator(), false).filter({
+            java.nio.file.Paths.get(it.absolutePath).getFileName().toString().matches("mixin-\\d+(\\.\\d+)*\\.jar")
+        }).findAny().ifPresent({
+            minecraft.clientJvmArgs += "-javaagent:" + it.absolutePath
+            minecraft.serverJvmArgs += "-javaagent:" + it.absolutePath
+        })
+    }
+}
+genIntellijRuns.dependsOn(preIntellijRuns)

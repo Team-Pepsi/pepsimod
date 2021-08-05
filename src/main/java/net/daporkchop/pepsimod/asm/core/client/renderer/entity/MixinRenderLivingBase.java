@@ -18,35 +18,42 @@
  *
  */
 
-package net.daporkchop.pepsimod.asm.lite.client.renderer.entity;
+package net.daporkchop.pepsimod.asm.core.client.renderer.entity;
 
-import net.daporkchop.pepsimod.misc.data.Group;
+import net.daporkchop.pepsimod.module.impl.render.NameTagsMod;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.EntityLivingBase;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import static net.daporkchop.pepsimod.Lite.*;
 
 /**
  * @author DaPorkchop_
  */
-@Mixin(Render.class)
-abstract class MixinRender {
-    @Inject(
-            method = "Lnet/minecraft/client/renderer/entity/Render;getTeamColor(Lnet/minecraft/entity/Entity;)I",
+@Mixin(RenderLivingBase.class)
+public abstract class MixinRenderLivingBase<T extends Entity> extends Render<T> {
+    protected MixinRenderLivingBase() {
+        super(null);
+    }
+
+    @Redirect(method = "Lnet/minecraft/client/renderer/entity/RenderLivingBase;renderName(Lnet/minecraft/entity/EntityLivingBase;DDD)V",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/entity/EntityLivingBase;getDistanceSq(Lnet/minecraft/entity/Entity;)D"))
+    private double pepsimod_renderLivingLabel_alwaysRenderName(EntityLivingBase entity, Entity otherEntity) {
+        return NameTagsMod.INSTANCE.state.enabled ? Double.NEGATIVE_INFINITY : entity.getDistanceSq(otherEntity);
+    }
+
+    @Inject(method = "Lnet/minecraft/client/renderer/entity/RenderLivingBase;canRenderName(Lnet/minecraft/entity/EntityLivingBase;)Z",
             at = @At("HEAD"),
             cancellable = true)
-    public void changeDefaultTeamColor(Entity entity, CallbackInfoReturnable<Integer> ci) {
-        if (entity instanceof EntityPlayer) {
-            Group group = DATA.getGroup((EntityPlayer) entity);
-            if (group != null && group.color != 0) {
-                ci.setReturnValue(group.color);
-                ci.cancel();
-            }
+    private void pepsimod_canRenderName_alwaysRenderName(EntityLivingBase entity, CallbackInfoReturnable<Boolean> ci) {
+        if (NameTagsMod.INSTANCE.state.enabled) {
+            ci.setReturnValue(Minecraft.isGuiEnabled() && entity != this.renderManager.renderViewEntity && !entity.isBeingRidden());
         }
     }
 }

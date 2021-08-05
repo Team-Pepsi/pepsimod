@@ -1,7 +1,7 @@
 /*
  * Adapted from The MIT License (MIT)
  *
- * Copyright (c) 2016-2020 DaPorkchop_
+ * Copyright (c) 2016-2021 DaPorkchop_
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -151,8 +151,8 @@ public abstract class MixinMinecraft {
             cancellable = true
     )
     public void preSetWindowIcon(CallbackInfo callbackInfo) {
-        try {
-            BufferedImage img = ImageIO.read(Pepsimod.class.getResourceAsStream("/pepsilogo.png"));
+        try (InputStream in = Pepsimod.class.getResourceAsStream("/pepsilogo.png")) {
+            BufferedImage img = ImageIO.read(in);
             List<ByteBuffer> sizes = new ArrayList<>();
             int w = img.getWidth();
             do  {
@@ -163,8 +163,8 @@ public abstract class MixinMinecraft {
             } while (w >= 8);
             Display.setIcon(sizes.toArray(new ByteBuffer[sizes.size()]));
             callbackInfo.cancel();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            new RuntimeException("pepsimod failed to override the window icon!", e).printStackTrace();
             //thonk
         }
 

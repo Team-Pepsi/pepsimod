@@ -1,7 +1,7 @@
 /*
  * Adapted from The MIT License (MIT)
  *
- * Copyright (c) 2016-2020 DaPorkchop_
+ * Copyright (c) 2016-2021 DaPorkchop_
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -31,75 +31,66 @@ import net.daporkchop.pepsimod.util.config.impl.NameTagsTranslator;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Render.class)
 public abstract class MixinRender<T extends Entity> {
-    @Shadow
-    @Final
-    protected RenderManager renderManager;
-
-    @Shadow
-    public FontRenderer getFontRendererFromRenderManager() {
-        return null;
+    @Redirect(method = "Lnet/minecraft/client/renderer/entity/Render;renderLivingLabel(Lnet/minecraft/entity/Entity;Ljava/lang/String;DDDI)V",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/entity/Entity;getDistanceSq(Lnet/minecraft/entity/Entity;)D"))
+    private double pepsimod_renderLivingLabel_alwaysDrawNameplate(Entity entity, Entity otherEntity) {
+        return NameTagsMod.INSTANCE.state.enabled ? Double.NEGATIVE_INFINITY : entity.getDistanceSq(otherEntity);
     }
 
-    @Overwrite
-    protected void renderLivingLabel(T entityIn, String str, double x, double y, double z, int maxDistance) {
-        double d0 = entityIn.getDistanceSq(this.renderManager.renderViewEntity);
+    @Redirect(method = "Lnet/minecraft/client/renderer/entity/Render;renderLivingLabel(Lnet/minecraft/entity/Entity;Ljava/lang/String;DDDI)V",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/EntityRenderer;drawNameplate(Lnet/minecraft/client/gui/FontRenderer;Ljava/lang/String;FFFIFFZZ)V"))
+    private void pepsimod_renderLivingLabel_redirectDrawNameplate(
+            FontRenderer fontRenderer, String str, float x, float y, float z, int verticalShift, float viewerYaw, float viewerPitch, boolean isThirdPersonFrontal, boolean isSneaking,
+            Entity entityIn, String _strAgain, double _x, double _y, double _z, int maxDistance) {
+        if (entityIn instanceof EntityLivingBase) {
+            if (entityIn instanceof EntityPlayer && FriendsTranslator.INSTANCE.isFriend(entityIn)) {
+                str = PepsiUtils.COLOR_ESCAPE + "b" + str;
+            }
 
-        if (d0 <= (double) (maxDistance * maxDistance)) {
-            boolean flag = entityIn.isSneaking();
-            float f = this.renderManager.playerViewY;
-            float f1 = this.renderManager.playerViewX;
-            boolean flag1 = this.renderManager.options.thirdPersonView == 2;
-            float f2 = entityIn.height + 0.5F - (flag ? 0.25F : 0.0F);
-            int i = "deadmau5".equals(str) ? -10 : 0;
-
-            if (entityIn instanceof EntityLivingBase) {
-                if (entityIn instanceof EntityPlayer && FriendsTranslator.INSTANCE.isFriend(entityIn)) {
-                    str = PepsiUtils.COLOR_ESCAPE + "b" + str;
-                }
-
-                if (HealthTagsMod.INSTANCE.state.enabled) {
-                    str += " ";
-                    int health = (int) ((EntityLivingBase) entityIn).getHealth();
-                    if (health <= 5) {
-                        str += "\u00A74";
-                    } else if (health <= 10) {
-                        str += "\u00A76";
-                    } else if (health <= 15) {
-                        str += "\u00A7e";
+            if (HealthTagsMod.INSTANCE.state.enabled) {
+                float health = ((EntityLivingBase) entityIn).getHealth();
+                float relativeHealth = health / ((EntityLivingBase) entityIn).getMaxHealth();
+                char colorCode = '7';
+                if (relativeHealth >= 0.0f && relativeHealth <= 1.0f) {
+                    if (relativeHealth <= 0.25f) {
+                        colorCode = '4';
+                    } else if (relativeHealth <= 0.5f) {
+                        colorCode = '6';
+                    } else if (relativeHealth <= 0.75f) {
+                        colorCode = 'e';
                     } else {
-                        str += "\u00A7a";
+                        colorCode = 'a';
                     }
-                    str += health;
                 }
+                str += " " + PepsiUtils.COLOR_ESCAPE + colorCode + (int) health;
             }
+        }
 
-            if (NameTagsMod.INSTANCE.state.enabled) {
-                PepsiUtils.drawNameplateNoScale(this.getFontRendererFromRenderManager(), str, (float) x, (float) y, (float) z, i, f, f1, flag1, f2, NameTagsTranslator.INSTANCE.scale);
-            } else {
-                EntityRenderer.drawNameplate(this.getFontRendererFromRenderManager(), str, (float) x, (float) y + f2, (float) z, i, f, f1, flag1, flag);
-            }
+        if (NameTagsMod.INSTANCE.state.enabled) {
+            float offset = entityIn.height + 0.5F - (entityIn.isSneaking() ? 0.25F : 0.0F);
+            PepsiUtils.drawNameplateNoScale(fontRenderer, str, x, y - offset, z, verticalShift, viewerYaw, viewerPitch, isThirdPersonFrontal, offset, NameTagsTranslator.INSTANCE.scale);
+        } else {
+            EntityRenderer.drawNameplate(fontRenderer, str, x, y, z, verticalShift, viewerYaw, viewerPitch, isThirdPersonFrontal, isSneaking);
         }
     }
 
     @Inject(
             method = "Lnet/minecraft/client/renderer/entity/Render;getTeamColor(Lnet/minecraft/entity/Entity;)I",
-            at = @At("HEAD"))
+            at = @At("HEAD"),
+            cancellable = true)
     public void changeDefaultTeamColor(Entity entity, CallbackInfoReturnable<Integer> ci) {
         if (ESPMod.INSTANCE.state.enabled && !ESPTranslator.INSTANCE.box) {
             RenderColor color = ESPMod.INSTANCE.chooseColor(entity);

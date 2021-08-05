@@ -1,7 +1,7 @@
 /*
  * Adapted from The MIT License (MIT)
  *
- * Copyright (c) 2016-2020 DaPorkchop_
+ * Copyright (c) 2016-2021 DaPorkchop_
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -58,19 +58,6 @@ public abstract class MixinEntityRenderer {
     @Shadow
     @Final
     private Minecraft mc;
-
-    @Inject(
-            method = "Lnet/minecraft/client/renderer/EntityRenderer;renderWorldPass(IFJ)V",
-            at = @At(
-                    value = "INVOKE_ASSIGN",
-                    target = "Lnet/minecraft/profiler/Profiler;endStartSection(Ljava/lang/String;)V",
-                    ordinal = 19
-            ))
-    public void preRenderHand(CallbackInfo ci, int pass, float partialTicks, long finishTimeNano) {
-        PepsiUtils.toRemoveWurstRenderListeners.forEach(PepsiUtils.wurstRenderListeners::remove);
-        PepsiUtils.toRemoveWurstRenderListeners.clear();
-        PepsiUtils.wurstRenderListeners.forEach(listener -> listener.render(partialTicks));
-    }
 
     @Inject(
             method = "Lnet/minecraft/client/renderer/EntityRenderer;renderWorldPass(IFJ)V",

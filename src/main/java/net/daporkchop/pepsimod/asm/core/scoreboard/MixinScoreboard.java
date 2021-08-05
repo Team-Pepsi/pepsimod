@@ -1,7 +1,7 @@
 /*
  * Adapted from The MIT License (MIT)
  *
- * Copyright (c) 2016-2020 DaPorkchop_
+ * Copyright (c) 2016-2021 DaPorkchop_
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -20,9 +20,9 @@
 
 package net.daporkchop.pepsimod.asm.core.scoreboard;
 
-import com.google.common.collect.Maps;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -32,7 +32,8 @@ import java.util.Map;
 @Mixin(Scoreboard.class)
 public abstract class MixinScoreboard {
     @Shadow
-    private final Map<String, ScorePlayerTeam> teamMemberships = Maps.<String, ScorePlayerTeam>newHashMap();
+    @Final
+    private Map<String, ScorePlayerTeam> teamMemberships;
 
     @Overwrite
     public void removePlayerFromTeam(String username, ScorePlayerTeam playerTeam) {
