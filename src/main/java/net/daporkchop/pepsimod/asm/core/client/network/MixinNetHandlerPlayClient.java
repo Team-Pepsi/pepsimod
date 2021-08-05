@@ -21,14 +21,17 @@
 package net.daporkchop.pepsimod.asm.core.client.network;
 
 import net.daporkchop.pepsimod.module.impl.misc.AnnouncerMod;
+import net.daporkchop.pepsimod.module.impl.movement.VelocityMod;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.network.play.server.SPacketExplosion;
 import net.minecraft.network.play.server.SPacketPlayerListItem;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
@@ -66,5 +69,26 @@ public abstract class MixinNetHandlerPlayClient {
             }
         } catch (NullPointerException e) {
         }
+    }
+
+    @Redirect(method = "Lnet/minecraft/client/network/NetHandlerPlayClient;handleExplosion(Lnet/minecraft/network/play/server/SPacketExplosion;)V",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/network/play/server/SPacketExplosion;getMotionX()F"))
+    private float pepsimod_handleExplosion_adjustMotionX(SPacketExplosion packet) {
+        return packet.getMotionX() * VelocityMod.INSTANCE.getVelocity();
+    }
+
+    @Redirect(method = "Lnet/minecraft/client/network/NetHandlerPlayClient;handleExplosion(Lnet/minecraft/network/play/server/SPacketExplosion;)V",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/network/play/server/SPacketExplosion;getMotionY()F"))
+    private float pepsimod_handleExplosion_adjustMotionY(SPacketExplosion packet) {
+        return packet.getMotionY() * VelocityMod.INSTANCE.getVelocity();
+    }
+
+    @Redirect(method = "Lnet/minecraft/client/network/NetHandlerPlayClient;handleExplosion(Lnet/minecraft/network/play/server/SPacketExplosion;)V",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/network/play/server/SPacketExplosion;getMotionZ()F"))
+    private float pepsimod_handleExplosion_adjustMotionZ(SPacketExplosion packet) {
+        return packet.getMotionZ() * VelocityMod.INSTANCE.getVelocity();
     }
 }

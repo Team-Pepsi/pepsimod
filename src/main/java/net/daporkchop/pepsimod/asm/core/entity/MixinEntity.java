@@ -1,7 +1,7 @@
 /*
  * Adapted from The MIT License (MIT)
  *
- * Copyright (c) 2016-2020 DaPorkchop_
+ * Copyright (c) 2016-2021 DaPorkchop_
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -59,16 +59,15 @@ public abstract class MixinEntity {
     @Inject(
             method = "Lnet/minecraft/entity/Entity;setVelocity(DDD)V",
             at = @At("HEAD"),
-            cancellable = true
-    )
+            cancellable = true)
     public void preSetVelocity(double x, double y, double z, CallbackInfo callbackInfo) {
         float strength = 1.0f;
-        if (Entity.class.cast(this) == mc.player) {
+        if ((Object) this == mc.player) {
             strength = VelocityMod.INSTANCE.getVelocity();
         }
-        this.motionX = x * strength;
-        this.motionY = y * strength;
-        this.motionZ = z * strength;
+        this.motionX = this.motionX * (1.0f - strength) + x * strength;
+        this.motionY = this.motionY * (1.0f - strength) + y * strength;
+        this.motionZ = this.motionZ * (1.0f - strength) + z * strength;
         callbackInfo.cancel();
     }
 
