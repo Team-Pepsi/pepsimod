@@ -1,7 +1,7 @@
 /*
  * Adapted from The MIT License (MIT)
  *
- * Copyright (c) 2016-2020 DaPorkchop_
+ * Copyright (c) 2016-2021 DaPorkchop_
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -30,14 +30,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(WorldInfo.class)
 public abstract class MixinWorldInfo {
-    @Inject(
-            method = "Lnet/minecraft/world/storage/WorldInfo;getWorldTime()J",
+    @Inject(method = "Lnet/minecraft/world/storage/WorldInfo;getWorldTime()J",
             at = @At("HEAD"),
-            cancellable = true
-    )
+            cancellable = true)
     public void preGetWorldTime(CallbackInfoReturnable<Long> callbackInfoReturnable) {
         if (NoWeatherMod.INSTANCE.state.enabled && NoWeatherTranslator.INSTANCE.changeTime) {
             callbackInfoReturnable.setReturnValue((long) NoWeatherTranslator.INSTANCE.time);
+            callbackInfoReturnable.cancel();
         }
     }
 }

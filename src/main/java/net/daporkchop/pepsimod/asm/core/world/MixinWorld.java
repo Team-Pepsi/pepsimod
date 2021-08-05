@@ -1,7 +1,7 @@
 /*
  * Adapted from The MIT License (MIT)
  *
- * Copyright (c) 2016-2020 DaPorkchop_
+ * Copyright (c) 2016-2021 DaPorkchop_
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -30,18 +30,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(World.class)
 public abstract class MixinWorld {
-    @Inject(
-            method = "Lnet/minecraft/world/World;getCelestialAngle(F)F",
-            at = @At("HEAD"),
-            cancellable = true
-    )
-    public void preGetCelestialAngle(float partialTicks, CallbackInfoReturnable<Float> callbackInfoReturnable) {
-        if (NoWeatherMod.INSTANCE.state.enabled && NoWeatherTranslator.INSTANCE.changeTime) {
-            callbackInfoReturnable.setReturnValue(NoWeatherTranslator.INSTANCE.time + 0.0f);
-            callbackInfoReturnable.cancel();
-        }
-    }
-
     @Inject(
             method = "Lnet/minecraft/world/World;getRainStrength(F)F",
             at = @At("HEAD"),
